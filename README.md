@@ -28,6 +28,6 @@ Console.WriteLine(sqlServers.AsBullets());
  * (local)\SQL2005 (9.0.5000.0)
 ```
 
-In the bullet list above (local) and (localdb) servers was discovered automatically using registry, and rest of servers where injected using `SQLSERVER_WELLKNOWN_` env vars.
+The bullet list above (local) and (localdb) servers was discovered automatically using registry, and rest of servers where injected using `SQLSERVER_WELLKNOWN_` env vars.
 
 
