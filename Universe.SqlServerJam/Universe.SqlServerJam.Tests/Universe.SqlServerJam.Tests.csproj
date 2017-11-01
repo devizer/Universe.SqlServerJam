@@ -25,7 +25,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -43,7 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="A_Utilities.cs" />
-    <Compile Include="ExceptionExtentions.cs" />
     <Compile Include="NUnit3Logs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
