@@ -1,6 +1,9 @@
 # Universe.SqlServerJam
 Package implements: discovering local sql server instances by the same way as SSMS and operations during unit testing: start, stop services, check server edition, forced database delete, checking databases size, recovery mode, auto shrinking, etc.
 
+## Full Featured Demo
+Source code: [Full_Featured_Demo.cs](https://github.com/devizer/Universe.SqlServerJam/blob/master/Universe.SqlServerJam/Universe.SqlServerJam.Tests/Full_Featured_Demo.cs)
+
 ## SqlDiscovery
 It is a root class of the library.
 It's purpose to find local installed SQL Server, icluding x86 and x64 families.
