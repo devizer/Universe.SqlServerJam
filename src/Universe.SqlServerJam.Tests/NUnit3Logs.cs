@@ -19,7 +19,7 @@ namespace Universe.SqlServerJam.Tests
                     {
                         var name = Process.GetCurrentProcess()?.ProcessName ?? "";
                         var runners = new[] {"JetBrains.ReSharper.TaskRunner", "nunit-agent"};
-                        if (runners.Any(x => name.StartsWith(x, StringComparison.InvariantCultureIgnoreCase)))
+                        if (true || runners.Any(x => name.StartsWith(x, StringComparison.InvariantCultureIgnoreCase)))
                         {
                             Debug.Listeners.Add(new TextWriterTraceListener(TestContext.Progress));
                         }

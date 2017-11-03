@@ -45,7 +45,7 @@ namespace Universe.SqlServerJam.Tests
         {
             var list = SqlServers.OrderByVersionDesc().ToList();
             Debug.WriteLine($"Check services status {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
-            Debug.WriteLine("\t");
+            Debug.WriteLine("");
 
             IEnumerable<SqlServerRef> ordered = list.OrderByVersionDesc().ToList();
             List<SqlServerRef> stopped = new List<SqlServerRef>();
