@@ -522,7 +522,5 @@ else
             FULL, BULK_LOGGED, SIMPLE
         }
 
-
-
     }
 }

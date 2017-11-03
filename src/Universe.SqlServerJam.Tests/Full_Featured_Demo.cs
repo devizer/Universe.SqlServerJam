@@ -99,7 +99,7 @@ namespace Universe.SqlServerJam.Tests
             Stopwatch startAt = Stopwatch.StartNew();
             StringBuilder timingReport = new StringBuilder();
             ConcurrentBag<string> errorServers = new ConcurrentBag<string>();
-            ParallelOptions opts = new ParallelOptions() {MaxDegreeOfParallelism = list.Count};
+            ParallelOptions opts = new ParallelOptions() {MaxDegreeOfParallelism = Math.Max(list.Count,1)};
             Parallel.For(0, list.Count, opts, (i) =>
             {
                 var sqlRef = list[i];

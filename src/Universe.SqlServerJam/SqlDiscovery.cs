@@ -59,7 +59,7 @@ namespace Universe.SqlServerJam
                                     try
                                     {
                                         var version = new Version(subKeyName);
-                                        var instance = "(LocalDB)\\v" + subKeyName;
+                                        var instance = version.Major == 11 ?  "(LocalDB)\\v11.0" : "(LocalDB)\\MSSqlLocalDB";
                                         ret.Add(new SqlServerRef()
                                         {
                                             Kind = SqlServerDiscoverySource.LocalDB,
@@ -82,6 +82,8 @@ namespace Universe.SqlServerJam
             {
                 var top = ret.OrderByVersionDesc().FirstOrDefault();
                 ret.Clear();
+                ret.Add(top);
+/*
                 // is it 2014 or 2016?
                 if (top.Version.Major > 11)
                 {
@@ -92,6 +94,7 @@ namespace Universe.SqlServerJam
                         Version = top.Version,
                     });
                 }
+*/
             }
 
             return ret;
