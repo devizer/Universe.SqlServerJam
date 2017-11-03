@@ -72,23 +72,26 @@ namespace Universe.SqlServerJam
                                     }
 
                                 }
-
-
                         }
                 }
             }
 
             // ignore all the found!!!
-            if (ret.Any())
+            // It means we do not support ugly SQL LocalDB 2012
+            if (ret.Count > 0)
             {
                 var top = ret.OrderByVersionDesc().FirstOrDefault();
                 ret.Clear();
-                ret.Add(new SqlServerRef()
+                // is it 2014 or 2016?
+                if (top.Version.Major > 11)
                 {
-                    Kind = SqlServerDiscoverySource.LocalDB,
-                    Data = "(LocalDB)\\MSSqlLocalDB",
-                    Version = top.Version,
-                });
+                    ret.Add(new SqlServerRef()
+                    {
+                        Kind = SqlServerDiscoverySource.LocalDB,
+                        Data = "(LocalDB)\\MSSqlLocalDB",
+                        Version = top.Version,
+                    });
+                }
             }
 
             return ret;
