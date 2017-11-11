@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Microsoft.Win32;
 
 namespace Universe.SqlServerJam
@@ -19,15 +20,17 @@ namespace Universe.SqlServerJam
             return ret;
         }
 
-        public static List<SqlServerRef> GetWellKnownServers()
+        public static List<SqlServerRef> GetWellKnownServers(string envPrefix = "SQLSERVER_WELLKNOWN_")
         {
             List<SqlServerRef> ret = new List<SqlServerRef>();
+            if (string.IsNullOrEmpty(envPrefix))
+                envPrefix = "SQLSERVER_WELLKNOWN_";
 
             IDictionary allVars = Environment.GetEnvironmentVariables();
             foreach (object varRaw in allVars.Keys)
             {
                 var var = varRaw.ToString();
-                if (var.StartsWith("SQLSERVER_WELLKNOWN_"))
+                if (var.StartsWith(envPrefix))
                 {
                     var value = Convert.ToString(allVars[var]);
                     if (string.IsNullOrEmpty(value)) continue;
@@ -42,59 +45,52 @@ namespace Universe.SqlServerJam
             return ret;
         }
 
+        // Always returns latest version only 
         public static List<SqlServerRef> GetLocalDbList()
         {
             List<SqlServerRef> ret = new List<SqlServerRef>();
             using (RegistryKey lm = Registry.LocalMachine)
             {
                 // default instance
-                using (RegistryKey k0 = lm.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions", false))
+                using (RegistryKey keyInstalledVersions = lm.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions", false))
                 {
-                    if (k0 != null)
-                        foreach (var subKeyName in k0.GetSubKeyNames())
+                    if (keyInstalledVersions != null)
+                        foreach (var subKeyName in keyInstalledVersions.GetSubKeyNames())
                         {
-                            using (RegistryKey candidate = k0.OpenSubKey(subKeyName))
-                                if (candidate != null)
+                            using (RegistryKey keyVersion = keyInstalledVersions.OpenSubKey(subKeyName))
+                            {
+                                if (keyVersion == null) continue;
+                                try
                                 {
-                                    try
-                                    {
-                                        var version = new Version(subKeyName);
-                                        var instance = version.Major == 11 ?  "(LocalDB)\\v11.0" : "(LocalDB)\\MSSqlLocalDB";
-                                        ret.Add(new SqlServerRef()
-                                        {
-                                            Kind = SqlServerDiscoverySource.LocalDB,
-                                            Data = instance,
-                                            Version = version,
-                                        });
-                                    }
-                                    catch
-                                    {
-                                    }
+                                    var version = new Version(subKeyName);
+                                    var instance = version.Major == 11
+                                        ? "(LocalDB)\\v11.0"
+                                        : "(LocalDB)\\MSSqlLocalDB";
 
+                                    ret.Add(new SqlServerRef()
+                                    {
+                                        Kind = SqlServerDiscoverySource.LocalDB,
+                                        Data = instance,
+                                        Version = version,
+                                    });
                                 }
+                                catch
+                                {
+                                    // a subkey in the keyInstalledVersions
+                                    // isn't a valid Version string.
+                                }
+
+                            }
                         }
                 }
             }
 
             // ignore all the found!!!
-            // It means we do not support ugly SQL LocalDB 2012
             if (ret.Count > 0)
             {
                 var top = ret.OrderByVersionDesc().FirstOrDefault();
                 ret.Clear();
                 ret.Add(top);
-/*
-                // is it 2014 or 2016?
-                if (top.Version.Major > 11)
-                {
-                    ret.Add(new SqlServerRef()
-                    {
-                        Kind = SqlServerDiscoverySource.LocalDB,
-                        Data = "(LocalDB)\\MSSqlLocalDB",
-                        Version = top.Version,
-                    });
-                }
-*/
             }
 
             return ret;
