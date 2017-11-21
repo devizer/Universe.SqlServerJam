@@ -36,7 +36,6 @@ The bullet list above (local) and (localdb) servers was discovered automatically
 ## SqlExtentions
 Here is a sample output of IDbConnection extentions on Azure DB
 ```
-SERVER 'tcp:vlad-sandbox-eu.database.windows.net,1433'
 Version (32-bit) .........: 14.0.900
 Version (string) .........: 12.0.2000.8
 Product Level ............: RTM
