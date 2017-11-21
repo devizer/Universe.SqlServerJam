@@ -12,6 +12,15 @@ namespace Universe.SqlServerJam
     public static class SqlExtentions
     {
 
+        public static IDbConnection OpenIfClosed(this IDbConnection connection)
+        {
+            if (connection == null)
+                throw new ArgumentNullException(nameof(connection));
+
+            if (connection.State == ConnectionState.Closed) connection.Open();
+            return connection;
+        }
+
         public static SqlConnection AsSqlConnection(this IDbConnection connection)
         {
             if (connection == null)
@@ -24,7 +33,7 @@ namespace Universe.SqlServerJam
                 $"SqlConnection instance is expected. Fact type is {connection.GetType()}");
         }
 
-        // @@microsoftversion
+        // Returns @@microsoftversion as System.Version
         public static Version GetServerShortVersion(this IDbConnection connection)
         {
             var con = connection.AsSqlConnection();
@@ -48,26 +57,17 @@ namespace Universe.SqlServerJam
             return connection.GetServerProperty<string>("Collation");
         }
 
-
-
-
-        /*
-                class Item_ProductVersion
-                {
-                    public int Major, Minor /*, Update1, Update2#1#;
-                }
-        */
-
+        // Returns @@VERSION
         public static string GetServerVersionAsString(this IDbConnection connection)
         {
             var con = connection.AsSqlConnection();
             OpenIfClosed(con);
-            var l = con.ExecuteScalar<string>("Select @@VERSION");
-            l = l.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ");
-            while (l.IndexOf("  ") >= 0)
-                l = l.Replace("  ", " ");
+            var ret = con.ExecuteScalar<string>("Select @@VERSION");
+            ret = ret.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ");
+            while (ret.IndexOf("  ", StringComparison.InvariantCultureIgnoreCase) >= 0)
+                ret = ret.Replace("  ", " ");
 
-            return l;
+            return ret;
         }
 
         public static T GetServerProperty<T>(this IDbConnection connection, string propertyName)
@@ -99,14 +99,12 @@ namespace Universe.SqlServerJam
 
         public static string GetServerEdition(this IDbConnection connection)
         {
-            var con = connection.AsSqlConnection();
-            return GetServerProperty<string>(con, "Edition");
+            return GetServerProperty<string>(connection, "Edition");
         }
 
         public static EngineEdition GetServerEngineEdition(this IDbConnection connection)
         {
-            var con = connection.AsSqlConnection();
-            return (EngineEdition) GetServerProperty<int>(con, "EngineEdition");
+            return (EngineEdition) GetServerProperty<int>(connection, "EngineEdition");
         }
 
         public enum EngineEdition
@@ -134,9 +132,7 @@ namespace Universe.SqlServerJam
 
         public static SecurityMode GetServerSecurityMode(this IDbConnection connection)
         {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
-            return (SecurityMode) con.GetServerProperty<int>("IsIntegratedSecurityOnly");
+            return (SecurityMode) connection.GetServerProperty<int>("IsIntegratedSecurityOnly");
         }
 
 
@@ -151,11 +147,10 @@ namespace Universe.SqlServerJam
 
         public static bool IsLocalDB(this IDbConnection connection)
         {
-            var con = connection.AsSqlConnection();
-            if (con.GetServerShortVersion().Major < 11)
+            if (connection.GetServerShortVersion().Major < 11)
                 return false;
 
-            return GetServerProperty<int>(con, "IsLocalDB") == 1;
+            return GetServerProperty<int>(connection, "IsLocalDB") == 1;
         }
 
         public static FixedServerRoles IsInFixedRoles(this IDbConnection connection)
@@ -325,13 +320,13 @@ namespace Universe.SqlServerJam
             }
         }
 
-        public static void KillConnections(string connectionString, string databseName)
+        public static void KillConnections(string connectionString, string databaseName)
         {
             if (string.IsNullOrEmpty(connectionString))
                 throw new ArgumentException("connectionString is null or empty", nameof(connectionString));
 
             if (string.IsNullOrEmpty(connectionString))
-                throw new ArgumentException("databseName is null or empty", nameof(databseName));
+                throw new ArgumentException("databaseName is null or empty", nameof(databaseName));
 
             SqlConnectionStringBuilder b = new SqlConnectionStringBuilder(connectionString);
             b.Pooling = false;
@@ -340,7 +335,7 @@ namespace Universe.SqlServerJam
                 con.Open();
                 var mySpid = con.GetSPID();
                 var ids = con
-                    .ListConnections(databseName)
+                    .ListConnections(databaseName)
                     .Where(id => id != mySpid);
 
                 foreach (var id in ids)
@@ -352,20 +347,11 @@ namespace Universe.SqlServerJam
                     catch(Exception ex)
                     {
                         Debug.WriteLine(
-                            $"Warning! Failed to kill connection {id} to database {databseName}. {ex.GetExeptionDigest()}"
+                            $"Warning! Failed to kill connection {id} to database {databaseName}. {ex.GetExeptionDigest()}"
                         );
                     }
                 }
             }
-        }
-
-        public static IDbConnection OpenIfClosed(this IDbConnection connection)
-        {
-            if (connection == null)
-                throw new ArgumentNullException(nameof(connection));
-
-            if (connection.State == ConnectionState.Closed) connection.Open();
-            return connection;
         }
 
         public static SqlDefaultPaths GetDefaultPaths(this IDbConnection connection)
@@ -422,7 +408,6 @@ select
             }
 
             return ret;
-
         }
 
         public static string GetHostPlatform(this IDbConnection connection)
@@ -446,21 +431,4 @@ else
 
     }
 
-    public enum DbOptions
-    {
-        /*
-         * Alter Database [] Set
-            AUTO_CREATE_STATISTICS { OFF | ON [ ( INCREMENTAL = { ON | OFF } ) ] }
-          | AUTO_SHRINK { ON | OFF }
-          | AUTO_UPDATE_STATISTICS { ON | OFF }
-          | AUTO_UPDATE_STATISTICS_ASYNC { ON | OFF }
-        */
-
-        AutoCreateStatistics,
-        // Available to 2014+
-        AutoCreateStatisticsIncremental,
-        AutoShrink,
-        AutoUpdateStatistic,
-        AutoUpdateStatisticAsync
-    }
 }

@@ -123,7 +123,6 @@ namespace Universe.SqlServerJam
                     option);
 
                 _Connection.OpenIfClosed().Execute(sql);
-
             }
         }
 
@@ -191,6 +190,60 @@ namespace Universe.SqlServerJam
             }
         }
 
+        /// <summary>
+        /// /// Shared (for Web/Business editions)
+        /// Basic
+        /// S0 | S1 | S2 | S3
+        /// P1 | P2 | P3
+        /// ElasticPool
+        /// System (for master DB)
+        /// </summary>
+        public string AzureServiceObjective
+        {
+            get
+            {
+                return _Connection.OpenIfClosed()
+                    .GetDatabaseProperty<string>("ServiceObjective", _DatabaseName);
+            }
+        }
+
+        /// <summary>
+        /// Web = Web Edition Database
+        /// Business = Business Edition Database
+        /// Basic
+        /// Standard
+        /// Premium
+        /// System (for master database)
+        /// </summary>
+        public string AzureEdition
+        {
+            get
+            {
+                return _Connection.OpenIfClosed()
+                    .GetDatabaseProperty<string>("Edition", _DatabaseName);
+            }
+        }
+
+        public string AzureElasticPool
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(AzureEdition))
+                    return null;
+                
+                string sql = @"
+SELECT slo.elastic_pool_name FROM 
+  sys.databases d
+  JOIN sys.database_service_objectives slo
+ON d.database_id = slo.database_id
+WHERE d.name = @name
+";
+
+                return _Connection.OpenIfClosed()
+                    .ExecuteScalar<string>(sql, new {name = _DatabaseName});
+            }
+        }
+
         public long? Size
         {
             get
@@ -250,9 +303,22 @@ namespace Universe.SqlServerJam
             }
         }
 
+        public string OwnerName
+        {
+            get
+            {
+                if (_Connection.IsAzure())
+                    return "Not Applicable";
+
+                string sql = "select suser_sname(owner_sid) from sys.databases where name = @name";
+                return _Connection.OpenIfClosed().ExecuteScalar<string>(sql, new {name = _DatabaseName});
+
+            }
+        }
 
 
-        public void Shrink(ShrinkOptions options = ShrinkOptions.ShinkAndTruncate)
+
+        public void Shrink(ShrinkOptions options = ShrinkOptions.ShinkAndTruncate, int? commandTimeout = null)
         {
 
             string so = "";
@@ -266,13 +332,19 @@ namespace Universe.SqlServerJam
                 _DatabaseName.Replace("'", "''"),
                 so);
 
-            _Connection.Execute(sql);
+            _Connection.Execute(sql, commandTimeout: commandTimeout);
         }
 
 
         public string GetDigest(int intent = 4)
         {
             StringBuilder ret = new StringBuilder();
+            WriteDigest(ret, intent);
+            return ret.ToString();
+        }
+
+        public void WriteDigest(StringBuilder ret, int intent = 4)
+        {
             string pre = intent > 0 ? new string(' ', intent) : "";
             ret.AppendLine($"{pre} - Auto Shrink ......... : {IsAutoShrink}");
             ret.AppendLine($"{pre} - Auto Create Statistic : {AutoCreateStatistic}");
@@ -285,9 +357,12 @@ namespace Universe.SqlServerJam
             ret.AppendLine($"{pre} - Default Collation ... : {DefaultCollationName} [{comparisionStyle}]");
             ret.AppendLine($"{pre} - Size (KB) ........... : {Size}");
             ret.AppendLine($"{pre} - Recovery Mode ....... : {RecoveryMode}");
+            ret.AppendLine($"{pre} - Owner ............... : {OwnerName}");
+            ret.AppendLine($"{pre} - AZ Edtion ........... : {AzureEdition}");
+            ret.AppendLine($"{pre} - AZ Service Objective. : {AzureServiceObjective}");
+            ret.AppendLine($"{pre} - AZ Elastic Pool ..... : {AzureElasticPool}");
             var isFullText = IsFullTextEnabled;
             var isClone = IsClone;
-            return ret.ToString();
         }
 
         /*

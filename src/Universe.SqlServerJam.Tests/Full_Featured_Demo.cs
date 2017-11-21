@@ -143,7 +143,8 @@ namespace Universe.SqlServerJam.Tests
                         // DB Options demo
                         var currentDatabase = con.GetCurrentDatabaseName();
                         var dbOptions = con.GetDatabaseOptionsManager(currentDatabase);
-                        report.Append("Connected DB Info ........: [" + currentDatabase + "]" + Environment.NewLine + dbOptions.GetDigest(intent: 1));
+                        report.Append("Connected DB Info ........: [" + currentDatabase + "]" + Environment.NewLine);
+                        dbOptions.WriteDigest(report, intent: 1);
 
                         report.AppendLine("Long Version .............: " + con.GetServerVersionAsString());
 
