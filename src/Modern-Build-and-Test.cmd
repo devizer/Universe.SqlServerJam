@@ -6,6 +6,6 @@ call Prepare-Nuget-and-Build-Tools.cmd
 
 rem *** TEST *** 
 pushd Universe.SqlServerJam.Tests\bin\Release
-"%NUNIT_CONSOLE_RUNNER%" --labels=On --workers=1 Universe.SqlServerJam.Tests.dll
+"%NUNIT_CONSOLE_RUNNER%" --labels=On --workers=1 Universe.SqlServerJam.Tests.dll | tee tests.log
 "%REPORT_UNIT%" .\ 1>report_uit.log 2>&1
 popd

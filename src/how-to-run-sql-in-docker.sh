@@ -1,1 +1,1 @@
-docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=~1qazxsw2' -p 1433:1433 -d microsoft/mssql-server-linux:latest
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=~1qazxsw2' -e 'MSSQL_PID=Developer' -p 1433:1433 microsoft/mssql-server-linux:latest

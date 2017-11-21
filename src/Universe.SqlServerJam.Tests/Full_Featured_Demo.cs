@@ -128,10 +128,8 @@ namespace Universe.SqlServerJam.Tests
                         transport += ", " + (con.GetConnectionEncryption() ? "Encrypted" : "Without Encryption");
                         report.AppendLine("Transport ................: " + transport);
                         report.AppendLine("Server Collation .........: " + con.GetServerCollation());
-                        report.AppendLine("Database Collation .......: " + con.GetDatabaseCollation() + " (database " + con.GetCurrentDatabaseName() + ")");
-                        report.AppendLine("Database Recovery Mode ...: " + con.GetDatabaseRecoveryMode());
                         var roles = con.IsInFixedRoles();
-                        var isSysAdmin = ((roles & SqlExtentions.FixedServerRoles.SysAdmin) != 0);
+                        var isSysAdmin = (roles & SqlExtentions.FixedServerRoles.SysAdmin) != 0;
                         var rolesString = isSysAdmin ? "Sys Admin" : roles.ToString();
                         report.AppendLine("Built-in Roles ...........: " + rolesString);
                         var dbList = con.GetDatabases();
@@ -141,19 +139,26 @@ namespace Universe.SqlServerJam.Tests
                         report.AppendLine("Default Data .............: " + paths.DefaultData);
                         report.AppendLine("Default Log ..............: " + paths.DefaultLog);
                         report.AppendLine("Default Backup ...........: " + paths.DefaultBackup);
+
+                        // DB Options demo
+                        var currentDatabase = con.GetCurrentDatabaseName();
+                        var dbOptions = con.GetDatabaseOptions(currentDatabase);
+                        report.Append("Connected DB Info ........: [" + currentDatabase + "]" + Environment.NewLine + dbOptions.GetDigest(intent: 1));
+
                         report.AppendLine("Long Version .............: " + con.GetServerVersionAsString());
+
 
                         if (con.IsAzure() && Debugger.IsAttached) Debugger.Break();
                         if (!con.IsAzure())
                         {
-                            var prevRecovery = con.GetDatabaseRecoveryMode();
-                            var newRecovery =
-                                "BULK_LOGGED".Equals(prevRecovery, StringComparison.InvariantCultureIgnoreCase)
-                                    ? SqlExtentions.RecoveryMode.SIMPLE
-                                    : SqlExtentions.RecoveryMode.BULK_LOGGED;
+                            var prevRecovery = dbOptions.RecoveryMode;
+                            DatabaseRecoveryMode newRecovery =
+                                prevRecovery == DatabaseRecoveryMode.Bulk_Logged
+                                    ? DatabaseRecoveryMode.Simple
+                                    : DatabaseRecoveryMode.Bulk_Logged;
 
-                            con.SetDatabaseRecoveryMode(recoveryMode: newRecovery);
-                            con.SetDatabaseRecoveryMode(recoveryMode: (SqlExtentions.RecoveryMode) Enum.Parse(typeof(SqlExtentions.RecoveryMode), prevRecovery));
+                            dbOptions.RecoveryMode = newRecovery;
+                            dbOptions.RecoveryMode = prevRecovery;
                         }
                     }
                 }

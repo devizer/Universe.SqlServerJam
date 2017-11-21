@@ -48,18 +48,6 @@ namespace Universe.SqlServerJam
             return connection.GetServerProperty<string>("Collation");
         }
 
-        public static string GetDatabaseCollation(this IDbConnection connection, string databaseName = null)
-        {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
-
-            if (databaseName == null)
-                databaseName = GetCurrentDatabaseName(con);
-
-            var sql = @"Select DATABASEPROPERTYEX(@name,'collation');";
-            return con.ExecuteScalar<string>(sql, new { name = databaseName });
-        }
-
 
 
 
@@ -87,6 +75,16 @@ namespace Universe.SqlServerJam
             var con = connection.AsSqlConnection();
             OpenIfClosed(con);
             return con.ExecuteScalar<T>($"Select SERVERPROPERTY('{propertyName}')");
+        }
+
+        public static T GetDatabaseProperty<T>(this IDbConnection connection, string propertyName, string databaseName = null)
+        {
+            var con = connection.AsSqlConnection();
+            OpenIfClosed(con);
+            if (databaseName == null)
+                databaseName = GetCurrentDatabaseName(con);
+
+            return con.ExecuteScalar<T>($"Select {propertyName} from sys.databases where name=@name", new {name = databaseName});
         }
 
         public static string GetServerEdition(this IDbConnection connection)
@@ -192,31 +190,6 @@ namespace Universe.SqlServerJam
             return GetServerProperty<string>(con, "ProductUpdateLevel");
         }
 
-        // FULL | BULK_LOGGED | SIMPLE
-        public static string GetDatabaseRecoveryMode(this IDbConnection connection, string databaseName = null)
-        {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
-            if (databaseName == null)
-                databaseName = GetCurrentDatabaseName(con);
-
-            var sql = @"SELECT recovery_model_desc FROM sys.databases WHERE name = @name;";
-            return con.ExecuteScalar<string>(sql, new {name = databaseName});
-        }
-
-        public static void SetDatabaseRecoveryMode(this IDbConnection connection, string databaseName = null, RecoveryMode recoveryMode = RecoveryMode.SIMPLE)
-        {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
-
-            if (databaseName == null)
-                databaseName = GetCurrentDatabaseName(con);
-
-            var sql = $"Alter Database [{databaseName}] Set Recovery " + recoveryMode;
-            con.Execute(sql, new { name = databaseName });
-        }
-
-
         public static string GetCurrentDatabaseName(this IDbConnection connection, int? id = null)
         {
             var con = connection.AsSqlConnection();
@@ -225,6 +198,17 @@ namespace Universe.SqlServerJam
                 return (string)con.ExecuteScalar("Select DB_NAME(@id)", new { id = id.Value });
             else
                 return (string)con.ExecuteScalar("Select DB_NAME()");
+        }
+
+        public static DatabaseOptionsManagment GetDatabaseOptions(this IDbConnection connection, string databaseName = null)
+        {
+            var con = connection.AsSqlConnection();
+            OpenIfClosed(con);
+
+            if (databaseName == null)
+                databaseName = GetCurrentDatabaseName(con);
+
+            return new DatabaseOptionsManagment(con, databaseName);
         }
 
         public static string GetConnectionTransportAsString(this IDbConnection connection)
@@ -274,7 +258,7 @@ namespace Universe.SqlServerJam
         // SQL Azure
         public static bool IsAzure(this IDbConnection connection)
         {
-            return "SQL Azure".Equals(connection.GetServerEdition());
+            return "SQL Azure".Equals(connection.GetServerEdition(), StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static int GetSPID(this IDbConnection connection)
@@ -318,16 +302,15 @@ namespace Universe.SqlServerJam
                 }
                 catch (Exception ex)
                 {
+                    Debug.WriteLine(
+                        "Warning! Failed to drop database {0} on server {1}. {2}",
+                        databseName,
+                        new SqlConnectionStringBuilder(connectionString).DataSource,
+                        ex.GetExeptionDigest()
+                    );
 
                     if (throwOnError)
                         throw;
-                    else
-                        Debug.WriteLine(string.Format(
-                            "Warning! Failed to drop database {0} on server {1}. {2}",
-                            databseName, 
-                            new SqlConnectionStringBuilder(connectionString).DataSource,
-                            ex.GetExeptionDigest()
-                        ));
                 }
             }
         }
@@ -366,80 +349,13 @@ namespace Universe.SqlServerJam
             }
         }
 
-        public static void OpenIfClosed(this IDbConnection connection)
+        public static IDbConnection OpenIfClosed(this IDbConnection connection)
         {
             if (connection == null)
                 throw new ArgumentNullException(nameof(connection));
 
             if (connection.State == ConnectionState.Closed) connection.Open();
-        }
-
-        public static bool? GetAutoShrinkProperty(this IDbConnection connection, string databaseName = null)
-        {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
-            if (databaseName == null)
-                databaseName = GetCurrentDatabaseName(con);
-
-            var sql = @"Select DatabasePropertyEx(@name, 'isautoshrink')";
-            return con.ExecuteScalar<bool?>(sql, new { name = databaseName });
-        }
-
-        public static bool? SetAutoShrinkProperty(this IDbConnection connection, string databaseName = null, bool needAutoShrink = false)
-        {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
-            if (databaseName == null)
-                databaseName = GetCurrentDatabaseName(con);
-
-            var sql = $"Alter Database [{databaseName}] SET AUTO_SHRINK " + (needAutoShrink ? "ON" : "OFF");
-            return con.ExecuteScalar<bool?>(sql, new { name = databaseName });
-        }
-
-        public static void ShrinkDatabase(this IDbConnection connection, string databaseName = null, ShrinkOptions options = ShrinkOptions.ShinkAndTruncate)
-        {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
-
-            if (databaseName == null)
-                databaseName = GetCurrentDatabaseName(con);
-
-            string so = "";
-            if (options == ShrinkOptions.ShrinkOnly)
-                so = ", NOTRUNCATE";
-            else if (options == ShrinkOptions.TruncateOnly)
-                so = ", TRUNCATEONLY";
-
-            string sql = string.Format(
-                @"DBCC SHRINKDATABASE ('{0}' {1}) WITH NO_INFOMSGS",
-                databaseName, 
-                so);
-
-            con.Execute(sql);
-        }
-
-        public static long? GetDatabaseSize(this IDbConnection connection, string databaseName = null, ShrinkOptions options = ShrinkOptions.ShinkAndTruncate)
-        {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
-
-            if (databaseName == null)
-                databaseName = GetCurrentDatabaseName(con);
-
-            int size;
-            if (!GetDatabases(con).TryGetValue(databaseName, out size))
-                return null;
-            else
-                return size;
-        }
-
-
-
-        public enum ShrinkOptions
-        {
-            ShinkAndTruncate,
-            ShrinkOnly,
-            TruncateOnly,
+            return connection;
         }
 
         public static SqlDefaultPaths GetDefaultPaths(this IDbConnection connection)
@@ -517,10 +433,24 @@ else
             return con.ExecuteScalar<string>(sql);
         }
 
-        public enum RecoveryMode
-        {
-            FULL, BULK_LOGGED, SIMPLE
-        }
 
+    }
+
+    public enum DbOptions
+    {
+        /*
+         * Alter Database [] Set
+            AUTO_CREATE_STATISTICS { OFF | ON [ ( INCREMENTAL = { ON | OFF } ) ] }
+          | AUTO_SHRINK { ON | OFF }
+          | AUTO_UPDATE_STATISTICS { ON | OFF }
+          | AUTO_UPDATE_STATISTICS_ASYNC { ON | OFF }
+        */
+
+        AutoCreateStatistics,
+        // Available to 2014+
+        AutoCreateStatisticsIncremental,
+        AutoShrink,
+        AutoUpdateStatistic,
+        AutoUpdateStatisticAsync
     }
 }
