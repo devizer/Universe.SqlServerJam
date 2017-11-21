@@ -77,6 +77,16 @@ namespace Universe.SqlServerJam
             return con.ExecuteScalar<T>($"Select SERVERPROPERTY('{propertyName}')");
         }
 
+        public static T GetSysDatabasesColumn<T>(this IDbConnection connection, string propertyName, string databaseName = null)
+        {
+            var con = connection.AsSqlConnection();
+            OpenIfClosed(con);
+            if (databaseName == null)
+                databaseName = GetCurrentDatabaseName(con);
+
+            return con.ExecuteScalar<T>($"Select {propertyName} from sys.databases where name=@name", new { name = databaseName });
+        }
+
         public static T GetDatabaseProperty<T>(this IDbConnection connection, string propertyName, string databaseName = null)
         {
             var con = connection.AsSqlConnection();
@@ -84,7 +94,7 @@ namespace Universe.SqlServerJam
             if (databaseName == null)
                 databaseName = GetCurrentDatabaseName(con);
 
-            return con.ExecuteScalar<T>($"Select {propertyName} from sys.databases where name=@name", new {name = databaseName});
+            return con.ExecuteScalar<T>($"Select DatabasePropertyEx(@db, @property)", new { db = databaseName, property = propertyName });
         }
 
         public static string GetServerEdition(this IDbConnection connection)
@@ -200,7 +210,7 @@ namespace Universe.SqlServerJam
                 return (string)con.ExecuteScalar("Select DB_NAME()");
         }
 
-        public static DatabaseOptionsManagment GetDatabaseOptions(this IDbConnection connection, string databaseName = null)
+        public static DatabaseOptionsManagement GetDatabaseOptionsManager(this IDbConnection connection, string databaseName = null)
         {
             var con = connection.AsSqlConnection();
             OpenIfClosed(con);
@@ -208,7 +218,7 @@ namespace Universe.SqlServerJam
             if (databaseName == null)
                 databaseName = GetCurrentDatabaseName(con);
 
-            return new DatabaseOptionsManagment(con, databaseName);
+            return new DatabaseOptionsManagement(con, databaseName);
         }
 
         public static string GetConnectionTransportAsString(this IDbConnection connection)

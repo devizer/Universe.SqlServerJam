@@ -9,7 +9,7 @@ using Dapper;
 
 namespace Universe.SqlServerJam
 {
-    public class DatabaseOptionsManagment
+    public class DatabaseOptionsManagement
     {
         private readonly SqlConnection _Connection;
         private readonly string _DatabaseName;
@@ -28,7 +28,7 @@ namespace Universe.SqlServerJam
             }
         }
 
-        public DatabaseOptionsManagment(SqlConnection connection, string databaseName)
+        public DatabaseOptionsManagement(SqlConnection connection, string databaseName)
         {
             _Connection = connection;
             _DatabaseName = databaseName;
@@ -36,7 +36,7 @@ namespace Universe.SqlServerJam
 
         public bool IsBrokerEnabled
         {
-            get { return _Connection.OpenIfClosed().GetDatabaseProperty<bool>("is_broker_enabled", _DatabaseName); }
+            get { return _Connection.OpenIfClosed().GetSysDatabasesColumn<bool>("is_broker_enabled", _DatabaseName); }
             set
             {
                 string sql = string.Format("Alter Database [{0}] Set {1}_BROKER",
@@ -49,7 +49,7 @@ namespace Universe.SqlServerJam
 
         public bool IsReadOnly
         {
-            get { return _Connection.OpenIfClosed().GetDatabaseProperty<bool>("is_read_only", _DatabaseName); }
+            get { return _Connection.OpenIfClosed().GetSysDatabasesColumn<bool>("is_read_only", _DatabaseName); }
             set
             {
                 string sql = string.Format("Alter Database [{0}] Set {1}",
@@ -62,7 +62,7 @@ namespace Universe.SqlServerJam
 
         public bool IsAutoShrink
         {
-            get { return _Connection.OpenIfClosed().GetDatabaseProperty<bool>("is_auto_shrink_on", _DatabaseName); }
+            get { return _Connection.OpenIfClosed().GetSysDatabasesColumn<bool>("is_auto_shrink_on", _DatabaseName); }
             set
             {
                 string sql = string.Format("Alter Database [{0}] Set AUTO_SHRINK {1}",
@@ -84,7 +84,7 @@ namespace Universe.SqlServerJam
 
         public string StateDescription
         {
-            get { return _Connection.OpenIfClosed().GetDatabaseProperty<string>("state_desc", _DatabaseName); }
+            get { return _Connection.OpenIfClosed().GetSysDatabasesColumn<string>("state_desc", _DatabaseName); }
         }
 
         public bool IsOnline
@@ -103,9 +103,9 @@ namespace Universe.SqlServerJam
             get
             {
                 var c = _Connection.OpenIfClosed();
-                bool isOn = c.GetDatabaseProperty<bool>("is_auto_create_stats_on");
+                bool isOn = c.GetSysDatabasesColumn<bool>("is_auto_create_stats_on");
                 bool isIncremental = IsIncrementalAutoStatisticCreationSupported
-                                     && c.GetDatabaseProperty<bool>("is_auto_create_stats_incremental_on");
+                                     && c.GetSysDatabasesColumn<bool>("is_auto_create_stats_incremental_on");
 
                 return !isOn ? AutoCreateStatisticMode.Off
                     : (isIncremental ? AutoCreateStatisticMode.Incremental : AutoCreateStatisticMode.Complete);
@@ -132,8 +132,8 @@ namespace Universe.SqlServerJam
             get
             {
                 var c = _Connection.OpenIfClosed();
-                bool isOn = c.GetDatabaseProperty<bool>("is_auto_update_stats_on");
-                bool isAsync = c.GetDatabaseProperty<bool>("is_auto_update_stats_async_on");
+                bool isOn = c.GetSysDatabasesColumn<bool>("is_auto_update_stats_on");
+                bool isAsync = c.GetSysDatabasesColumn<bool>("is_auto_update_stats_async_on");
                 return !isOn ? AutoUpdateStatisticMode.Off
                     : (isAsync ? AutoUpdateStatisticMode.Async : AutoUpdateStatisticMode.Syncly);
             }
@@ -156,7 +156,10 @@ namespace Universe.SqlServerJam
 
         public string DefaultCollationName
         {
-            get { return _Connection.OpenIfClosed().GetDatabaseProperty<string>("collation_name", _DatabaseName); }
+            get
+            {
+                return _Connection.OpenIfClosed().GetSysDatabasesColumn<string>("collation_name", _DatabaseName);
+            }
             set
             {
                 if (new[] { '\'', ';', '"', ' ', '\r', '\n'}.Any(x => value.IndexOf(x.ToString()) >= 0))
@@ -167,6 +170,24 @@ namespace Universe.SqlServerJam
                     value);
 
                 _Connection.OpenIfClosed().Execute(sql);
+            }
+        }
+
+        public DatabaseComparisonStyle ComparisonStyle
+        {
+            get
+            {
+                return (DatabaseComparisonStyle)_Connection.OpenIfClosed()
+                    .GetDatabaseProperty<int>("ComparisonStyle", _DatabaseName);
+            }
+        }
+
+        public bool IsClone
+        {
+            get
+            {
+                return _Connection.OpenIfClosed()
+                    .GetDatabaseProperty<bool>("IsClone", _DatabaseName);
             }
         }
 
@@ -186,7 +207,7 @@ namespace Universe.SqlServerJam
         {
             get
             {
-                var raw = _Connection.OpenIfClosed().GetDatabaseProperty<string>("recovery_model_desc");
+                var raw = _Connection.OpenIfClosed().GetSysDatabasesColumn<string>("recovery_model_desc");
                 var all = Enum.GetValues(typeof(DatabaseRecoveryMode)).OfType<DatabaseRecoveryMode>().ToList();
                 var ret = all.FirstOrDefault(x => x.ToString().Equals(raw, StringComparison.InvariantCultureIgnoreCase));
 
@@ -212,7 +233,7 @@ namespace Universe.SqlServerJam
         {
             get
             {
-                return _Connection.OpenIfClosed().GetDatabaseProperty<bool>("is_recursive_triggers_on");
+                return _Connection.OpenIfClosed().GetSysDatabasesColumn<bool>("is_recursive_triggers_on");
             }
             set
             {
@@ -225,9 +246,8 @@ namespace Universe.SqlServerJam
         {
             get
             {
-                return _Connection.OpenIfClosed().GetDatabaseProperty<bool>("is_fulltext_enabled");
+                return _Connection.OpenIfClosed().GetSysDatabasesColumn<bool>("is_fulltext_enabled");
             }
-
         }
 
 
@@ -261,10 +281,12 @@ namespace Universe.SqlServerJam
             ret.AppendLine($"{pre} - Broker Enabled ...... : {IsBrokerEnabled}");
             ret.AppendLine($"{pre} - State ............... : {(IsOnline ? "Online" : StateDescription)}");
             ret.AppendLine($"{pre} - Is Readonly ......... : {IsReadOnly}");
-            ret.AppendLine($"{pre} - Default Collation.... : {DefaultCollationName}");
+            var comparisionStyle = ComparisonStyle;
+            ret.AppendLine($"{pre} - Default Collation ... : {DefaultCollationName} [{comparisionStyle}]");
             ret.AppendLine($"{pre} - Size (KB) ........... : {Size}");
-            ret.AppendLine($"{pre} - Recovery Mode........ : {RecoveryMode}");
+            ret.AppendLine($"{pre} - Recovery Mode ....... : {RecoveryMode}");
             var isFullText = IsFullTextEnabled;
+            var isClone = IsClone;
             return ret.ToString();
         }
 
@@ -316,6 +338,15 @@ namespace Universe.SqlServerJam
         Simple,
         Bulk_Logged,
         Full,
+    }
+
+    [Flags]
+    public enum DatabaseComparisonStyle
+    {
+        IgnoreCase = 1,
+        IgnoreAccent = 2,
+        IgnoreKana = 65536,
+        IgnoreWidth = 131072,
     }
 
 

@@ -33,4 +33,3 @@ Console.WriteLine(sqlServers.AsBullets());
 
 The bullet list above (local) and (localdb) servers was discovered automatically using registry, and rest of servers where injected using `SQLSERVER_WELLKNOWN_` env vars.
 
-
