@@ -43,9 +43,9 @@ Console.WriteLine(sqlServers.AsBullets());
  * tcp:Ubuntu-16.04-LTS,1433 (14.0.3006)
  * (local)\SQLEXPRESS (14.0.1000.169)
  * tcp:my-server-eu.database.windows.net,1433 (14.0.900)
- * tcp:my-server-frankfurt.cu2g0szytlwx.eu-central-1.rds.amazonaws.com,1433 (13.0.4422)
+ * tcp:my-server-frankfurt.blablahash.eu-central-1.rds.amazonaws.com,1433 (13.0.4422)
  * (LocalDB)\MSSqlLocalDB (13.0)
- * tcp:my-server-oregon.chwcc2jan4bi.us-west-2.rds.amazonaws.com,1433 (10.50.2789)
+ * tcp:my-server-oregon.blablahash.rds.amazonaws.com,1433 (10.50.2789)
  * (local)\SQL2008R2 (10.50.1600.1)
  * (local)\SQL2005 (9.0.5000.0)
 ```
