@@ -21,23 +21,10 @@ namespace Universe.SqlServerJam
             return connection;
         }
 
-        public static SqlConnection AsSqlConnection(this IDbConnection connection)
-        {
-            if (connection == null)
-                throw new ArgumentNullException(nameof(connection));
-
-            if (connection is SqlConnection)
-                return (SqlConnection) connection;
-
-            throw new ArgumentException(
-                $"SqlConnection instance is expected. Fact type is {connection.GetType()}");
-        }
-
         // Returns @@microsoftversion as System.Version
         public static Version GetServerShortVersion(this IDbConnection connection)
         {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
+            var con = connection.OpenIfClosed();
             int v = con.ExecuteScalar<int>("Select @@MICROSOFTVERSION");
             int v1 = v >> 24;
             int v2 = v >> 16 & 0xFF;
@@ -60,8 +47,7 @@ namespace Universe.SqlServerJam
         // Returns @@VERSION
         public static string GetServerVersionAsString(this IDbConnection connection)
         {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
+            var con = connection.OpenIfClosed();
             var ret = con.ExecuteScalar<string>("Select @@VERSION");
             ret = ret.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ");
             while (ret.IndexOf("  ", StringComparison.InvariantCultureIgnoreCase) >= 0)
@@ -72,15 +58,13 @@ namespace Universe.SqlServerJam
 
         public static T GetServerProperty<T>(this IDbConnection connection, string propertyName)
         {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
+            var con = connection.OpenIfClosed();
             return con.ExecuteScalar<T>($"Select SERVERPROPERTY('{propertyName}')");
         }
 
         public static T GetSysDatabasesColumn<T>(this IDbConnection connection, string propertyName, string databaseName = null)
         {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
+            var con = connection.OpenIfClosed();
             if (databaseName == null)
                 databaseName = GetCurrentDatabaseName(con);
 
@@ -89,8 +73,7 @@ namespace Universe.SqlServerJam
 
         public static T GetDatabaseProperty<T>(this IDbConnection connection, string propertyName, string databaseName = null)
         {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
+            var con = connection.OpenIfClosed();
             if (databaseName == null)
                 databaseName = GetCurrentDatabaseName(con);
 
@@ -155,8 +138,7 @@ namespace Universe.SqlServerJam
 
         public static FixedServerRoles IsInFixedRoles(this IDbConnection connection)
         {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
+            var con = connection.OpenIfClosed();
             IEnumerable<FixedServerRoles> all = Enum.GetValues(typeof (FixedServerRoles)).OfType<FixedServerRoles>();
             FixedServerRoles ret = FixedServerRoles.None;
             foreach (var i in all)
@@ -185,20 +167,17 @@ namespace Universe.SqlServerJam
 
         public static string GetServerProductLevel(this IDbConnection connection)
         {
-            var con = connection.AsSqlConnection();
-            return GetServerProperty<string>(con, "ProductLevel");
+            return GetServerProperty<string>(connection, "ProductLevel");
         }
 
         public static string GetServerProductUpdateLevel(this IDbConnection connection)
         {
-            var con = connection.AsSqlConnection();
-            return GetServerProperty<string>(con, "ProductUpdateLevel");
+            return GetServerProperty<string>(connection, "ProductUpdateLevel");
         }
 
         public static string GetCurrentDatabaseName(this IDbConnection connection, int? id = null)
         {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
+            var con = connection.OpenIfClosed();
             if (id.HasValue)
                 return (string)con.ExecuteScalar("Select DB_NAME(@id)", new { id = id.Value });
             else
@@ -207,8 +186,7 @@ namespace Universe.SqlServerJam
 
         public static DatabaseOptionsManagement GetDatabaseOptionsManager(this IDbConnection connection, string databaseName = null)
         {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
+            var con = connection.OpenIfClosed();
 
             if (databaseName == null)
                 databaseName = GetCurrentDatabaseName(con);
@@ -219,8 +197,7 @@ namespace Universe.SqlServerJam
         public static string GetConnectionTransportAsString(this IDbConnection connection)
         {
             const string sql = "SELECT net_transport FROM sys.dm_exec_connections WHERE session_id = @@SPID;";
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
+            var con = connection.OpenIfClosed();
             return con.ExecuteScalar<string>(sql);
         }
 
@@ -228,15 +205,13 @@ namespace Universe.SqlServerJam
         public static bool GetConnectionEncryption(this IDbConnection connection)
         {
             const string sql = "SELECT encrypt_option FROM sys.dm_exec_connections WHERE session_id = @@SPID;";
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
+            var con = connection.OpenIfClosed();
             return con.ExecuteScalar<bool>(sql);
         }
 
         public static Dictionary<string, int> GetDatabases(this IDbConnection connection)
         {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
+            var con = connection.OpenIfClosed();
             if (!IsAzure(connection))
             {
                 var query = con.Query("exec sp_databases");
@@ -272,15 +247,13 @@ namespace Universe.SqlServerJam
 
         public static int GetSPID(this IDbConnection connection)
         {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
+            var con = connection.OpenIfClosed();
             return con.ExecuteScalar<int>("Select @@SPID");
         }
 
         public static List<int> ListConnections(this IDbConnection connection, string databaseName)
         {
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
+            var con = connection.OpenIfClosed();
 
             if (databaseName == null)
                 databaseName = GetCurrentDatabaseName(con);
@@ -361,8 +334,7 @@ namespace Universe.SqlServerJam
         public static SqlDefaultPaths GetDefaultPaths(this IDbConnection connection)
         {
 
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
+            var con = connection.OpenIfClosed();
 
             const string sql = @"
 declare @DefaultData nvarchar(1024)
@@ -417,8 +389,7 @@ select
         public static string GetHostPlatform(this IDbConnection connection)
         {
 
-            var con = connection.AsSqlConnection();
-            OpenIfClosed(con);
+            var con = connection.OpenIfClosed();
 
             const string sql = @"
 if exists (select 1 from sys.all_objects where name = 'dm_os_host_info' and type = 'V' and is_ms_shipped = 1)

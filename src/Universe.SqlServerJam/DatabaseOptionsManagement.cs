@@ -11,7 +11,7 @@ namespace Universe.SqlServerJam
 {
     public class DatabaseOptionsManagement
     {
-        private readonly SqlConnection _Connection;
+        private readonly IDbConnection _Connection;
         private readonly string _DatabaseName;
         readonly object _Sync = new object();
         private Version _ServerVersion;
@@ -28,7 +28,7 @@ namespace Universe.SqlServerJam
             }
         }
 
-        public DatabaseOptionsManagement(SqlConnection connection, string databaseName)
+        public DatabaseOptionsManagement(IDbConnection connection, string databaseName)
         {
             _Connection = connection;
             _DatabaseName = databaseName;
