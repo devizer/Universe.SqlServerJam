@@ -404,6 +404,48 @@ else
         }
 
 
+        public enum RdbmsFamily
+        {
+            Unknown,
+            MSSQLServer,
+            SQLite,
+            MySQL,
+            Postgre,
+            Oracle,
+        }
+
+        public static RdbmsFamily GetDbFamily(this IDbConnection connection)
+        {
+            var checkers = new[]
+            {
+                new {Kind = RdbmsFamily.MSSQLServer, Probe = "Select @@VERSION"},
+                new {Kind = RdbmsFamily.SQLite, Probe = "Select sqlite_version();"},
+                new {Kind = RdbmsFamily.MySQL, Probe = "Show Variables Like \"VERSION\";"},
+                new {Kind = RdbmsFamily.Postgre, Probe = "Select Version();"},
+                new {Kind = RdbmsFamily.Oracle, Probe = "SELECT * FROM V$VERSION"},
+            };
+
+            // 3.15.2 (2017) | 3.6.23 (2010)
+            // PostgreSQL 9.6.3 on x86_64-pc-linux-gnu, compiled by gcc (GCC) 4.9.3, 64-bit
+            // PostgreSQL 9.1.24lts2 on x86_64-unknown-linux-gnu, compiled by gcc (Debian 4.7.2-5) 4.7.2, 64-bit
+
+            OpenIfClosed(connection);
+            foreach (var check in checkers)
+            {
+                try
+                {
+                    connection.Execute(check.Probe);
+                    return check.Kind;
+                }
+                catch
+                {
+                }
+            }
+
+            return RdbmsFamily.Unknown;
+        }
+
+
     }
 
 }
