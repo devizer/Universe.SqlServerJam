@@ -34,6 +34,7 @@ namespace Universe.SqlServerJam
             return
                 host.Equals(".", StringComparison.InvariantCultureIgnoreCase)
                 || host.Equals("(local)", StringComparison.InvariantCultureIgnoreCase)
+                || host.Equals("::1", StringComparison.InvariantCultureIgnoreCase)
                 || host.Equals("127.0.0.1", StringComparison.InvariantCultureIgnoreCase);
 
             // Before (rough)
@@ -87,7 +88,6 @@ namespace Universe.SqlServerJam
                 timeout = TimeSpan.FromSeconds(30);
 
             if (!IsLocalDB(localDb)) return false;
-            string instanceName = localDb.Split('\\').LastOrDefault() ?? "MSSQLLocalDB";
             Stopwatch sw = Stopwatch.StartNew();
             while (true)
             {
@@ -102,6 +102,7 @@ namespace Universe.SqlServerJam
                 }
                 catch
                 {
+                    string instanceName = localDb.Split('\\').LastOrDefault() ?? "MSSQLLocalDB";
                     // try { StartLocalDB_Impl(instanceName, (int)timeout.TotalMilliseconds); } catch { }
                 }
 

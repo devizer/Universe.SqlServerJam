@@ -263,7 +263,11 @@ namespace Universe.SqlServerJam
         // SQL Azure
         public static bool IsAzure(this IDbConnection connection)
         {
-            return "SQL Azure".Equals(connection.GetServerEdition(), StringComparison.InvariantCultureIgnoreCase);
+            if ("SQL Azure".Equals(connection.GetServerEdition(), StringComparison.InvariantCultureIgnoreCase))
+                return true;
+
+            var so = connection.OpenIfClosed().GetDatabaseProperty<string>("ServiceObjective");
+            return !string.IsNullOrEmpty(so);
         }
 
         public static int GetSPID(this IDbConnection connection)
