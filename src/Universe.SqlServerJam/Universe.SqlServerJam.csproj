@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExperimentalDbExtentions.cs" />
     <Compile Include="DatabaseOptionsManagement.cs" />
     <Compile Include="ExceptionExtentions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
