@@ -5,10 +5,29 @@ Package implements: discovering local sql server instances by the same way as SS
 Source code: [Full_Featured_Demo.cs](https://github.com/devizer/Universe.SqlServerJam/blob/master/Universe.SqlServerJam/Universe.SqlServerJam.Tests/Full_Featured_Demo.cs)
 
 ## SqlDiscovery
-It is a root class of the library.
+It is *a* first person class of the library.
 It's purpose to find local installed SQL Server, icluding x86 and x64 families.
-Also it finds default MSSQLLocalDB instance of LocalDB 2014 or 2016.
-Optionally for integration tests network/cloud SQL Servers might be injectec into descory proc using environvent variables. For example:
+```csharp
+public static List<SqlServerRef> GetLocalDbAndServerList() { ... }
+
+public class SqlServerRef
+{
+    public SqlServerDiscoverySource Kind { get; set; }
+    public Version Version { get; set; }
+    public string ConnectionString { get; }
+}
+
+public enum SqlServerDiscoverySource
+{
+    Local,
+    LocalDB,
+    WellKnown
+}
+
+```
+
+Also it finds default MSSQLLocalDB instance of LocalDB 2012 ... 2016.
+Optionally for integration tests a network/cloud SQL Servers might be injectec into descory proc using environvent variables. For example:
 ```
 set SQLSERVER_WELLKNOWN_Linux=Server=tcp:Ubuntu-16.04-LTS,1433;User Id=sa;Password=your!passw0rd
 set SQLSERVER_WELLKNOWN_Azure_EU=Server=tcp:my-server.database.windows.net,1433;Initial Catalog=MyDb;Persist Security Info=False;User ID=<user>;Password=<password>;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
