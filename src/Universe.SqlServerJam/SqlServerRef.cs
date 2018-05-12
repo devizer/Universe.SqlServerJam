@@ -82,6 +82,7 @@ namespace Universe.SqlServerJam
                     }
                     catch
                     {
+                        // protocol is not supported
                     }
 
                     if (startAt.ElapsedMilliseconds > timeoutMillisecs)

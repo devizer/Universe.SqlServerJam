@@ -10,7 +10,7 @@ namespace Universe.SqlServerJam
         [Description("Standard (This is returned for Standard, Web and Business Intelligence.)")]
         Standard = 2,
 
-        [Description("Enterprise (This is returned for Evaluation, Developer, and Enterprise editions.)")]
+        [Description("Enterprise (This is returned for Evaluation, Developer and Enterprise editions.)")]
         Enterprise = 3,
 
         [Description("Express (This is returned for Express, Express with Tools and Express with Advanced Services)")]

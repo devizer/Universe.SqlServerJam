@@ -56,7 +56,7 @@
     <Compile Include="SqlDiscovery.cs" />
     <Content Include="SqlExtentions.cs.txt" />
     <Compile Include="SqlServerDiscoverySource.cs" />
-    <Compile Include="SqlServerManagment.cs" />
+    <Compile Include="SqlServerManagement.cs" />
     <Compile Include="SqlServerRef.cs" />
     <Compile Include="SqlServiceExtentions.cs" />
     <Compile Include="SqlSpeedMeasurement.cs" />

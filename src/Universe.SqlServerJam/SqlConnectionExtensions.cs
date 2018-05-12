@@ -7,9 +7,9 @@ namespace Universe.SqlServerJam
     public static class SqlConnectionExtensions
     {
 
-        public static SqlServerManagment GetSqlManagment(this IDbConnection connection)
+        public static SqlServerManagement GetSqlManagment(this IDbConnection connection)
         {
-            return new SqlServerManagment(connection);
+            return new SqlServerManagement(connection);
         }
 
     }

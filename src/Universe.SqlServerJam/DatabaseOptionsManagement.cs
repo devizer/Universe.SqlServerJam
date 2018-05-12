@@ -12,7 +12,7 @@ namespace Universe.SqlServerJam
     public class DatabaseOptionsManagement
     {
         // private readonly IDbConnection _Connection;
-        private SqlServerManagment _ServerManagement;
+        private SqlServerManagement _ServerManagement;
         private readonly string _DatabaseName;
         readonly object _Sync = new object();
         private Version _ServerVersion;
@@ -21,21 +21,21 @@ namespace Universe.SqlServerJam
 
         Version ServerVersion => _ServerManagement.ShortServerVersion;
 
-        public DatabaseOptionsManagement(SqlServerManagment serverManagment, string databaseName = null)
+        public DatabaseOptionsManagement(SqlServerManagement serverManagement, string databaseName = null)
         {
-            _ServerManagement = serverManagment;
-            _DatabaseName = databaseName ?? serverManagment.CurrentDatabaseName;
+            _ServerManagement = serverManagement;
+            _DatabaseName = databaseName ?? serverManagement.CurrentDatabaseName;
         }
 
-        internal T GetSysDatabasesColumn<T>(string propertyName, string databaseName = null)
+        internal T GetSysDatabasesColumn<T>(string propertyName)
         {
-            return _ServerManagement.SqlConnection.ExecuteScalar<T>($"Select {propertyName} from sys.databases where name=@name", new { name = databaseName });
+            return _ServerManagement.SqlConnection.ExecuteScalar<T>($"Select {propertyName} from sys.databases where name=@name", new { name = _DatabaseName });
         }
 
 
         public bool IsBrokerEnabled
         {
-            get { return GetSysDatabasesColumn<bool>("is_broker_enabled", _DatabaseName); }
+            get { return GetSysDatabasesColumn<bool>("is_broker_enabled"); }
             set
             {
                 string sql = string.Format("Alter Database [{0}] Set {1}_BROKER",
@@ -48,7 +48,7 @@ namespace Universe.SqlServerJam
 
         public bool IsReadOnly
         {
-            get { return GetSysDatabasesColumn<bool>("is_read_only", _DatabaseName); }
+            get { return GetSysDatabasesColumn<bool>("is_read_only"); }
             set
             {
                 string sql = string.Format("Alter Database [{0}] Set {1}",
@@ -61,7 +61,7 @@ namespace Universe.SqlServerJam
 
         public bool IsAutoShrink
         {
-            get { return GetSysDatabasesColumn<bool>("is_auto_shrink_on", _DatabaseName); }
+            get { return GetSysDatabasesColumn<bool>("is_auto_shrink_on"); }
             set
             {
                 string sql = string.Format("Alter Database [{0}] Set AUTO_SHRINK {1}",
@@ -83,7 +83,7 @@ namespace Universe.SqlServerJam
 
         public string StateDescription
         {
-            get { return GetSysDatabasesColumn<string>("state_desc", _DatabaseName); }
+            get { return GetSysDatabasesColumn<string>("state_desc"); }
         }
 
         public bool IsOnline
@@ -155,7 +155,7 @@ namespace Universe.SqlServerJam
         {
             get
             {
-                return GetSysDatabasesColumn<string>("collation_name", _DatabaseName);
+                return GetSysDatabasesColumn<string>("collation_name");
             }
             set
             {
@@ -240,10 +240,13 @@ WHERE d.name = @name
             }
         }
 
+        // Sum(size) of all files of CURRENT DB :(
         public long? Size
         {
             get
             {
+                const string sql = "Select Sum(Cast(size as bigint)) From sys.database_files";
+                return 8L * _ServerManagement.SqlConnection.ExecuteScalar<long>(sql);
                 int size;
                 if (!_ServerManagement.DatabaseSizes.TryGetValue(_DatabaseName, out size))
                     return null;
@@ -264,7 +267,7 @@ WHERE d.name = @name
                 if (ret == DatabaseRecoveryMode.Unknown)
                 {
                     var server = new SqlConnectionStringBuilder(_Connection.ConnectionString).DataSource;
-                    Debug.WriteLine($"Unable to parse recovery model {raw} of DB [{_DatabaseName}] on server {server}");
+                    Trace.WriteLine($"Unable to parse recovery model '{raw}' of DB [{_DatabaseName}] on server {server}");
                 }
 
                 return ret;
@@ -351,10 +354,11 @@ WHERE d.name = @name
             ret.AppendLine($"{pre} - Is Readonly ......... : {IsReadOnly}");
             var comparisionStyle = ComparisonStyle;
             ret.AppendLine($"{pre} - Default Collation ... : {DefaultCollationName} [{comparisionStyle}]");
+            ret.AppendLine($"{pre} - Fulltext Search ..... : {(IsFullTextEnabled ? "Enabled" : "Not Enabled")}");
             ret.AppendLine($"{pre} - Size (KB) ........... : {Size}");
             ret.AppendLine($"{pre} - Recovery Mode ....... : {RecoveryMode}");
             ret.AppendLine($"{pre} - Owner ............... : {OwnerName}");
-            ret.AppendLine($"{pre} - AZ Edtion ........... : {AzureEdition}");
+            ret.AppendLine($"{pre} - AZ Edition .......... : {AzureEdition}");
             ret.AppendLine($"{pre} - AZ Service Objective. : {AzureServiceObjective}");
             ret.AppendLine($"{pre} - AZ Elastic Pool ..... : {AzureElasticPool}");
             var isFullText = IsFullTextEnabled;

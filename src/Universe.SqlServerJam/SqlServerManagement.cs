@@ -7,22 +7,22 @@ using Dapper;
 
 namespace Universe.SqlServerJam
 {
-    public class SqlServerManagment
+    public class SqlServerManagement
     {
         public readonly IDbConnection SqlConnection;
-        Lazy<Version> _ShortVersion;
-        private Lazy<DatabaseSelector> _DatabaseSelector;
+        readonly Lazy<Version> _ShortVersion;
+        private readonly Lazy<DatabaseSelector> _DatabaseSelector;
 
-        public SqlServerManagment(IDbConnection sqlConnection)
+        public SqlServerManagement(IDbConnection sqlConnection)
         {
-            SqlConnection = sqlConnection;
+            SqlConnection = sqlConnection ?? throw new ArgumentNullException(nameof(sqlConnection));
 
             _ShortVersion = new Lazy<Version>(() =>
             {
-                int v = SqlConnection.ExecuteScalar<int>("Select @@MICROSOFTVERSION");
-                int v1 = v >> 24;
-                int v2 = v >> 16 & 0xFF;
-                int v3 = v & 0xFFFF;
+                int ver32Bit = SqlConnection.ExecuteScalar<int>("Select @@MICROSOFTVERSION");
+                int v1 = ver32Bit >> 24;
+                int v2 = ver32Bit >> 16 & 0xFF;
+                int v3 = ver32Bit & 0xFFFF;
                 return new Version(v1, v2, v3);
             });
 
@@ -87,6 +87,10 @@ namespace Universe.SqlServerJam
             }
         }
 
+        public bool IsCompressedBackupSupported => 
+            this.EngineEdition == EngineEdition.Enterprise 
+            && this.ShortServerVersion.Major >= 10;
+
         public Dictionary<string, int> DatabaseSizes
         {
             get
@@ -138,10 +142,6 @@ namespace Universe.SqlServerJam
                 property = propertyName
             });
         }
-
-
-
-
 
         public string ProductVersion
         {
@@ -247,9 +247,9 @@ select
 
         public class DatabaseSelector
         {
-            readonly SqlServerManagment Owner;
+            readonly SqlServerManagement Owner;
 
-            public DatabaseSelector(SqlServerManagment owner)
+            public DatabaseSelector(SqlServerManagement owner)
             {
                 Owner = owner;
             }
