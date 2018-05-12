@@ -1,0 +1,302 @@
+NUnit Console Runner 3.7.0 
+Copyright (c) 2017 Charlie Poole, Rob Prouse
+
+Runtime Environment
+   OS Version: Microsoft Windows NT 10.0.14393.0
+  CLR Version: 4.0.30319.42000
+
+Test Files
+    Universe.SqlServerJam.Tests.dll
+
+=> Universe.SqlServerJam.Tests.Full_Featured_Demo
+[NUnit3Logs.Bind] Process: nunit-agent
+=> Universe.SqlServerJam.Tests.Full_Featured_Demo._1_Find_Local_Servers
+Found 8 sql servers:
+ * (local)\SQLEXPRESS (14.0.1000.169)
+ * (LocalDB)\MSSqlLocalDB (13.0)
+ * (local)\SQL2008R2 (10.50.1600.1)
+ * (local)\SQL2005 (9.0.5000.0)
+ * tcp:vlad-sandbox-eu.database.windows.net,1433
+ * tcp:vlad-oregon.chwcc2jan4bi.us-west-2.rds.amazonaws.com,1433
+ * tcp:vlad-frankfurt.cu2g0szytlwx.eu-central-1.rds.amazonaws.com,1433
+ * tcp:Ubuntu-16.04-LTS,1433
+
+
+x--------> 00:00.29 secs <-----------> 38 Mb <--------x
+
+=> Universe.SqlServerJam.Tests.Full_Featured_Demo._2_Start_Local_Services
+Check services status 8 sql servers:
+ * (local)\SQLEXPRESS (14.0.1000.169)
+ * (LocalDB)\MSSqlLocalDB (13.0)
+ * (local)\SQL2008R2 (10.50.1600.1)
+ * (local)\SQL2005 (9.0.5000.0)
+ * tcp:vlad-sandbox-eu.database.windows.net,1433
+ * tcp:vlad-oregon.chwcc2jan4bi.us-west-2.rds.amazonaws.com,1433
+ * tcp:vlad-frankfurt.cu2g0szytlwx.eu-central-1.rds.amazonaws.com,1433
+ * tcp:Ubuntu-16.04-LTS,1433
+
+State of corresponding services
+ (local)\SQLEXPRESS (14.0.1000.169): Running
+ (local)\SQL2008R2 (10.50.1600.1): Running
+ (local)\SQL2005 (9.0.5000.0): Running
+
+Start stopped sql services
+ Checking (LocalDB)\MSSqlLocalDB: OK (1.42 secs)
+
+
+x--------> 00:01.54 secs <-----------> 47 Mb <--------x
+
+=> Universe.SqlServerJam.Tests.Full_Featured_Demo._3_Exam_Servers
+Exam 8 sql servers:
+ * (local)\SQLEXPRESS (14.0.1000.169)
+ * (LocalDB)\MSSqlLocalDB (13.0)
+ * (local)\SQL2008R2 (10.50.1600.1)
+ * (local)\SQL2005 (9.0.5000.0)
+ * tcp:vlad-sandbox-eu.database.windows.net,1433
+ * tcp:vlad-oregon.chwcc2jan4bi.us-west-2.rds.amazonaws.com,1433
+ * tcp:vlad-frankfurt.cu2g0szytlwx.eu-central-1.rds.amazonaws.com,1433
+ * tcp:Ubuntu-16.04-LTS,1433
+
+SERVER '(local)\SQL2008R2' Ver 10.50.1600.1
+Version (32-bit) .........: 10.50.1600
+Version (string) .........: 10.50.1600.1
+Product Level ............: RTM
+Update Level .............: 
+Edition ..................: Data Center Edition (64-bit)
+Engine Edition ...........: Enterprise
+Host Platform ............: Windows
+Security Mode ............: Both
+Is LocalDB ...............: False
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: Cyrillic_General_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 9 (81600 Kb)
+Default Data .............: C:\Apps\2008R2I\MSSQL10_50.SQL2008R2\MSSQL\DATA
+Default Log ..............: C:\Apps\2008R2I\MSSQL10_50.SQL2008R2\MSSQL\DATA
+Default Backup ...........: C:\Apps\2008R2I\MSSQL10_50.SQL2008R2\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Syncly
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Default Collation.... : Cyrillic_General_CI_AS
+  - Size (KB) ........... : 5376
+  - Recovery Mode........ : Simple
+Long Version .............: Microsoft SQL Server 2008 R2 (RTM) - 10.50.1600.1 (X64) Apr 2 2010 15:48:46 Copyright (c) Microsoft Corporation Data Center Edition (64-bit) on Windows NT 6.2 <X64> (Build 9200: ) 
+
+SERVER 'tcp:vlad-sandbox-eu.database.windows.net,1433'
+Version (32-bit) .........: 14.0.900
+Version (string) .........: 12.0.2000.8
+Product Level ............: RTM
+Update Level .............: 
+Edition ..................: SQL Azure
+Engine Edition ...........: SQL_Database
+Host Platform ............: Windows
+Security Mode ............: Both
+Is LocalDB ...............: False
+Transport ................: TCP, Encrypted
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: None
+Databases ................: 1 (4144 Kb)
+Default Data .............: 
+Default Log ..............: 
+Default Backup ...........: 
+Connected DB Info ........: [MySandBox]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Syncly
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : True
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Default Collation.... : SQL_Latin1_General_CP1_CI_AS
+  - Size (KB) ........... : 4144
+  - Recovery Mode........ : Full
+Long Version .............: Microsoft SQL Azure (RTM) - 12.0.2000.8 Aug 29 2017 13:06:11 Copyright (C) 2017 Microsoft Corporation 
+
+SERVER 'tcp:vlad-frankfurt.cu2g0szytlwx.eu-central-1.rds.amazonaws.com,1433'
+Version (32-bit) .........: 13.0.4422
+Version (string) .........: 13.0.4422.0
+Product Level ............: SP1
+Update Level .............: CU2
+Edition ..................: Express Edition (64-bit)
+Engine Edition ...........: Express
+Host Platform ............: Windows
+Security Mode ............: Both
+Is LocalDB ...............: False
+Transport ................: TCP, Encrypted
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: SetupAdmin, ProcessAdmin
+Databases ................: 5 (86592 Kb)
+Default Data .............: D:\RDSDBDATA\DATA\
+Default Log ..............: D:\RDSDBDATA\DATA\
+Default Backup ...........: D:\RDSDBDATA\BACKUP
+Connected DB Info ........: [MySandBox]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Syncly
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Default Collation.... : SQL_Latin1_General_CP1_CI_AS
+  - Size (KB) ........... : 9216
+  - Recovery Mode........ : Simple
+Long Version .............: Microsoft SQL Server 2016 (SP1-CU2) (KB4013106) - 13.0.4422.0 (X64) Mar 6 2017 14:18:16 Copyright (c) Microsoft Corporation Express Edition (64-bit) on Windows Server 2012 R2 Standard 6.3 <X64> (Build 9600: ) (Hypervisor) 
+
+SERVER '(LocalDB)\MSSqlLocalDB' Ver 13.0
+Version (32-bit) .........: 13.0.4001
+Version (string) .........: 13.0.4001.0
+Product Level ............: SP1
+Update Level .............: 
+Edition ..................: Express Edition (64-bit)
+Engine Edition ...........: Express
+Host Platform ............: Windows
+Security Mode ............: Both
+Is LocalDB ...............: True
+Transport ................: Named pipe, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (53696 Kb)
+Default Data .............: C:\Users\Administrator\
+Default Log ..............: C:\Users\Administrator\
+Default Backup ...........: 
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Syncly
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Default Collation.... : SQL_Latin1_General_CP1_CI_AS
+  - Size (KB) ........... : 6400
+  - Recovery Mode........ : Simple
+Long Version .............: Microsoft SQL Server 2016 (SP1) (KB3182545) - 13.0.4001.0 (X64) Oct 28 2016 18:17:30 Copyright (c) Microsoft Corporation Express Edition (64-bit) on Windows Server 2016 Datacenter 6.3 <X64> (Build 14393: ) 
+
+SERVER 'tcp:vlad-oregon.chwcc2jan4bi.us-west-2.rds.amazonaws.com,1433'
+Version (32-bit) .........: 10.50.2789
+Version (string) .........: 10.50.2789.0
+Product Level ............: SP1
+Update Level .............: 
+Edition ..................: Express Edition with Advanced Services (64-bit)
+Engine Edition ...........: Express
+Host Platform ............: Windows
+Security Mode ............: Both
+Is LocalDB ...............: False
+Transport ................: TCP, Encrypted
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: SetupAdmin, ProcessAdmin
+Databases ................: 5 (81664 Kb)
+Default Data .............: D:\RDSDBDATA\DATA
+Default Log ..............: D:\RDSDBDATA\DATA
+Default Backup ...........: D:\RDSDBDATA\BACKUP
+Connected DB Info ........: [MySandBox]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Syncly
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Default Collation.... : SQL_Latin1_General_CP1_CI_AS
+  - Size (KB) ........... : 6144
+  - Recovery Mode........ : Full
+Long Version .............: Microsoft SQL Server 2008 R2 (SP1) - 10.50.2789.0 (X64) Sep 28 2011 17:10:21 Copyright (c) Microsoft Corporation Express Edition with Advanced Services (64-bit) on Windows NT 6.1 <X64> (Build 7601: Service Pack 1) (Hypervisor) 
+
+SERVER 'tcp:Ubuntu-16.04-LTS,1433'
+Exception ................: [SqlException] A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: TCP Provider, error: 0 - The wait operation timed out.) --> [Win32Exception] The wait operation timed out
+
+SERVER '(local)\SQL2005' Ver 9.0.5000.0
+Version (32-bit) .........: 9.0.5000
+Version (string) .........: 9.00.5000.00
+Product Level ............: SP4
+Update Level .............: 
+Edition ..................: Express Edition
+Engine Edition ...........: Express
+Host Platform ............: Windows
+Security Mode ............: Both
+Is LocalDB ...............: False
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: Cyrillic_General_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 7 (209008 Kb)
+Default Data .............: C:\Apps\SQL2005-SP4-x86\MSSQL.1\MSSQL\DATA
+Default Log ..............: C:\Apps\SQL2005-SP4-x86\MSSQL.1\MSSQL\DATA
+Default Backup ...........: C:\Apps\SQL2005-SP4-x86\MSSQL.1\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Syncly
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Default Collation.... : Cyrillic_General_CI_AS
+  - Size (KB) ........... : 5376
+  - Recovery Mode........ : Simple
+Long Version .............: Microsoft SQL Server 2005 - 9.00.5000.00 (Intel X86) Dec 10 2010 10:56:29 Copyright (c) 1988-2005 Microsoft Corporation Express Edition on Windows NT 6.2 (Build 9200: ) 
+
+SERVER '(local)\SQLEXPRESS' Ver 14.0.1000.169
+Version (32-bit) .........: 14.0.1000
+Version (string) .........: 14.0.1000.169
+Product Level ............: RTM
+Update Level .............: 
+Edition ..................: Developer Edition (64-bit)
+Engine Edition ...........: Enterprise
+Host Platform ............: Windows
+Security Mode ............: Both
+Is LocalDB ...............: False
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: Cyrillic_General_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 6 (102784 Kb)
+Default Data .............: C:\Apps\VIRTUAL\2017\MSSQL14.SQLEXPRESS\MSSQL\DATA\
+Default Log ..............: C:\Apps\VIRTUAL\2017\MSSQL14.SQLEXPRESS\MSSQL\DATA\
+Default Backup ...........: C:\Apps\VIRTUAL\2017\MSSQL14.SQLEXPRESS\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Syncly
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Default Collation.... : Cyrillic_General_CI_AS
+  - Size (KB) ........... : 7296
+  - Recovery Mode........ : Simple
+Long Version .............: Microsoft SQL Server 2017 (RTM) - 14.0.1000.169 (X64) Aug 22 2017 17:04:49 Copyright (C) 2017 Microsoft Corporation Developer Edition (64-bit) on Windows Server 2016 Datacenter 10.0 <X64> (Build 14393: ) 
+
+Done:
+ '(local)\SQL2008R2' Ver 10.50.1600.1 examined in 2.93 secs
+ 'tcp:vlad-sandbox-eu.database.windows.net,1433' Ver 14.0.900 examined in 6.48 secs
+ 'tcp:vlad-frankfurt.cu2g0szytlwx.eu-central-1.rds.amazonaws.com,1433' Ver 13.0.4422 examined in 12.00 secs
+ '(LocalDB)\MSSqlLocalDB' Ver 13.0 examined in 12.59 secs
+ 'tcp:vlad-oregon.chwcc2jan4bi.us-west-2.rds.amazonaws.com,1433' Ver 10.50.2789 examined in 17.54 secs
+ 'tcp:Ubuntu-16.04-LTS,1433' examined in 24.94 secs
+ '(local)\SQL2005' Ver 9.0.5000.0 examined in 30.57 secs
+ '(local)\SQLEXPRESS' Ver 14.0.1000.169 examined in 36.92 secs
+
+Alive Servers: 7. SysAdmins Permissions: 4.
+Warning! Some sql servers have fails. See details above: 
+ * tcp:Ubuntu-16.04-LTS,1433
+
+
+x--------> 00:37.06 secs <-----------> 53 Mb <--------x
+
+=> Universe.SqlServerJam.Tests.Full_Featured_Demo._4_Meashure_Ping
+Ping 8 sql servers:
+ * (local)\SQLEXPRESS (14.0.1000.169)
+ * tcp:vlad-sandbox-eu.database.windows.net,1433 (14.0.900)
+ * tcp:vlad-frankfurt.cu2g0szytlwx.eu-central-1.rds.amazonaws.com,1433 (13.0.4422)
+ * (LocalDB)\MSSqlLocalDB (13.0)
+ * tcp:vlad-oregon.chwcc2jan4bi.us-west-2.rds.amazonaws.com,1433 (10.50.2789)
+ * (local)\SQL2008R2 (10.50.1600.1)
+ * (local)\SQL2005 (9.0.5000.0)
+ * tcp:Ubuntu-16.04-LTS,1433
+
+Ping Report (milliseconds)
+     0.44 : (local)\SQLEXPRESS (Shared memory, Without Encryption)
