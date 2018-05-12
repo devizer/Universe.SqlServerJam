@@ -72,10 +72,10 @@ namespace Universe.SqlServerJam
                 {
                     try
                     {
-                        string cs = string.Format("Data Source={0};Integrated Security=SSPI; Timeout=1",
+                        string cs = string.Format("Data Source={0};Integrated Security=SSPI; Timeout=3",
                             candidate.Data);
                         using (SqlConnection con = new SqlConnection(cs))
-                            con.GetServerShortVersion();
+                            con.GetSqlManagment().Ping(timeout: 3);
 
                         lock (ret) ret.Add(candidate);
                         break;

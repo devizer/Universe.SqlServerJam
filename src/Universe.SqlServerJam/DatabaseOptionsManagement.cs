@@ -11,65 +11,64 @@ namespace Universe.SqlServerJam
 {
     public class DatabaseOptionsManagement
     {
-        private readonly IDbConnection _Connection;
+        // private readonly IDbConnection _Connection;
+        private SqlServerManagment _ServerManagement;
         private readonly string _DatabaseName;
         readonly object _Sync = new object();
         private Version _ServerVersion;
 
-        Version ServerVersion
-        {
-            get
-            {
-                if (_ServerVersion == null)
-                    lock (_Sync)
-                        if (_ServerVersion == null) _ServerVersion = _Connection.GetServerShortVersion();
+        private IDbConnection _Connection => _ServerManagement.SqlConnection;
 
-                return _ServerVersion;
-            }
+        Version ServerVersion => _ServerManagement.ShortServerVersion;
+
+        public DatabaseOptionsManagement(SqlServerManagment serverManagment, string databaseName = null)
+        {
+            _ServerManagement = serverManagment;
+            _DatabaseName = databaseName ?? serverManagment.CurrentDatabaseName;
         }
 
-        public DatabaseOptionsManagement(IDbConnection connection, string databaseName)
+        internal T GetSysDatabasesColumn<T>(string propertyName, string databaseName = null)
         {
-            _Connection = connection;
-            _DatabaseName = databaseName;
+            return _ServerManagement.SqlConnection.ExecuteScalar<T>($"Select {propertyName} from sys.databases where name=@name", new { name = databaseName });
         }
+
 
         public bool IsBrokerEnabled
         {
-            get { return _Connection.OpenIfClosed().GetSysDatabasesColumn<bool>("is_broker_enabled", _DatabaseName); }
+            get { return GetSysDatabasesColumn<bool>("is_broker_enabled", _DatabaseName); }
             set
             {
                 string sql = string.Format("Alter Database [{0}] Set {1}_BROKER",
                     _DatabaseName,
                     value ? "ENABLE" : "DISABLE");
 
-                _Connection.OpenIfClosed().Execute(sql);
+                _Connection.Execute(sql);
             }
         }
 
         public bool IsReadOnly
         {
-            get { return _Connection.OpenIfClosed().GetSysDatabasesColumn<bool>("is_read_only", _DatabaseName); }
+            get { return GetSysDatabasesColumn<bool>("is_read_only", _DatabaseName); }
             set
             {
                 string sql = string.Format("Alter Database [{0}] Set {1}",
                     _DatabaseName,
                     value ? "READ_ONLY" : "READ_WRITE");
 
-                _Connection.OpenIfClosed().Execute(sql);
+                _Connection.Execute(sql);
             }
         }
 
         public bool IsAutoShrink
         {
-            get { return _Connection.OpenIfClosed().GetSysDatabasesColumn<bool>("is_auto_shrink_on", _DatabaseName); }
+            get { return GetSysDatabasesColumn<bool>("is_auto_shrink_on", _DatabaseName); }
             set
             {
                 string sql = string.Format("Alter Database [{0}] Set AUTO_SHRINK {1}",
                     _DatabaseName,
                     value ? "ON" : "OFF");
 
-                _Connection.OpenIfClosed().Execute(sql);
+                _Connection.Execute(sql);
             }
         }
 
@@ -79,12 +78,12 @@ namespace Universe.SqlServerJam
                 _DatabaseName,
                 newState);
 
-            _Connection.OpenIfClosed().Execute(sql);
+            _Connection.Execute(sql);
         }
 
         public string StateDescription
         {
-            get { return _Connection.OpenIfClosed().GetSysDatabasesColumn<string>("state_desc", _DatabaseName); }
+            get { return GetSysDatabasesColumn<string>("state_desc", _DatabaseName); }
         }
 
         public bool IsOnline
@@ -102,10 +101,9 @@ namespace Universe.SqlServerJam
         {
             get
             {
-                var c = _Connection.OpenIfClosed();
-                bool isOn = c.GetSysDatabasesColumn<bool>("is_auto_create_stats_on");
+                bool isOn = GetSysDatabasesColumn<bool>("is_auto_create_stats_on");
                 bool isIncremental = IsIncrementalAutoStatisticCreationSupported
-                                     && c.GetSysDatabasesColumn<bool>("is_auto_create_stats_incremental_on");
+                                     && GetSysDatabasesColumn<bool>("is_auto_create_stats_incremental_on");
 
                 return !isOn ? AutoCreateStatisticMode.Off
                     : (isIncremental ? AutoCreateStatisticMode.Incremental : AutoCreateStatisticMode.Complete);
@@ -122,7 +120,7 @@ namespace Universe.SqlServerJam
                     _DatabaseName,
                     option);
 
-                _Connection.OpenIfClosed().Execute(sql);
+                _Connection.Execute(sql);
             }
         }
 
@@ -130,9 +128,9 @@ namespace Universe.SqlServerJam
         {
             get
             {
-                var c = _Connection.OpenIfClosed();
-                bool isOn = c.GetSysDatabasesColumn<bool>("is_auto_update_stats_on");
-                bool isAsync = c.GetSysDatabasesColumn<bool>("is_auto_update_stats_async_on");
+                var c = _Connection;
+                bool isOn = GetSysDatabasesColumn<bool>("is_auto_update_stats_on");
+                bool isAsync = GetSysDatabasesColumn<bool>("is_auto_update_stats_async_on");
                 return !isOn ? AutoUpdateStatisticMode.Off
                     : (isAsync ? AutoUpdateStatisticMode.Async : AutoUpdateStatisticMode.Syncly);
             }
@@ -148,7 +146,7 @@ namespace Universe.SqlServerJam
                     _DatabaseName,
                     option);
 
-                _Connection.OpenIfClosed().Execute(sql);
+                _Connection.Execute(sql);
 
             }
         }
@@ -157,7 +155,7 @@ namespace Universe.SqlServerJam
         {
             get
             {
-                return _Connection.OpenIfClosed().GetSysDatabasesColumn<string>("collation_name", _DatabaseName);
+                return GetSysDatabasesColumn<string>("collation_name", _DatabaseName);
             }
             set
             {
@@ -168,7 +166,7 @@ namespace Universe.SqlServerJam
                     _DatabaseName,
                     value);
 
-                _Connection.OpenIfClosed().Execute(sql);
+                _Connection.Execute(sql);
             }
         }
 
@@ -176,8 +174,7 @@ namespace Universe.SqlServerJam
         {
             get
             {
-                return (DatabaseComparisonStyle)_Connection.OpenIfClosed()
-                    .GetDatabaseProperty<int>("ComparisonStyle", _DatabaseName);
+                return (DatabaseComparisonStyle)_ServerManagement.GetDatabaseProperty<int>("ComparisonStyle", _DatabaseName);
             }
         }
 
@@ -185,8 +182,7 @@ namespace Universe.SqlServerJam
         {
             get
             {
-                return _Connection.OpenIfClosed()
-                    .GetDatabaseProperty<bool>("IsClone", _DatabaseName);
+                return _ServerManagement.GetDatabaseProperty<bool>("IsClone", _DatabaseName);
             }
         }
 
@@ -202,7 +198,7 @@ namespace Universe.SqlServerJam
         {
             get
             {
-                return _Connection.OpenIfClosed()
+                return _ServerManagement
                     .GetDatabaseProperty<string>("ServiceObjective", _DatabaseName);
             }
         }
@@ -219,7 +215,7 @@ namespace Universe.SqlServerJam
         {
             get
             {
-                return _Connection.OpenIfClosed()
+                return _ServerManagement
                     .GetDatabaseProperty<string>("Edition", _DatabaseName);
             }
         }
@@ -239,7 +235,7 @@ ON d.database_id = slo.database_id
 WHERE d.name = @name
 ";
 
-                return _Connection.OpenIfClosed()
+                return _Connection
                     .ExecuteScalar<string>(sql, new {name = _DatabaseName});
             }
         }
@@ -249,7 +245,7 @@ WHERE d.name = @name
             get
             {
                 int size;
-                if (!_Connection.GetDatabases().TryGetValue(_DatabaseName, out size))
+                if (!_ServerManagement.DatabaseSizes.TryGetValue(_DatabaseName, out size))
                     return null;
                 else
                     return size;
@@ -260,7 +256,7 @@ WHERE d.name = @name
         {
             get
             {
-                var raw = _Connection.OpenIfClosed().GetSysDatabasesColumn<string>("recovery_model_desc");
+                var raw = GetSysDatabasesColumn<string>("recovery_model_desc");
                 var all = Enum.GetValues(typeof(DatabaseRecoveryMode)).OfType<DatabaseRecoveryMode>().ToList();
                 var ret = all.FirstOrDefault(x => x.ToString().Equals(raw, StringComparison.InvariantCultureIgnoreCase));
 
@@ -277,7 +273,7 @@ WHERE d.name = @name
             {
                 if (value == DatabaseRecoveryMode.Unknown) throw new ArgumentOutOfRangeException();
                 var sql = $"Alter Database [{_DatabaseName}] Set Recovery {value}";
-                _Connection.OpenIfClosed().Execute(sql);
+                _Connection.Execute(sql);
             }
 
         }
@@ -286,12 +282,12 @@ WHERE d.name = @name
         {
             get
             {
-                return _Connection.OpenIfClosed().GetSysDatabasesColumn<bool>("is_recursive_triggers_on");
+                return GetSysDatabasesColumn<bool>("is_recursive_triggers_on");
             }
             set
             {
                 var sql = $"Alter Database [{_DatabaseName}] Set RECURSIVE_TRIGGERS {(value ? "ON" : "OFF")}";
-                _Connection.OpenIfClosed().Execute(sql);
+                _Connection.Execute(sql);
             }
         }
 
@@ -299,7 +295,7 @@ WHERE d.name = @name
         {
             get
             {
-                return _Connection.OpenIfClosed().GetSysDatabasesColumn<bool>("is_fulltext_enabled");
+                return GetSysDatabasesColumn<bool>("is_fulltext_enabled");
             }
         }
 
@@ -307,11 +303,11 @@ WHERE d.name = @name
         {
             get
             {
-                if (_Connection.IsAzure())
+                if (_ServerManagement.IsAzure)
                     return "Not Applicable";
 
                 string sql = "select suser_sname(owner_sid) from sys.databases where name = @name";
-                return _Connection.OpenIfClosed().ExecuteScalar<string>(sql, new {name = _DatabaseName});
+                return _Connection.ExecuteScalar<string>(sql, new {name = _DatabaseName});
 
             }
         }

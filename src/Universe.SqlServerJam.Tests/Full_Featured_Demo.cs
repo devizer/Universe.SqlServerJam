@@ -112,45 +112,46 @@ namespace Universe.SqlServerJam.Tests
                 {
                     using (SqlConnection con = new SqlConnection(cs))
                     {
-                        var ver = con.GetServerShortVersion();
+                        var man = con.GetSqlManagment();
+                        var ver = man.ShortServerVersion;
                         if (sqlRef.Version == null) sqlRef.Version = ver;
                         alive++;
                         report.AppendLine("Version (32-bit) .........: " + ver);
-                        report.AppendLine("Version (string) .........: " + con.GetProductVersion());
-                        report.AppendLine("Product Level ............: " + con.GetServerProductLevel());
-                        report.AppendLine("Update Level .............: " + con.GetServerProductUpdateLevel());
-                        report.AppendLine("Edition ..................: " + con.GetServerEdition());
-                        report.AppendLine("Engine Edition ...........: " + con.GetServerEngineEdition());
-                        report.AppendLine("Host Platform ............: " + con.GetHostPlatform());
-                        report.AppendLine("Security Mode ............: " + con.GetServerSecurityMode());
-                        report.AppendLine("Is LocalDB ...............: " + con.IsLocalDB());
-                        var transport = con.GetConnectionTransportAsString();
-                        transport += ", " + (con.GetConnectionEncryption() ? "Encrypted" : "Without Encryption");
+                        report.AppendLine("Version (string) .........: " + man.ProductVersion);
+                        report.AppendLine("Product Level ............: " + man.ProductLevel);
+                        report.AppendLine("Update Level .............: " + man.ProductUpdateLevel);
+                        report.AppendLine("Edition ..................: " + man.ServerEdition);
+                        report.AppendLine("Engine Edition ...........: " + man.EngineEdition);
+                        report.AppendLine("Host Platform ............: " + man.HostPlatform);
+                        report.AppendLine("Security Mode ............: " + man.SecurityMode);
+                        report.AppendLine("Is LocalDB ...............: " + man.IsLocalDB);
+                        var transport = man.NetTransport;
+                        transport += ", " + (man.IsConnectionEncrypted ? "Encrypted" : "Without Encryption");
                         report.AppendLine("Transport ................: " + transport);
-                        report.AppendLine("Server Collation .........: " + con.GetServerCollation());
-                        var roles = con.IsInFixedRoles();
-                        var isSysAdmin = (roles & SqlExtentions.FixedServerRoles.SysAdmin) != 0;
+                        report.AppendLine("Server Collation .........: " + man.ServerCollation);
+                        var roles = man.FixedServerRoles;
+                        var isSysAdmin = (roles & FixedServerRoles.SysAdmin) != 0;
                         var rolesString = isSysAdmin ? "Sys Admin" : roles.ToString();
                         report.AppendLine("Built-in Roles ...........: " + rolesString);
-                        var dbList = con.GetDatabases();
+                        var dbList = man.DatabaseSizes;
                         report.AppendLine("Databases ................: " + dbList.Count + " ("+ dbList.Sum(x => x.Value) + " Kb)");
                         if (isSysAdmin) sysadmin++;
-                        var paths = con.GetDefaultPaths();
+                        var paths = man.DefaultPaths;
                         report.AppendLine("Default Data .............: " + paths.DefaultData);
                         report.AppendLine("Default Log ..............: " + paths.DefaultLog);
                         report.AppendLine("Default Backup ...........: " + paths.DefaultBackup);
 
                         // DB Options demo
-                        var currentDatabase = con.GetCurrentDatabaseName();
-                        var dbOptions = con.GetDatabaseOptionsManager(currentDatabase);
+                        var currentDatabase = man.CurrentDatabaseName;
+                        var dbOptions = man.Databases[currentDatabase];
                         report.Append("Connected DB Info ........: [" + currentDatabase + "]" + Environment.NewLine);
                         dbOptions.WriteDigest(report, intent: 1);
 
-                        report.AppendLine("Long Version .............: " + con.GetServerVersionAsString());
+                        report.AppendLine("Long Version .............: " + man.LongServerVersion);
 
 
-                        if (con.IsAzure() && Debugger.IsAttached) Debugger.Break();
-                        if (!con.IsAzure())
+                        if (man.IsAzure && Debugger.IsAttached) Debugger.Break();
+                        if (!man.IsAzure)
                         {
                             var prevRecovery = dbOptions.RecoveryMode;
                             DatabaseRecoveryMode newRecovery =
@@ -161,6 +162,8 @@ namespace Universe.SqlServerJam.Tests
                             dbOptions.RecoveryMode = newRecovery;
                             dbOptions.RecoveryMode = prevRecovery;
                         }
+
+                        man.IsFullTextSearchInstalled.ToString();
                     }
                 }
                 catch (Exception ex)
@@ -175,7 +178,6 @@ namespace Universe.SqlServerJam.Tests
                         .AppendLine();
 
                 Debug.WriteLine(report);
-
 
             });
 
@@ -299,9 +301,9 @@ namespace Universe.SqlServerJam.Tests
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                var transport = con.GetConnectionTransportAsString();
-                transport += ", " + (con.GetConnectionEncryption() ? "Encrypted" : "Without Encryption");
-                var hostPlatform = con.GetHostPlatform();
+                var transport = con.GetSqlManagment().NetTransport;
+                transport += ", " + (con.GetSqlManagment().IsConnectionEncrypted ? "Encrypted" : "Without Encryption");
+                var hostPlatform = con.GetSqlManagment().HostPlatform;
                 if (hostPlatform != "Windows") transport += ", " + hostPlatform;
                 return transport;
             }
