@@ -110,13 +110,12 @@ namespace Universe.SqlServerJam
                 }
                 else
                 {
-                    var sql =
-                        "select sum(CAST(FILEPROPERTY(name, 'SpaceUsed') AS bigint) * 8192.) from sys.database_files";
-
+                    var sql = "select sum(CAST(FileProperty(name, 'SpaceUsed') AS bigint) * 8192.) from sys.database_files";
                     decimal size = SqlConnection.ExecuteScalar<decimal>(sql);
-                    Dictionary<string, int> ret = new Dictionary<string, int>();
-                    ret[CurrentDatabaseName] = (int) (size / 1024m);
-                    return ret;
+                    return new Dictionary<string, int>()
+                    {
+                        {CurrentDatabaseName, (int) (size / 1024m)}
+                    };
                 }
             }
         }
@@ -136,7 +135,7 @@ namespace Universe.SqlServerJam
 
         internal T GetDatabaseProperty<T>(string propertyName, string databaseName = null)
         {
-            return SqlConnection.ExecuteScalar<T>($"Select DatabasePropertyEx(@db, @property)", new
+            return SqlConnection.ExecuteScalar<T>("Select DatabasePropertyEx(@db, @property)", new
             {
                 db = databaseName ?? CurrentDatabaseName,
                 property = propertyName
