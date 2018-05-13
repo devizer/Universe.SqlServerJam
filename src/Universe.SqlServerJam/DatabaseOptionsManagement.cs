@@ -11,19 +11,17 @@ namespace Universe.SqlServerJam
 {
     public class DatabaseOptionsManagement
     {
-        // private readonly IDbConnection _Connection;
         private SqlServerManagement _ServerManagement;
         private readonly string _DatabaseName;
-        readonly object _Sync = new object();
-        private Version _ServerVersion;
 
         private IDbConnection _Connection => _ServerManagement.SqlConnection;
 
         Version ServerVersion => _ServerManagement.ShortServerVersion;
 
+        // TODO: CTOR should not throw exception
         public DatabaseOptionsManagement(SqlServerManagement serverManagement, string databaseName = null)
         {
-            _ServerManagement = serverManagement;
+            _ServerManagement = serverManagement ?? throw new ArgumentNullException(nameof(serverManagement));
             _DatabaseName = databaseName ?? serverManagement.CurrentDatabaseName;
         }
 

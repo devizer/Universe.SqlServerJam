@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using Dapper;
 
 namespace Universe.SqlServerJam
@@ -10,21 +11,21 @@ namespace Universe.SqlServerJam
     public class SqlServerManagement
     {
         public readonly IDbConnection SqlConnection;
-        readonly Lazy<Version> _ShortVersion;
+        readonly Lazy<Version> _ShortServerVersion;
         private readonly Lazy<DatabaseSelector> _DatabaseSelector;
 
         public SqlServerManagement(IDbConnection sqlConnection)
         {
             SqlConnection = sqlConnection ?? throw new ArgumentNullException(nameof(sqlConnection));
 
-            _ShortVersion = new Lazy<Version>(() =>
+            _ShortServerVersion = new Lazy<Version>(() =>
             {
                 int ver32Bit = SqlConnection.ExecuteScalar<int>("Select @@MICROSOFTVERSION");
                 int v1 = ver32Bit >> 24;
                 int v2 = ver32Bit >> 16 & 0xFF;
                 int v3 = ver32Bit & 0xFFFF;
                 return new Version(v1, v2, v3);
-            });
+            }, LazyThreadSafetyMode.ExecutionAndPublication);
 
             _DatabaseSelector = new Lazy<DatabaseSelector>(() => new DatabaseSelector(this));
         }
@@ -45,7 +46,7 @@ namespace Universe.SqlServerJam
         // Returns either Windows or Linux
         public string HostPlatform => SqlConnection.ExecuteScalar<string>(SqlGetHostPlatform);
 
-        public Version ShortServerVersion => _ShortVersion.Value;
+        public Version ShortServerVersion => _ShortServerVersion.Value;
 
         public bool IsLocalDB => ShortServerVersion.Major >= 11 && GetServerProperty<int>("IsLocalDB") == 1;
 
