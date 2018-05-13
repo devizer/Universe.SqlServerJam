@@ -12,5 +12,5 @@ if not defined TEST_SQL_NET_DURATION_OF_Upload   set TEST_SQL_NET_DURATION_OF_Up
 if not defined TEST_SQL_NET_DURATION_OF_Download set TEST_SQL_NET_DURATION_OF_Download=7000
 pushd Universe.SqlServerJam.Tests\bin\Release
 "%NUNIT_RUNNER_EXE%" --labels=On --workers=1 Universe.SqlServerJam.Tests.dll | tee tests.log
-"%REPORT_UNIT_EXE%" .\ 1>report_unit.log 2>&1
+"%REPORT_UNIT_EXE%" .\ tests-report 1>report_unit.log 2>&1
 popd
