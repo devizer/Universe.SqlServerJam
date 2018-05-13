@@ -13,6 +13,8 @@ namespace Universe.SqlServerJam.Tests
     [TestFixture]
     public class Full_Featured_Demo
     {
+        const int TRANSPORT_PROBE_DURATION = 1000;
+
         Stopwatch _StartAt = Stopwatch.StartNew();
 
         [OneTimeSetUp]
@@ -29,6 +31,7 @@ namespace Universe.SqlServerJam.Tests
         {
             return SqlDiscovery.GetLocalDbAndServerList();
         });
+
 
         private List<SqlServerRef> SqlServers => _SqlServers.Value;
 
@@ -202,7 +205,7 @@ namespace Universe.SqlServerJam.Tests
             StringBuilder errors = new StringBuilder();
             foreach (var sqlRef in list)
             {
-                var supportedProtocols = sqlRef.ProbeTransports(timeoutMillisecs: 30000);
+                var supportedProtocols = sqlRef.ProbeTransports(timeoutMillisecs: TRANSPORT_PROBE_DURATION);
                 foreach (var supportedProtocol in supportedProtocols)
                 {
                     try
@@ -237,7 +240,7 @@ namespace Universe.SqlServerJam.Tests
             foreach (var sqlRef in list)
             {
                 var blockSize = SqlServiceExtentions.IsLocalDbOrLocalServer(sqlRef.ConnectionString) ? 1024 : 1024;
-                var supportedProtocols = sqlRef.ProbeTransports(timeoutMillisecs: 10_000);
+                var supportedProtocols = sqlRef.ProbeTransports(timeoutMillisecs: TRANSPORT_PROBE_DURATION);
                 foreach (var supportedProtocol in supportedProtocols)
                 {
                     try
@@ -275,7 +278,7 @@ namespace Universe.SqlServerJam.Tests
             foreach (var sqlRef in list)
             {
                 var blockSize = SqlServiceExtentions.IsLocalDbOrLocalServer(sqlRef.ConnectionString) ? 4096 : 1024;
-                var supportedProtocols = sqlRef.ProbeTransports(timeoutMillisecs: 30000);
+                var supportedProtocols = sqlRef.ProbeTransports(timeoutMillisecs: TRANSPORT_PROBE_DURATION);
                 foreach (var supportedProtocol in supportedProtocols)
                 {
                     try
