@@ -60,9 +60,10 @@ function SmartNugetInstall { param([string]$package)
 
 # Download nuget.exe
 # $nuget = SmartDownload "NuGet(cache)" "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" "NuGet.exe"
-$nuget = SmartDownload "NuGet-4.1.0(cache)" "https://dist.nuget.org/win-x86-commandline/v4.1.0/nuget.exe" "NuGet-4.1.0.exe"
-$nuget_3 = SmartDownload "NuGet-3.4.4(cache)" "https://dist.nuget.org/win-x86-commandline/v3.4.4/nuget.exe" "NuGet-3.4.4.exe"
+$nuget_41 = SmartDownload "NuGet-4.1.0(cache)" "https://dist.nuget.org/win-x86-commandline/v4.1.0/nuget.exe" "NuGet-4.1.0.exe"
+$nuget_344 = SmartDownload "NuGet-3.4.4(cache)" "https://dist.nuget.org/win-x86-commandline/v3.4.4/nuget.exe" "NuGet-3.4.4.exe"
 $nuget_Latest = SmartDownload "NuGet-latest(cache)" "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" "NuGet-latest.exe"
+$nuget=$nuget_Latest
 AddVar "NUGET_EXE" $nuget
 
 # Downloading packes
