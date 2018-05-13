@@ -46,6 +46,7 @@
     <Compile Include="Full_Featured_Demo.cs" />
     <Compile Include="NUnit3Logs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestEnvironment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

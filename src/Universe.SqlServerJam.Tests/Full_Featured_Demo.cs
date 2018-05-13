@@ -208,7 +208,7 @@ namespace Universe.SqlServerJam.Tests
                     try
                     {
                         SqlSpeedMeasurement test = new SqlSpeedMeasurement(supportedProtocol.ConnectionString);
-                        decimal msec = test.GetPing(limitCount: 100000, milliSecondsLimit: 3000);
+                        decimal msec = test.GetPing(limitCount: 100000, milliSecondsLimit: TestEnvironment.SqlPingDuration);
                         var transport = GetTransportInfo(supportedProtocol.ConnectionString);
                         Debug.WriteLine($"{(msec.ToString("f2")).PadLeft(9)} : {sqlRef.DataSource} ({transport})");
                     }
@@ -237,7 +237,7 @@ namespace Universe.SqlServerJam.Tests
             foreach (var sqlRef in list)
             {
                 var blockSize = SqlServiceExtentions.IsLocalDbOrLocalServer(sqlRef.ConnectionString) ? 1024 : 1024;
-                var supportedProtocols = sqlRef.ProbeTransports(timeoutMillisecs: 30000);
+                var supportedProtocols = sqlRef.ProbeTransports(timeoutMillisecs: 10_000);
                 foreach (var supportedProtocol in supportedProtocols)
                 {
                     try
@@ -247,7 +247,7 @@ namespace Universe.SqlServerJam.Tests
                         builder.PacketSize = 32768;
                         var connectionString = builder.ConnectionString;
                         SqlSpeedMeasurement test = new SqlSpeedMeasurement(connectionString);
-                        decimal kbPerSec = test.GetUploadSpeed(limitIterations: 100000, blockSizeInKb: blockSize, limitMilliSeconds: 7000);
+                        decimal kbPerSec = test.GetUploadSpeed(limitIterations: 100000, blockSizeInKb: blockSize, limitMilliSeconds: TestEnvironment.SqlUploadDuration);
                         var transport = GetTransportInfo(supportedProtocol.ConnectionString);
                         Debug.WriteLine($"{(kbPerSec.ToString("f1")).PadLeft(9)} : {sqlRef.DataSource} ({transport})");
                     }
@@ -281,7 +281,7 @@ namespace Universe.SqlServerJam.Tests
                     try
                     {
                         SqlSpeedMeasurement test = new SqlSpeedMeasurement(supportedProtocol.ConnectionString);
-                        decimal kbPerSec = test.GetDownloadSpeed(limitIterations: 100000, blockSizeInKb: blockSize, limitMilliSeconds: 7000);
+                        decimal kbPerSec = test.GetDownloadSpeed(limitIterations: 100000, blockSizeInKb: blockSize, limitMilliSeconds: TestEnvironment.SqlDownloadDuration);
                         var transport = GetTransportInfo(supportedProtocol.ConnectionString);
                         Debug.WriteLine($"{(kbPerSec.ToString("f1")).PadLeft(9)} : {sqlRef.DataSource} ({transport})");
                     }
