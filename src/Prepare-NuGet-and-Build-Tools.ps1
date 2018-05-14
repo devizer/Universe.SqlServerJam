@@ -15,7 +15,8 @@ $report_Cmd = "~local-build-tools.cmd"
 
 function AddVar { param([string]$var, [string]$value)
   [IO.File]::AppendAllText($report_Cmd, "set $var=$value`r`n");
-  # $Env:$var=$value
+  Write-Host "$var=$value" -ForegroundColor Green
+  ${Env:$var}=$value
   # [Environment]::SetEnvironmentVariable($var, $value, "User")
 }
 
@@ -59,7 +60,7 @@ function SmartNugetInstall { param([string]$package)
 }
 
 # Download nuget.exe
-# $nuget = SmartDownload "NuGet(cache)" "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" "NuGet.exe"
+
 $nuget_41 = SmartDownload "NuGet-4.1.0(cache)" "https://dist.nuget.org/win-x86-commandline/v4.1.0/nuget.exe" "NuGet-4.1.0.exe"
 $nuget_344 = SmartDownload "NuGet-3.4.4(cache)" "https://dist.nuget.org/win-x86-commandline/v3.4.4/nuget.exe" "NuGet-3.4.4.exe"
 $nuget_Latest = SmartDownload "NuGet-latest(cache)" "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" "NuGet-latest.exe"
@@ -84,8 +85,12 @@ AddVar "VS_PATH" "$vs_Dir"
 if ($vs_Dir) { 
   $msbuild_x86 = join-Path -Path "$vs_Dir" -ChildPath "MSBuild\*\Bin\MSBuild.exe" -Resolve
   $msbuild_x64 = join-Path -Path "$vs_Dir" -ChildPath "\MSBuild\*\Bin\amd64\MSBuild.exe" -Resolve
-  $msbuild=$msbuild_x64; if (-Not $msbuild) { $msbuild=$msbuild_x86; }
 }
+if (-Not "${Env:PROCESSOR_ARCHITECTURE}".ToUpper() -eq "AMD64") { 
+  $msbuild_x64 = $null;
+}
+$msbuild=$msbuild_x64; if (-Not $msbuild) { $msbuild=$msbuild_x86; }
+
 AddVar "MSBUILD_EXE" $msbuild
 AddVar "MSBUILD_x86_EXE" $msbuild_x86
 AddVar "MSBUILD_x64_EXE" $msbuild_x64
