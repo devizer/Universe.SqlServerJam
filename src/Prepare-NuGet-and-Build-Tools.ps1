@@ -14,7 +14,7 @@ $report_Cmd = "~local-build-tools.cmd"
 [IO.File]::WriteAllText($report_Cmd, "@REM Local Build Tools. Auto-generated.`r`n");
 
 function AddVar { param([string]$var, [string]$value)
-  [IO.File]::AppendAllText($report_Cmd, "set $var=$value`r`n");
+  [IO.File]::AppendAllText($report_Cmd, "@set $var=$value`r`n");
   Write-Host "$var=$value" -ForegroundColor Green
   ${Env:$var}=$value
   # [Environment]::SetEnvironmentVariable($var, $value, "User")
