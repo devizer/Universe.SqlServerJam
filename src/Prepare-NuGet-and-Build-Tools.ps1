@@ -65,9 +65,8 @@ $nuget_41 = SmartDownload "NuGet-4.1.0(cache)" "https://dist.nuget.org/win-x86-c
 $nuget_344 = SmartDownload "NuGet-3.4.4(cache)" "https://dist.nuget.org/win-x86-commandline/v3.4.4/nuget.exe" "NuGet-3.4.4.exe"
 $nuget_Latest = SmartDownload "NuGet-latest(cache)" "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" "NuGet-latest.exe"
 $nuget=$nuget_Latest
-AddVar "NUGET_EXE" $nuget
 
-# Downloading packes
+# Downloading packages
 foreach ($p in $packages) { $p_Path = SmartNugetInstall $p; }
 
 # VS 2017 and later
@@ -77,6 +76,7 @@ if ($vswhere) {
 } else {
   Write-Host "Unable to find vswhere.exe. Check is internet connection works and support TLS/SSL" -ForegroundColor Red
 }
+AddVar "NUGET_EXE" $nuget
 AddVar "VSWHERE_EXE" $vswhere
 
 $vs_Dir = (& "$vswhere" -latest -products * -requires Microsoft.Component.MSBuild -property installationPath) | Out-String;
@@ -86,7 +86,7 @@ if ($vs_Dir) {
   $msbuild_x86 = join-Path -Path "$vs_Dir" -ChildPath "MSBuild\*\Bin\MSBuild.exe" -Resolve
   $msbuild_x64 = join-Path -Path "$vs_Dir" -ChildPath "\MSBuild\*\Bin\amd64\MSBuild.exe" -Resolve
 }
-if (-Not "${Env:PROCESSOR_ARCHITECTURE}".ToUpper() -eq "AMD64") { 
+if (-Not ("${Env:PROCESSOR_ARCHITECTURE}".ToUpper() -eq "AMD64")) { 
   $msbuild_x64 = $null;
 }
 $msbuild=$msbuild_x64; if (-Not $msbuild) { $msbuild=$msbuild_x86; }
