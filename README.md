@@ -1,6 +1,33 @@
 # Universe.SqlServerJam
 Package implements: discovering local sql server instances by the same way as SSMS and operations during unit testing: start, stop services, check server edition, forced database delete, checking databases size, recovery mode, auto shrinking, etc.
 
+## IDbConnection.Manage() Extensions
+
+| Data Type | Member |
+|-----------|--------|
+| string    | ServerEdition |
+| EngineEdition | EngineEdition | Personal, Standard, Exterprise, Express, SqlDatabase, SqlDataWarehouse |
+| SecurityMode| SecurityMode | IntegratedOnly, Both |
+| string | HostPlatform | "Windows", "Linux" |
+| Version | ShortServerVersion | @@MICROSOFTVERSION |
+| bool | IsLocalDB |
+| bool | IsAzure |
+| FixedServerRoles | FixedServerRoles | SysAdmin, SetupAdmin, ServerAdmin, SecurityAdmin, ProcessAdmin, ... |
+| bool | IsFullTextSearchInstalled |
+| bool | IsConnectionEncrypted |
+| string | NetTransport | "TCP", "Shared Memory", "Named Pipe" |
+| bool | IsCompressedBackupSupported | ShortServerVersion.Major >= 10 && EngineEdition == Enterprise |
+| string | ProductVersion |
+| string | LongServerVersion | @@VERSION |
+| int | CurrentSPID | @@SPID |
+| string | CurrentDatabaseName | DB_NAME() |
+| DatabaseOptionsManagement | CurrentDatabase | .Databases[CurrentDatabaseName] |
+| string | ProductUpdateLevel | CU1, CU2, ... |
+| string | ProductLevel | CTP, RTM, SP1, SP2, ... |
+| double | Ping(int timeout = 20) | returns roundtrip duration |
+| SqlDefaultPaths | DefaultPaths | Data, Logs and Backups default folder. By default SQL Server process has permissions to this folders only. Not applicable for Azure |
+
+
 ## Full Featured Demo
 Source code: [Full_Featured_Demo.cs](https://github.com/devizer/Universe.SqlServerJam/blob/master/Universe.SqlServerJam/Universe.SqlServerJam.Tests/Full_Featured_Demo.cs)
 

@@ -10,7 +10,7 @@ namespace Universe.SqlServerJam
 {
     public class SqlServerManagement
     {
-        public readonly IDbConnection SqlConnection;
+        public IDbConnection SqlConnection { get; }
         readonly Lazy<Version> _ShortServerVersion;
         private readonly Lazy<DatabaseSelector> _DatabaseSelector;
 
@@ -191,7 +191,7 @@ namespace Universe.SqlServerJam
         public double Ping(int timeout = 20)
         {
             Stopwatch sw = Stopwatch.StartNew();
-            SqlConnection.Execute("Select Null", commandTimeout: Math.Max(1, timeout));
+            SqlConnection.Execute("-- ping", commandTimeout: Math.Max(1, timeout));
             return sw.ElapsedTicks / (double) Stopwatch.Frequency;
         }
 
