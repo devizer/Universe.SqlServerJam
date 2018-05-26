@@ -31,25 +31,25 @@ SqlServerManagement Manage(this IDbConnection) contains following public members
 ```csharp
 Version ShortServerVersion { get; } 
 string ProductVersion { get; } 
-string ProductUpdateLevel { get; } // CU1, CU2, ... 
-string ProductLevel { get; }  // CTP, RTM, SP1, SP2, ... 
-string LongServerVersion { get; } // @@VERSION 
+string ProductUpdateLevel { get; }                  // CU1, CU2, ... 
+string ProductLevel { get; }                        // CTP, RTM, SP1, SP2, ... 
+string LongServerVersion { get; }                   // @@VERSION 
 string ServerEdition { get; } 
-EngineEdition EngineEdition { get; } // Personal | Standard | Exterprise | Express | SqlDatabase | SqlDataWarehouse
+EngineEdition EngineEdition { get; }                // Personal | Standard | Exterprise | Express | SqlDatabase | SqlDataWarehouse
 bool IsLocalDB { get; } 
 bool IsAzure { get; } 
-bool IsCompressedBackupSupported { get; } // ShortServerVersion.Major >= 10 && EngineEdition == Enterprise 
+bool IsCompressedBackupSupported { get; }           // ShortServerVersion.Major >= 10 && EngineEdition == Enterprise 
 bool IsFullTextSearchInstalled { get; } 
 bool IsConnectionEncrypted { get; } 
-SecurityMode SecurityMode { get; } | Eother IntegratedOnly or Both
-string HostPlatform { get; } | Either "Windows" or "Linux"
-FixedServerRoles FixedServerRoles { get; } // SysAdmin | SetupAdmin | ServerAdmin, ...
-string NetTransport { get; } // Either "TCP", "Shared Memory" or "Named Pipe" 
+SecurityMode SecurityMode { get; }                  // Either IntegratedOnly or Both
+string HostPlatform { get; }                        // Either "Windows" or "Linux"
+FixedServerRoles FixedServerRoles { get; }          // SysAdmin | SetupAdmin | ServerAdmin, ...
+string NetTransport { get; }                        // Either "TCP", "Shared Memory" or "Named Pipe" 
 int CurrentSPID | @@SPID { get; } 
-string CurrentDatabaseName { get; } | DB_NAME() 
-DatabaseOptionsManagement CurrentDatabase { get; } // .Databases[CurrentDatabaseName] 
+string CurrentDatabaseName { get; }                 // DB_NAME() 
+DatabaseOptionsManagement CurrentDatabase { get; }  // .Databases[CurrentDatabaseName] 
 double Ping(int timeout = 20)
-SqlDefaultPaths DefaultPaths { get; } // Data, Logs and Backups default folder. By default SQL Server process has permissions to this folders only. Not applicable for Azure
+SqlDefaultPaths DefaultPaths { get; }               // Data, Logs and Backups default folder. By default SQL Server process has permissions to this folders only. Not applicable for Azure
 ```
 
 ## Full Featured Demo
