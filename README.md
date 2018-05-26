@@ -29,7 +29,7 @@ Package implements: discovering local sql server instances by the same way as SS
 
 SqlServerManagement Manage(this IDbConnection) contains following public members:
 ```csharp
-Version ShortServerVersion { get; }                │
+Version ShortServerVersion { get; }                │ @@MICROSOFTVERSION
 string ProductVersion { get; }                     │
 string ProductUpdateLevel { get; }                 │ CU1, CU2, ... 
 string ProductLevel { get; }                       │ CTP, RTM, SP1, SP2, ... 
@@ -45,7 +45,7 @@ SecurityMode SecurityMode { get; }                 │ Either IntegratedOnly or 
 string HostPlatform { get; }                       │ Either "Windows" or "Linux"
 FixedServerRoles FixedServerRoles { get; }         │ SysAdmin | SetupAdmin | ServerAdmin, ...
 string NetTransport { get; }                       │ Either "TCP", "Shared Memory" or "Named Pipe" 
-int CurrentSPID | @@SPID { get; }                  │
+int CurrentSPID                                    │ @@SPID { get; }
 string CurrentDatabaseName { get; }                │ DB_NAME() 
 DatabaseOptionsManagement CurrentDatabase { get; } │ Databases[CurrentDatabaseName] 
 double Ping(int timeout = 20)                      │
