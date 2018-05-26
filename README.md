@@ -3,8 +3,8 @@ Package implements: discovering local sql server instances by the same way as SS
 
 ## IDbConnection.Manage() Extensions
 
-| Data Type | Member |
-|-----------|--------|
+| Data Type | Member | comments |
+|-----------|--------|----------|
 | string    | ServerEdition |
 | EngineEdition | EngineEdition | Personal, Standard, Exterprise, Express, SqlDatabase, SqlDataWarehouse |
 | SecurityMode| SecurityMode | IntegratedOnly, Both |
