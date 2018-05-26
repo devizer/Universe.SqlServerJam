@@ -10,7 +10,7 @@ Package implements: discovering local sql server instances by the same way as SS
 | string | ProductUpdateLevel { get; } | CU1, CU2, ... |
 | string | ProductLevel { get; } | CTP, RTM, SP1, SP2, ... |
 | string | LongServerVersion { get; } | @@VERSION |
-| string    | ServerEdition { get; } |
+| string    | ServerEdition { get; } | "SQL Azure", "Express Edition", "Developer Edition", "Enterprise Edition", ...
 | EngineEdition | EngineEdition { get; }| Personal, Standard, Exterprise, Express, SqlDatabase, SqlDataWarehouse |
 | bool | IsLocalDB { get; } |
 | bool | IsAzure { get; } |
@@ -29,27 +29,28 @@ Package implements: discovering local sql server instances by the same way as SS
 
 SqlServerManagement Manage(this IDbConnection) contains following public members:
 ```csharp
-Version ShortServerVersion { get; }                │ @@MICROSOFTVERSION
-string ProductVersion { get; }                     │
-string ProductUpdateLevel { get; }                 │ CU1, CU2, ... 
-string ProductLevel { get; }                       │ CTP, RTM, SP1, SP2, ... 
-string LongServerVersion { get; }                  │ @@VERSION 
-string ServerEdition { get; }                      │
-EngineEdition EngineEdition { get; }               │ Personal | Standard | Exterprise | Express | SqlDatabase | SqlDataWarehouse
-bool IsLocalDB { get; }                            │
-bool IsAzure { get; }                              │
-bool IsCompressedBackupSupported { get; }          │ ShortServerVersion.Major >= 10 && EngineEdition == Enterprise 
-bool IsFullTextSearchInstalled { get; }            │
-bool IsConnectionEncrypted { get; }                │
-SecurityMode SecurityMode { get; }                 │ Either IntegratedOnly or Both
-string HostPlatform { get; }                       │ Either "Windows" or "Linux"
-FixedServerRoles FixedServerRoles { get; }         │ SysAdmin | SetupAdmin | ServerAdmin, ...
-string NetTransport { get; }                       │ Either "TCP", "Shared Memory" or "Named Pipe" 
-int CurrentSPID                                    │ @@SPID { get; }
-string CurrentDatabaseName { get; }                │ DB_NAME() 
-DatabaseOptionsManagement CurrentDatabase { get; } │ Databases[CurrentDatabaseName] 
-double Ping(int timeout = 20)                      │
-SqlDefaultPaths DefaultPaths { get; }              │ Data, Logs and Backups default folder. By default SQL Server process has permissions to this folders only. Not applicable for Azure
+Version ShortServerVersion { get; }                      │ @@MICROSOFTVERSION
+string ProductVersion { get; }                           │ 
+string ProductUpdateLevel { get; }                       │ CU1, CU2, ... 
+string ProductLevel { get; }                             │ CTP, RTM, SP1, SP2, ... 
+string LongServerVersion { get; }                        │ @@VERSION 
+string ServerEdition { get; }                            │ "SQL Azure", "Express Edition", "Developer Edition", "Enterprise Edition", ...
+EngineEdition EngineEdition { get; }                     │ Personal | Standard | Exterprise | Express | SqlDatabase | SqlDataWarehouse
+bool IsLocalDB { get; }                                  │
+bool IsAzure { get; }                                    │
+bool IsCompressedBackupSupported { get; }                │ ShortServerVersion.Major >= 10 && EngineEdition == Enterprise 
+bool IsFullTextSearchInstalled { get; }                  │
+bool IsConnectionEncrypted { get; }                      │
+SecurityMode SecurityMode { get; }                       │ Either IntegratedOnly or Both
+SqlDefaultPaths DefaultPaths { get; }                    │ Data, Logs and Backups default folder. By default SQL Server process has permissions to this folders only. Not applicable for Azure
+string HostPlatform { get; }                             │ Either "Windows" or "Linux"
+FixedServerRoles FixedServerRoles { get; }               │ SysAdmin | SetupAdmin | ServerAdmin, ...
+string NetTransport { get; }                             │ Either "TCP", "Shared Memory" or "Named Pipe" 
+int CurrentSPID { get; }                                 │ @@SPID
+double Ping(int timeout = 20)                            │
+string CurrentDatabaseName { get; }                      │ DB_NAME() 
+DatabaseOptionsManagement CurrentDatabase { get; }       │ Databases[CurrentDatabaseName] 
+DatabaseOptionsManagement Databases["Contoso"] { get; }  │ Databases[CurrentDatabaseName] 
 ```
 
 ## Full Featured Demo
