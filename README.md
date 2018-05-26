@@ -39,19 +39,22 @@ EngineEdition EngineEdition { get; }                     │ Personal | Standard
 bool IsLocalDB { get; }                                  │
 bool IsAzure { get; }                                    │
 bool IsCompressedBackupSupported { get; }                │ ShortServerVersion.Major >= 10 && EngineEdition == Enterprise 
+string ServerCollation { get; }                          | 
 bool IsFullTextSearchInstalled { get; }                  │
 bool IsConnectionEncrypted { get; }                      │
 SecurityMode SecurityMode { get; }                       │ Either IntegratedOnly or Both
-SqlDefaultPaths DefaultPaths { get; }                    │ Data, Logs and Backups default folder. By default SQL Server process has permissions to this folders only. Not applicable for Azure
+SqlDefaultPaths DefaultPaths { get; }                    │ Data, Logs and Backups default folder. Not applicable for Azure DB
 string HostPlatform { get; }                             │ Either "Windows" or "Linux"
 FixedServerRoles FixedServerRoles { get; }               │ SysAdmin | SetupAdmin | ServerAdmin, ...
 string NetTransport { get; }                             │ Either "TCP", "Shared Memory" or "Named Pipe" 
 int CurrentSPID { get; }                                 │ @@SPID
-double Ping(int timeout = 20)                            │
+double Ping(int timeout = 20)                            │ Returns roundtrip duration in seconds
 string CurrentDatabaseName { get; }                      │ DB_NAME() 
 DatabaseOptionsManagement CurrentDatabase { get; }       │ Databases[CurrentDatabaseName] 
-DatabaseOptionsManagement Databases["Contoso"] { get; }  │ Databases[CurrentDatabaseName] 
+DatabaseOptionsManagement Databases["Contoso"] { get; }  │
 ```
+
+
 
 ## Full Featured Demo
 Source code: [Full_Featured_Demo.cs](https://github.com/devizer/Universe.SqlServerJam/blob/master/Universe.SqlServerJam/Universe.SqlServerJam.Tests/Full_Featured_Demo.cs)
