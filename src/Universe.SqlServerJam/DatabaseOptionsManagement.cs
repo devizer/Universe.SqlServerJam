@@ -1,35 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Dapper;
 
 namespace Universe.SqlServerJam
 {
     public class DatabaseOptionsManagement
     {
-        private SqlServerManagement _ServerManagement;
-        private readonly string _DatabaseName;
+        private readonly SqlServerManagement _ServerManagement;
+        private readonly Lazy<string> _DatabaseName;
+        private string DatabaseName => _DatabaseName.Value;
 
         private IDbConnection _Connection => _ServerManagement.SqlConnection;
 
         Version ServerVersion => _ServerManagement.ShortServerVersion;
 
-        // TODO: CTOR should not throw exception
+        // TODO: CTOR should not throw exception except of ArgumentException;
         public DatabaseOptionsManagement(SqlServerManagement serverManagement, string databaseName = null)
         {
             _ServerManagement = serverManagement ?? throw new ArgumentNullException(nameof(serverManagement));
-            _DatabaseName = databaseName ?? serverManagement.CurrentDatabaseName;
+
+            // As comment above said,
+            // serverManagement.CurrentDatabaseName can be lazy only
+            _DatabaseName = new Lazy<string>(
+                () => databaseName ?? serverManagement.CurrentDatabaseName,
+                LazyThreadSafetyMode.ExecutionAndPublication
+            );
         }
 
         internal T GetSysDatabasesColumn<T>(string propertyName)
         {
-            return _ServerManagement.SqlConnection.ExecuteScalar<T>($"Select {propertyName} from sys.databases where name=@name", new { name = _DatabaseName });
+            return _ServerManagement.SqlConnection.ExecuteScalar<T>($"Select {propertyName} from sys.databases where name=@name", new { name = DatabaseName });
         }
-
 
         public bool IsBrokerEnabled
         {
@@ -37,7 +43,7 @@ namespace Universe.SqlServerJam
             set
             {
                 string sql = string.Format("Alter Database [{0}] Set {1}_BROKER",
-                    _DatabaseName,
+                    DatabaseName,
                     value ? "ENABLE" : "DISABLE");
 
                 _Connection.Execute(sql);
@@ -50,7 +56,7 @@ namespace Universe.SqlServerJam
             set
             {
                 string sql = string.Format("Alter Database [{0}] Set {1}",
-                    _DatabaseName,
+                    DatabaseName,
                     value ? "READ_ONLY" : "READ_WRITE");
 
                 _Connection.Execute(sql);
@@ -63,7 +69,7 @@ namespace Universe.SqlServerJam
             set
             {
                 string sql = string.Format("Alter Database [{0}] Set AUTO_SHRINK {1}",
-                    _DatabaseName,
+                    DatabaseName,
                     value ? "ON" : "OFF");
 
                 _Connection.Execute(sql);
@@ -73,7 +79,7 @@ namespace Universe.SqlServerJam
         public void SetState(TargetDatabaseState newState)
         {
             string sql = string.Format("Alter Database [{0}] Set {1}",
-                _DatabaseName,
+                DatabaseName,
                 newState);
 
             _Connection.Execute(sql);
@@ -115,7 +121,7 @@ namespace Universe.SqlServerJam
                         : string.Empty);
 
                 string sql = string.Format("Alter Database [{0}] Set AUTO_CREATE_STATISTICS {1}",
-                    _DatabaseName,
+                    DatabaseName,
                     option);
 
                 _Connection.Execute(sql);
@@ -141,7 +147,7 @@ namespace Universe.SqlServerJam
                     option = "AUTO_UPDATE_STATISTICS ON, AUTO_UPDATE_STATISTICS_ASYNC ON";
 
                 string sql = string.Format("Alter Database [{0}] Set {1}",
-                    _DatabaseName,
+                    DatabaseName,
                     option);
 
                 _Connection.Execute(sql);
@@ -161,7 +167,7 @@ namespace Universe.SqlServerJam
                     throw new ArgumentException();
 
                 string sql = string.Format("Alter Database [{0}] COLLATE {1}",
-                    _DatabaseName,
+                    DatabaseName,
                     value);
 
                 _Connection.Execute(sql);
@@ -172,7 +178,7 @@ namespace Universe.SqlServerJam
         {
             get
             {
-                return (DatabaseComparisonStyle)_ServerManagement.GetDatabaseProperty<int>("ComparisonStyle", _DatabaseName);
+                return (DatabaseComparisonStyle)_ServerManagement.GetDatabaseProperty<int>("ComparisonStyle", DatabaseName);
             }
         }
 
@@ -180,7 +186,7 @@ namespace Universe.SqlServerJam
         {
             get
             {
-                return _ServerManagement.GetDatabaseProperty<bool>("IsClone", _DatabaseName);
+                return _ServerManagement.GetDatabaseProperty<bool>("IsClone", DatabaseName);
             }
         }
 
@@ -192,14 +198,8 @@ namespace Universe.SqlServerJam
         /// ElasticPool
         /// System (for master DB)
         /// </summary>
-        public string AzureServiceObjective
-        {
-            get
-            {
-                return _ServerManagement
-                    .GetDatabaseProperty<string>("ServiceObjective", _DatabaseName);
-            }
-        }
+        public string AzureServiceObjective => _ServerManagement.GetDatabaseProperty<string>("ServiceObjective", DatabaseName);
+
 
         /// <summary>
         /// Web = Web Edition Database
@@ -209,14 +209,7 @@ namespace Universe.SqlServerJam
         /// Premium
         /// System (for master database)
         /// </summary>
-        public string AzureEdition
-        {
-            get
-            {
-                return _ServerManagement
-                    .GetDatabaseProperty<string>("Edition", _DatabaseName);
-            }
-        }
+        public string AzureEdition => _ServerManagement.GetDatabaseProperty<string>("Edition", DatabaseName);
 
         public string AzureElasticPool
         {
@@ -233,8 +226,7 @@ ON d.database_id = slo.database_id
 WHERE d.name = @name
 ";
 
-                return _Connection
-                    .ExecuteScalar<string>(sql, new {name = _DatabaseName});
+                return _Connection.ExecuteScalar<string>(sql, new { name = DatabaseName });
             }
         }
 
@@ -246,7 +238,7 @@ WHERE d.name = @name
                 const string sql = "Select Sum(Cast(size as bigint)) From sys.database_files";
                 return 8L * _ServerManagement.SqlConnection.ExecuteScalar<long>(sql);
                 int size;
-                if (!_ServerManagement.DatabaseSizes.TryGetValue(_DatabaseName, out size))
+                if (!_ServerManagement.DatabaseSizes.TryGetValue(DatabaseName, out size))
                     return null;
                 else
                     return size;
@@ -261,11 +253,10 @@ WHERE d.name = @name
                 var all = Enum.GetValues(typeof(DatabaseRecoveryMode)).OfType<DatabaseRecoveryMode>().ToList();
                 var ret = all.FirstOrDefault(x => x.ToString().Equals(raw, StringComparison.InvariantCultureIgnoreCase));
 
-
                 if (ret == DatabaseRecoveryMode.Unknown)
                 {
                     var server = new SqlConnectionStringBuilder(_Connection.ConnectionString).DataSource;
-                    Trace.WriteLine($"Unable to parse recovery model '{raw}' of DB [{_DatabaseName}] on server {server}");
+                    Trace.WriteLine($"Unable to parse recovery model '{raw}' of DB [{DatabaseName}] on server {server}");
                 }
 
                 return ret;
@@ -273,7 +264,7 @@ WHERE d.name = @name
             set
             {
                 if (value == DatabaseRecoveryMode.Unknown) throw new ArgumentOutOfRangeException();
-                var sql = $"Alter Database [{_DatabaseName}] Set Recovery {value}";
+                var sql = $"Alter Database [{DatabaseName}] Set Recovery {value}";
                 _Connection.Execute(sql);
             }
 
@@ -287,18 +278,12 @@ WHERE d.name = @name
             }
             set
             {
-                var sql = $"Alter Database [{_DatabaseName}] Set RECURSIVE_TRIGGERS {(value ? "ON" : "OFF")}";
+                var sql = $"Alter Database [{DatabaseName}] Set RECURSIVE_TRIGGERS {(value ? "ON" : "OFF")}";
                 _Connection.Execute(sql);
             }
         }
 
-        public bool IsFullTextEnabled
-        {
-            get
-            {
-                return GetSysDatabasesColumn<bool>("is_fulltext_enabled");
-            }
-        }
+        public bool IsFullTextEnabled => GetSysDatabasesColumn<bool>("is_fulltext_enabled");
 
         public string OwnerName
         {
@@ -308,7 +293,7 @@ WHERE d.name = @name
                     return "Not Applicable";
 
                 string sql = "select suser_sname(owner_sid) from sys.databases where name = @name";
-                return _Connection.ExecuteScalar<string>(sql, new {name = _DatabaseName});
+                return _Connection.ExecuteScalar<string>(sql, new {name = DatabaseName});
 
             }
         }
@@ -326,12 +311,11 @@ WHERE d.name = @name
 
             string sql = string.Format(
                 @"DBCC SHRINKDATABASE ('{0}' {1}) WITH NO_INFOMSGS",
-                _DatabaseName.Replace("'", "''"),
+                DatabaseName.Replace("'", "''"),
                 so);
 
             _Connection.Execute(sql, commandTimeout: commandTimeout);
         }
-
 
         public string GetDigest(int intent = 4)
         {

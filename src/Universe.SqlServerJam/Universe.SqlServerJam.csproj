@@ -43,10 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgileDbKiller.cs" />
     <Compile Include="EngineEdition.cs" />
     <Compile Include="ExperimentalDbExtentions.cs" />
     <Compile Include="DatabaseOptionsManagement.cs" />
-    <Compile Include="ExceptionExtentions.cs" />
+    <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="FixedServerRoles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RamDriveInfo.cs" />

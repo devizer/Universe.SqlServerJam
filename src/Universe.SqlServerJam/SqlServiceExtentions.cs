@@ -96,7 +96,7 @@ namespace Universe.SqlServerJam
                     string cs = String.Format("Data Source={0};Integrated Security=True;Pooling=false;Timeout=1", localDb);
                     using (SqlConnection con = new SqlConnection(cs))
                     {
-                        con.GetSqlManagment().Ping(timeout: 1);
+                        con.Manage().Ping(timeout: 1);
                         return true;
                     }
                 }
@@ -161,7 +161,7 @@ namespace Universe.SqlServerJam
                     string cs = String.Format("Data Source={0};Integrated Security=True;Pooling=false;Timeout=2", sqlServer);
                     using (SqlConnection con = new SqlConnection(cs))
                     {
-                        con.GetSqlManagment().Ping(timeout: 2);
+                        con.Manage().Ping(timeout: 2);
                         return true;
                     }
                 }

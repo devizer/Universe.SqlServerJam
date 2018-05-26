@@ -115,7 +115,7 @@ namespace Universe.SqlServerJam.Tests
                 {
                     using (SqlConnection con = new SqlConnection(cs))
                     {
-                        var man = con.GetSqlManagment();
+                        var man = con.Manage();
                         var ver = man.ShortServerVersion;
                         if (sqlRef.Version == null) sqlRef.Version = ver;
                         alive++;
@@ -304,9 +304,9 @@ namespace Universe.SqlServerJam.Tests
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                var transport = con.GetSqlManagment().NetTransport;
-                transport += ", " + (con.GetSqlManagment().IsConnectionEncrypted ? "Encrypted" : "Without Encryption");
-                var hostPlatform = con.GetSqlManagment().HostPlatform;
+                var transport = con.Manage().NetTransport;
+                transport += ", " + (con.Manage().IsConnectionEncrypted ? "Encrypted" : "Without Encryption");
+                var hostPlatform = con.Manage().HostPlatform;
                 if (hostPlatform != "Windows") transport += ", " + hostPlatform;
                 return transport;
             }

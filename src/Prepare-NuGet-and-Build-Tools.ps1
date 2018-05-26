@@ -1,6 +1,7 @@
 $packages = @("vswhere", "ReportUnit",
-              "NUnit.ConsoleRunner", "NUnit.Extension.NUnitV2Driver", "NUnit.Extension.NUnitV2ResultWriter", 
-              "xunit.runner.console", "xunit");
+  "NUnit.ConsoleRunner", "NUnit.Extension.NUnitV2Driver", "NUnit.Extension.NUnitV2ResultWriter", 
+  "xunit.runner.console", "xunit",
+  "JetBrains.dotCover.CommandLineTools");
 
 # Arrange
 $baseDir=$Env:LocalAppData; if (!$baseDir) { $baseDir=$Env:AppData; }
@@ -103,3 +104,6 @@ AddVar "XUNIT_RUNNER_EXE" $xunit_Runner
 
 $report_Exe = join-Path -Path "$packagesDir\ReportUnit.*" -ChildPath "tools\ReportUnit*.exe" -Resolve
 AddVar "REPORT_UNIT_EXE" $report_Exe
+
+$dotCover_Exe = join-Path -Path "$packagesDir\JetBrains.dotCover.CommandLineTools.*" -ChildPath "tools\dotCover.exe" -Resolve
+AddVar "DOTCOVER_EXE" $dotCover_Exe

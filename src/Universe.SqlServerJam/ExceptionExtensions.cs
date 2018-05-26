@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Universe.SqlServerJam
 {
-    public static class ExceptionExtentions
+    public static class ExceptionExtensions
     {
         public static string GetExeptionDigest(this Exception ex)
         {

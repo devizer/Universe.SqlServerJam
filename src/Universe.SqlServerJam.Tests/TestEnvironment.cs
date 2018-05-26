@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
+[assembly: SecurityRules(SecurityRuleSet.Level1, SkipVerificationInFullTrust = true)]
 
 namespace Universe.SqlServerJam.Tests
 {
@@ -19,6 +21,7 @@ namespace Universe.SqlServerJam.Tests
 
             return 100;
         }
+
     }
 }
 

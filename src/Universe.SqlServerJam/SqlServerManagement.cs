@@ -43,12 +43,21 @@ namespace Universe.SqlServerJam
 
         public SecurityMode SecurityMode => (SecurityMode) GetServerProperty<int>("IsIntegratedSecurityOnly");
 
-        // Returns either Windows or Linux
+        // Returns either "Windows" or "Linux"
         public string HostPlatform => SqlConnection.ExecuteScalar<string>(SqlGetHostPlatform);
 
         public Version ShortServerVersion => _ShortServerVersion.Value;
 
         public bool IsLocalDB => ShortServerVersion.Major >= 11 && GetServerProperty<int>("IsLocalDB") == 1;
+
+        public bool IsDbExists(string dbName)
+        {
+            if (dbName == null)
+                throw new ArgumentNullException(nameof(dbName));
+
+            string sql = "Select Cast(Case When Exists(Select 1 From sys.databases Where Name = @dbName) Then 1 Else 0 End As Bit)";
+            return this.SqlConnection.ExecuteScalar<bool>(sql, new { dbName });
+        }
 
         public FixedServerRoles FixedServerRoles
         {
@@ -113,7 +122,7 @@ namespace Universe.SqlServerJam
                 {
                     var sql = "select sum(CAST(FileProperty(name, 'SpaceUsed') AS bigint) * 8192.) from sys.database_files";
                     decimal size = SqlConnection.ExecuteScalar<decimal>(sql);
-                    return new Dictionary<string, int>()
+                    return new Dictionary<string, int>
                     {
                         {CurrentDatabaseName, (int) (size / 1024m)}
                     };
@@ -121,7 +130,6 @@ namespace Universe.SqlServerJam
             }
         }
 
-        // SQL Azure
         public bool IsAzure
         {
             get
@@ -216,15 +224,13 @@ select
     isnull(@DefaultLog, @MasterLog) DefaultLog,
     isnull(@DefaultBackup, @MasterLog) DefaultBackup";
 
-
                 SqlDefaultPaths ret = new SqlDefaultPaths();
                 
                 // Azure doesn't allow master.dbo.xp_instance_regread
                 try
                 {
                     IEnumerable<SqlDefaultPaths> query = SqlConnection.Query<SqlDefaultPaths>(sql);
-                    SqlDefaultPaths try1 = query.FirstOrDefault();
-                    ret = try1 ?? new SqlDefaultPaths();
+                    ret = query.First();
                 }
                 catch
                 {
@@ -254,9 +260,9 @@ select
                 Owner = owner;
             }
 
-
             public DatabaseOptionsManagement this[string databaseName] => 
                 new DatabaseOptionsManagement(Owner, databaseName);
+
         }
 
         private const string SqlGetHostPlatform = @"
