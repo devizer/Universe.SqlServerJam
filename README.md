@@ -39,7 +39,7 @@ EngineEdition EngineEdition { get; }                     │ Personal | Standard
 bool IsLocalDB { get; }                                  │
 bool IsAzure { get; }                                    │
 bool IsCompressedBackupSupported { get; }                │ ShortServerVersion.Major >= 10 && EngineEdition == Enterprise 
-string ServerCollation { get; }                          | 
+string ServerCollation { get; }                          |
 bool IsFullTextSearchInstalled { get; }                  │
 bool IsConnectionEncrypted { get; }                      │
 SecurityMode SecurityMode { get; }                       │ Either IntegratedOnly or Both
