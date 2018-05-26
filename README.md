@@ -5,28 +5,52 @@ Package implements: discovering local sql server instances by the same way as SS
 
 | Data Type | Member | comments |
 |-----------|--------|----------|
-| string    | ServerEdition { get; }|
-| EngineEdition | EngineEdition { get; }| Personal, Standard, Exterprise, Express, SqlDatabase, SqlDataWarehouse |
-| SecurityMode| SecurityMode { get; } | IntegratedOnly, Both |
-| string | HostPlatform { get; } | "Windows", "Linux" |
 | Version | ShortServerVersion { get; } | @@MICROSOFTVERSION |
+| string | ProductVersion { get; } |
+| string | ProductUpdateLevel { get; } | CU1, CU2, ... |
+| string | ProductLevel { get; } | CTP, RTM, SP1, SP2, ... |
+| string | LongServerVersion { get; } | @@VERSION |
+| string    | ServerEdition { get; } |
+| EngineEdition | EngineEdition { get; }| Personal, Standard, Exterprise, Express, SqlDatabase, SqlDataWarehouse |
 | bool | IsLocalDB { get; } |
 | bool | IsAzure { get; } |
-| FixedServerRoles | FixedServerRoles { get; } | SysAdmin, SetupAdmin, ServerAdmin, SecurityAdmin, ProcessAdmin, ... |
+| bool | IsCompressedBackupSupported { get; } | ShortServerVersion.Major >= 10 && EngineEdition == Enterprise |
 | bool | IsFullTextSearchInstalled { get; } |
 | bool | IsConnectionEncrypted { get; } |
+| SecurityMode| SecurityMode { get; } | IntegratedOnly, Both |
+| string | HostPlatform { get; } | "Windows", "Linux" |
+| FixedServerRoles | FixedServerRoles { get; } | SysAdmin, SetupAdmin, ServerAdmin, SecurityAdmin, ProcessAdmin, ... |
 | string | NetTransport { get; } | "TCP", "Shared Memory", "Named Pipe" |
-| bool | IsCompressedBackupSupported { get; } | ShortServerVersion.Major >= 10 && EngineEdition == Enterprise |
-| string | ProductVersion { get; } |
-| string | LongServerVersion { get; } | @@VERSION |
 | int | CurrentSPID | @@SPID { get; } |
 | string | CurrentDatabaseName { get; } | DB_NAME() |
 | DatabaseOptionsManagement | CurrentDatabase { get; } | .Databases[CurrentDatabaseName] |
-| string | ProductUpdateLevel { get; } | CU1, CU2, ... |
-| string | ProductLevel { get; } | CTP, RTM, SP1, SP2, ... |
 | double | Ping(int timeout = 20) | returns roundtrip duration |
 | SqlDefaultPaths | DefaultPaths { get; } | Data, Logs and Backups default folder. By default SQL Server process has permissions to this folders only. Not applicable for Azure |
 
+SqlServerManagement Manage(this IDbConnection) contains following public members:
+```csharp
+Version ShortServerVersion { get; } 
+string ProductVersion { get; } 
+string ProductUpdateLevel { get; } // CU1, CU2, ... 
+string ProductLevel { get; }  // CTP, RTM, SP1, SP2, ... 
+string LongServerVersion { get; } // @@VERSION 
+string ServerEdition { get; } 
+EngineEdition EngineEdition { get; } // Personal | Standard | Exterprise | Express | SqlDatabase | SqlDataWarehouse
+bool IsLocalDB { get; } 
+bool IsAzure { get; } 
+bool IsCompressedBackupSupported { get; } // ShortServerVersion.Major >= 10 && EngineEdition == Enterprise 
+bool IsFullTextSearchInstalled { get; } 
+bool IsConnectionEncrypted { get; } 
+SecurityMode SecurityMode { get; } | Eother IntegratedOnly or Both
+string HostPlatform { get; } | Either "Windows" or "Linux"
+FixedServerRoles FixedServerRoles { get; } // SysAdmin | SetupAdmin | ServerAdmin, ...
+string NetTransport { get; } // Either "TCP", "Shared Memory" or "Named Pipe" 
+int CurrentSPID | @@SPID { get; } 
+string CurrentDatabaseName { get; } | DB_NAME() 
+DatabaseOptionsManagement CurrentDatabase { get; } // .Databases[CurrentDatabaseName] 
+double Ping(int timeout = 20)
+SqlDefaultPaths DefaultPaths { get; } // Data, Logs and Backups default folder. By default SQL Server process has permissions to this folders only. Not applicable for Azure
+```
 
 ## Full Featured Demo
 Source code: [Full_Featured_Demo.cs](https://github.com/devizer/Universe.SqlServerJam/blob/master/Universe.SqlServerJam/Universe.SqlServerJam.Tests/Full_Featured_Demo.cs)
