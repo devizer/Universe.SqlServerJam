@@ -5,27 +5,27 @@ Package implements: discovering local sql server instances by the same way as SS
 
 | Data Type | Member | comments |
 |-----------|--------|----------|
-| string    | ServerEdition |
-| EngineEdition | EngineEdition | Personal, Standard, Exterprise, Express, SqlDatabase, SqlDataWarehouse |
-| SecurityMode| SecurityMode | IntegratedOnly, Both |
-| string | HostPlatform | "Windows", "Linux" |
-| Version | ShortServerVersion | @@MICROSOFTVERSION |
-| bool | IsLocalDB |
-| bool | IsAzure |
-| FixedServerRoles | FixedServerRoles | SysAdmin, SetupAdmin, ServerAdmin, SecurityAdmin, ProcessAdmin, ... |
-| bool | IsFullTextSearchInstalled |
-| bool | IsConnectionEncrypted |
-| string | NetTransport | "TCP", "Shared Memory", "Named Pipe" |
-| bool | IsCompressedBackupSupported | ShortServerVersion.Major >= 10 && EngineEdition == Enterprise |
-| string | ProductVersion |
-| string | LongServerVersion | @@VERSION |
-| int | CurrentSPID | @@SPID |
-| string | CurrentDatabaseName | DB_NAME() |
-| DatabaseOptionsManagement | CurrentDatabase | .Databases[CurrentDatabaseName] |
-| string | ProductUpdateLevel | CU1, CU2, ... |
-| string | ProductLevel | CTP, RTM, SP1, SP2, ... |
+| string    | ServerEdition { get; }|
+| EngineEdition | EngineEdition { get; }| Personal, Standard, Exterprise, Express, SqlDatabase, SqlDataWarehouse |
+| SecurityMode| SecurityMode { get; } | IntegratedOnly, Both |
+| string | HostPlatform { get; } | "Windows", "Linux" |
+| Version | ShortServerVersion { get; } | @@MICROSOFTVERSION |
+| bool | IsLocalDB { get; } |
+| bool | IsAzure { get; } |
+| FixedServerRoles | FixedServerRoles { get; } | SysAdmin, SetupAdmin, ServerAdmin, SecurityAdmin, ProcessAdmin, ... |
+| bool | IsFullTextSearchInstalled { get; } |
+| bool | IsConnectionEncrypted { get; } |
+| string | NetTransport { get; } | "TCP", "Shared Memory", "Named Pipe" |
+| bool | IsCompressedBackupSupported { get; } | ShortServerVersion.Major >= 10 && EngineEdition == Enterprise |
+| string | ProductVersion { get; } |
+| string | LongServerVersion { get; } | @@VERSION |
+| int | CurrentSPID | @@SPID { get; } |
+| string | CurrentDatabaseName { get; } | DB_NAME() |
+| DatabaseOptionsManagement | CurrentDatabase { get; } | .Databases[CurrentDatabaseName] |
+| string | ProductUpdateLevel { get; } | CU1, CU2, ... |
+| string | ProductLevel { get; } | CTP, RTM, SP1, SP2, ... |
 | double | Ping(int timeout = 20) | returns roundtrip duration |
-| SqlDefaultPaths | DefaultPaths | Data, Logs and Backups default folder. By default SQL Server process has permissions to this folders only. Not applicable for Azure |
+| SqlDefaultPaths | DefaultPaths { get; } | Data, Logs and Backups default folder. By default SQL Server process has permissions to this folders only. Not applicable for Azure |
 
 
 ## Full Featured Demo
