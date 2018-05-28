@@ -55,7 +55,6 @@ DatabaseOptionsManagement Databases["Contoso"] { get; }  │
 ```
 
 
-
 ## Full Featured Demo
 Source code: [Full_Featured_Demo.cs](https://github.com/devizer/Universe.SqlServerJam/blob/master/Universe.SqlServerJam/Universe.SqlServerJam.Tests/Full_Featured_Demo.cs)
 
