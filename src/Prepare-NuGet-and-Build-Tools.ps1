@@ -34,12 +34,27 @@ function SmartDownload { param([string]$key, [string]$url, [string]$fileName)
     return $path;
   }
   $path = "$workdir\$fileName";
+  $dir = [System.IO.Path]::GetDirectoryName($path)
+  Write-Host "Create DIR: $dir"
+  New-Item -ItemType Directory -Path $dir -EA SilentlyContinue | out-null
   Write-Host "Caching '$url' as`r`n        [$path]" -ForegroundColor $color
   $webClient.DownloadFile($url, $path);
   $path > "$workdir\${key}.path"
   GetSHA1 $path > "$workdir\${key}.sha1"
   return $path
 }
+
+function SmartDownloadSfx { param([string]$key, [string]$url, [string]$fileName)
+  $sfx = SmartDownload $key $url $fileName
+  Write-Host "SFX ${fileName}: $sfx" -ForegroundColor DarkGray
+  $dir = [System.IO.Path]::GetDirectoryName($sfx)
+  pushd $dir
+  $output = (& $sfx -y) | Out-String 
+  popd
+  return $dir
+}
+
+# function SmartExtractUrl { param([string]$url, [string]$relPath, [string]$exe)
 
 function SmartNugetInstall { param([string]$package) 
   $done=""; if (Test-Path "$packagesDir\$package.is-done") { $done = Get-Content "$packagesDir\$package.is-done"; }
@@ -67,6 +82,8 @@ $nuget_344 = SmartDownload "NuGet-3.4.4(cache)" "https://dist.nuget.org/win-x86-
 $nuget_Latest = SmartDownload "NuGet-latest(cache)" "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" "NuGet-latest.exe"
 $nuget=$nuget_Latest
 
+$essentials_dir = SmartDownloadSfx "Essentials(cache)" "https://raw.githubusercontent.com/devizer/glist/master/Essentials/Essentials.7z.exe" "Essentials\Essentials.7z.exe"
+
 # Downloading packages
 foreach ($p in $packages) { $p_Path = SmartNugetInstall $p; }
 
@@ -77,6 +94,8 @@ if ($vswhere) {
 } else {
   Write-Host "Unable to find vswhere.exe. Check is internet connection works and support TLS/SSL" -ForegroundColor Red
 }
+
+AddVar "ESSENTIALS_PATH" $essentials_dir
 AddVar "NUGET_EXE" $nuget
 AddVar "VSWHERE_EXE" $vswhere
 
