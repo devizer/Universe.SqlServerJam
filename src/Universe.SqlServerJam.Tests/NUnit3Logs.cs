@@ -13,16 +13,17 @@ namespace Universe.SqlServerJam.Tests
         // Rarely used method
         public static void Bind()
         {
-            if (!_Bound)
+            if (!_Bound) 
                 lock (Sync)
                     if (!_Bound)
                     {
+                        Debug.Listeners.Add(new TextWriterTraceListener(TestContext.Progress));
+
                         var name = Process.GetCurrentProcess()?.ProcessName ?? "";
-                        var runners = new[] {"JetBrains.ReSharper.TaskRunner", "nunit-agent"};
-                        if (true || runners.Any(x => name.StartsWith(x, StringComparison.InvariantCultureIgnoreCase)))
-                        {
-                            Debug.Listeners.Add(new TextWriterTraceListener(TestContext.Progress));
-                        }
+                        var ignoreCase = StringComparison.InvariantCultureIgnoreCase;
+                        bool isNUnitAgent = name.StartsWith("nunit-agent", ignoreCase);
+                        if (!isNUnitAgent)
+                            Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
 
                         Debug.WriteLine("[NUnit3Logs.Bind] Process: " + name);
 

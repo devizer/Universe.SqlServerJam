@@ -35,6 +35,11 @@ namespace Universe.SqlServerJam.Tests
 
         private List<SqlServerRef> SqlServers => _SqlServers.Value;
 
+        [Test]
+        public void Test_Debug()
+        {
+            if (Debugger.IsAttached) Debugger.Break();
+        }
 
         [Test]
         public void _1_Find_Local_Servers()
@@ -43,7 +48,7 @@ namespace Universe.SqlServerJam.Tests
             Debug.WriteLine($"Found {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
         }
 
-        [Test]
+        [Test/*, Ignore("Test Only Sql@Linux")*/]
         public void _2_Start_Local_Services()
         {
             var list = SqlServers.OrderByVersionDesc().ToList();
