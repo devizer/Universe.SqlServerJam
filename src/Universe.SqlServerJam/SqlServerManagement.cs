@@ -265,11 +265,11 @@ select
         }
 
         private const string SqlGetHostPlatform = @"
-if exists (select 1 from sys.all_objects where name = 'dm_os_host_info' and type = 'V' and is_ms_shipped = 1)
-begin
-    select host_platform from sys.dm_os_host_info
-end
-else 
+If Exists (Select 1 From sys.all_objects Where name = 'dm_os_host_info' and type = 'V' and is_ms_shipped = 1)
+Begin
+    Select host_platform from sys.dm_os_host_info
+End
+Else 
     select N'Windows' as host_platform
 ";
 
