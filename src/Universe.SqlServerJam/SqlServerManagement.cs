@@ -11,8 +11,8 @@ namespace Universe.SqlServerJam
     public class SqlServerManagement
     {
         public IDbConnection SqlConnection { get; }
+        public DatabaseSelector Databases { get; }
         readonly Lazy<Version> _ShortServerVersion;
-        private readonly Lazy<DatabaseSelector> _DatabaseSelector;
 
         public SqlServerManagement(IDbConnection sqlConnection)
         {
@@ -27,10 +27,8 @@ namespace Universe.SqlServerJam
                 return new Version(v1, v2, v3);
             }, LazyThreadSafetyMode.ExecutionAndPublication);
 
-            _DatabaseSelector = new Lazy<DatabaseSelector>(() => new DatabaseSelector(this));
+            Databases = new DatabaseSelector(this);
         }
-
-        public DatabaseSelector Databases => _DatabaseSelector.Value;
 
         public T GetServerProperty<T>(string propertyName)
         {
@@ -67,8 +65,8 @@ namespace Universe.SqlServerJam
                 FixedServerRoles ret = FixedServerRoles.None;
                 foreach (var i in all)
                 {
-                    int? @is = SqlConnection.ExecuteScalar<int?>($"Select IS_SRVROLEMEMBER('{i}')");
-                    if (@is.HasValue && @is.Value != 0)
+                    int? isMember = SqlConnection.ExecuteScalar<int?>($"Select IS_SRVROLEMEMBER('{i}')");
+                    if (isMember.HasValue && isMember.Value != 0)
                         ret |= i;
                 }
 
@@ -120,7 +118,7 @@ namespace Universe.SqlServerJam
                 }
                 else
                 {
-                    var sql = "select sum(CAST(FileProperty(name, 'SpaceUsed') AS bigint) * 8192.) from sys.database_files";
+                    var sql = "Select Sum(CAST(FileProperty(name, 'SpaceUsed') AS Bigint) * 8192.) From sys.database_files";
                     decimal size = SqlConnection.ExecuteScalar<decimal>(sql);
                     return new Dictionary<string, int>
                     {
@@ -177,6 +175,7 @@ namespace Universe.SqlServerJam
 
         public string ServerCollation => GetServerProperty<string>("Collation");
 
+        // If connection is closed this property is useless
         public int CurrentSPID => SqlConnection.ExecuteScalar<int>("Select @@SPID");
 
         public string CurrentDatabaseName => SqlConnection.ExecuteScalar<string>("Select DB_NAME()");
@@ -266,11 +265,11 @@ select
         }
 
         private const string SqlGetHostPlatform = @"
-if exists (select 1 from sys.all_objects where name = 'dm_os_host_info' and type = 'V' and is_ms_shipped = 1)
-begin
-    select host_platform from sys.dm_os_host_info
-end
-else 
+If Exists (Select 1 From sys.all_objects Where name = 'dm_os_host_info' and type = 'V' and is_ms_shipped = 1)
+Begin
+    Select host_platform from sys.dm_os_host_info
+End
+Else 
     select N'Windows' as host_platform
 ";
 

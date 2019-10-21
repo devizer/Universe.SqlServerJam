@@ -1,0 +1,24 @@
+﻿name    minimum maximum config_value    run_value
+allow polybase export   0   1   0   0
+allow updates   0   1   0   0
+backup checksum default 0   1   0   0
+backup compression default  0   1   0   0
+clr enabled 0   1   0   0
+contained database authentication   0   1   0   0
+cross db ownership chaining 0   1   0   0
+default language    0   9999    0   0
+external scripts enabled    0   1   0   0
+filestream access level 0   2   0   0
+hadoop connectivity 0   7   0   0
+max text repl size (B)  -1  2147483647  65536   65536
+nested triggers 0   1   1   1
+polybase network encryption 0   1   1   1
+remote access   0   1   1   1
+remote admin connections    0   1   0   0
+remote data archive 0   1   0   0
+remote login timeout (s)    0   2147483647  10  10
+remote proc trans   0   1   0   0
+remote query timeout (s)    0   2147483647  600 600
+server trigger recursion    0   1   1   1
+show advanced options   0   1   0   0
+user options    0   32767   0   0
