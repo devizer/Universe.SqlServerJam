@@ -110,6 +110,7 @@ if (-Not ("${Env:PROCESSOR_ARCHITECTURE}".ToUpper() -eq "AMD64")) {
   $msbuild_x64 = $null;
 }
 $msbuild=$msbuild_x64; if (-Not $msbuild) { $msbuild=$msbuild_x86; }
+if (-Not $msbuild) { $msbuild="msbuild.exe"; } # AppVoyer and VS 2013 image
 
 AddVar "MSBUILD_EXE" $msbuild
 AddVar "MSBUILD_x86_EXE" $msbuild_x86
