@@ -124,7 +124,7 @@ namespace Universe.SqlServerJam.Tests
                         var ver = man.ShortServerVersion;
                         if (sqlRef.Version == null) sqlRef.Version = ver;
                         alive++;
-                        report.AppendLine("Version (32-bit) .........: " + ver);
+                        report.AppendLine("Version (4 bytes) ........: " + ver);
                         report.AppendLine("Version (string) .........: " + man.ProductVersion);
                         report.AppendLine("Product Level ............: " + man.ProductLevel);
                         report.AppendLine("Update Level .............: " + man.ProductUpdateLevel);
