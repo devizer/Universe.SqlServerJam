@@ -16,7 +16,9 @@ namespace Universe.SqlServerJam
 
         public SqlServerManagement(IDbConnection sqlConnection)
         {
-            SqlConnection = sqlConnection ?? throw new ArgumentNullException(nameof(sqlConnection));
+            if (sqlConnection == null) throw new ArgumentNullException(nameof(sqlConnection));
+
+            SqlConnection = sqlConnection;
 
             _ShortServerVersion = new Lazy<Version>(() =>
             {

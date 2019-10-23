@@ -16,7 +16,8 @@ namespace Universe.SqlServerJam.Tests
         static int GetVar(string varSuffix)
         {
             var v = Environment.GetEnvironmentVariable("TEST_SQL_NET_DURATION_OF_" + varSuffix);
-            if (v != null && int.TryParse(v, out var ret))
+            int ret;
+            if (v != null && int.TryParse(v, out ret))
                 return ret;
 
             return 100;

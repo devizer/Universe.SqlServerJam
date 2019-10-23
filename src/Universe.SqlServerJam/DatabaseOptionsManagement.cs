@@ -19,10 +19,12 @@ namespace Universe.SqlServerJam
 
         Version ServerVersion => _ServerManagement.ShortServerVersion;
 
-        // TODO: CTOR should not throw exception except of ArgumentException;
+        // CTOR should not throw exception except of ArgumentException;
         public DatabaseOptionsManagement(SqlServerManagement serverManagement, string databaseName = null)
         {
-            _ServerManagement = serverManagement ?? throw new ArgumentNullException(nameof(serverManagement));
+            if (serverManagement == null) throw new ArgumentNullException(nameof(serverManagement));
+
+            _ServerManagement = serverManagement;
 
             // As comment above said,
             // serverManagement.CurrentDatabaseName can be lazy only
