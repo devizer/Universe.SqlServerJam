@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace Universe.SqlServerJam
 {
@@ -10,7 +12,9 @@ namespace Universe.SqlServerJam
             List<string> ret = new List<string>();
             while (ex != null)
             {
-                ret.Add("[" + ex.GetType().Name + "] " + ex.Message);
+                SqlException sqlex = ex as SqlException;
+                string sqlError = sqlex != null ? string.Join(",", sqlex.Errors.OfType<SqlError>().Select(x => x.Number)) : "";
+                ret.Add("[" + ex.GetType().Name + (sqlError == "" ? "" : " ") + sqlError + "] " + ex.Message);
                 ex = ex.InnerException;
             }
 
