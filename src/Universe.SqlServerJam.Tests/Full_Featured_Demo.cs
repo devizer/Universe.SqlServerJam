@@ -107,11 +107,11 @@ namespace Universe.SqlServerJam.Tests
             Stopwatch startAt = Stopwatch.StartNew();
             StringBuilder timingReport = new StringBuilder();
             ConcurrentBag<string> errorServers = new ConcurrentBag<string>();
-            ParallelOptions opts = new ParallelOptions() {MaxDegreeOfParallelism = Math.Max(list.Count,1)};
+            ParallelOptions opts = new ParallelOptions() {MaxDegreeOfParallelism = Math.Max(list.Count,2)};
             Parallel.For(0, list.Count, opts, (i) =>
             {
                 var sqlRef = list[i];
-                if (Debugger.IsAttached && sqlRef.DataSource.IndexOf("Ubuntu-16.04-LTS", StringComparison.InvariantCultureIgnoreCase) >= 0) Debugger.Break();
+                // if (Debugger.IsAttached && sqlRef.DataSource.IndexOf("Ubuntu-16.04-LTS", StringComparison.InvariantCultureIgnoreCase) >= 0) Debugger.Break();
                 string cs = sqlRef.ConnectionString;
                 string v = sqlRef.Version == null ? "N/A" : sqlRef.Version.ToString();
                 StringBuilder report = new StringBuilder();
