@@ -105,6 +105,24 @@ namespace Universe.SqlServerJam
         public bool IsCompressedBackupSupported => 
             this.EngineEdition == EngineEdition.Enterprise 
             && this.ShortServerVersion.Major >= 10;
+        
+        public bool IsMemoryOptimizedTableSupported
+        {
+            get
+            {
+                var ver = this.ShortServerVersion;
+                // Server 2016 (13.x) SP1 (or later), any edition. For SQL Server 2014 (12.x) and SQL Server 2016 (13.x) RTM (pre-SP1) you need Enterprise, Developer, or Evaluation edition.
+                if (IsLocalDB) return false;
+                if (IsAzure) return true;
+                if (ver.Major <= 11) return false;
+                if (ver.Major > 13) return true;
+                bool isEnterprise = EngineEdition == EngineEdition.Enterprise;
+                if (ver.Major == 12) return isEnterprise;
+                if (ver.Major == 13) return isEnterprise || ver.Build >= 4001;
+                return false;
+            }
+        }
+
 
         class sp_databases
         {
