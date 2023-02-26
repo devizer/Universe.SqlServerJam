@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using Microsoft.Win32;
 
 namespace Universe.SqlServerJam
@@ -45,7 +44,7 @@ namespace Universe.SqlServerJam
             return ret;
         }
 
-        // Always returns latest version only 
+        // Always returns latest version only
         public static List<SqlServerRef> GetLocalDbList()
         {
             List<SqlServerRef> ret = new List<SqlServerRef>();
@@ -163,8 +162,8 @@ namespace Universe.SqlServerJam
         public static string AsBullets(this IEnumerable<SqlServerRef> list)
         {
             var sorted = OrderByVersionDesc(list);
-            var strs = sorted.Select(x => " * " + x.DataSource + (x.Version == null ? "" : $" ({x.Version})"));
-            return string.Join(Environment.NewLine, strs);
+            IEnumerable<string> strs = sorted.Select(x => " * " + x.DataSource + (x.Version == null ? "" : $" ({x.Version})"));
+            return strs.JoinIntoString(Environment.NewLine); 
         }
     }
 }

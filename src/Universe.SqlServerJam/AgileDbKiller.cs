@@ -58,7 +58,7 @@ namespace Universe.SqlServerJam
         private static void KillConnections(SqlConnection con, string dbName)
         {
             int mySpid = con.ExecuteScalar<int>("Select @@SPID");
-            List<dynamic> query = con.Query<dynamic>("exec sp_who").ToList();
+            List<sp_who> query = con.Query<sp_who>("exec sp_who").ToList();
             const StringComparison comp = StringComparison.InvariantCultureIgnoreCase;
             List<int> dbConnectionIdList = query
                 .Where(x => x.dbname != null && x.dbname.Equals(dbName, comp))
@@ -79,7 +79,13 @@ namespace Universe.SqlServerJam
                 }
             }
         }
-    }
 
+        class sp_who
+        {
+            public int spid { get; set; }
+            public string dbname { get; set; }
+            
+        }
+    }
 }
 

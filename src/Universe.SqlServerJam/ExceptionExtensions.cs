@@ -13,12 +13,12 @@ namespace Universe.SqlServerJam
             while (ex != null)
             {
                 SqlException sqlex = ex as SqlException;
-                string sqlError = sqlex != null ? string.Join(",", sqlex.Errors.OfType<SqlError>().Select(x => x.Number)) : "";
+                string sqlError = sqlex?.Errors.OfType<SqlError>().Select(x => x.Number).JoinIntoString(",") ?? "";
                 ret.Add("[" + ex.GetType().Name + (sqlError == "" ? "" : " ") + sqlError + "] " + ex.Message);
                 ex = ex.InnerException;
             }
 
-            return string.Join(" --> ", ret);
+            return ret.JoinIntoString(" --> ");
         }
 
     }

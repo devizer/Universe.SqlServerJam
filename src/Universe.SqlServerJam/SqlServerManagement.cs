@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -32,9 +33,16 @@ namespace Universe.SqlServerJam
             Databases = new DatabaseSelector(this);
         }
 
+        ConcurrentDictionary<string, object> _ServerProperties = new ConcurrentDictionary<string, object>();
         public T GetServerProperty<T>(string propertyName)
         {
-            return SqlConnection.ExecuteScalar<T>($"Select SERVERPROPERTY('{propertyName}')");
+            
+            if (!_ServerProperties.TryGetValue(propertyName, out var raw))
+                return (T)raw;
+
+            T ret = SqlConnection.ExecuteScalar<T>($"Select SERVERPROPERTY('{propertyName}')");
+            _ServerProperties[propertyName] = ret;
+            return ret;
         }
 
         public string ServerEdition => GetServerProperty<string>("Edition");
@@ -101,13 +109,19 @@ namespace Universe.SqlServerJam
             this.EngineEdition == EngineEdition.Enterprise 
             && this.ShortServerVersion.Major >= 10;
 
+        class sp_databases
+        {
+            public string DATABASE_NAME { get; set; }
+            public int DATABASE_SIZE { get; set; }
+        }
+        
         public Dictionary<string, int> DatabaseSizes
         {
             get
             {
                 if (!IsAzure)
                 {
-                    var query = SqlConnection.Query("exec sp_databases");
+                    var query = SqlConnection.Query<sp_databases>("exec sp_databases");
                     Dictionary<string, int> ret = new Dictionary<string, int>();
                     foreach (var o in query)
                     {
