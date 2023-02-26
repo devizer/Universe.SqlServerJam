@@ -1,0 +1,1 @@
+pwsh Pack-Nuget.ps1

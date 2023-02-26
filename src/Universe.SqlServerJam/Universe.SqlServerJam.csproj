@@ -8,7 +8,24 @@
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <OutputType>Library</OutputType>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <DebugType>Full</DebugType>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageId>Universe.SqlServerJam</PackageId>
+        <Title>Universe.SqlServerJam</Title>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Product>Universe.SqlServerJam</Product>
+        <Description>The stuff for integration tests with SQL Server 2005 ... 2022+. Targets everywhere</Description>
+        <RepositoryUrl>https://github.com/devizer/Universe.SqlServerJam</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>sql server</PackageTags>
+        <DebugType>Full</DebugType>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    </PropertyGroup>
+
 
     <ItemGroup>
       <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="All" />

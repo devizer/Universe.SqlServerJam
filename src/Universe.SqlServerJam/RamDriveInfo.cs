@@ -28,7 +28,11 @@ namespace Universe.SqlServerJam
                     }
                 }
 
-                bool isRamDrive = ("RamDisk".Equals(label, StringComparison.InvariantCultureIgnoreCase)) || i.DriveType == DriveType.Ram;
+                bool isRamDrive =
+                    "RamDisk".Equals(label, StringComparison.InvariantCultureIgnoreCase)
+                    || "RamDrive".Equals(label, StringComparison.InvariantCultureIgnoreCase)
+                    || i.DriveType == DriveType.Ram;
+
                 if (isRamDrive && free.Value >= minAvailMegabytes*1024*1024)
                     ret.Add(i);
             }

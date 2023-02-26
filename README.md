@@ -1,14 +1,14 @@
 # Universe.SqlServerJam
-Package implements: discovering local sql server instances by the same way as SSMS and operations during unit testing: start, stop services, check server edition, forced database delete, checking databases size, recovery mode, auto shrinking, etc.
+Operations during unit testing: start, stop services, check server edition, forced database delete, checking databases size, recovery mode, auto shrinking, etc. Discovering local sql server instances by the same way as SSMS
 
 ## IDbConnection.Manage() Extensions
 
 | Data Type | Member | comments |
 |-----------|--------|----------|
 | Version | ShortServerVersion { get; } | @@MICROSOFTVERSION |
-| string | ProductVersion { get; } |
-| string | ProductUpdateLevel { get; } | CU1, CU2, ... |
+| string | ProductVersion { get; } | GetServerProperty<string>("ProductVersion") |
 | string | ProductLevel { get; } | CTP, RTM, SP1, SP2, ... |
+| string | ProductUpdateLevel { get; } | CU1, CU2, ... |
 | string | LongServerVersion { get; } | @@VERSION |
 | string    | ServerEdition { get; } | "SQL Azure", "Express Edition", "Developer Edition", "Enterprise Edition", ...
 | EngineEdition | EngineEdition { get; }| Personal, Standard, Exterprise, Express, SqlDatabase, SqlDataWarehouse |
@@ -21,7 +21,7 @@ Package implements: discovering local sql server instances by the same way as SS
 | string | HostPlatform { get; } | "Windows", "Linux" |
 | FixedServerRoles | FixedServerRoles { get; } | SysAdmin, SetupAdmin, ServerAdmin, SecurityAdmin, ProcessAdmin, ... |
 | string | NetTransport { get; } | "TCP", "Shared Memory", "Named Pipe" |
-| int | CurrentSPID | @@SPID { get; } |
+| int | CurrentSPID | @@SPID |
 | string | CurrentDatabaseName { get; } | DB_NAME() |
 | DatabaseOptionsManagement | CurrentDatabase { get; } | .Databases[CurrentDatabaseName] |
 | double | Ping(int timeout = 20) | returns roundtrip duration |

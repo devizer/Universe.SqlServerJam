@@ -351,10 +351,5 @@ else
             return connection.ExecuteScalar<string>(sql);
         }
 
-
-
-
     }
-
-
 }

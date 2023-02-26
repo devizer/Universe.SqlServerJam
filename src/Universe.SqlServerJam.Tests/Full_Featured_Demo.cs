@@ -109,8 +109,7 @@ namespace Universe.SqlServerJam.Tests
                 string v = sqlRef.Version == null ? "N/A" : sqlRef.Version.ToString();
                 StringBuilder report = new StringBuilder();
                 report.AppendLine($"SERVER {sqlRef}");
-                try
-                {
+
                     using (SqlConnection con = new SqlConnection(cs))
                     {
                         var man = con.Manage();
@@ -118,7 +117,7 @@ namespace Universe.SqlServerJam.Tests
                         if (sqlRef.Version == null) sqlRef.Version = ver;
                         alive++;
                         report.AppendLine("Version (4 bytes) ........: " + ver);
-                        report.AppendLine("Version (string) .........: " + man.ProductVersion);
+                        report.AppendLine("ProductVersion (string) ..: " + man.ProductVersion);
                         report.AppendLine("Product Level ............: " + man.ProductLevel);
                         report.AppendLine("Update Level .............: " + man.ProductUpdateLevel);
                         report.AppendLine("Edition ..................: " + man.ServerEdition);
@@ -126,52 +125,66 @@ namespace Universe.SqlServerJam.Tests
                         report.AppendLine("Host Platform ............: " + man.HostPlatform);
                         report.AppendLine("Security Mode ............: " + man.SecurityMode);
                         report.AppendLine("Is LocalDB ...............: " + man.IsLocalDB);
+
                         var transport = man.NetTransport;
                         transport += ", " + (man.IsConnectionEncrypted ? "Encrypted" : "Without Encryption");
                         report.AppendLine("Transport ................: " + transport);
                         report.AppendLine("Server Collation .........: " + man.ServerCollation);
-                        var roles = man.FixedServerRoles;
-                        var isSysAdmin = (roles & FixedServerRoles.SysAdmin) != 0;
-                        var rolesString = isSysAdmin ? "Sys Admin" : roles.ToString();
-                        report.AppendLine("Built-in Roles ...........: " + rolesString);
-                        var dbList = man.DatabaseSizes;
-                        report.AppendLine("Databases ................: " + dbList.Count + " ("+ dbList.Sum(x => x.Value) + " Kb)");
-                        if (isSysAdmin) sysadmin++;
-                        var paths = man.DefaultPaths;
-                        report.AppendLine("Default Data .............: " + paths.DefaultData);
-                        report.AppendLine("Default Log ..............: " + paths.DefaultLog);
-                        report.AppendLine("Default Backup ...........: " + paths.DefaultBackup);
 
-                        // DB Options demo
-                        var currentDatabase = man.CurrentDatabaseName;
-                        var dbOptions = man.Databases[currentDatabase];
-                        report.Append("Connected DB Info ........: [" + currentDatabase + "]" + Environment.NewLine);
-                        dbOptions.WriteDigest(report, intent: 1);
-
-                        report.AppendLine("Long Version .............: " + man.LongServerVersion);
-
-
-                        if (man.IsAzure && Debugger.IsAttached) Debugger.Break();
-                        if (!man.IsAzure)
+                        try
                         {
-                            var prevRecovery = dbOptions.RecoveryMode;
-                            DatabaseRecoveryMode newRecovery =
-                                prevRecovery == DatabaseRecoveryMode.Bulk_Logged
-                                    ? DatabaseRecoveryMode.Simple
-                                    : DatabaseRecoveryMode.Bulk_Logged;
 
-                            dbOptions.RecoveryMode = newRecovery;
-                            dbOptions.RecoveryMode = prevRecovery;
+                            var roles = man.FixedServerRoles;
+                            var isSysAdmin = (roles & FixedServerRoles.SysAdmin) != 0;
+                            var rolesString = isSysAdmin ? "Sys Admin" : roles.ToString();
+                            report.AppendLine("Built-in Roles ...........: " + rolesString);
+                            var dbList = man.DatabaseSizes;
+                            report.AppendLine("Databases ................: " + dbList.Count + " (" + dbList.Sum(x => x.Value) + " Kb)");
+                            if (isSysAdmin) sysadmin++;
+                            var paths = man.DefaultPaths;
+                            report.AppendLine("Default Data .............: " + paths.DefaultData);
+                            report.AppendLine("Default Log ..............: " + paths.DefaultLog);
+                            report.AppendLine("Default Backup ...........: " + paths.DefaultBackup);
+
+                            // DB Options demo
+                            var currentDatabase = man.CurrentDatabaseName;
+                            var dbOptions = man.Databases[currentDatabase];
+                            report.Append("Connected DB Info ........: [" + currentDatabase + "]" + Environment.NewLine);
+                            dbOptions.WriteDigest(report, intent: 1);
+
+                            report.AppendLine("Long Version .............: " + man.LongServerVersion);
+
+
+                            if (man.IsAzure && Debugger.IsAttached) Debugger.Break();
+                            if (!man.IsAzure)
+                            {
+                                var prevRecovery = dbOptions.RecoveryMode;
+                                DatabaseRecoveryMode newRecovery =
+                                    prevRecovery == DatabaseRecoveryMode.Bulk_Logged
+                                        ? DatabaseRecoveryMode.Simple
+                                        : DatabaseRecoveryMode.Bulk_Logged;
+
+                                dbOptions.RecoveryMode = newRecovery;
+                                dbOptions.RecoveryMode = prevRecovery;
+                            }
+
+                            man.IsFullTextSearchInstalled.ToString();
+
+                        }
+                        catch (Exception ex)
+                        {
+                            report.AppendLine("Exception ................: " + ex.GetExeptionDigest());
+                            errorServers.Add(sqlRef.DataSource);
                         }
 
-                        man.IsFullTextSearchInstalled.ToString();
-                    }
+                        Assert.IsNotNull(man.ShortServerVersion, "@@MICROSOFTVERSION");
+                        Assert.GreaterOrEqual(man.ShortServerVersion.Major, 8);
+                        Assert.IsTrue(!string.IsNullOrEmpty(man.LongServerVersion), "@@VERSION");
+                        Assert.IsTrue(man.CurrentSPID != 0, "@@SPID");
+                        // TODO: Add more asserts
                 }
-                catch (Exception ex)
-                {
-                    report.AppendLine("Exception ................: " + ex.GetExeptionDigest());
-                    errorServers.Add(sqlRef.DataSource);
-                }
+
+
 
                 lock (timingReport)
                     timingReport
