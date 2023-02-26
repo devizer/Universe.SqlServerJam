@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !NETSTANDARD1_3
+using System;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
@@ -59,18 +60,17 @@ namespace Universe.SqlServerJam
             var host = instance.Split('\\').First();
             // Discovery always returns either (local) or (localdb) host only.
             return
-                host.Equals(".", StringComparison.InvariantCultureIgnoreCase)
-                || host.Equals("(local)", StringComparison.InvariantCultureIgnoreCase)
-                || host.Equals("(LocalDb)", StringComparison.InvariantCultureIgnoreCase)
-                || host.Equals("127.0.0.1", StringComparison.InvariantCultureIgnoreCase);
+                host.Equals(".", StringComparisonExtensions.IgnoreCase)
+                || host.Equals("(local)", StringComparisonExtensions.IgnoreCase)
+                || host.Equals("(LocalDb)", StringComparisonExtensions.IgnoreCase)
+                || host.Equals("127.0.0.1", StringComparisonExtensions.IgnoreCase);
         }
 
 
         public static string GetServiceName(string sqlServer)
         {
-            var invariant = StringComparison.InvariantCultureIgnoreCase;
-            var c = StringComparer.InvariantCultureIgnoreCase;
-            if (c.Equals("(local)", sqlServer))
+            var invariant = StringComparisonExtensions.IgnoreCase;
+            if ("(local)".Equals(sqlServer, StringComparison.Ordinal))
             {
                 return "MSSQLServer";
             }
@@ -222,3 +222,4 @@ namespace Universe.SqlServerJam
 
     }
 }
+#endif

@@ -59,7 +59,7 @@ namespace Universe.SqlServerJam
         {
             int mySpid = con.ExecuteScalar<int>("Select @@SPID");
             List<sp_who> query = con.Query<sp_who>("exec sp_who").ToList();
-            const StringComparison comp = StringComparison.InvariantCultureIgnoreCase;
+            StringComparison comp = StringComparisonExtensions.IgnoreCase;
             List<int> dbConnectionIdList = query
                 .Where(x => x.dbname != null && x.dbname.Equals(dbName, comp))
                 .Where(x => x.spid != mySpid)

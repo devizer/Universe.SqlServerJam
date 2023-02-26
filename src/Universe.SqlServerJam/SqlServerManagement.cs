@@ -148,7 +148,7 @@ namespace Universe.SqlServerJam
         {
             get
             {
-                if ("SQL Azure".Equals(ServerEdition, StringComparison.InvariantCultureIgnoreCase))
+                if ("SQL Azure".Equals(ServerEdition, StringComparisonExtensions.IgnoreCase))
                     return true;
 
                 var so = GetDatabaseProperty<string>("ServiceObjective");
@@ -181,7 +181,7 @@ namespace Universe.SqlServerJam
             {
                 var ret = SqlConnection.ExecuteScalar<string>("Select @@VERSION");
                 ret = ret.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ");
-                while (ret.IndexOf("  ", StringComparison.InvariantCultureIgnoreCase) >= 0)
+                while (ret.IndexOf("  ", StringComparisonExtensions.IgnoreCase) >= 0)
                     ret = ret.Replace("  ", " ");
 
                 return ret;

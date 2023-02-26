@@ -6,6 +6,16 @@ using Dapper;
 
 namespace Universe.SqlServerJam
 {
+
+    public static class StringComparisonExtensions
+    {
+#if NETSTANDARD1_3
+        public static readonly StringComparison IgnoreCase = StringComparison.OrdinalIgnoreCase;
+#else
+        public static readonly StringComparison IgnoreCase = StringComparison.InvariantCultureIgnoreCase;
+#endif
+
+    } 
     public static class StringJoinExtension
     {
         public static string JoinIntoString<T>(this IEnumerable<T> collection, string separator)
@@ -55,4 +65,18 @@ namespace Universe.SqlServerJam
 #else
 #endif
     }
+    
 }
+
+#if NETSTANDARD1_3
+namespace System.ComponentModel
+{
+    public class DescriptionAttribute : Attribute
+    {
+        public DescriptionAttribute(string description)
+        {
+        }
+    }
+}
+#endif
+

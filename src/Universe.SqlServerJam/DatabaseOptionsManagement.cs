@@ -94,7 +94,7 @@ namespace Universe.SqlServerJam
 
         public bool IsOnline
         {
-            get { return "ONLINE".Equals(StateDescription, StringComparison.InvariantCultureIgnoreCase); }
+            get { return "ONLINE".Equals(StateDescription, StringComparisonExtensions.IgnoreCase); }
         }
 
         public bool IsIncrementalAutoStatisticCreationSupported
@@ -253,7 +253,7 @@ WHERE d.name = @name
             {
                 var raw = GetSysDatabasesColumn<string>("recovery_model_desc");
                 var all = Enum.GetValues(typeof(DatabaseRecoveryMode)).OfType<DatabaseRecoveryMode>().ToList();
-                var ret = all.FirstOrDefault(x => x.ToString().Equals(raw, StringComparison.InvariantCultureIgnoreCase));
+                var ret = all.FirstOrDefault(x => x.ToString().Equals(raw, StringComparisonExtensions.IgnoreCase));
 
                 if (ret == DatabaseRecoveryMode.Unknown)
                 {

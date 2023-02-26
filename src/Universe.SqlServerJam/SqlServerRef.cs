@@ -72,8 +72,7 @@ namespace Universe.SqlServerJam
                 {
                     try
                     {
-                        string cs = string.Format("Data Source={0};Integrated Security=SSPI; Timeout=3",
-                            candidate.Data);
+                        string cs = $"Data Source={candidate.Data};Integrated Security=SSPI; Timeout=3";
                         using (SqlConnection con = new SqlConnection(cs))
                             con.Manage().Ping(timeout: 3);
 
