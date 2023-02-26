@@ -37,7 +37,7 @@ namespace Universe.SqlServerJam
         public T GetServerProperty<T>(string propertyName)
         {
             
-            if (!_ServerProperties.TryGetValue(propertyName, out var raw))
+            if (_ServerProperties.TryGetValue(propertyName, out var raw))
                 return (T)raw;
 
             T ret = SqlConnection.ExecuteScalar<T>($"Select SERVERPROPERTY('{propertyName}')");

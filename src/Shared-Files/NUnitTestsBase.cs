@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -166,6 +167,17 @@ namespace Universe.NUnitTests
             }
         }
 
+        public static string JoinToString(string separator, IEnumerable collection)
+        {
+            if (collection == null) return null;
+            StringBuilder ret = new StringBuilder();
+            foreach (var item in collection)
+                ret.Append(ret.Length == 0 ? "" : separator).Append(Convert.ToString(item));
+
+            return ret.ToString();
+        }
+
+
 
         protected static bool IsDebug
         {
@@ -245,12 +257,14 @@ namespace Universe.NUnitTests
             if (!isIt)
             {
                 test.RunState = RunState.Ignored;
-                string onOs = string.Join(", ", OperatingSystems);
+                string onOs = NUnitTestsBase.JoinToString(",", OperatingSystems);
                 if (OperatingSystems.Length == 0) onOs = "none of any OS";
                 test.Properties.Set(PropertyNames.SkipReason, $"This test should run only on '{onOs}'");
             }
         }
     }
+
+
 
     [Flags]
     public enum TestDisposeOptions

@@ -7,22 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Universe.NUnitTests;
 
 namespace Universe.SqlServerJam.Tests
 {
     [TestFixture]
-    public class Full_Featured_Demo
+    public class Full_Featured_Demo : NUnitTestsBase
     {
         const int TRANSPORT_PROBE_DURATION = 1000;
 
         Stopwatch _StartAt = Stopwatch.StartNew();
-
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            NUnit3Logs.Bind();
-        }
-
 
         // The root feature is SQL Discovery.
         // We will cache sql server list.
@@ -45,29 +39,28 @@ namespace Universe.SqlServerJam.Tests
         public void _1_Find_Local_Servers()
         {
             var list = SqlServers.OrderByVersionDesc().ToList();
-            Debug.WriteLine($"Found {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
+            Console.WriteLine($"Found {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
         }
 
         [Test/*, Ignore("Test Only Sql@Linux")*/]
         public void _2_Start_Local_Services()
         {
             var list = SqlServers.OrderByVersionDesc().ToList();
-            Debug.WriteLine($"Check services status {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
-            Debug.WriteLine("");
+            Console.WriteLine($"Check services status {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}{Environment.NewLine}");
 
             IEnumerable<SqlServerRef> ordered = list.OrderByVersionDesc().ToList();
             List<SqlServerRef> stopped = new List<SqlServerRef>();
             var localOrdered = ordered.Where(x => SqlServiceExtentions.IsLocalService(x.DataSource)).ToList();
             if (localOrdered.Any())
             {
-                Debug.WriteLine("State of corresponding services");
+                Console.WriteLine("State of corresponding services");
                 foreach (var sqlRef in localOrdered)
                 {
                     var serviceStatus = SqlServiceExtentions.CheckServiceStatus(sqlRef.DataSource);
                     if (serviceStatus.State != SqlServiceStatus.ServiceStatus.Running)
                         stopped.Add(sqlRef);
 
-                    Debug.WriteLine(" {0} ({1}): {2}", sqlRef.DataSource, sqlRef.Version, serviceStatus);
+                    Console.WriteLine(" {0} ({1}): {2}", sqlRef.DataSource, sqlRef.Version, serviceStatus);
                 }
             }
 
@@ -79,15 +72,15 @@ namespace Universe.SqlServerJam.Tests
 
             if (stopped.Any())
             {
-                Debug.WriteLine("");
-                Debug.WriteLine("Start stopped sql services");
+                Console.WriteLine("");
+                Console.WriteLine("Start stopped sql services");
                 {
                     foreach (var sqlRef in stopped)
                     {
                         Stopwatch sw = Stopwatch.StartNew();
                         bool ok = SqlServiceExtentions.StartService(sqlRef.DataSource, TimeSpan.FromSeconds(30));
                         string action = SqlServiceExtentions.IsLocalDB(sqlRef.DataSource) ? "Checking" : "Starting";
-                        Debug.WriteLine(" {3} {0}: {1} ({2:0.00} secs)",
+                        Console.WriteLine(" {3} {0}: {1} ({2:0.00} secs)",
                             sqlRef.DataSource, ok ? "OK" : "Fail", sw.ElapsedMilliseconds / 1000d, action);
                     }
                 }
@@ -100,8 +93,8 @@ namespace Universe.SqlServerJam.Tests
         public void _3_Exam_Servers()
         {
             var list = SqlServers.OrderByVersionDesc().ToList();
-            Debug.WriteLine($"Exam {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
-            Debug.WriteLine("");
+            Console.WriteLine($"Exam {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
+            Console.WriteLine("");
 
             int alive = 0, sysadmin = 0;
             Stopwatch startAt = Stopwatch.StartNew();
@@ -185,17 +178,17 @@ namespace Universe.SqlServerJam.Tests
                         .AppendFormat($" {sqlRef} examined in {(startAt.ElapsedMilliseconds / 1000m):0.00} secs")
                         .AppendLine();
 
-                Debug.WriteLine(report);
+                Console.WriteLine(report);
 
             });
 
-            Debug.WriteLine($"Done:{Environment.NewLine}{timingReport}");
-            Debug.WriteLine($"Alive Servers: {alive}. SysAdmins Permissions: {sysadmin}.");
+            Console.WriteLine($"Done:{Environment.NewLine}{timingReport}");
+            Console.WriteLine($"Alive Servers: {alive}. SysAdmins Permissions: {sysadmin}.");
             if (errorServers.Count > 0)
-                Debug.WriteLine(string.Format(
+                Console.WriteLine(string.Format(
                     "Warning! Some sql servers have fails. See details above: {0}{1}",
                     Environment.NewLine,
-                    string.Join(Environment.NewLine, errorServers.OrderBy(x => x).Select(x => " * " + x))
+                    JoinToString(Environment.NewLine, errorServers.OrderBy(x => x).Select(x => " * " + x))
                     ));
         }
 
@@ -203,10 +196,10 @@ namespace Universe.SqlServerJam.Tests
         public void _4_Meashure_Ping()
         {
             var list = SqlServers.OrderByVersionDesc().ToList();
-            Debug.WriteLine($"Ping {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
+            Console.WriteLine($"Ping {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
 
-            Debug.WriteLine("");
-            Debug.WriteLine("Ping Report (milliseconds)");
+            Console.WriteLine("");
+            Console.WriteLine("Ping Report (milliseconds)");
             StringBuilder errors = new StringBuilder();
             foreach (var sqlRef in list)
             {
@@ -218,7 +211,7 @@ namespace Universe.SqlServerJam.Tests
                         SqlSpeedMeasurement test = new SqlSpeedMeasurement(supportedProtocol.ConnectionString);
                         decimal msec = test.GetPing(limitCount: 100000, milliSecondsLimit: TestEnvironment.SqlPingDuration);
                         var transport = GetTransportInfo(supportedProtocol.ConnectionString);
-                        Debug.WriteLine($"{(msec.ToString("f2")).PadLeft(9)} : {sqlRef.DataSource} ({transport})");
+                        Console.WriteLine($"{(msec.ToString("f2")).PadLeft(9)} : {sqlRef.DataSource} ({transport})");
                     }
                     catch (Exception ex)
                     {
@@ -228,7 +221,7 @@ namespace Universe.SqlServerJam.Tests
             }
 
             if (errors.Length > 0)
-                Debug.WriteLine(Environment.NewLine + "SpeedTest failed" + Environment.NewLine + errors);
+                Console.WriteLine(Environment.NewLine + "SpeedTest failed" + Environment.NewLine + errors);
 
         }
 
@@ -237,10 +230,10 @@ namespace Universe.SqlServerJam.Tests
         {
             var list = SqlServers.OrderByVersionDesc().ToList();
             Console.WriteLine(list.AsBullets());
-            Debug.WriteLine($"Upload speed test of {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
+            Console.WriteLine($"Upload speed test of {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
 
-            Debug.WriteLine("");
-            Debug.WriteLine("Upload speed Report (KBytes per second)");
+            Console.WriteLine("");
+            Console.WriteLine("Upload speed Report (KBytes per second)");
             StringBuilder errors = new StringBuilder();
             foreach (var sqlRef in list)
             {
@@ -257,7 +250,7 @@ namespace Universe.SqlServerJam.Tests
                         SqlSpeedMeasurement test = new SqlSpeedMeasurement(connectionString);
                         decimal kbPerSec = test.GetUploadSpeed(limitIterations: 100000, blockSizeInKb: blockSize, limitMilliSeconds: TestEnvironment.SqlUploadDuration);
                         var transport = GetTransportInfo(supportedProtocol.ConnectionString);
-                        Debug.WriteLine($"{(kbPerSec.ToString("f1")).PadLeft(9)} : {sqlRef.DataSource} ({transport})");
+                        Console.WriteLine($"{(kbPerSec.ToString("f1")).PadLeft(9)} : {sqlRef.DataSource} ({transport})");
                     }
                     catch (Exception ex)
                     {
@@ -267,7 +260,7 @@ namespace Universe.SqlServerJam.Tests
             }
 
             if (errors.Length > 0)
-                Debug.WriteLine(Environment.NewLine + "SpeedTest failed" + Environment.NewLine + errors);
+                Console.WriteLine(Environment.NewLine + "SpeedTest failed" + Environment.NewLine + errors);
 
         }
 
@@ -275,10 +268,10 @@ namespace Universe.SqlServerJam.Tests
         public void _6_Meashure_Download_Speed()
         {
             var list = SqlServers.OrderByVersionDesc().ToList();
-            Debug.WriteLine($"Download speed test of {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
+            Console.WriteLine($"Download speed test of {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
 
-            Debug.WriteLine("");
-            Debug.WriteLine("Download speed Report (KB per second)");
+            Console.WriteLine("");
+            Console.WriteLine("Download speed Report (KB per second)");
             StringBuilder errors = new StringBuilder();
             foreach (var sqlRef in list)
             {
@@ -291,7 +284,7 @@ namespace Universe.SqlServerJam.Tests
                         SqlSpeedMeasurement test = new SqlSpeedMeasurement(supportedProtocol.ConnectionString);
                         decimal kbPerSec = test.GetDownloadSpeed(limitIterations: 100000, blockSizeInKb: blockSize, limitMilliSeconds: TestEnvironment.SqlDownloadDuration);
                         var transport = GetTransportInfo(supportedProtocol.ConnectionString);
-                        Debug.WriteLine($"{(kbPerSec.ToString("f1")).PadLeft(9)} : {sqlRef.DataSource} ({transport})");
+                        Console.WriteLine($"{(kbPerSec.ToString("f1")).PadLeft(9)} : {sqlRef.DataSource} ({transport})");
                     }
                     catch (Exception ex)
                     {
@@ -301,7 +294,7 @@ namespace Universe.SqlServerJam.Tests
             }
 
             if (errors.Length > 0)
-                Debug.WriteLine(Environment.NewLine + "SpeedTest failed" + Environment.NewLine + errors);
+                Console.WriteLine(Environment.NewLine + "SpeedTest failed" + Environment.NewLine + errors);
 
         }
 
@@ -317,24 +310,6 @@ namespace Universe.SqlServerJam.Tests
             }
         }
 
-        [SetUp]
-        public void SetUp()
-        {
-            _StartAt = Stopwatch.StartNew();
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            Debug.WriteLine("");
-            var secs = new DateTime(0L).AddSeconds(_StartAt.Elapsed.TotalSeconds).ToString("mm:ss.ff") + " secs";
-            var mem = (Process.GetCurrentProcess().WorkingSet64 / 1024 / 1024).ToString("0") + " Mb";
-            var pad = '-';
-            var nl = Environment.NewLine;
-            secs = $"> {secs} <".PadRight(12, pad);
-            mem = $"> {mem} <".PadLeft(12, pad);
-            Debug.WriteLine(nl + $"x--------{secs}--------{mem}--------x" + nl);
-        }
 
     }
 }

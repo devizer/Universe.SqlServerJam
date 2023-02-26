@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security;
-using System.Text;
-[assembly: SecurityRules(SecurityRuleSet.Level1, SkipVerificationInFullTrust = true)]
+#if NET40
+[assembly: SecurityRules(SecurityRuleSet.Level1, SkipVerificationInFullTrust = true)] 
+#endif
 
 namespace Universe.SqlServerJam.Tests
 {
