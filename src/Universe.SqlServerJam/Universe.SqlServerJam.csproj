@@ -8,7 +8,7 @@
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
         <OutputType>Library</OutputType>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <DebugType>Full</DebugType>
+        <DebugType>pdbonly</DebugType>
     </PropertyGroup>
 
     <PropertyGroup>
