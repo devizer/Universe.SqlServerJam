@@ -29,12 +29,11 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="All" />
-      <PackageReference Include="Theraot.Core" Version="3.2.11" />
     </ItemGroup>
 
     <!-- Sql Discovery -->
     <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-        <PackageReference Include="Microsoft.Windows.Compatibility" />
+        <PackageReference Include="Microsoft.Windows.Compatibility" Version="2.0.1" />
     </ItemGroup>
 
     <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
@@ -57,6 +56,10 @@
     </ItemGroup>
 
     <!-- Theraot.Core -->
+
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net35' Or '$(TargetFramework)' == 'netstandard1.3' ">
+        <PackageReference Include="Theraot.Core" Version="3.2.11" />
+    </ItemGroup>
 
     <ItemGroup Condition=" '$(TargetFramework)' == 'net35'">
         <AssemblyAttribute Include="System.Runtime.Versioning.TargetFrameworkAttribute">
