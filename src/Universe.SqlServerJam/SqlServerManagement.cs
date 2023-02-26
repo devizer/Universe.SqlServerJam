@@ -13,7 +13,9 @@ namespace Universe.SqlServerJam
     {
         public IDbConnection SqlConnection { get; }
         public DatabaseSelector Databases { get; }
+        
         readonly Lazy<Version> _ShortServerVersion;
+        private Lazy<string> _LongServerVersion;
 
         public SqlServerManagement(IDbConnection sqlConnection)
         {
@@ -21,14 +23,8 @@ namespace Universe.SqlServerJam
 
             SqlConnection = sqlConnection;
 
-            _ShortServerVersion = new Lazy<Version>(() =>
-            {
-                int ver32Bit = SqlConnection.ExecuteScalar<int>("Select @@MICROSOFTVERSION");
-                int v1 = ver32Bit >> 24;
-                int v2 = ver32Bit >> 16 & 0xFF;
-                int v3 = ver32Bit & 0xFFFF;
-                return new Version(v1, v2, v3);
-            }, LazyThreadSafetyMode.ExecutionAndPublication);
+            _ShortServerVersion = new Lazy<Version>(GetShortServerVersion);
+            _LongServerVersion = new Lazy<string>(GetLongServerVersion);
 
             Databases = new DatabaseSelector(this);
         }
@@ -55,6 +51,7 @@ namespace Universe.SqlServerJam
         public string HostPlatform => SqlConnection.ExecuteScalar<string>(SqlGetHostPlatform);
 
         public Version ShortServerVersion => _ShortServerVersion.Value;
+        public string LongServerVersion => _LongServerVersion.Value;
 
         public bool IsLocalDB => ShortServerVersion.Major >= 11 && GetServerProperty<int>("IsLocalDB") == 1;
 
@@ -175,17 +172,24 @@ namespace Universe.SqlServerJam
             }
         }
 
-        public string LongServerVersion
-        {
-            get
-            {
-                var ret = SqlConnection.ExecuteScalar<string>("Select @@VERSION");
-                ret = ret.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ");
-                while (ret.IndexOf("  ", StringComparisonExtensions.IgnoreCase) >= 0)
-                    ret = ret.Replace("  ", " ");
 
-                return ret;
-            }
+        string GetLongServerVersion()
+        {
+            var ret = SqlConnection.ExecuteScalar<string>("Select @@VERSION");
+            ret = ret.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ");
+            while (ret.IndexOf("  ", StringComparisonExtensions.IgnoreCase) >= 0)
+                ret = ret.Replace("  ", " ");
+
+            return ret;
+        }
+
+        Version GetShortServerVersion()
+        {
+            int ver32Bit = SqlConnection.ExecuteScalar<int>("Select @@MICROSOFTVERSION");
+            int v1 = ver32Bit >> 24;
+            int v2 = ver32Bit >> 16 & 0xFF;
+            int v3 = ver32Bit & 0xFFFF;
+            return new Version(v1, v2, v3);
         }
 
 

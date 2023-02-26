@@ -78,5 +78,22 @@ namespace System.ComponentModel
         }
     }
 }
+
+namespace System.Threading.Tasks
+{
+    public class Parallel
+    {
+        // Used for ProbeTransports only
+        public static void ForEach<TSource>(
+            IEnumerable<TSource> source,
+            Action<TSource> body)
+        {
+            foreach (var item in source)
+            {
+                Task.Run(() => body(item)).GetAwaiter().GetResult();
+            }
+        }
+    }
+}
 #endif
 
