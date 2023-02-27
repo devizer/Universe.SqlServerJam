@@ -111,6 +111,7 @@ namespace Universe.SqlServerJam
             get
             {
                 var ver = this.ShortServerVersion;
+                // https://www.sqlservercentral.com/forums/topic/filegroup-contains-memory_optimized_data-failed-because-it-is-not-supported#post-3728121
                 // Server 2016 (13.x) SP1 (or later), any edition. For SQL Server 2014 (12.x) and SQL Server 2016 (13.x) RTM (pre-SP1) you need Enterprise, Developer, or Evaluation edition.
                 if (IsLocalDB) return false;
                 if (IsAzure) return true;
