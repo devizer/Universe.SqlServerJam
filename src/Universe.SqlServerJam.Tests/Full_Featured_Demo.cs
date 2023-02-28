@@ -125,6 +125,7 @@ namespace Universe.SqlServerJam.Tests
                         report.AppendLine("Host Platform ............: " + man.HostPlatform);
                         report.AppendLine("Security Mode ............: " + man.SecurityMode);
                         report.AppendLine("Is LocalDB ...............: " + man.IsLocalDB);
+                        report.AppendLine("Can Mem Optimized ........: " + man.IsMemoryOptimizedTableSupported);
 
                         var transport = man.NetTransport;
                         transport += ", " + (man.IsConnectionEncrypted ? "Encrypted" : "Without Encryption");

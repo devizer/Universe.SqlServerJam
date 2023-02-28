@@ -319,6 +319,20 @@ WHERE d.name = @name
             _Connection.Execute(sql, commandTimeout: commandTimeout);
         }
 
+        public bool HasMemoryOptimizedTableFileGroup
+        {
+            get
+            {
+                if (_ServerManagement.IsMemoryOptimizedTableSupported)
+                {
+                    var motFileGroup = _Connection.Query<string>("Select Top 1 name from sys.filegroups where type = 'FX'").FirstOrDefault();
+                    return motFileGroup != null;
+                }
+
+                return false;
+            }
+        }
+
         public string GetDigest(int intent = 4)
         {
             StringBuilder ret = new StringBuilder();
@@ -336,6 +350,7 @@ WHERE d.name = @name
             ret.AppendLine($"{pre} - Broker Enabled ...... : {IsBrokerEnabled}");
             ret.AppendLine($"{pre} - State ............... : {(IsOnline ? "Online" : StateDescription)}");
             ret.AppendLine($"{pre} - Is Readonly ......... : {IsReadOnly}");
+            ret.AppendLine($"{pre} - Is Memory Optimized . : {HasMemoryOptimizedTableFileGroup}");
             var comparisionStyle = ComparisonStyle;
             ret.AppendLine($"{pre} - Default Collation ... : {DefaultCollationName} [{comparisionStyle}]");
             ret.AppendLine($"{pre} - Fulltext Search ..... : {(IsFullTextEnabled ? "Enabled" : "Not Enabled")}");
