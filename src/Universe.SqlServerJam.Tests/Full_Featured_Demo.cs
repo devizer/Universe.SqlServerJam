@@ -174,7 +174,7 @@ namespace Universe.SqlServerJam.Tests
                         }
                         catch (Exception ex)
                         {
-                            report.AppendLine("Exception ................: " + ex.GetExeptionDigest());
+                            report.AppendLine("Exception ................: " + ex.GetExceptionDigest());
                             errorServers.Add(sqlRef.DataSource);
                         }
 
@@ -229,7 +229,7 @@ namespace Universe.SqlServerJam.Tests
                     }
                     catch (Exception ex)
                     {
-                        errors.AppendFormat("{0} {1}", supportedProtocol.DataSource, ex.GetExeptionDigest()).AppendLine();
+                        errors.AppendFormat("{0} {1}", supportedProtocol.DataSource, ex.GetExceptionDigest()).AppendLine();
                     }
                 }
             }
@@ -268,7 +268,7 @@ namespace Universe.SqlServerJam.Tests
                     }
                     catch (Exception ex)
                     {
-                        errors.AppendFormat("{0} {1}", supportedProtocol.DataSource, ex.GetExeptionDigest()).AppendLine();
+                        errors.AppendFormat("{0} {1}", supportedProtocol.DataSource, ex.GetExceptionDigest()).AppendLine();
                     }
                 }
             }
@@ -302,7 +302,7 @@ namespace Universe.SqlServerJam.Tests
                     }
                     catch (Exception ex)
                     {
-                        errors.AppendFormat("{0} {1}", supportedProtocol.DataSource, ex.GetExeptionDigest()).AppendLine();
+                        errors.AppendFormat("{0} {1}", supportedProtocol.DataSource, ex.GetExceptionDigest()).AppendLine();
                     }
                 }
             }

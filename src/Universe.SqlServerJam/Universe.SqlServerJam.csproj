@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+    <!-- do not refer to Microsoft SqlClient -->
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard1.3;net35;net40</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard1.3;net35;net40;net461</TargetFrameworks>
   </PropertyGroup>
 
     <PropertyGroup>
@@ -44,7 +45,7 @@
         <!--<PackageReference Include="System.Threading.Tasks.Parallel" />-->
     </ItemGroup>
 
-    <ItemGroup Condition=" '$(TargetFramework)' == 'net35' Or '$(TargetFramework)' == 'net40' ">
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net35' Or '$(TargetFramework)' == 'net40' Or '$(TargetFramework)' == 'net461' ">
         <Reference Include="System.ServiceProcess" />
     </ItemGroup>
 

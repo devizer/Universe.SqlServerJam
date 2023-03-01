@@ -75,7 +75,7 @@ namespace Universe.SqlServerJam
                 catch (Exception ex)
                 {
                     Trace.WriteLine($"Warning! Failed to kill connection {id} to database {dbName}. No additional actions required. " +
-                                    $"{ex.GetExeptionDigest()}");
+                                    $"{ex.GetExceptionDigest()}");
                 }
             }
         }
