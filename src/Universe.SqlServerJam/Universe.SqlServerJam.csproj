@@ -49,11 +49,11 @@
         <Reference Include="System.ServiceProcess" />
     </ItemGroup>
 
-    <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'netstandard1.3' Or '$(TargetFramework)' == 'netcoreapp1.0' Or '$(TargetFramework)' == 'netcoreapp1.1' ">
+    <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'netstandard1.3' Or '$(TargetFramework)' == 'netcoreapp1.0' Or '$(TargetFramework)' == 'netcoreapp1.1' Or '$(TargetFramework)' == 'net461' ">
         <PackageReference Include="Dapper" Version="1.60.6" />
     </ItemGroup>
 
-    <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' And '$(TargetFramework)' != 'netstandard1.3' And '$(TargetFramework)' != 'net20' And '$(TargetFramework)' != 'net30' And '$(TargetFramework)' != 'netnetcoreapp1.1' And '$(TargetFramework)' != 'netnetcoreapp1.0'">
+    <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' And '$(TargetFramework)' != 'netstandard1.3' And '$(TargetFramework)' != 'net20' And '$(TargetFramework)' != 'net30' And '$(TargetFramework)' != 'netnetcoreapp1.1' And '$(TargetFramework)' != 'netnetcoreapp1.0' and '$(TargetFramework)' != 'net461'">
         <PackageReference Include="Dapper" Version="1.42.0" />
     </ItemGroup>
 
