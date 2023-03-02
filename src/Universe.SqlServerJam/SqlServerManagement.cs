@@ -15,6 +15,7 @@ namespace Universe.SqlServerJam
         public DatabaseSelector Databases { get; }
         
         readonly Lazy<Version> _ShortServerVersion;
+        private Lazy<string> _MediumServerVersion;
         private Lazy<string> _LongServerVersion;
 
         public SqlServerManagement(IDbConnection sqlConnection)
@@ -24,10 +25,12 @@ namespace Universe.SqlServerJam
             SqlConnection = sqlConnection;
 
             _ShortServerVersion = new Lazy<Version>(GetShortServerVersion);
+            _MediumServerVersion = new Lazy<string>(GetMediumServerVersion);
             _LongServerVersion = new Lazy<string>(GetLongServerVersion);
 
             Databases = new DatabaseSelector(this);
         }
+
 
         ConcurrentDictionary<string, object> _ServerProperties = new ConcurrentDictionary<string, object>();
         public T GetServerProperty<T>(string propertyName)
@@ -51,6 +54,7 @@ namespace Universe.SqlServerJam
         public string HostPlatform => SqlConnection.ExecuteScalar<string>(SqlGetHostPlatform);
 
         public Version ShortServerVersion => _ShortServerVersion.Value;
+        public string MediumServerVersion => _MediumServerVersion.Value;
         public string LongServerVersion => _LongServerVersion.Value;
 
         public bool IsLocalDB => ShortServerVersion.Major >= 11 && GetServerProperty<int>("IsLocalDB") == 1;
@@ -192,6 +196,32 @@ namespace Universe.SqlServerJam
         }
 
 
+        Version GetShortServerVersion()
+        {
+            int ver32Bit = SqlConnection.ExecuteScalar<int>("Select @@MICROSOFTVERSION");
+            int v1 = ver32Bit >> 24;
+            int v2 = ver32Bit >> 16 & 0xFF;
+            int v3 = ver32Bit & 0xFFFF;
+            return new Version(v1, v2, v3);
+        }
+
+        // 15.0.4153.1 RTM CU12 LocalDB Express Edition (64-bit)
+        // 15.0.2095.3 RTM Developer Edition (64-bit)
+        private string GetMediumServerVersion()
+        {
+            var mediumStrings = new[]
+            {
+                this.ProductVersion,
+                this.ProductLevel,
+                this.ProductUpdateLevel,
+                this.IsLocalDB ? "LocalDB" : "",
+                this.IsAzure ? "Azure" : "",
+                this.ServerEdition,
+            };
+            var mediumVersion = string.Join(" ", mediumStrings.Select(x => x?.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray());
+            return mediumVersion;
+        }
+
         string GetLongServerVersion()
         {
             var ret = SqlConnection.ExecuteScalar<string>("Select @@VERSION");
@@ -200,15 +230,6 @@ namespace Universe.SqlServerJam
                 ret = ret.Replace("  ", " ");
 
             return ret;
-        }
-
-        Version GetShortServerVersion()
-        {
-            int ver32Bit = SqlConnection.ExecuteScalar<int>("Select @@MICROSOFTVERSION");
-            int v1 = ver32Bit >> 24;
-            int v2 = ver32Bit >> 16 & 0xFF;
-            int v3 = ver32Bit & 0xFFFF;
-            return new Version(v1, v2, v3);
         }
 
 

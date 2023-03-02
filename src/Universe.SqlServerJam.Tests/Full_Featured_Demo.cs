@@ -122,7 +122,9 @@ namespace Universe.SqlServerJam.Tests
                         report.AppendLine("Update Level .............: " + man.ProductUpdateLevel);
                         report.AppendLine("Edition ..................: " + man.ServerEdition);
                         report.AppendLine("Engine Edition ...........: " + man.EngineEdition);
-                        report.AppendLine("Host Platform ............: " + man.HostPlatform);
+                        report.AppendLine("Medium Version ...........: " + man.MediumServerVersion);
+
+                    report.AppendLine("Host Platform ............: " + man.HostPlatform);
                         report.AppendLine("Security Mode ............: " + man.SecurityMode);
                         report.AppendLine("Is LocalDB ...............: " + man.IsLocalDB);
                         report.AppendLine("Can Mem Optimized ........: " + man.IsMemoryOptimizedTableSupported);
