@@ -7,7 +7,8 @@ namespace Universe.SqlServerJam
 {
     public static class ExceptionExtensions
     {
-        public static string GetExceptionDigest(this Exception exception)
+        // Does not support Microsoft SqlClient
+        public static string GetLegacyExceptionDigest(this Exception exception)
         {
             List<string> ret = new List<string>();
             // while (ex != null)
@@ -21,7 +22,7 @@ namespace Universe.SqlServerJam
             return ret.JoinIntoString(" --> ");
         }
 
-        public static IEnumerable<Exception> AsPlainExceptionList(this Exception ex)
+        private static IEnumerable<Exception> AsPlainExceptionList(Exception ex)
         {
             while (ex != null)
             {

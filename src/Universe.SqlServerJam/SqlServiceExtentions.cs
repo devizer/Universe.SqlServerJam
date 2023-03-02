@@ -194,7 +194,7 @@ namespace Universe.SqlServerJam
         {
             Ex = ex;
             State = ServiceStatus.Unknown;
-            AsString = ex.GetExceptionDigest();
+            AsString = ex.GetLegacyExceptionDigest();
         }
 
         public SqlServiceStatus(ServiceStatus state)
