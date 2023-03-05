@@ -319,9 +319,7 @@ select
                 Owner = owner;
             }
 
-            public DatabaseOptionsManagement this[string databaseName] => 
-                new DatabaseOptionsManagement(Owner, databaseName);
-
+            public DatabaseOptionsManagement this[string databaseName] => new DatabaseOptionsManagement(Owner, databaseName);
         }
 
         private const string SqlGetHostPlatform = @"
@@ -330,8 +328,9 @@ Begin
     Select host_platform from sys.dm_os_host_info
 End
 Else 
-    select N'Windows' as host_platform
+    Select N'Windows' as host_platform
 ";
 
+        public ServerConfigurationSettingsManager ServerConfigurationSettings => new ServerConfigurationSettingsManager(this);
     }
 }

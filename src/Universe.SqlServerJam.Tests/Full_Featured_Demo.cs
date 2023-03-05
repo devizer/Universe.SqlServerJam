@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -110,81 +111,108 @@ namespace Universe.SqlServerJam.Tests
                 StringBuilder report = new StringBuilder();
                 report.AppendLine($"SERVER {sqlRef}");
 
-                    using (SqlConnection con = new SqlConnection(cs))
+                using (SqlConnection con = new SqlConnection(cs))
+                {
+                    var man = con.Manage();
+                    var ver = man.ShortServerVersion;
+                    if (sqlRef.Version == null) sqlRef.Version = ver;
+                    alive++;
+                    report.AppendLine("Version (4 bytes) ........: " + ver);
+                    report.AppendLine("ProductVersion (string) ..: " + man.ProductVersion);
+                    report.AppendLine("Product Level ............: " + man.ProductLevel);
+                    report.AppendLine("Update Level .............: " + man.ProductUpdateLevel);
+                    report.AppendLine("Edition ..................: " + man.ServerEdition);
+                    report.AppendLine("Engine Edition ...........: " + man.EngineEdition);
+                    report.AppendLine("Medium Version ...........: " + man.MediumServerVersion);
+
+                    // Expression<Func<ServerConfigurationSettingsManager, object>>[] serverOptions = new Expression<Func<ServerConfigurationSettingsManager, object>>[]
+                    Expression<Func<ServerConfigurationSettingsManager, object>>[] serverOptions = new Expression<Func<ServerConfigurationSettingsManager, object>>[]
                     {
-                        var man = con.Manage();
-                        var ver = man.ShortServerVersion;
-                        if (sqlRef.Version == null) sqlRef.Version = ver;
-                        alive++;
-                        report.AppendLine("Version (4 bytes) ........: " + ver);
-                        report.AppendLine("ProductVersion (string) ..: " + man.ProductVersion);
-                        report.AppendLine("Product Level ............: " + man.ProductLevel);
-                        report.AppendLine("Update Level .............: " + man.ProductUpdateLevel);
-                        report.AppendLine("Edition ..................: " + man.ServerEdition);
-                        report.AppendLine("Engine Edition ...........: " + man.EngineEdition);
-                        report.AppendLine("Medium Version ...........: " + man.MediumServerVersion);
+                        x => x.BackupCompressionDefault,
+                        x => x.MaxServerMemory,
+                        x => x.ShowAdvancedOption,
+                        x => x.XpCmdShell,
+                        x => x.ClrEnabled,
+                        x => x.FileStreamAccessLevel,
+                        x => x.ServerTriggerRecursion,
+                    };
+
+                    report.AppendLine("Server Configuration Settings:");
+                    foreach (var serverOption in serverOptions)
+                    {
+                        string title = ExpressionExtensions.GetTitle1(serverOption) + " ";
+                        title = title.PadRight(52, '.');
+                        object value = serverOption.Compile().Invoke(man.ServerConfigurationSettings);
+                        report.AppendLine($"    {title}: " + value);
+                    }
+
+
+
+                    report.AppendLine("Max Server Memory ........: " + man.ServerConfigurationSettings.MaxServerMemory);
+                    report.AppendLine("XpCmdShell ...............: " + man.ServerConfigurationSettings.XpCmdShell);
+                    report.AppendLine("BackupCompressionDefault .: " + man.ServerConfigurationSettings.BackupCompressionDefault);
 
                     report.AppendLine("Host Platform ............: " + man.HostPlatform);
-                        report.AppendLine("Security Mode ............: " + man.SecurityMode);
-                        report.AppendLine("Is LocalDB ...............: " + man.IsLocalDB);
-                        report.AppendLine("Can Mem Optimized ........: " + man.IsMemoryOptimizedTableSupported);
+                    report.AppendLine("Security Mode ............: " + man.SecurityMode);
+                    report.AppendLine("Is LocalDB ...............: " + man.IsLocalDB);
+                    report.AppendLine("Can Mem Optimized ........: " + man.IsMemoryOptimizedTableSupported);
 
-                        var transport = man.NetTransport;
-                        transport += ", " + (man.IsConnectionEncrypted ? "Encrypted" : "Without Encryption");
-                        report.AppendLine("Transport ................: " + transport);
-                        report.AppendLine("Server Collation .........: " + man.ServerCollation);
+                    var transport = man.NetTransport;
+                    transport += ", " + (man.IsConnectionEncrypted ? "Encrypted" : "Without Encryption");
+                    report.AppendLine("Transport ................: " + transport);
+                    report.AppendLine("Server Collation .........: " + man.ServerCollation);
 
-                        try
+                    try
+                    {
+
+                        var roles = man.FixedServerRoles;
+                        var isSysAdmin = (roles & FixedServerRoles.SysAdmin) != 0;
+                        var rolesString = isSysAdmin ? "Sys Admin" : roles.ToString();
+                        report.AppendLine("Built-in Roles ...........: " + rolesString);
+                        var dbList = man.DatabaseSizes;
+                        report.AppendLine("Databases ................: " + dbList.Count + " (" + dbList.Sum(x => x.Value) + " Kb)");
+                        if (isSysAdmin) sysadmin++;
+                        var paths = man.DefaultPaths;
+                        report.AppendLine("Default Data .............: " + paths.DefaultData);
+                        report.AppendLine("Default Log ..............: " + paths.DefaultLog);
+                        report.AppendLine("Default Backup ...........: " + paths.DefaultBackup);
+
+                        // DB Options demo
+                        var currentDatabase = man.CurrentDatabaseName;
+                        var dbOptions = man.Databases[currentDatabase];
+                        report.Append("Connected DB Info ........: [" + currentDatabase + "]" + Environment.NewLine);
+                        dbOptions.WriteDigest(report, intent: 1);
+
+                        report.AppendLine("Long Version .............: " + man.LongServerVersion);
+
+
+                        if (man.IsAzure && Debugger.IsAttached) Debugger.Break();
+                        if (!man.IsAzure)
                         {
+                            var prevRecovery = dbOptions.RecoveryMode;
+                            DatabaseRecoveryMode newRecovery =
+                                prevRecovery == DatabaseRecoveryMode.Bulk_Logged
+                                    ? DatabaseRecoveryMode.Simple
+                                    : DatabaseRecoveryMode.Bulk_Logged;
 
-                            var roles = man.FixedServerRoles;
-                            var isSysAdmin = (roles & FixedServerRoles.SysAdmin) != 0;
-                            var rolesString = isSysAdmin ? "Sys Admin" : roles.ToString();
-                            report.AppendLine("Built-in Roles ...........: " + rolesString);
-                            var dbList = man.DatabaseSizes;
-                            report.AppendLine("Databases ................: " + dbList.Count + " (" + dbList.Sum(x => x.Value) + " Kb)");
-                            if (isSysAdmin) sysadmin++;
-                            var paths = man.DefaultPaths;
-                            report.AppendLine("Default Data .............: " + paths.DefaultData);
-                            report.AppendLine("Default Log ..............: " + paths.DefaultLog);
-                            report.AppendLine("Default Backup ...........: " + paths.DefaultBackup);
-
-                            // DB Options demo
-                            var currentDatabase = man.CurrentDatabaseName;
-                            var dbOptions = man.Databases[currentDatabase];
-                            report.Append("Connected DB Info ........: [" + currentDatabase + "]" + Environment.NewLine);
-                            dbOptions.WriteDigest(report, intent: 1);
-
-                            report.AppendLine("Long Version .............: " + man.LongServerVersion);
-
-
-                            if (man.IsAzure && Debugger.IsAttached) Debugger.Break();
-                            if (!man.IsAzure)
-                            {
-                                var prevRecovery = dbOptions.RecoveryMode;
-                                DatabaseRecoveryMode newRecovery =
-                                    prevRecovery == DatabaseRecoveryMode.Bulk_Logged
-                                        ? DatabaseRecoveryMode.Simple
-                                        : DatabaseRecoveryMode.Bulk_Logged;
-
-                                dbOptions.RecoveryMode = newRecovery;
-                                dbOptions.RecoveryMode = prevRecovery;
-                            }
-
-                            man.IsFullTextSearchInstalled.ToString();
-
-                        }
-                        catch (Exception ex)
-                        {
-                            report.AppendLine("Exception ................: " + ex.GetLegacyExceptionDigest());
-                            errorServers.Add(sqlRef.DataSource);
+                            dbOptions.RecoveryMode = newRecovery;
+                            dbOptions.RecoveryMode = prevRecovery;
                         }
 
-                        Assert.IsNotNull(man.ShortServerVersion, "@@MICROSOFTVERSION");
-                        Assert.GreaterOrEqual(man.ShortServerVersion.Major, 8);
-                        Assert.IsTrue(!string.IsNullOrEmpty(man.LongServerVersion), "@@VERSION");
-                        Assert.IsTrue(man.CurrentSPID != 0, "@@SPID");
-                        // TODO: Add more asserts
+                        man.IsFullTextSearchInstalled.ToString();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        report.AppendLine("Exception ................: " + ex.GetLegacyExceptionDigest());
+                        errorServers.Add(sqlRef.DataSource);
+                    }
+
+                    Assert.IsNotNull(man.ShortServerVersion, "@@MICROSOFTVERSION");
+                    Assert.GreaterOrEqual(man.ShortServerVersion.Major, 8);
+                    Assert.IsTrue(!string.IsNullOrEmpty(man.LongServerVersion), "@@VERSION");
+                    Assert.IsTrue(man.CurrentSPID != 0, "@@SPID");
+                    // TODO: Add more asserts
                 }
 
 
