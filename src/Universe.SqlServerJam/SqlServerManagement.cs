@@ -112,7 +112,7 @@ namespace Universe.SqlServerJam
             this.EngineEdition == EngineEdition.Enterprise 
             && this.ShortServerVersion.Major >= 10;
 
-        public bool IsFileStreamSupported => this.ShortServerVersion.Major >= 10;
+        public bool IsFileStreamSupported => this.ShortServerVersion.Major >= 10 && !this.IsLocalDB;
         
         public bool IsMemoryOptimizedTableSupported
         {
