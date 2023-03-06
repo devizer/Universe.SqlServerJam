@@ -27,7 +27,7 @@ namespace Universe.SqlServerJam
 
         public FileStreamAccessLevels FileStreamAccessLevel
         {
-            get => _ServerManagement.IsFileStreamSupported ? FileStreamAccessLevels.Disabled : (FileStreamAccessLevels) ReadOption<int>(Names.FilestreamAccessLevel).RunValue;
+            get => _ServerManagement.IsFileStreamSupported ? FileStreamAccessLevels.NotSupported : (FileStreamAccessLevels) ReadOption<int>(Names.FilestreamAccessLevel).RunValue;
             set => SetOption<int>(Names.FilestreamAccessLevel, (int) value);
         }
 
@@ -166,6 +166,7 @@ namespace Universe.SqlServerJam
 
     public enum FileStreamAccessLevels
     {
+        NotSupported = -1,
         Disabled = 0,
         Enabled = 1,
         EnabledWithWin32Streaming = 2,
