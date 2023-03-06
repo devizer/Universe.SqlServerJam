@@ -27,7 +27,7 @@ namespace Universe.SqlServerJam
 
         public FileStreamAccessLevels FileStreamAccessLevel
         {
-            get => _ServerManagement.IsFileStreamSupported ? FileStreamAccessLevels.NotSupported : (FileStreamAccessLevels) ReadOption<int>(Names.FilestreamAccessLevel).RunValue;
+            get => !_ServerManagement.IsFileStreamSupported ? FileStreamAccessLevels.NotSupported : (FileStreamAccessLevels) ReadOption<int>(Names.FilestreamAccessLevel).RunValue;
             set => SetOption<int>(Names.FilestreamAccessLevel, (int) value);
         }
 
