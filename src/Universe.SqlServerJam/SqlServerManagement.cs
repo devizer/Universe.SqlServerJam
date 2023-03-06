@@ -111,6 +111,8 @@ namespace Universe.SqlServerJam
         public bool IsCompressedBackupSupported => 
             this.EngineEdition == EngineEdition.Enterprise 
             && this.ShortServerVersion.Major >= 10;
+
+        public bool IsFileStreamSupported => this.ShortServerVersion.Major >= 10;
         
         public bool IsMemoryOptimizedTableSupported
         {
