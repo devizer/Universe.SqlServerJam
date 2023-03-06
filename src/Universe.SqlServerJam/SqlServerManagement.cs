@@ -53,6 +53,9 @@ namespace Universe.SqlServerJam
         // Returns either "Windows" or "Linux"
         public string HostPlatform => SqlConnection.ExecuteScalar<string>(SqlGetHostPlatform);
 
+        public bool IsWindows => "Windows".Equals(HostPlatform, StringComparison.OrdinalIgnoreCase);
+        public bool IsLinux => "Linux".Equals(HostPlatform, StringComparison.OrdinalIgnoreCase);
+
         public Version ShortServerVersion => _ShortServerVersion.Value;
         public string MediumServerVersion => _MediumServerVersion.Value;
         public string LongServerVersion => _LongServerVersion.Value;

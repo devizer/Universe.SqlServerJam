@@ -39,7 +39,7 @@ namespace Universe.SqlServerJam
 
         public bool XpCmdShell
         {
-            get => ReadAdvancedOption<bool>(Names.XpCmdShell)?.RunValue == true;
+            get => _ServerManagement.IsWindows && ReadAdvancedOption<bool>(Names.XpCmdShell)?.RunValue == true;
             set => SetAdvancedOption<bool>(Names.XpCmdShell, value);
         }
 
