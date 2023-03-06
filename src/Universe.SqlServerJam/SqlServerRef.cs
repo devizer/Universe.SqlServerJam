@@ -46,7 +46,7 @@ namespace Universe.SqlServerJam
             return $"'{DataSource}'" + (Version != null ? (" Ver " + Version) : "");
         }
 
-        public List<SqlServerRef> ProbeTransports(int timeoutMillisecs = 30000)
+        public List<SqlServerRef> ProbeTransports(int timeoutMilliseconds = 30000)
         {
             List<SqlServerRef> ret = new List<SqlServerRef>();
             if (this.Kind != SqlServerDiscoverySource.Local || this.Data.IndexOf(":") >= 0)
@@ -84,7 +84,7 @@ namespace Universe.SqlServerJam
                         // protocol is not supported
                     }
 
-                    if (startAt.ElapsedMilliseconds > timeoutMillisecs)
+                    if (startAt.ElapsedMilliseconds > timeoutMilliseconds)
                         expired = true;
 
                 } while (!expired);

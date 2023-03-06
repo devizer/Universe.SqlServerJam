@@ -7,7 +7,7 @@ namespace Universe.SqlServerJam
     {
         None = 0,
         BulkAdmin = 128,
-        BbCreator = 64,
+        DbCreator = 64,
         DiskAdmin = 32,
         ProcessAdmin = 16,
         SecurityAdmin = 8,
