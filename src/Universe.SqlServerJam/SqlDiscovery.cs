@@ -49,6 +49,7 @@ namespace Universe.SqlServerJam
         public static List<SqlServerRef> GetLocalDbList()
         {
             List<SqlServerRef> ret = new List<SqlServerRef>();
+            if (!TinyCrossInfo.IsWindows) return ret;
             using (RegistryKey lm = Registry.LocalMachine)
             {
                 // default instance
@@ -99,6 +100,7 @@ namespace Universe.SqlServerJam
         public static List<SqlServerRef> GetServerList()
         {
             List<SqlServerRef> ret = new List<SqlServerRef>();
+            if (!TinyCrossInfo.IsWindows) return ret;
             using (RegistryKey lm = Registry.LocalMachine)
             {
                 // default instance
@@ -167,5 +169,7 @@ namespace Universe.SqlServerJam
             return strs.JoinIntoString(Environment.NewLine); 
         }
     }
+
+
 }
 #endif
