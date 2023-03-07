@@ -124,29 +124,7 @@ namespace Universe.SqlServerJam.Tests
                     report.AppendLine("Edition ..................: " + man.ServerEdition);
                     report.AppendLine("Engine Edition ...........: " + man.EngineEdition);
                     report.AppendLine("Medium Version ...........: " + man.MediumServerVersion);
-
-                    // Expression<Func<ServerConfigurationSettingsManager, object>>[] serverOptions = new Expression<Func<ServerConfigurationSettingsManager, object>>[]
-                    Expression<Func<ServerConfigurationSettingsManager, object>>[] serverOptions = new Expression<Func<ServerConfigurationSettingsManager, object>>[]
-                    {
-                        x => x.BackupCompressionDefault,
-                        x => x.MaxServerMemory,
-                        x => x.ShowAdvancedOption,
-                        x => x.XpCmdShell,
-                        x => x.ClrEnabled,
-                        x => x.FileStreamAccessLevel,
-                        x => x.ServerTriggerRecursion,
-                    };
-
-                    report.AppendLine("Server Configuration Settings:");
-                    foreach (var serverOption in serverOptions)
-                    {
-                        string title = ExpressionExtensions.GetTitle1(serverOption) + " ";
-                        title = title.PadRight(52, '.');
-                        object value = serverOption.Compile().Invoke(man.ServerConfigurationSettings);
-                        report.AppendLine($"    {title}: " + value);
-                    }
-
-
+                    report.AppendLine("Long Version .............: " + man.LongServerVersion);
 
                     report.AppendLine("Max Server Memory ........: " + man.ServerConfigurationSettings.MaxServerMemory);
                     report.AppendLine("XpCmdShell ...............: " + man.ServerConfigurationSettings.XpCmdShell);
@@ -183,7 +161,28 @@ namespace Universe.SqlServerJam.Tests
                         report.Append("Connected DB Info ........: [" + currentDatabase + "]" + Environment.NewLine);
                         dbOptions.WriteDigest(report, intent: 1);
 
-                        report.AppendLine("Long Version .............: " + man.LongServerVersion);
+                        // Expression<Func<ServerConfigurationSettingsManager, object>>[] serverOptions = new Expression<Func<ServerConfigurationSettingsManager, object>>[]
+                        Expression<Func<ServerConfigurationSettingsManager, object>>[] serverOptions = new Expression<Func<ServerConfigurationSettingsManager, object>>[]
+                        {
+                            x => x.BackupCompressionDefault,
+                            x => x.MaxServerMemory,
+                            x => x.ShowAdvancedOption,
+                            x => x.XpCmdShell,
+                            x => x.ClrEnabled,
+                            x => x.FileStreamAccessLevel,
+                            x => x.ServerTriggerRecursion,
+                        };
+
+                        report.AppendLine("Server Configuration Settings [sp_configure]:");
+                        foreach (var serverOption in serverOptions)
+                        {
+                            string title = ExpressionExtensions.GetTitle1(serverOption) + " ";
+                            title = title.PadRight(52, '.');
+                            object value = serverOption.Compile().Invoke(man.ServerConfigurationSettings);
+                            if (value is int) value = string.Format("{0:n0}", value);
+                            report.AppendLine($"   * {title}: " + value);
+                        }
+
 
 
                         if (man.IsAzure && Debugger.IsAttached) Debugger.Break();
