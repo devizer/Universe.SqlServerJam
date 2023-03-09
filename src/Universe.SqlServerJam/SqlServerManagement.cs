@@ -16,6 +16,7 @@ namespace Universe.SqlServerJam
         readonly Lazy<Version> _ShortServerVersion;
         private Lazy<string> _MediumServerVersion;
         private Lazy<string> _LongServerVersion;
+        private Lazy<string> _HostPlatform;
 
         public SqlServerManagement(IDbConnection sqlConnection)
         {
@@ -26,6 +27,7 @@ namespace Universe.SqlServerJam
             _ShortServerVersion = new Lazy<Version>(GetShortServerVersion);
             _MediumServerVersion = new Lazy<string>(GetMediumServerVersion);
             _LongServerVersion = new Lazy<string>(GetLongServerVersion);
+            _HostPlatform = new Lazy<string>(GetHostPlatform);
 
             Databases = new DatabaseSelector(this);
         }
@@ -50,7 +52,8 @@ namespace Universe.SqlServerJam
         public SecurityMode SecurityMode => (SecurityMode) GetServerProperty<int>("IsIntegratedSecurityOnly");
 
         // Returns either "Windows" or "Linux"
-        public string HostPlatform => SqlConnection.ExecuteScalar<string>(SqlGetHostPlatform);
+        public string HostPlatform => _HostPlatform.Value;
+
 
         public bool IsWindows => "Windows".Equals(HostPlatform, StringComparison.OrdinalIgnoreCase);
         public bool IsLinux => "Linux".Equals(HostPlatform, StringComparison.OrdinalIgnoreCase);
@@ -112,6 +115,7 @@ namespace Universe.SqlServerJam
             this.EngineEdition == EngineEdition.Enterprise 
             && this.ShortServerVersion.Major >= 10;
 
+        // Since 2008, except of LocalDB
         public bool IsFileStreamSupported => this.ShortServerVersion.Major >= 10 && !this.IsLocalDB;
         
         public bool IsMemoryOptimizedTableSupported
@@ -334,6 +338,13 @@ End
 Else 
     Select N'Windows' as host_platform
 ";
+
+        private string GetHostPlatform()
+        {
+            return SqlConnection.ExecuteScalar<string>(SqlGetHostPlatform);
+        }
+
+
 
         public ServerConfigurationSettingsManager ServerConfigurationSettings => new ServerConfigurationSettingsManager(this);
     }
