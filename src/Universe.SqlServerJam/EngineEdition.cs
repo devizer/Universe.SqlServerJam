@@ -17,10 +17,22 @@ namespace Universe.SqlServerJam
         Express = 4,
 
         [Description("SQL Database")]
-        SQL_Database = 5,
+        SQLDatabase = 5,
 
         [Description("SQL Data Warehouse")]
-        SQL_Data_Warehouse = 6,
+        SQLDataWarehouse = 6,
+
+        [Description("Azure SQL Managed Instance")]
+        AzureSQLManagedInstance = 8,
+
+        [Description("Azure SQL Edge (For all editions of Azure SQL Edge)")]
+        AzureSQLEdge = 9,
+
+        [Description("Azure Synapse serverless SQL pool")]
+        AzureSynapseServerlessSQLPool = 11,
+
+
+
 
     }
 }

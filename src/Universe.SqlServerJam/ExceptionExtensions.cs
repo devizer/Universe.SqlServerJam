@@ -7,7 +7,7 @@ namespace Universe.SqlServerJam
 {
     public static class ExceptionExtensions
     {
-        // Does not support Microsoft SqlClient
+        // TODO: Does not support Microsoft SqlClient
         public static string GetLegacyExceptionDigest(this Exception exception)
         {
             List<string> ret = new List<string>();

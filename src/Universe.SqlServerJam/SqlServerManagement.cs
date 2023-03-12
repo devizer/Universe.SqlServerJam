@@ -81,6 +81,7 @@ namespace Universe.SqlServerJam
                 FixedServerRoles ret = FixedServerRoles.None;
                 foreach (var i in all)
                 {
+                    if (i == FixedServerRoles.None) continue;
                     int? isMember = SqlConnection.ExecuteScalar<int?>($"Select IS_SRVROLEMEMBER('{i}')");
                     if (isMember.HasValue && isMember.Value != 0)
                         ret |= i;
@@ -226,7 +227,10 @@ namespace Universe.SqlServerJam
                 this.IsAzure ? "Azure" : "",
                 this.ServerEdition,
             };
-            var mediumVersion = string.Join(" ", mediumStrings.Select(x => x?.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray());
+
+
+            var parts = mediumStrings.Select(x => x?.Trim()).Where(x => !string.IsNullOrEmpty(x));
+            var mediumVersion = string.Join(" ", parts.ToArray());
             return mediumVersion;
         }
 
@@ -345,7 +349,7 @@ select
         private const string SqlGetHostPlatform = @"
 If Exists (Select 1 From sys.all_objects Where name = 'dm_os_host_info' and type = 'V' and is_ms_shipped = 1)
 Begin
-    Select host_platform from sys.dm_os_host_info
+    Select Top 1 host_platform from sys.dm_os_host_info
 End
 Else 
     Select N'Windows' as host_platform

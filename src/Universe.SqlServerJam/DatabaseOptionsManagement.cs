@@ -138,12 +138,12 @@ namespace Universe.SqlServerJam
                 bool isOn = GetSysDatabasesColumn<bool>("is_auto_update_stats_on");
                 bool isAsync = GetSysDatabasesColumn<bool>("is_auto_update_stats_async_on");
                 return !isOn ? AutoUpdateStatisticMode.Off
-                    : (isAsync ? AutoUpdateStatisticMode.Async : AutoUpdateStatisticMode.Syncly);
+                    : (isAsync ? AutoUpdateStatisticMode.Async : AutoUpdateStatisticMode.Synchronously);
             }
             set
             {
                 string option = "AUTO_UPDATE_STATISTICS OFF";
-                if (value == AutoUpdateStatisticMode.Syncly)
+                if (value == AutoUpdateStatisticMode.Synchronously)
                     option = "AUTO_UPDATE_STATISTICS ON, AUTO_UPDATE_STATISTICS_ASYNC OFF";
                 else if (value == AutoUpdateStatisticMode.Async)
                     option = "AUTO_UPDATE_STATISTICS ON, AUTO_UPDATE_STATISTICS_ASYNC ON";
@@ -364,18 +364,6 @@ WHERE d.name = @name
             var isClone = IsClone;
         }
 
-        /*
-                                bool IsBrokerEnabled
-                                enum RecoveryModel: 3 Kinds
-                                bool IsReadOnly,
-                                enum State: N Kinds
-                                enum AutoCreateStatistic: 3 kinds (Off, Sync, Incremental)
-                                enum AutoUpdateStatisctic: Off, Syncly, Async
-                                bool AreTriggersRecursive
-                                IsFullTextEnabled
-                                bool IsAutoShrink
-                                string Collation
-                        */
     }
 
     public enum TargetDatabaseState
@@ -395,7 +383,7 @@ WHERE d.name = @name
     public enum AutoUpdateStatisticMode
     {
         Off,
-        Syncly,
+        Synchronously,
         Async,
     }
 

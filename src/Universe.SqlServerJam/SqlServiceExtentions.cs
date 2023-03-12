@@ -180,19 +180,19 @@ namespace Universe.SqlServerJam
     public class SqlServiceStatus
     {
         public ServiceStatus State { get; set; }
-        public Exception Ex { get; set; }
+        public Exception StatusError { get; set; }
         public string AsString { get; set; }
 
         public SqlServiceStatus()
         {
             State = ServiceStatus.Unknown;
-            Ex = null;
+            StatusError = null;
             AsString = State.ToString();
         }
 
         public SqlServiceStatus(Exception ex)
         {
-            Ex = ex;
+            StatusError = ex;
             State = ServiceStatus.Unknown;
             AsString = ex.GetLegacyExceptionDigest();
         }
