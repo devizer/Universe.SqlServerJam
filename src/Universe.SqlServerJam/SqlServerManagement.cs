@@ -244,7 +244,19 @@ namespace Universe.SqlServerJam
         public string ServerCollation => GetServerProperty<string>("Collation");
 
         // If connection is closed this property is useless
-        public int CurrentSPID => SqlConnection.ExecuteScalar<int>("Select @@SPID");
+        public int CurrentSPID
+        {
+            get
+            {
+#if DEBUG
+                if (SqlConnection.State == ConnectionState.Closed)
+                {
+                    Console.WriteLine("Warning! CurrentSPID property is invoked for Closed connection");
+                }
+#endif
+                return SqlConnection.ExecuteScalar<int>("Select @@SPID");
+            }
+        }
 
         public string CurrentDatabaseName => SqlConnection.ExecuteScalar<string>("Select DB_NAME()");
 
