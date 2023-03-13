@@ -180,6 +180,8 @@ namespace Universe.SqlServerJam
                 if ("SQL Azure".Equals(ServerEdition, StringComparisonExtensions.IgnoreCase))
                     return true;
 
+                if (ServerEdition?.ToUpper() == "AZURE") return true;
+
                 var so = GetDatabaseProperty<string>("ServiceObjective");
                 return !string.IsNullOrEmpty(so);
             }
