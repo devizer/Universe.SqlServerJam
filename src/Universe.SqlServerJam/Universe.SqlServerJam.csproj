@@ -26,6 +26,8 @@
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+        <PackageIcon>Main.Icon.png</PackageIcon>
+        <PackageIconUrl>https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/Images/Main.Icon.png</PackageIconUrl>
     </PropertyGroup>
 
 
@@ -44,6 +46,12 @@
         <PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
         <!--<PackageReference Include="System.Threading.Tasks.Parallel" />-->
     </ItemGroup>
+
+    <ItemGroup>
+        <!-- None Include="docs\readme.md" Pack="true" PackagePath="\"/ -->
+        <None Include="..\..\Images\Main.Icon.png" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
 
     <ItemGroup Condition=" '$(TargetFramework)' == 'net35' Or '$(TargetFramework)' == 'net40' Or '$(TargetFramework)' == 'net461' ">
         <Reference Include="System.ServiceProcess" />
