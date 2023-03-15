@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using Dapper;
+using Universe.SqlServerJam.GenericSqlInterop;
 
 namespace Universe.SqlServerJam
 {
@@ -40,7 +41,8 @@ namespace Universe.SqlServerJam
 #if NET35
         public static T ExecuteScalar<T>(this IDbConnection cnn, string sql)
         {
-            return cnn.ExecuteScalar<T>(sql, null, null, null, CommandType.Text);
+            // return cnn.ExecuteScalar<T>(sql, null, null, null, CommandType.Text);
+            return cnn.ExecuteScalar2<T>(sql);
         }
 
         public static T ExecuteScalar<T>(this IDbConnection cnn, string sql, object parameters)
@@ -48,19 +50,20 @@ namespace Universe.SqlServerJam
             return cnn.ExecuteScalar<T>(sql, parameters, null, null, CommandType.Text);
         }
 
+        // sp_who, sp_databases, SqlDefaultPaths
         public static IEnumerable<T> Query<T>(this IDbConnection cnn, string sql)
         {
             return cnn.Query<T>(sql, null, null, true, null, null);
         }
 
-        public static int Execute(this IDbConnection cnn, string sql)
+        public static void Execute(this IDbConnection cnn, string sql)
         {
-            return cnn.Execute(sql, null);
+            cnn.Execute2(sql);
         }
 
-        public static int Execute(this IDbConnection cnn, string sql, int? commandTimeout)
+        public static void Execute(this IDbConnection cnn, string sql, int? commandTimeout)
         {
-            return cnn.Execute(sql, null, null, commandTimeout, CommandType.Text);
+            cnn.Execute2(sql, commandTimeout.GetValueOrDefault());
         }
 #else
 #endif

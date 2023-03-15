@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Dapper;
+using Universe.SqlServerJam.GenericSqlInterop;
 
 namespace Universe.SqlServerJam
 {
@@ -48,7 +49,7 @@ namespace Universe.SqlServerJam
                     DatabaseName,
                     value ? "ENABLE" : "DISABLE");
 
-                _Connection.Execute(sql);
+                _Connection.Execute2(sql);
             }
         }
 
@@ -61,7 +62,7 @@ namespace Universe.SqlServerJam
                     DatabaseName,
                     value ? "READ_ONLY" : "READ_WRITE");
 
-                _Connection.Execute(sql);
+                _Connection.Execute2(sql);
             }
         }
 
@@ -74,7 +75,7 @@ namespace Universe.SqlServerJam
                     DatabaseName,
                     value ? "ON" : "OFF");
 
-                _Connection.Execute(sql);
+                _Connection.Execute2(sql);
             }
         }
 
@@ -84,7 +85,7 @@ namespace Universe.SqlServerJam
                 DatabaseName,
                 newState);
 
-            _Connection.Execute(sql);
+            _Connection.Execute2(sql);
         }
 
         public string StateDescription
@@ -126,7 +127,7 @@ namespace Universe.SqlServerJam
                     DatabaseName,
                     option);
 
-                _Connection.Execute(sql);
+                _Connection.Execute2(sql);
             }
         }
 
@@ -152,7 +153,7 @@ namespace Universe.SqlServerJam
                     DatabaseName,
                     option);
 
-                _Connection.Execute(sql);
+                _Connection.Execute2(sql);
 
             }
         }
@@ -172,7 +173,7 @@ namespace Universe.SqlServerJam
                     DatabaseName,
                     value);
 
-                _Connection.Execute(sql);
+                _Connection.Execute2(sql);
             }
         }
 
@@ -238,7 +239,7 @@ WHERE d.name = @name
             get
             {
                 const string sql = "Select Sum(Cast(size as bigint)) From sys.database_files";
-                return 8L * _ServerManagement.SqlConnection.ExecuteScalar<long>(sql);
+                return 8L * _ServerManagement.SqlConnection.ExecuteScalar2<long>(sql);
                 int size;
                 if (!_ServerManagement.DatabaseSizes.TryGetValue(DatabaseName, out size))
                     return null;
@@ -267,7 +268,7 @@ WHERE d.name = @name
             {
                 if (value == DatabaseRecoveryMode.Unknown) throw new ArgumentOutOfRangeException();
                 var sql = $"Alter Database [{DatabaseName}] Set Recovery {value}";
-                _Connection.Execute(sql);
+                _Connection.Execute2(sql);
             }
 
         }
@@ -281,7 +282,7 @@ WHERE d.name = @name
             set
             {
                 var sql = $"Alter Database [{DatabaseName}] Set RECURSIVE_TRIGGERS {(value ? "ON" : "OFF")}";
-                _Connection.Execute(sql);
+                _Connection.Execute2(sql);
             }
         }
 
@@ -316,7 +317,7 @@ WHERE d.name = @name
                 DatabaseName.Replace("'", "''"),
                 so);
 
-            _Connection.Execute(sql, commandTimeout: commandTimeout);
+            _Connection.Execute2(sql, commandTimeout.GetValueOrDefault());
         }
 
         public bool HasMemoryOptimizedTableFileGroup
@@ -325,7 +326,7 @@ WHERE d.name = @name
             {
                 if (_ServerManagement.IsMemoryOptimizedTableSupported)
                 {
-                    var motFileGroup = _Connection.Query<string>("Select Top 1 name from sys.filegroups where type = 'FX'").FirstOrDefault();
+                    string motFileGroup = _Connection.ExecuteScalar2<string>("Select Top 1 name from sys.filegroups where type = 'FX'");
                     return motFileGroup != null;
                 }
 

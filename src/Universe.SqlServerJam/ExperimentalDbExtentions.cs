@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
+using Universe.SqlServerJam.GenericSqlInterop;
 
 namespace Universe.SqlServerJam
 {
@@ -91,8 +92,8 @@ END;
             {
                 try
                 {
-                    foreach (var probe in check.SpecificProbe) connection.Execute(probe);
-                    string ver = connection.ExecuteScalar<string>(check.VerQuery);
+                    foreach (var probeSql in check.SpecificProbe) connection.Execute2(probeSql);
+                    string ver = connection.ExecuteScalar2<string>(check.VerQuery);
                     return new RdbmsInfo()
                     {
                         Family = check.Kind,

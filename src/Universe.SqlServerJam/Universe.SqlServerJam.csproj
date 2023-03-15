@@ -2,7 +2,7 @@
 
     <!-- do not refer to Microsoft SqlClient -->
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard1.3;net35;net40;net461</TargetFrameworks>
+    <TargetFrameworks>net35;netstandard2.0;netstandard1.3;net40;net461</TargetFrameworks>
   </PropertyGroup>
 
     <PropertyGroup>
@@ -49,7 +49,7 @@
 
     <ItemGroup>
         <!-- None Include="docs\readme.md" Pack="true" PackagePath="\"/ -->
-        <None Include="..\..\Images\Main.Icon.png" Pack="true" PackagePath="\"/>
+        <None Include="..\..\Images\Main.Icon.png" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 

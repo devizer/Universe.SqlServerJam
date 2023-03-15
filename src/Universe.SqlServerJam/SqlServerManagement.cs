@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using Dapper;
+using Universe.SqlServerJam.GenericSqlInterop;
 
 namespace Universe.SqlServerJam
 {
@@ -40,7 +41,10 @@ namespace Universe.SqlServerJam
             if (_ServerProperties.TryGetValue(propertyName, out var raw))
                 return (T)raw;
 
-            T ret = SqlConnection.ExecuteScalar<T>($"Select SERVERPROPERTY('{propertyName}')");
+            // T ret = SqlConnection.ExecuteScalar<T>($"Select SERVERPROPERTY('{propertyName}')");
+            // T ret = OneColumnDataReaderWithoutParameters<T>.Instance.ExecuteScalar(SqlConnection, $"Select SERVERPROPERTY('{propertyName}')");
+            T ret = SqlConnection.ExecuteScalar2<T>($"Select SERVERPROPERTY('{propertyName}')");
+
             _ServerProperties[propertyName] = ret;
             return ret;
         }
@@ -209,7 +213,8 @@ namespace Universe.SqlServerJam
 
         Version GetShortServerVersion()
         {
-            int ver32Bit = SqlConnection.ExecuteScalar<int>("Select @@MICROSOFTVERSION");
+            // int ver32Bit = SqlConnection.ExecuteScalar<int>();
+            int ver32Bit = OneColumnDataReaderWithoutParameters<int>.Instance.ExecuteScalar(SqlConnection, "Select @@MICROSOFTVERSION");
             int v1 = ver32Bit >> 24;
             int v2 = ver32Bit >> 16 & 0xFF;
             int v3 = ver32Bit & 0xFFFF;
@@ -260,7 +265,7 @@ namespace Universe.SqlServerJam
                     Console.WriteLine("Warning! CurrentSPID property is invoked for Closed connection");
                 }
 #endif
-                return SqlConnection.ExecuteScalar<int>("Select @@SPID");
+                return SqlConnection.ExecuteScalar2<short>("Select @@SPID");
             }
         }
 
@@ -276,7 +281,8 @@ namespace Universe.SqlServerJam
         public double Ping(int timeout = 20)
         {
             Stopwatch sw = Stopwatch.StartNew();
-            SqlConnection.Execute("-- ping", commandTimeout: Math.Max(1, timeout));
+            // SqlConnection.Execute("-- ping", commandTimeout: Math.Max(1, timeout));
+            SqlConnection.Execute2("-- ping", Math.Max(1, timeout));
             return sw.ElapsedTicks / (double) Stopwatch.Frequency;
         }
 

@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using Dapper;
+using Universe.SqlServerJam.GenericSqlInterop;
 
 namespace Universe.SqlServerJam
 {
@@ -65,7 +66,7 @@ namespace Universe.SqlServerJam
                 long limitTicks = (long)(limitMilliSeconds / 1000m * Stopwatch.Frequency);
                 GetDownloadSpeed_Impl(con, tableName, 1, 1);
                 var ret = GetDownloadSpeed_Impl(con, tableName, limitIterations, limitTicks);
-                con.Execute($"Drop Table {tableName};");
+                con.Execute2($"Drop Table {tableName};");
                 return ret;
             }
         }
