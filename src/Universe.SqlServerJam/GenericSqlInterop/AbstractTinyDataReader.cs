@@ -101,8 +101,8 @@ namespace Universe.SqlServerJam.GenericSqlInterop
                     }
 
 
-                    if (behaviour == QueryBehaviour.Single && totalRows != 1)
-                        throw new Exception($"Single row expected, but {getTotalRowsInfo(totalRows)} obtained total");
+                    if (behaviour == QueryBehaviour.Single && totalRows > 1)
+                        throw new Exception($"Single row expected, but {getTotalRowsInfo(totalRows)} obtained total. Sql is '{sql}'");
                 }
             }
         }

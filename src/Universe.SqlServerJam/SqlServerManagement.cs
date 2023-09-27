@@ -213,8 +213,8 @@ namespace Universe.SqlServerJam
 
         Version GetShortServerVersion()
         {
-            // int ver32Bit = SqlConnection.ExecuteScalar<int>();
-            int ver32Bit = OneColumnDataReaderWithoutParameters<int>.Instance.ExecuteScalar(SqlConnection, "Select @@MICROSOFTVERSION");
+            int ver32Bit = SqlConnection.ExecuteScalar<int>("Select @@MICROSOFTVERSION");
+            // int ver32Bit = OneColumnDataReaderWithoutParameters<int>.Instance.ExecuteScalar(SqlConnection, "Select @@MICROSOFTVERSION");
             int v1 = ver32Bit >> 24;
             int v2 = ver32Bit >> 16 & 0xFF;
             int v3 = ver32Bit & 0xFFFF;

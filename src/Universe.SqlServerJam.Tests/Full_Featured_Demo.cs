@@ -33,7 +33,7 @@ namespace Universe.SqlServerJam.Tests
         [Test]
         public void Test_Debug()
         {
-            if (Debugger.IsAttached) Debugger.Break();
+            // if (Debugger.IsAttached) Debugger.Break();
         }
 
         [Test]

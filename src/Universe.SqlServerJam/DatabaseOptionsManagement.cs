@@ -326,7 +326,9 @@ WHERE d.name = @name
             {
                 if (_ServerManagement.IsMemoryOptimizedTableSupported)
                 {
-                    string motFileGroup = _Connection.ExecuteScalar2<string>("Select Top 1 name from sys.filegroups where type = 'FX'");
+                    // string motFileGroup = _Connection.ExecuteScalar2<string>("Select Top 1 name from sys.filegroups where type = 'FX'");
+                    var sql = "Select Top 1 name from sys.filegroups where type = 'FX'";
+                    string motFileGroup = _Connection.Query<string>(sql).FirstOrDefault();
                     return motFileGroup != null;
                 }
 
