@@ -113,6 +113,7 @@ namespace Universe.SqlServerJam.Tests
 
                 using (SqlConnection con = new SqlConnection(cs))
                 {
+                    TryAndForget(() => con.Manage().ShortServerVersion?.ToString());
                     var man = con.Manage();
                     var ver = man.ShortServerVersion;
                     if (sqlRef.Version == null) sqlRef.Version = ver;
@@ -233,6 +234,17 @@ namespace Universe.SqlServerJam.Tests
                     Environment.NewLine,
                     JoinToString(Environment.NewLine, errorServers.OrderBy(x => x).Select(x => " * " + x))
                     ));
+        }
+
+        private void TryAndForget(Action func)
+        {
+            try
+            {
+                func();
+            }
+            catch
+            {
+            }
         }
 
         [Test]
