@@ -96,7 +96,9 @@ namespace Universe.SqlServerJam
         }
 
         public bool IsFullTextSearchInstalled =>
-            1 == SqlConnection.ExecuteScalar<int?>("SELECT FULLTEXTSERVICEPROPERTY('IsFullTextInstalled')");
+            // 1 == SqlConnection.ExecuteScalar<int?>("SELECT FULLTEXTSERVICEPROPERTY('IsFullTextInstalled')");
+            1 == SqlConnection.ExecuteScalar<int?>("SELECT SERVERPROPERTY('IsFullTextInstalled')");
+
 
         public bool IsConnectionEncrypted
         {
