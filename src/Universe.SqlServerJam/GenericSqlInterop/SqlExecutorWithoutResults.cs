@@ -5,7 +5,7 @@ namespace Universe.SqlServerJam.GenericSqlInterop
 {
     public class SqlExecutorWithoutResults<TParameters> : AbstractTinyDataReader<NoAnyResultSet, TParameters>
     {
-        public static readonly SqlExecutorWithoutResults<TParameters> Instance = new SqlExecutorWithoutResults<TParameters>();
+        public new static readonly SqlExecutorWithoutResults<TParameters> Instance = new SqlExecutorWithoutResults<TParameters>();
 
         protected override NoAnyResultSet ParseRow(IDataReader reader)
         {
