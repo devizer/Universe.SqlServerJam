@@ -115,7 +115,7 @@ namespace Universe.SqlServerJam.Tests
                 using (SqlConnection con = new SqlConnection(cs))
                 {
                     // TryAndForget(() => con.Manage().ShortServerVersion?.ToString());
-                    var warmUpError = WarmUp(cs, timeoutSeconds: 90);
+                    var warmUpError = WarmUp(cs, timeoutSeconds: 100);
                     if (warmUpError != null) Console.WriteLine($"WARNING! Warm up error {warmUpError.GetLegacyExceptionDigest()}{Environment.NewLine}{warmUpError}");
                     var man = con.Manage();
                     var ver = man.ShortServerVersion;
