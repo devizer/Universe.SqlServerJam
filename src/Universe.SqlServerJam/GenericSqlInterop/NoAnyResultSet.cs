@@ -2,6 +2,6 @@
 {
     public class NoAnyResultSet
     {
-        public static readonly NoAnyResultSet Insance;
+        public static readonly NoAnyResultSet Instance = new NoAnyResultSet();
     }
 }

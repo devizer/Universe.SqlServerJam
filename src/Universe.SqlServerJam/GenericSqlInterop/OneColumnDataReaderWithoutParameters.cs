@@ -26,7 +26,7 @@ namespace Universe.SqlServerJam.GenericSqlInterop
 
         public TColumn ExecuteScalar(IDbConnection cnn, string sql)
         {
-            return QueryFirstOrDefault(cnn, sql, NoAnyCommandParameters.Insance, 0);
+            return QueryFirstOrDefault(cnn, sql, NoAnyCommandParameters.Instance, 0);
         }
     }
 

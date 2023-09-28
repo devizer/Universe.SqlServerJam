@@ -5,7 +5,7 @@ namespace Universe.SqlServerJam.GenericSqlInterop
 {
     public class SqlExecutorWithoutResults<TParameters> : AbstractTinyDataReader<NoAnyResultSet, TParameters>
     {
-        public new static readonly SqlExecutorWithoutResults<TParameters> Instance = new SqlExecutorWithoutResults<TParameters>();
+        public static readonly SqlExecutorWithoutResults<TParameters> Instance = new SqlExecutorWithoutResults<TParameters>();
 
         protected override NoAnyResultSet ParseRow(IDataReader reader)
         {
@@ -18,7 +18,7 @@ namespace Universe.SqlServerJam.GenericSqlInterop
         public static void Execute2(this IDbConnection cnn, string sql, int commandTimeout)
         {
             SqlExecutorWithoutResults<NoAnyCommandParameters>.Instance
-                .Query(cnn, sql, QueryBehaviour.NoAnyResults, NoAnyCommandParameters.Insance, commandTimeout);
+                .Query(cnn, sql, QueryBehaviour.NoAnyResults, NoAnyCommandParameters.Instance, commandTimeout);
         }
 
         public static void Execute2(this IDbConnection cnn, string sql)
