@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -113,7 +114,9 @@ namespace Universe.SqlServerJam.Tests
 
                 using (SqlConnection con = new SqlConnection(cs))
                 {
-                    TryAndForget(() => con.Manage().ShortServerVersion?.ToString());
+                    // TryAndForget(() => con.Manage().ShortServerVersion?.ToString());
+                    var warmUpError = WarmUp(cs, timeoutSeconds: 90);
+                    if (warmUpError != null) Console.WriteLine($"WARNING! Warm up error {warmUpError.GetLegacyExceptionDigest()}{Environment.NewLine}{warmUpError}");
                     var man = con.Manage();
                     var ver = man.ShortServerVersion;
                     if (sqlRef.Version == null) sqlRef.Version = ver;
@@ -236,6 +239,37 @@ namespace Universe.SqlServerJam.Tests
                     ));
         }
 
+        static Exception WarmUp(string connectionString, int timeoutSeconds)
+        {
+            var csb = new SqlConnectionStringBuilder(connectionString);
+            csb.ConnectTimeout = 2;
+            var cs = csb.ConnectionString;
+            Stopwatch sw = Stopwatch.StartNew();
+            Exception ret = null;
+            do
+            {
+                try
+                {
+                    using (SqlConnection con = new SqlConnection(connectionString))
+                    {
+                        con.Open();
+                        con.Manage().LongServerVersion?.ToString();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ret = ex;
+                }
+
+            } while (sw.Elapsed.TotalSeconds <= timeoutSeconds);
+
+            if (ret != null)
+                ret = new InvalidOperationException(
+                    $"Unable to warm up Sql Server or Local DB during {sw.Elapsed.TotalSeconds:n1} seconds [{connectionString}] ",
+                    ret);
+
+            return ret;
+        }
         private void TryAndForget(Action func)
         {
             try
