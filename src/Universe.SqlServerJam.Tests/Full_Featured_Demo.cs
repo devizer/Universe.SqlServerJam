@@ -264,10 +264,9 @@ namespace Universe.SqlServerJam.Tests
 
             } while (sw.Elapsed.TotalSeconds <= timeoutSeconds);
 
-            if (ret != null)
-                ret = new InvalidOperationException(
-                    $"Unable to warm up Sql Server or Local DB during {sw.Elapsed.TotalSeconds:n1} seconds [{connectionString}] ",
-                    ret);
+            ret = new InvalidOperationException(
+                $"Unable to warm up Sql Server or Local DB during {sw.Elapsed.TotalSeconds:n1} seconds [{connectionString}] ",
+                ret);
 
             return ret;
         }
