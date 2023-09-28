@@ -254,6 +254,7 @@ namespace Universe.SqlServerJam.Tests
                     {
                         con.Open();
                         con.Manage().LongServerVersion?.ToString();
+                        return null;
                     }
                 }
                 catch (Exception ex)
