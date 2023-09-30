@@ -37,6 +37,7 @@ namespace Universe.SqlServerJam.Tests
                 : "/tmp/sql-backups";
 
             var tmpFile = Path.Combine(tmpFolderRoot, "Temp" + Path.DirectorySeparatorChar + "DB For Tests.bak");
+            if (!Directory.Exists(Path.GetDirectoryName(tmpFile))) Directory.CreateDirectory(Path.GetDirectoryName(tmpFile));
             Console.WriteLine($"Extracting {fullPath} --> {tmpFile}");
             using(FileStream fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             using(GZipStream gzip = new GZipStream(fs, CompressionMode.Decompress, false))
