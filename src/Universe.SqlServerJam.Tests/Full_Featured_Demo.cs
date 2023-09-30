@@ -89,6 +89,28 @@ namespace Universe.SqlServerJam.Tests
             }
         }
 
+        [Test]
+        public void _4_ExamBackupMeta()
+        {
+            if (CrossInfo.ThePlatform != CrossInfo.Platform.Windows) return;
+            var list = SqlServers.OrderByVersionDesc().ToList();
+            foreach (var sqlRef in list)
+            {
+                string cs = sqlRef.ConnectionString;
+                string v = sqlRef.Version == null ? "N/A" : sqlRef.Version.ToString();
+                StringBuilder report = new StringBuilder();
+                report.AppendLine();
+                using (SqlConnection con = new SqlConnection(cs))
+                {
+                    SqlBackupDescription backupDescr = con.Manage().GetBackupDescription(TestEnvironment.DbForTestsBak);
+                    Console.WriteLine($"SERVER {sqlRef}{Environment.NewLine}{backupDescr}{Environment.NewLine}");
+                }
+
+
+            }
+
+        }
+
 
 
         [Test]

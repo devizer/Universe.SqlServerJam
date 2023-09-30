@@ -8,6 +8,16 @@
   <Import Project="..\Shared-Files\NUnit-Platform.props" />
 
   <ItemGroup>
+    <None Remove="Assets\DB For Tests.bak.gz" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\DB For Tests.bak.gz">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Universe.SqlServerJam\Universe.SqlServerJam.csproj" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="All" />
   </ItemGroup>
