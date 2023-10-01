@@ -90,7 +90,7 @@ namespace Universe.SqlServerJam.Tests
         }
 
         [Test]
-        public void _5_Exam_Backup_Meta()
+        public void _7_Exam_Backup_Meta()
         {
             if (CrossInfo.ThePlatform != CrossInfo.Platform.Windows) return;
             var list = SqlServers.OrderByVersionDesc().ToList();
