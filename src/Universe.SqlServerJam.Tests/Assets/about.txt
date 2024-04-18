@@ -1,0 +1,31 @@
+
+#1.7 {_7_Exam_Backup_Meta} @ Full_Featured_Demo starting...
+Extracting C:\_GIT\Universe.SqlServerJam\src\Universe.SqlServerJam.Tests\bin\Debug\net6.0\Assets\DB For Tests.bak.gz --> C:\Users\Administrator\AppData\Roaming\Temp\DB For Tests.bak
+SERVER '(local)' Ver 16.0.1000.6
+Backup History
+Position: 1, ExpirationDate: , DatabaseName: DB For Tests, Collation: SQL_Latin1_General_CP1_CI_AS, RecoveryModel: FULL, UserName: devops, BackupName: DB For Tests. Full Database First Full Backup , BackupDescription: My Description for backyp of DB With fulltext search, BackupType: 1, StrictBackupType: Database, BackupTypeDescription: Database, SoftwareVersionMajor: 9, SoftwareVersionMinor: 0, SoftwareVersionBuild: 5000, SqlServerVersion: 9.0.5000, Flags: 512, StrictFlags: 512
+Position: 2, ExpirationDate: , DatabaseName: DB For Tests, Collation: SQL_Latin1_General_CP1_CI_AS, RecoveryModel: FULL, UserName: devops, BackupName: DB For Tests. Full Database Next Backup, BackupDescription: , BackupType: 1, StrictBackupType: Database, BackupTypeDescription: Database, SoftwareVersionMajor: 9, SoftwareVersionMinor: 0, SoftwareVersionBuild: 5000, SqlServerVersion: 9.0.5000, Flags: 512, StrictFlags: 512
+Position: 3, ExpirationDate: , DatabaseName: DB For Tests, Collation: SQL_Latin1_General_CP1_CI_AS, RecoveryModel: FULL, UserName: devops, BackupName: DB For Tests. Differential Database Next Backup, BackupDescription: Next Diff Backup, BackupType: 5, StrictBackupType: DifferentialDatabase, BackupTypeDescription: Database Differential, SoftwareVersionMajor: 9, SoftwareVersionMinor: 0, SoftwareVersionBuild: 5000, SqlServerVersion: 9.0.5000, Flags: 2560, StrictFlags: 2560
+Position: 4, ExpirationDate: , DatabaseName: DB For Tests, Collation: SQL_Latin1_General_CP1_CI_AS, RecoveryModel: FULL, UserName: devops, BackupName: DB For Tests-Transaction Log Backup, BackupDescription: Log backup, BackupType: 2, StrictBackupType: TransactionLog, BackupTypeDescription: Transaction Log, SoftwareVersionMajor: 9, SoftwareVersionMinor: 0, SoftwareVersionBuild: 5000, SqlServerVersion: 9.0.5000, Flags: 512, StrictFlags: 512
+Backup File List
+LogicalName: DB For Tests, PhysicalName: D:\SQL Data\DB For Tests.mdf, Type: D, StrictType: Data, FileGroupName: PRIMARY, IsReadOnly: False, IsPresent: True, SnapshotURL: , Size: 2097152, BackupSizeInBytes: 1441792
+LogicalName: MyFile, PhysicalName: K:\SQL FullText Search\MyFile, Type: D, StrictType: Data, FileGroupName: MyFullTextFileGroup, IsReadOnly: False, IsPresent: True, SnapshotURL: , Size: 524288, BackupSizeInBytes: 131072
+LogicalName: DB For Tests_log, PhysicalName: L:\SQL Logs\DB For Tests_log.ldf, Type: L, StrictType: Log, FileGroupName: , IsReadOnly: False, IsPresent: True, SnapshotURL: , Size: 1048576, BackupSizeInBytes: 0
+LogicalName: sysft_MyFullTextCatalog, PhysicalName: K:\SQL FullText Search\MyFullTextCatalog, Type: F, StrictType: FullTextCatalog, FileGroupName: MyFullTextFileGroup, IsReadOnly: False, IsPresent: True, SnapshotURL: , Size: 468858, BackupSizeInBytes: 524288
+
+
+SERVER '(LocalDB)\MSSqlLocalDB' Ver 15.0
+Backup History
+Position: 1, ExpirationDate: , DatabaseName: DB For Tests, Collation: SQL_Latin1_General_CP1_CI_AS, RecoveryModel: FULL, UserName: devops, BackupName: DB For Tests. Full Database First Full Backup , BackupDescription: My Description for backyp of DB With fulltext search, BackupType: 1, StrictBackupType: Database, BackupTypeDescription: Database, SoftwareVersionMajor: 9, SoftwareVersionMinor: 0, SoftwareVersionBuild: 5000, SqlServerVersion: 9.0.5000, Flags: 512, StrictFlags: 512
+Position: 2, ExpirationDate: , DatabaseName: DB For Tests, Collation: SQL_Latin1_General_CP1_CI_AS, RecoveryModel: FULL, UserName: devops, BackupName: DB For Tests. Full Database Next Backup, BackupDescription: , BackupType: 1, StrictBackupType: Database, BackupTypeDescription: Database, SoftwareVersionMajor: 9, SoftwareVersionMinor: 0, SoftwareVersionBuild: 5000, SqlServerVersion: 9.0.5000, Flags: 512, StrictFlags: 512
+Position: 3, ExpirationDate: , DatabaseName: DB For Tests, Collation: SQL_Latin1_General_CP1_CI_AS, RecoveryModel: FULL, UserName: devops, BackupName: DB For Tests. Differential Database Next Backup, BackupDescription: Next Diff Backup, BackupType: 5, StrictBackupType: DifferentialDatabase, BackupTypeDescription: Database Differential, SoftwareVersionMajor: 9, SoftwareVersionMinor: 0, SoftwareVersionBuild: 5000, SqlServerVersion: 9.0.5000, Flags: 2560, StrictFlags: 2560
+Position: 4, ExpirationDate: , DatabaseName: DB For Tests, Collation: SQL_Latin1_General_CP1_CI_AS, RecoveryModel: FULL, UserName: devops, BackupName: DB For Tests-Transaction Log Backup, BackupDescription: Log backup, BackupType: 2, StrictBackupType: TransactionLog, BackupTypeDescription: Transaction Log, SoftwareVersionMajor: 9, SoftwareVersionMinor: 0, SoftwareVersionBuild: 5000, SqlServerVersion: 9.0.5000, Flags: 512, StrictFlags: 512
+Backup File List
+LogicalName: DB For Tests, PhysicalName: D:\SQL Data\DB For Tests.mdf, Type: D, StrictType: Data, FileGroupName: PRIMARY, IsReadOnly: False, IsPresent: True, SnapshotURL: , Size: 2097152, BackupSizeInBytes: 1441792
+LogicalName: MyFile, PhysicalName: K:\SQL FullText Search\MyFile, Type: D, StrictType: Data, FileGroupName: MyFullTextFileGroup, IsReadOnly: False, IsPresent: True, SnapshotURL: , Size: 524288, BackupSizeInBytes: 131072
+LogicalName: DB For Tests_log, PhysicalName: L:\SQL Logs\DB For Tests_log.ldf, Type: L, StrictType: Log, FileGroupName: , IsReadOnly: False, IsPresent: True, SnapshotURL: , Size: 1048576, BackupSizeInBytes: 0
+LogicalName: sysft_MyFullTextCatalog, PhysicalName: K:\SQL FullText Search\MyFullTextCatalog, Type: F, StrictType: FullTextCatalog, FileGroupName: MyFullTextFileGroup, IsReadOnly: False, IsPresent: True, SnapshotURL: , Size: 468858, BackupSizeInBytes: 524288
+
+
+#1.7 {_7_Exam_Backup_Meta} >PASSED< in 00:00:00.0653947 (cpu: 48%, 31.250 = 31.250 [user] + 0.000 [kernel] milliseconds)
+

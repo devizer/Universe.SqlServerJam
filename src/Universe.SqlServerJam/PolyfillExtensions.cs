@@ -39,10 +39,11 @@ namespace Universe.SqlServerJam
     public static class DapperExtensions
     {
 #if NET35
+
         public static T ExecuteScalar<T>(this IDbConnection cnn, string sql)
         {
-            // return cnn.ExecuteScalar<T>(sql, null, null, null, CommandType.Text);
-            return cnn.ExecuteScalar2<T>(sql);
+            return cnn.ExecuteScalar<T>(sql, null, null, null, CommandType.Text);
+            // return cnn.ExecuteScalar2<T>(sql);
         }
 
         public static T ExecuteScalar<T>(this IDbConnection cnn, string sql, object parameters)
@@ -58,17 +59,18 @@ namespace Universe.SqlServerJam
 
         public static void Execute(this IDbConnection cnn, string sql)
         {
-            cnn.Execute2(sql);
+            cnn.Execute(sql, null, null, null, CommandType.Text);            
+            // cnn.Execute2(sql);
         }
 
         public static void Execute(this IDbConnection cnn, string sql, int? commandTimeout)
         {
-            cnn.Execute2(sql, commandTimeout.GetValueOrDefault());
+            cnn.Execute(sql, commandTimeout.GetValueOrDefault());
         }
 #else
 #endif
     }
-    
+
 }
 
 #if NETSTANDARD1_3
