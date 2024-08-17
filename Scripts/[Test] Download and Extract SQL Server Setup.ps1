@@ -1016,6 +1016,13 @@ function Download-Fresh-SQL-Server-and-Extract {
   }
 
   $exeBootstrap = Combine-Path "$(Get-SqlServer-Downloads-Folder)" "SQL-Setup-Bootstrapper" "SQL-$Version-$(IIf $isDeveloper "Developer" "Express")-Bootstapper.exe"
+  if ($mediaType -eq "LocalDB") {
+     $mediaPath = $root
+  } else {
+     $mediaPath = Combine-Path "$(Get-SqlServer-Downloads-Folder)" "SQL-Setup-Compressed" "SQL-$Version-$mediaType" 
+  }
+  $setupPath="$root"
+
   $isRawOk = Download-File-FailFree-and-Cached $exeBootstrap @($url)
   if (-not $isRawOk) {
     Write-Host "Download bootstrapper for version $version failed. URL is '$url'" -ForegroundColor DarkRed;
@@ -1024,7 +1031,6 @@ function Download-Fresh-SQL-Server-and-Extract {
   
   Write-Host "Download SQL Server $version $mediaType"
   $mt = IIf $isDeveloper "CAB" $mediaType;
-  $mediaPath="$root-Archive"
   # echo Y | "%outfile%" /ENU /Q /Action=Download /MEDIATYPE=%MT% /MEDIAPATH="%Work%\SETUPFILES"
   & cmd.exe @("/c", "echo Y | `"$exeBootstrap`" /ENU /Q /Action=Download /MEDIATYPE=$mt /MEDIAPATH=`"$mediaPath`"")
   # & "$exeBootstrap" @("/ENU", "/Q", "/Action=Download", "/MEDIATYPE=$mt", "/MEDIAPATH=`"$mediaPath`"");
@@ -1039,7 +1045,6 @@ function Download-Fresh-SQL-Server-and-Extract {
 
   $exeArchive = Get-ChildItem -Path "$mediaPath" -Filter "*.exe" | Select -First 1
   Write-Host "Extracting exe archive for $version $mediaType using [$($exeArchive.FullName)]"
-  $setupPath="$root"
   Write-Host "Plain Setup Path for $version $mediaType is [$($setupPath)]"
   $startAt = [System.Diagnostics.Stopwatch]::StartNew()
   # & "$($exeArchive.FullName)" @("/qs", "/x:`"$setupPath`"")
