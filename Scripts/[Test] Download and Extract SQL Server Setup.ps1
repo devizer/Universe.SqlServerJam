@@ -1037,14 +1037,16 @@ function Download-Fresh-SQL-Server-and-Extract {
   }
 
   $exeArchive = Get-ChildItem -Path "$mediaPath" -Filter "*.exe" | Select -First 1
-  Write-Host "Extracting exe archive for $version $mediaType is [$($exeArchive.FullName)]"
+  Write-Host "Extracting exe archive for $version $mediaType using [$($exeArchive.FullName)]"
   $setupPath="$root"
-  Write-Host "Plain Setup Path is for $version $mediaType is [$($setupPath)]"
+  Write-Host "Plain Setup Path for $version $mediaType is [$($setupPath)]"
+  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
   & "$($exeArchive.FullName)" @("/qs", "/x:`"$setupPath`"")
   if (-not $?) {
     Write-Host "Extracting setup for version $version $mediaType. failed" -ForegroundColor DarkRed;
     return @{};
   }
+  Write-Host "Extraction took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
 
   return @{ Setup = Combine-Path $setupPath "Setup.exe"; }
 }
