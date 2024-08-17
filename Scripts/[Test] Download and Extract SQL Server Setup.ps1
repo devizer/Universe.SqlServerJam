@@ -1053,6 +1053,7 @@ function Download-Fresh-SQL-Server-and-Extract {
   $extractApp = Start-Process "$($exeArchive.FullName)" -ArgumentList @("/qs", "/x:`"$setupPath`"") -PassThru
   if ($extractApp -and $extractApp.Id) {
     Wait-Process -Id $extractApp.Id
+    Write-Host "[Extract] Exit code is $($extractApp.ExitCode)"
   } else {
     Write-Host "Extracting setup for version $version $mediaType. failed" -ForegroundColor DarkRed;
     return @{};
