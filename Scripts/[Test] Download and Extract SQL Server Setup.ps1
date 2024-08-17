@@ -1112,6 +1112,10 @@ $SqlServerDownloadLinks | ConvertTo-Json -Depth 32
 foreach($mt in "LocalDB", "Core", "Advanced", "Developer") {
 foreach($ver in @("2016", "2017", "2019", "2022")) {
   Say "SQL Server $ver [$mt]"
-  $result = Download-Fresh-SQL-Server-and-Extract $ver $mt
+  $result = [PSCustomObject](Download-Fresh-SQL-Server-and-Extract $ver $mt)
+  if ($result -and $result.Setup) {
+    try { $size = (New-Object System.IO.FileInfo($result.Setup)).Length; } catch {}
+    $result | Add-Member -Type NoteProperty -Name 'Size' -Value $size
+  }
   $result | Format-Table -AutoSize | Out-String -Width 200
 }}
