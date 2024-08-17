@@ -990,7 +990,7 @@ $SqlServerDownloadLinks = @(
   };
 )
 
-$SqlServerDownloadLinks | ConvertTo-Json -Depth 32
+# $SqlServerDownloadLinks | ConvertTo-Json -Depth 32
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-Fresh-SQL-Server.ps1]
 function Download-Fresh-SQL-Server-and-Extract {
@@ -1033,7 +1033,7 @@ function Download-Fresh-SQL-Server-and-Extract {
   }
 
   if ($mediaType -eq "LocalDB") {
-    return @{ Setup = Combine-Path $mediaPath "en-US" "LocalDB.msi"; }
+    return @{ Setup = Combine-Path $mediaPath "en-US" "SqlLocalDB.msi"; }
   }
 
   $exeArchive = Get-ChildItem -Path "$mediaPath" -Filter "*.exe" | Select -First 1
@@ -1096,8 +1096,11 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
 }
 
 
+$SqlServerDownloadLinks | ConvertTo-Json -Depth 32
+
 foreach($mt in "LocalDB", "Core", "Advanced", "Developer") {
 foreach($ver in @("2016", "2017", "2019", "2022")) {
   Say "SQL Server $ver [$mt]"
-  Download-Fresh-SQL-Server-and-Extract $ver $mt
+  $result = Download-Fresh-SQL-Server-and-Extract $ver $mt
+  $result | Format-Table -AutoSize | Out-String -Width 200
 }}
