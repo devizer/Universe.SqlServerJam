@@ -1121,3 +1121,14 @@ foreach($ver in @("2016", "2017", "2019", "2022")) {
   }
   $result | Format-Table -AutoSize | Out-String -Width 200
 }}
+
+$startFolder = Get-SqlServer-Downloads-Folder;
+$colItems = Get-ChildItem $startFolder -recurse -force -depth 2 | Where-Object {$_.PSIsContainer -eq $true} | % {$_.FullName} | Sort-Object
+foreach ($i in $colItems)
+{
+    $subFolderItems = Get-ChildItem $i -recurse -force | Where-Object {$_.PSIsContainer -eq $false} | Measure-Object -property Length -sum | Select-Object Sum
+    $size = ($subFolderItems.sum / 1MB).ToString("n2").PadLeft(12) + " Mb"
+    $size + " " + $i
+}
+
+Say "DONE"
