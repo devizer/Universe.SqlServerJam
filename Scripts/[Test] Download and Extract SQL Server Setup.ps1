@@ -991,6 +991,57 @@ $SqlServerDownloadLinks = @(
 )
 
 # $SqlServerDownloadLinks | ConvertTo-Json -Depth 32
+$SqlServerLegacyDownloadLinks = @(
+  @{ 
+    Version="2014-x64"; #SP3
+    Express ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x64_ENU.exe" 
+    Advanced="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x64_ENU.exe" #SP3, 
+    LocalDB ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x64/SqlLocalDB.msi"
+    CU=@(
+    )
+  };
+  @{ 
+    Version="2014-x86"; #SP3
+    Express ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x86_ENU.exe" 
+    Advanced="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x86_ENU.exe"
+    LocalDB ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x86/SqlLocalDB.msi"
+    CU=@(
+    )
+  };
+  @{ 
+    Version="2012-x64"; #SP4
+    Express ="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/SQLEXPR_x64_ENU.exe" 
+    Advanced="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/SQLEXPRADV_x64_ENU.exe" 
+    LocalDB ="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/ENU/x64/SqlLocalDB.msi"
+    CU=@(
+    )
+  };
+  @{ 
+    Version="2012-x86"; #SP4
+    Express ="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/SQLEXPR_x86_ENU.exe" 
+    Advanced="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/SQLEXPRADV_x86_ENU.exe"
+    LocalDB ="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/ENU/x86/SqlLocalDB.msi"
+    CU=@(
+    )
+  };
+
+  @{ 
+    Version="2008R2-x64"; #SP2
+    Express ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x64_ENU.exe" 
+    Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x64_ENU.exe" 
+    CU=@(
+      @{ Id="SP3"; Url="https://download.microsoft.com/download/D/7/A/D7A28B6C-FCFE-4F70-A902-B109388E01E9/ENU/SQLServer2008R2SP3-KB2979597-x64-ENU.exe" }
+    )
+  };
+  @{ 
+    Version="2008R2-x86"; #SP2
+    Express ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x86_ENU.exe" 
+    Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x86_ENU.exe"
+    CU=@(
+      @{ Id="SP3"; Url="https://download.microsoft.com/download/D/7/A/D7A28B6C-FCFE-4F70-A902-B109388E01E9/ENU/SQLServer2008R2SP3-KB2979597-x86-ENU.exe" }
+    )
+  };
+)
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-Fresh-SQL-Server.ps1]
 function Download-Fresh-SQL-Server-and-Extract {
@@ -1041,26 +1092,36 @@ function Download-Fresh-SQL-Server-and-Extract {
   }
   Write-Host "Media download took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
 
+  $ret = @{};
   if ($mediaType -eq "LocalDB") {
-    return @{ Setup = Combine-Path $mediaPath "en-US" "SqlLocalDB.msi"; }
+    $launcher=Combine-Path $mediaPath "en-US" "SqlLocalDB.msi"
+    $ret = @{ Launcher = $launcher; Setup = $setupPath; }
+  }
+  else 
+  {
+    $exeArchive = Get-ChildItem -Path "$mediaPath" -Filter "*.exe" | Select -First 1
+    Write-Host "Extracting exe archive for $version $mediaType using [$($exeArchive.FullName)]"
+    Write-Host "Plain Setup Path for $version $mediaType is [$($setupPath)]"
+    $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+    # & "$($exeArchive.FullName)" @("/qs", "/x:`"$setupPath`"")
+    $extractApp = Start-Process "$($exeArchive.FullName)" -ArgumentList @("/qs", "/x:`"$setupPath`"") -PassThru
+    if ($extractApp -and $extractApp.Id) {
+      Wait-Process -Id $extractApp.Id
+      Write-Host "[Extract] Exit code is $($extractApp.ExitCode)"
+    } else {
+      Write-Host "Extracting setup for version $version $mediaType. failed" -ForegroundColor DarkRed;
+      return @{};
+    }
+    Write-Host "Extraction took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
+
+    $ret = @{ Launcher = Combine-Path $setupPath "Setup.exe"; Setup = $setupPath; Media = $mediaPath; }
   }
 
-  $exeArchive = Get-ChildItem -Path "$mediaPath" -Filter "*.exe" | Select -First 1
-  Write-Host "Extracting exe archive for $version $mediaType using [$($exeArchive.FullName)]"
-  Write-Host "Plain Setup Path for $version $mediaType is [$($setupPath)]"
-  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
-  # & "$($exeArchive.FullName)" @("/qs", "/x:`"$setupPath`"")
-  $extractApp = Start-Process "$($exeArchive.FullName)" -ArgumentList @("/qs", "/x:`"$setupPath`"") -PassThru
-  if ($extractApp -and $extractApp.Id) {
-    Wait-Process -Id $extractApp.Id
-    Write-Host "[Extract] Exit code is $($extractApp.ExitCode)"
-  } else {
-    Write-Host "Extracting setup for version $version $mediaType. failed" -ForegroundColor DarkRed;
-    return @{};
+  if ($ret.Launcher) {
+    try { $size = (New-Object System.IO.FileInfo($result.Launcher)).Length; } catch {Write-Host "Warning $($_)"; }
+    $ret["LauncherSize"] = $size;
   }
-  Write-Host "Extraction took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
-
-  return @{ Setup = Combine-Path $setupPath "Setup.exe"; }
+  return $ret;
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Find-SqlServer-SetupLogs.ps1]
@@ -1115,12 +1176,10 @@ $SqlServerDownloadLinks | ConvertTo-Json -Depth 32
 foreach($mt in "LocalDB", "Core", "Advanced", "Developer") {
 foreach($ver in @("2016", "2017", "2019", "2022")) {
   Say "SQL Server $ver [$mt]"
-  $result = [PSCustomObject](Download-Fresh-SQL-Server-and-Extract $ver $mt)
-  if ($result -and $result.Setup) {
-    try { $size = (New-Object System.IO.FileInfo($result.Setup)).Length; } catch {}
-    $result | Add-Member -Type NoteProperty -Name 'Size' -Value $size
-  }
-  $result | Format-Table -AutoSize | Out-String -Width 200
+  $result = (Download-Fresh-SQL-Server-and-Extract $ver $mt)
+  # $result | Format-Table -AutoSize | Out-String -Width 256
+  $result | Format-Table -AutoSize | Out-String -Width 256
+  if (-not "$($ENV:TF_BUILD)") { sleep 5; }
 }}
 
 $startFolder = Get-SqlServer-Downloads-Folder;
