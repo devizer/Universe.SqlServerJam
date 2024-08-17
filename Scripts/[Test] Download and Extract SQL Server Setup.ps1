@@ -1029,15 +1029,17 @@ function Download-Fresh-SQL-Server-and-Extract {
     return @{};
   }
   
-  Write-Host "Download SQL Server $version $mediaType"
+  Write-Host "Download SQL Server $version media '$mediaType'"
   $mt = IIf $isDeveloper "CAB" $mediaType;
   # echo Y | "%outfile%" /ENU /Q /Action=Download /MEDIATYPE=%MT% /MEDIAPATH="%Work%\SETUPFILES"
+  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
   & cmd.exe @("/c", "echo Y | `"$exeBootstrap`" /ENU /Q /Action=Download /MEDIATYPE=$mt /MEDIAPATH=`"$mediaPath`"")
   # & "$exeBootstrap" @("/ENU", "/Q", "/Action=Download", "/MEDIATYPE=$mt", "/MEDIAPATH=`"$mediaPath`"");
   if (-not $?) {
     Write-Host "Media download for version $version $mediaType. failed" -ForegroundColor DarkRed;
     return @{};
   }
+  Write-Host "Media download took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
 
   if ($mediaType -eq "LocalDB") {
     return @{ Setup = Combine-Path $mediaPath "en-US" "SqlLocalDB.msi"; }
