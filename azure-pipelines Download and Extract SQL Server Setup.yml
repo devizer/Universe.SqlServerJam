@@ -29,6 +29,11 @@ jobs:
       $cpuName=(Get-WmiObject Win32_Processor).Name
       Write-Host "CPU: $($cpuName), $([System.Environment]::ProcessorCount) Cores"
 
+      gdr -PSProvider 'FileSystem'
+      Get-Volume
+      Get-PhysicalDisk
+      Get-Partition
+
     displayName: 'Bootstrap'
 
   - powershell: |
