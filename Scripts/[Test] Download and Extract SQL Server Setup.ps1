@@ -461,6 +461,14 @@ function Get-Cpu-Name {
   return $Global:_Cpu_Name;
 }
 
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-DirectorySize.ps1]
+function Get-DirectorySize([string] $path) {
+  if ( Test-Path "$path"  -PathType Container) {
+    $subFolderItems = Get-ChildItem "$path" -recurse -force | Where-Object {$_.PSIsContainer -eq $false} | Measure-Object -property Length -sum | Select-Object Sum;
+    return $subFolderItems.sum
+  }
+}
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Full7z-Exe-FullPath-for-Windows.ps1]
 # arch: x86|x64|arm64
 # version: 1604|2301
@@ -1118,8 +1126,14 @@ function Download-Fresh-SQL-Server-and-Extract {
   }
 
   if ($ret.Launcher) {
-    try { $size = (New-Object System.IO.FileInfo($result.Launcher)).Length; } catch {Write-Host "Warning $($_)"; }
+    try { $size = (New-Object System.IO.FileInfo($ret.Launcher)).Length; } catch {Write-Host "Warning $($_)"; }
     $ret["LauncherSize"] = $size;
+  }
+  if ($ret.Setup) {
+    $ret["SetupSize"] = Get-DirectorySize $ret.Setup;
+  }
+  if ($ret.Media) {
+    $ret["MediaSize"] = Get-DirectorySize $ret.Media;
   }
   return $ret;
 }
