@@ -807,6 +807,47 @@ function Has-Cmd {
 function IIf([bool] $flag, $trueResult, $falseResult) {
   if ($flag) { return $trueResult; } else { return $falseResult; }
 }
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Is-BuildServer.ps1]
+function Is-BuildServer() {
+  return "$(Try-BuildServerType)" -ne "";
+}
+
+function Try-BuildServerType() {
+  $simpleKeys = @(
+     "APPVEYOR",
+     "bamboo_planKey",
+     "BITBUCKET_COMMIT",
+     "BITRISE_IO",
+     "BUDDY_WORKSPACE_ID",
+     "BUILDKITE",
+     "CIRCLECI",
+     "CIRRUS_CI",
+     "CODEBUILD_BUILD_ARN"
+     "DRONE",
+     "DSARI",
+     "GITLAB_CI",
+     "GO_PIPELINE_LABEL",
+     "HUDSON_URL",
+     "MAGNUM",
+     "SAILCI",
+     "SEMAPHORE",
+     "SHIPPABLE",
+     "TDDIUM",
+     "STRIDER",
+     "TDDIUM",
+     "TEAMCITY_VERSION",
+     "TF_BUILD",
+     "TRAVIS");
+  
+  foreach($varName in $simpleKeys) {
+    $val=[Environment]::GetEnvironmentVariable($varName);
+    if ("$val" -ne "" -and $val -ne "False") { return $varName; }
+  }
+
+  return $null;
+}
+# Write-Host "Try-BuildServerType: [$(Try-BuildServerType)], Is-BuildServer: $(Is-BuildServer)"
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Is-File-Not-Empty.ps1]
 function Is-File-Not-Empty([string] $fileName) {
   try { $fi = new-object System.IO.FileInfo($fileName); return $fi.Length -gt 0; } catch {}; return $fasle; 
@@ -1092,7 +1133,8 @@ function Download-Fresh-SQL-Server-and-Extract {
   $mt = IIf $isDeveloper "CAB" $mediaType;
   # echo Y | "%outfile%" /ENU /Q /Action=Download /MEDIATYPE=%MT% /MEDIAPATH="%Work%\SETUPFILES"
   $startAt = [System.Diagnostics.Stopwatch]::StartNew()
-  & cmd.exe @("/c", "echo Y | `"$exeBootstrap`" /ENU /Q /Action=Download /MEDIATYPE=$mt /MEDIAPATH=`"$mediaPath`"")
+  $hideProgressBar=IIF (Is-BuildServer) " /HIDEPROGRESSBAR" "";
+  & cmd.exe @("/c", "echo Y | `"$exeBootstrap`" /ENU /Q$hideProgressBar /Action=Download /MEDIATYPE=$mt /MEDIAPATH=`"$mediaPath`"")
   # & "$exeBootstrap" @("/ENU", "/Q", "/Action=Download", "/MEDIATYPE=$mt", "/MEDIAPATH=`"$mediaPath`"");
   if (-not $?) {
     Write-Host "Media download for version $version $mediaType. failed" -ForegroundColor DarkRed;
@@ -1185,6 +1227,7 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
 }
 
 
+Write-Host "Try-BuildServerType: [$(Try-BuildServerType)], Is-BuildServer: $(Is-BuildServer)"
 $SqlServerDownloadLinks | ConvertTo-Json -Depth 32
 
 foreach($mt in "LocalDB", "Core", "Advanced", "Developer") {
@@ -1193,8 +1236,9 @@ foreach($ver in @("2016", "2017", "2019", "2022")) {
   $result = (Download-Fresh-SQL-Server-and-Extract $ver $mt)
   # $result | Format-Table -AutoSize | Out-String -Width 256
   $result | Format-Table -AutoSize | Out-String -Width 256
-  if (-not "$($ENV:TF_BUILD)") { sleep 5; }
+  if (-not (Is-BuildServer)) { sleep 5; }
 }}
+Say "DONE"
 
 $startFolder = Get-SqlServer-Downloads-Folder;
 $colItems = Get-ChildItem $startFolder -recurse -force -depth 2 | Where-Object {$_.PSIsContainer -eq $true} | % {$_.FullName} | Sort-Object
@@ -1204,5 +1248,3 @@ foreach ($i in $colItems)
     $size = ($subFolderItems.sum / 1MB).ToString("n2").PadLeft(12) + " Mb"
     $size + " " + $i
 }
-
-Say "DONE"
