@@ -1010,7 +1010,7 @@ $SqlServerDownloadLinks = @(
     BaseDev    ="https://download.microsoft.com/download/c/5/0/c50d5f5e-1adf-43eb-bf16-205f7eab1944/SQLServer2016-SSEI-Dev.exe"; #SP3, 3.0 Gb
     BaseExpress="https://download.microsoft.com/download/f/a/8/fa83d147-63d1-449c-b22d-5fef9bd5bb46/SQLServer2016-SSEI-Expr.exe" #SP3, 
     CU=@(
-      @{ Id="1:KB5040946"; Url="https://download.microsoft.com/download/d/a/1/da18aac1-2cd0-4c52-b30d-39c3172cd156/SQLServer2016-KB5040946-x64.exe"; }
+      @{ Id="1.KB5040946"; Url="https://download.microsoft.com/download/d/a/1/da18aac1-2cd0-4c52-b30d-39c3172cd156/SQLServer2016-KB5040946-x64.exe"; }
     )
   };
   @{ 
@@ -1092,22 +1092,35 @@ $SqlServer2010DownloadLinks = @(
   };
   # 2008 SP2
   @{ 
-    Version="2008-x64"; #SP2
-    Core    ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x64_ENU.exe" 
-    Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x64_ENU.exe" 
+    Version="2008-x64"; 
+    Core    ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x64_ENU.exe"  #SP2
+    Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x64_ENU.exe" #RTM
     CU=@(
       @{ Id="SP4"; Url="https://download.microsoft.com/download/5/E/7/5E7A89F7-C013-4090-901E-1A0F86B6A94C/ENU/SQLServer2008SP4-KB2979596-x64-ENU.exe" }
     )
   };
   @{ 
     Version ="2008-x86"; #SP2
-    Core    ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x86_ENU.exe" 
-    Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x86_ENU.exe"
+    Core    ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x86_ENU.exe" #SP2
+    Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x86_ENU.exe" #RTM
     CU=@(
       @{ Id="SP4"; Url="https://download.microsoft.com/download/5/E/7/5E7A89F7-C013-4090-901E-1A0F86B6A94C/ENU/SQLServer2008SP4-KB2979596-x86-ENU.exe" }
     )
   };
+  @{ 
+    Version="2005-x86"; 
+    Core    ="https://sourceforge.net/projects/db-engine/files/database-engine-x86-9.0.5000.exe/download"  #SP4
+    Advanced="https://ia601402.us.archive.org/34/items/Microsoft_SQL_Server_2005/en_sql_2005_express_adv.exe" #SP1
+    CU=@(
+      # Core already SP4
+      @{ Id="SP4"; Url="https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2011/01/sqlserver2005expressadvancedsp4-kb2463332-x86-enu_b8640fde879a23a2372b27f158d54abb5079033e.exe" }
+    )
+  };
 )
+<#
+was: 9.0.2047 (sp1) https://ia601402.us.archive.org/34/items/Microsoft_SQL_Server_2005/en_sql_2005_express_adv.exe
+now: 9.0.5000 (sp4) https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2011/01/sqlserver2005expressadvancedsp4-kb2463332-x86-enu_b8640fde879a23a2372b27f158d54abb5079033e.exe
+#>
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-Fresh-SQL-Server.ps1]
 
@@ -1318,8 +1331,8 @@ Write-Host "Try-BuildServerType: [$(Try-BuildServerType)], Is-BuildServer: $(Is-
 $SqlServerDownloadLinks | ConvertTo-Json -Depth 32
 
 foreach($mt in "LocalDB", "Core", "Advanced") {
-foreach($ver in @("2008-x64", "2008-x86", "2008R2-x64", "2008R2-x86", "2012-x64", "2012-x86", "2014-x64", "2014-x86")) {
-  if ($ver -like "2008*" -and $mt -eq "LocalDB") { continue; }
+foreach($ver in @("2005-x86", "2008-x64", "2008-x86", "2008R2-x64", "2008R2-x86", "2012-x64", "2012-x86", "2014-x64", "2014-x86")) {
+  if (($ver -like "2008*" -or $ver -like "2005*") -and $mt -eq "LocalDB") { continue; }
   Say "SQL Server $ver [$mt]"
   $result = (Download-2010-SQL-Server-and-Extract $ver $mt)
   # $result | Format-Table -AutoSize | Out-String -Width 256
