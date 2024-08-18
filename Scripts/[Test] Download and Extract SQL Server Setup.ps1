@@ -1173,16 +1173,19 @@ function Download-Fresh-SQL-Server-and-Extract {
   }
   Write-Host "Media download took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
 
-  $ret = @{};
+  $ret = @{ Version=$version; MediaType=$mediaType; };
   if ($mediaType -eq "LocalDB") {
-    $ret = @{ Launcher = Combine-Path $mediaPath "en-US" "SqlLocalDB.msi"; Setup = $setupPath; }
+    $ret["Launcher"] = Combine-Path $mediaPath "en-US" "SqlLocalDB.msi";
+    $ret["Setup"] = $setupPath;
   }
-  else 
+  else
   {
     $exeArchive = Get-ChildItem -Path "$mediaPath" -Filter "*.exe" | Select -First 1
     $isExtractOk = ExtractSqlServerSetup "SQL Server $version $mediaType" $exeArchive.FullName $setupPath "/QS"
     if ($isExtractOk) {
-      $ret = @{ Launcher = Combine-Path $setupPath "Setup.exe"; Setup = $setupPath; Media = $mediaPath; }
+      $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
+      $ret["Setup"] = $setupPath;
+      $ret["Media"] = $mediaPath;
     } else {
       return @{};
     }
@@ -1262,15 +1265,18 @@ function Download-2010-SQL-Server-and-Extract {
     return @{};
   }
 
-  $ret = @{};
+  $ret = @{ Version=$version; MediaType=$mediaType; };
   if ($mediaType -eq "LocalDB") {
-    $ret = @{ Launcher = $exeArchive; Setup = $setupPath; }
+    $ret["Launcher"] = $exeArchive;
+    $ret["Setup"] = $setupPath;
   }
   else 
   {
     $isExtractOk = ExtractSqlServerSetup "SQL Server $version $mediaType" $exeArchive $setupPath "/Q"
     if ($isExtractOk) {
-      $ret = @{ Launcher = Combine-Path $setupPath "Setup.exe"; Setup = $setupPath; Media = $mediaPath; }
+      $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
+      $ret["Setup"] = $setupPath;
+      $ret["Media"] = $mediaPath;
     } else {
       return @{};
     }
@@ -1328,8 +1334,8 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
 
 
 Write-Host "Try-BuildServerType: [$(Try-BuildServerType)], Is-BuildServer: $(Is-BuildServer)"
-$SqlServerDownloadLinks | ConvertTo-Json -Depth 32
 
+$SqlServer2010DownloadLinks | ConvertTo-Json -Depth 32
 foreach($mt in "LocalDB", "Core", "Advanced") {
 foreach($ver in @("2005-x86", "2008-x64", "2008-x86", "2008R2-x64", "2008R2-x86", "2012-x64", "2012-x86", "2014-x64", "2014-x86")) {
   if (($ver -like "2008*" -or $ver -like "2005*") -and $mt -eq "LocalDB") { continue; }
@@ -1340,7 +1346,7 @@ foreach($ver in @("2005-x86", "2008-x64", "2008-x86", "2008R2-x64", "2008R2-x86"
 }}
 Say "DONE: SQL 2010"
 
-
+$SqlServerDownloadLinks | ConvertTo-Json -Depth 32
 foreach($mt in "LocalDB", "Core", "Advanced", "Developer") {
 foreach($ver in @("2016", "2017", "2019", "2022")) {
   Say "SQL Server $ver [$mt]"
@@ -1352,7 +1358,7 @@ foreach($ver in @("2016", "2017", "2019", "2022")) {
 Say "DONE: Fresh SQL"
 
 function Show-Tree-Size([string] $startFolder, [int] $depth = 2) {
-  $colItems = Get-ChildItem $startFolder -recurse -force -depth 1 | Where-Object {$_.PSIsContainer -eq $true} | % {$_.FullName} | Sort-Object
+  $colItems = Get-ChildItem $startFolder -recurse -force -depth $depth | Where-Object {$_.PSIsContainer -eq $true} | % {$_.FullName} | Sort-Object
   foreach ($i in $colItems)
   {
       $subFolderItems = Get-ChildItem $i -recurse -force | Where-Object {$_.PSIsContainer -eq $false} | Measure-Object -property Length -sum | Select-Object Sum
@@ -1362,7 +1368,7 @@ function Show-Tree-Size([string] $startFolder, [int] $depth = 2) {
 }
 
 $startFolder = Get-SqlServer-Downloads-Folder;
-Show-Tree-Size $startFolder 1
+Show-Tree-Size $startFolder 0
 
 $startFolder = Combine-Path (Get-SqlServer-Downloads-Folder) "SQL-Setup-Compressed";
-Show-Tree-Size $startFolder 1
+Show-Tree-Size $startFolder 0
