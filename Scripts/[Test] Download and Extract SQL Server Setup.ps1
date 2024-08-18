@@ -1123,7 +1123,6 @@ now: 9.0.5000 (sp4) https://catalog.s.download.windowsupdate.com/msdownload/upda
 #>
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-Fresh-SQL-Server.ps1]
-
 function Download-Fresh-SQL-Server-and-Extract {
   Param(
     [string] $version,  # 2016|2017|2019|2022
@@ -1181,7 +1180,8 @@ function Download-Fresh-SQL-Server-and-Extract {
   else
   {
     $exeArchive = Get-ChildItem -Path "$mediaPath" -Filter "*.exe" | Select -First 1
-    $isExtractOk = ExtractSqlServerSetup "SQL Server $version $mediaType" $exeArchive.FullName $setupPath "/QS"
+    $quietArg = IIF (Is-BuildServer) "/Q" "/QS"
+    $isExtractOk = ExtractSqlServerSetup "SQL Server $version $mediaType" $exeArchive.FullName $setupPath "$quietArg"
     if ($isExtractOk) {
       $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
       $ret["Setup"] = $setupPath;
