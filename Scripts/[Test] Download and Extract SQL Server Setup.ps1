@@ -224,7 +224,7 @@ function Download-File-FailFree-and-Cached([string] $fullName, [string[]] $urlLi
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Download-File-Managed.ps1]
 function Download-File-Managed([string] $url, [string]$outfile) {
   $dirName=[System.IO.Path]::GetDirectoryName($outfile)
-  $_ = [System.IO.Directory]::CreateDirectory($dirName)
+  if ($dirName) { $_ = [System.IO.Directory]::CreateDirectory($dirName); }
   $okAria=$false; try { & aria2c.exe -h *| out-null; $okAria=$? } catch {}
   if ($okAria) {
     Troubleshoot-Info "Starting download `"" -Highlight "$url" "`" using aria2c as `"" -Highlight "$outfile" "`""
@@ -1090,6 +1090,23 @@ $SqlServer2010DownloadLinks = @(
       @{ Id="SP3"; Url="https://download.microsoft.com/download/D/7/A/D7A28B6C-FCFE-4F70-A902-B109388E01E9/ENU/SQLServer2008R2SP3-KB2979597-x86-ENU.exe" }
     )
   };
+  # 2008 SP2
+  @{ 
+    Version="2008-x64"; #SP2
+    Core    ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x64_ENU.exe" 
+    Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x64_ENU.exe" 
+    CU=@(
+      @{ Id="SP4"; Url="https://download.microsoft.com/download/5/E/7/5E7A89F7-C013-4090-901E-1A0F86B6A94C/ENU/SQLServer2008SP4-KB2979596-x64-ENU.exe" }
+    )
+  };
+  @{ 
+    Version ="2008-x86"; #SP2
+    Core    ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x86_ENU.exe" 
+    Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x86_ENU.exe"
+    CU=@(
+      @{ Id="SP4"; Url="https://download.microsoft.com/download/5/E/7/5E7A89F7-C013-4090-901E-1A0F86B6A94C/ENU/SQLServer2008SP4-KB2979596-x86-ENU.exe" }
+    )
+  };
 )
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-Fresh-SQL-Server.ps1]
@@ -1301,7 +1318,7 @@ Write-Host "Try-BuildServerType: [$(Try-BuildServerType)], Is-BuildServer: $(Is-
 $SqlServerDownloadLinks | ConvertTo-Json -Depth 32
 
 foreach($mt in "LocalDB", "Core", "Advanced") {
-foreach($ver in @("2008R2-x64", "2008R2-x86", "2012-x64", "2012-x86", "2014-x64", "2014-x86")) {
+foreach($ver in @("2008-x64", "2008-x86", "2008R2-x64", "2008R2-x86", "2012-x64", "2012-x86", "2014-x64", "2014-x86")) {
   if ($ver -like "2008*" -and $mt -eq "LocalDB") { continue; }
   Say "SQL Server $ver [$mt]"
   $result = (Download-2010-SQL-Server-and-Extract $ver $mt)
