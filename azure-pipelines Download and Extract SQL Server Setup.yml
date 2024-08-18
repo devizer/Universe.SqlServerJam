@@ -26,8 +26,7 @@ jobs:
   steps:
 
   - powershell: |
-      $cpuName=(Get-WmiObject Win32_Processor).Name
-      Write-Host "CPU: $($cpuName), $([System.Environment]::ProcessorCount) Cores"
+      Write-Host "CPU: $((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
 
       gdr -PSProvider 'FileSystem'
       Get-Volume
@@ -39,6 +38,7 @@ jobs:
   - powershell: |
        cd Scripts
        powershell -f "[Test] Download and Extract SQL Server Setup.ps1" *| tee "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\FULL-LOG.txt"
+       gdr -PSProvider 'FileSystem'
     condition: succeededOrFailed()
     displayName: 'Install'
 
