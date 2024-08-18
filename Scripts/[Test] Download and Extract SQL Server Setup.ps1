@@ -1040,10 +1040,10 @@ $SqlServerDownloadLinks = @(
 )
 
 # $SqlServerDownloadLinks | ConvertTo-Json -Depth 32
-$SqlServerLegacyDownloadLinks = @(
+$SqlServer2010DownloadLinks = @(
   @{ 
     Version="2014-x64"; #SP3
-    Express ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x64_ENU.exe" 
+    Core ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x64_ENU.exe" 
     Advanced="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x64_ENU.exe" #SP3, 
     LocalDB ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x64/SqlLocalDB.msi"
     CU=@(
@@ -1051,7 +1051,7 @@ $SqlServerLegacyDownloadLinks = @(
   };
   @{ 
     Version="2014-x86"; #SP3
-    Express ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x86_ENU.exe" 
+    Core ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x86_ENU.exe" 
     Advanced="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x86_ENU.exe"
     LocalDB ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x86/SqlLocalDB.msi"
     CU=@(
@@ -1059,7 +1059,7 @@ $SqlServerLegacyDownloadLinks = @(
   };
   @{ 
     Version="2012-x64"; #SP4
-    Express ="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/SQLEXPR_x64_ENU.exe" 
+    Core ="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/SQLEXPR_x64_ENU.exe" 
     Advanced="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/SQLEXPRADV_x64_ENU.exe" 
     LocalDB ="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/ENU/x64/SqlLocalDB.msi"
     CU=@(
@@ -1067,7 +1067,7 @@ $SqlServerLegacyDownloadLinks = @(
   };
   @{ 
     Version="2012-x86"; #SP4
-    Express ="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/SQLEXPR_x86_ENU.exe" 
+    Core ="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/SQLEXPR_x86_ENU.exe" 
     Advanced="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/SQLEXPRADV_x86_ENU.exe"
     LocalDB ="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/ENU/x86/SqlLocalDB.msi"
     CU=@(
@@ -1076,7 +1076,7 @@ $SqlServerLegacyDownloadLinks = @(
 
   @{ 
     Version="2008R2-x64"; #SP2
-    Express ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x64_ENU.exe" 
+    Core ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x64_ENU.exe" 
     Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x64_ENU.exe" 
     CU=@(
       @{ Id="SP3"; Url="https://download.microsoft.com/download/D/7/A/D7A28B6C-FCFE-4F70-A902-B109388E01E9/ENU/SQLServer2008R2SP3-KB2979597-x64-ENU.exe" }
@@ -1084,7 +1084,7 @@ $SqlServerLegacyDownloadLinks = @(
   };
   @{ 
     Version="2008R2-x86"; #SP2
-    Express ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x86_ENU.exe" 
+    Core ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x86_ENU.exe" 
     Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x86_ENU.exe"
     CU=@(
       @{ Id="SP3"; Url="https://download.microsoft.com/download/D/7/A/D7A28B6C-FCFE-4F70-A902-B109388E01E9/ENU/SQLServer2008R2SP3-KB2979597-x86-ENU.exe" }
@@ -1093,6 +1093,7 @@ $SqlServerLegacyDownloadLinks = @(
 )
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-Fresh-SQL-Server.ps1]
+
 function Download-Fresh-SQL-Server-and-Extract {
   Param(
     [string] $version,  # 2016|2017|2019|2022
@@ -1192,6 +1193,58 @@ function ExtractSqlServerSetup([string] $title, [string] $exeArchive, [string] $
   return $true;
 }
 
+function Download-2010-SQL-Server-and-Extract {
+  Param(
+    [string] $version,  # 2014|2012|2008R2-(x86|x64)
+    [string] $mediaType # Core|Advanced|LocalDB (localdb is missing for 2008R2)
+  )
+
+  $key="SQL-$version-$mediaType"
+  $root=Combine-Path "$(Get-SqlServer-Downloads-Folder)" $key
+
+  Write-Host "Download Media for '$key'"
+  $url="";
+  $isDeveloper = [bool]($mediaType -eq "Developer");
+  foreach($meta in $SqlServer2010DownloadLinks) {
+    if ($meta.Version -eq $version) {
+      $url = $meta[$mediaType]
+    }
+  }
+  if (-not $url) {
+    Write-Host "Unknown SQL Server version $version $mediaType" -ForegroundColor DarkRed;
+    return @{};
+  }
+
+  $mediaPath = Combine-Path "$(Get-SqlServer-Downloads-Folder)" "SQL-Setup-Compressed" "SQL-$Version-$mediaType"
+  $ext = IIf ($mediaType -eq "LocalDB") ".msi" ".exe"
+  $exeArchive = Combine-Path $mediaPath "SQL-$mediaType-$Version-ENU$ext"
+  $setupPath="$root"
+
+  Write-Host "Downloading media for version $version $mediaType. URL is '$url'. Setup file is '$exeArchive'";
+  $isDownloadOk = Download-File-FailFree-and-Cached $exeArchive @($url)
+  if (-not $isDownloadOk) {
+    Write-Host "Download media for version $version $mediaType failed. URL is '$url'" -ForegroundColor DarkRed;
+    return @{};
+  }
+
+  $ret = @{};
+  if ($mediaType -eq "LocalDB") {
+    $ret = @{ Launcher = $exeArchive; Setup = $setupPath; }
+  }
+  else 
+  {
+    $isExtractOk = ExtractSqlServerSetup "SQL Server $version $mediaType" $exeArchive $setupPath "/Q"
+    if ($isExtractOk) {
+      $ret = @{ Launcher = Combine-Path $setupPath "Setup.exe"; Setup = $setupPath; Media = $mediaPath; }
+    } else {
+      return @{};
+    }
+  }
+
+  ApplyCommonSqlServerState $ret;
+  return $ret;
+}
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Find-SqlServer-SetupLogs.ps1]
 function Find-SqlServer-SetupLogs() {
   $sysDrive = "$($ENV:SystemDrive)"
@@ -1242,6 +1295,17 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
 Write-Host "Try-BuildServerType: [$(Try-BuildServerType)], Is-BuildServer: $(Is-BuildServer)"
 $SqlServerDownloadLinks | ConvertTo-Json -Depth 32
 
+foreach($mt in "LocalDB", "Core", "Advanced") {
+foreach($ver in @("2008R2-x64", "2008R2-x86", "2012-x64", "2012-x86", "2014-x64", "2014-x86")) {
+  if ($ver -like "2008*" -and $mt -eq "LocalDB") { continue; }
+  Say "SQL Server $ver [$mt]"
+  $result = (Download-2010-SQL-Server-and-Extract $ver $mt)
+  # $result | Format-Table -AutoSize | Out-String -Width 256
+  $result | Format-Table -AutoSize | Out-String -Width 256
+}}
+Say "DONE: SQL 2010"
+
+
 foreach($mt in "LocalDB", "Core", "Advanced", "Developer") {
 foreach($ver in @("2016", "2017", "2019", "2022")) {
   Say "SQL Server $ver [$mt]"
@@ -1250,7 +1314,7 @@ foreach($ver in @("2016", "2017", "2019", "2022")) {
   $result | Format-Table -AutoSize | Out-String -Width 256
   if (-not (Is-BuildServer)) { sleep 5; }
 }}
-Say "DONE"
+Say "DONE: Fresh SQL"
 
 $startFolder = Get-SqlServer-Downloads-Folder;
 $colItems = Get-ChildItem $startFolder -recurse -force -depth 2 | Where-Object {$_.PSIsContainer -eq $true} | % {$_.FullName} | Sort-Object
