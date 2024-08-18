@@ -1144,29 +1144,24 @@ function Download-Fresh-SQL-Server-and-Extract {
 
   $ret = @{};
   if ($mediaType -eq "LocalDB") {
-    $launcher=Combine-Path $mediaPath "en-US" "SqlLocalDB.msi"
-    $ret = @{ Launcher = $launcher; Setup = $setupPath; }
+    $ret = @{ Launcher = Combine-Path $mediaPath "en-US" "SqlLocalDB.msi"; Setup = $setupPath; }
   }
   else 
   {
     $exeArchive = Get-ChildItem -Path "$mediaPath" -Filter "*.exe" | Select -First 1
-    Write-Host "Extracting exe archive for $version $mediaType using [$($exeArchive.FullName)]"
-    Write-Host "Plain Setup Path for $version $mediaType is [$($setupPath)]"
-    $startAt = [System.Diagnostics.Stopwatch]::StartNew()
-    # & "$($exeArchive.FullName)" @("/qs", "/x:`"$setupPath`"")
-    $extractApp = Start-Process "$($exeArchive.FullName)" -ArgumentList @("/qs", "/x:`"$setupPath`"") -PassThru
-    if ($extractApp -and $extractApp.Id) {
-      Wait-Process -Id $extractApp.Id
-      Write-Host "[Extract] Exit code is $($extractApp.ExitCode)"
+    $isExtractOk = ExtractSqlServerSetup "SQL Server $version $mediaType" $exeArchive.FullName $setupPath "/QS"
+    if ($isExtractOk) {
+      $ret = @{ Launcher = Combine-Path $setupPath "Setup.exe"; Setup = $setupPath; Media = $mediaPath; }
     } else {
-      Write-Host "Extracting setup for version $version $mediaType. failed" -ForegroundColor DarkRed;
       return @{};
     }
-    Write-Host "Extraction took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
-
-    $ret = @{ Launcher = Combine-Path $setupPath "Setup.exe"; Setup = $setupPath; Media = $mediaPath; }
   }
 
+  ApplyCommonSqlServerState $ret;
+  return $ret;
+}
+
+function ApplyCommonSqlServerState([Hashtable] $ret) {
   if ($ret.Launcher) {
     try { $size = (New-Object System.IO.FileInfo($ret.Launcher)).Length; } catch {Write-Host "Warning $($_)"; }
     $ret["LauncherSize"] = $size;
@@ -1177,7 +1172,24 @@ function Download-Fresh-SQL-Server-and-Extract {
   if ($ret.Media) {
     $ret["MediaSize"] = Get-DirectorySize $ret.Media;
   }
-  return $ret;
+}
+
+function ExtractSqlServerSetup([string] $title, [string] $exeArchive, [string] $setupPath, [string] $quietArg <# /QS (Fresh) | /Q (prev) #>) {
+  Write-Host "Extracting $title using [$($exeArchive)] to [$($setupPath)]"
+  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+  $extractApp = Start-Process "$($exeArchive)" -ArgumentList @("$quietArg", "/x:`"$setupPath`"") -PassThru
+  if ($extractApp -and $extractApp.Id) {
+    Wait-Process -Id $extractApp.Id
+    if ($extractApp.ExitCode -ne 0) {
+      Write-Host "Extracting $title failed. Exit code $($extractApp.ExitCode)." -ForegroundColor DarkRed;
+      return $false;
+    }
+  } else {
+    Write-Host "Extracting $title. failed." -ForegroundColor DarkRed;
+    return $false;
+  }
+  Write-Host "Extraction of $title took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
+  return $true;
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Find-SqlServer-SetupLogs.ps1]
