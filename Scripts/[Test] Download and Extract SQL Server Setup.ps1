@@ -1217,8 +1217,13 @@ function Download-2010-SQL-Server-and-Extract {
 
   $mediaPath = Combine-Path "$(Get-SqlServer-Downloads-Folder)" "SQL-Setup-Compressed" "SQL-$Version-$mediaType"
   $ext = IIf ($mediaType -eq "LocalDB") ".msi" ".exe"
-  $exeArchive = Combine-Path $mediaPath "SQL-$mediaType-$Version-ENU$ext"
+  $exeName = "SQL-$mediaType-$Version-ENU$ext"
+  $exeArchive = Combine-Path $mediaPath $exeName
   $setupPath="$root"
+  if ($mediaType -eq "LocalDB") { 
+    $exeArchive = Combine-Path $setupPath $exeName
+    $mediaPath = $null;
+  }
 
   Write-Host "Downloading media for version $version $mediaType. URL is '$url'. Setup file is '$exeArchive'";
   $isDownloadOk = Download-File-FailFree-and-Cached $exeArchive @($url)
