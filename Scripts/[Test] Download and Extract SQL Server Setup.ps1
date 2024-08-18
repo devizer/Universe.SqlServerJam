@@ -1351,11 +1351,18 @@ foreach($ver in @("2016", "2017", "2019", "2022")) {
 }}
 Say "DONE: Fresh SQL"
 
-$startFolder = Get-SqlServer-Downloads-Folder;
-$colItems = Get-ChildItem $startFolder -recurse -force -depth 2 | Where-Object {$_.PSIsContainer -eq $true} | % {$_.FullName} | Sort-Object
-foreach ($i in $colItems)
-{
-    $subFolderItems = Get-ChildItem $i -recurse -force | Where-Object {$_.PSIsContainer -eq $false} | Measure-Object -property Length -sum | Select-Object Sum
-    $size = ($subFolderItems.sum / 1MB).ToString("n2").PadLeft(12) + " Mb"
-    $size + " " + $i
+function Show-Tree-Size([string] $startFolder, [int] $depth = 2) {
+  $colItems = Get-ChildItem $startFolder -recurse -force -depth 1 | Where-Object {$_.PSIsContainer -eq $true} | % {$_.FullName} | Sort-Object
+  foreach ($i in $colItems)
+  {
+      $subFolderItems = Get-ChildItem $i -recurse -force | Where-Object {$_.PSIsContainer -eq $false} | Measure-Object -property Length -sum | Select-Object Sum
+      $size = ($subFolderItems.sum / 1MB).ToString("n2").PadLeft(12) + " Mb"
+      $size + " " + $i
+  }
 }
+
+$startFolder = Get-SqlServer-Downloads-Folder;
+Show-Tree-Size $startFolder 1
+
+$startFolder = Combine-Path (Get-SqlServer-Downloads-Folder) "SQL-Setup-Compressed";
+Show-Tree-Size $startFolder 1
