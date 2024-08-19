@@ -743,7 +743,7 @@ function Get-PS1-Repo-Downloads-Folder() {
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Smarty-FileHash.ps1]
 # $algorithm: MD5|SHA1|SHA256|SHA384|SHA512
 function Get-Smarty-FileHash([string] $fileName, [string] $algorithm = "MD5") {
-  $fileExists = (Test-Path $fileName)
+  $fileExists = (Test-Path $fileName -PathType Leaf)
   if (-not $fileExists) { return $null; }
   $hashAlg = [System.Security.Cryptography.HashAlgorithm]::Create($algorithm)
   try {
@@ -766,6 +766,35 @@ function Get-Smarty-First-Obsolete($arg) {
   if ($arg -eq $null) { return new-object PSObject; }
   if ($arg -is [array]) { return $arg[0]; }
   return $arg;
+}
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Smarty-FolderHash.ps1]
+# Get-Smarty-FileHash([string] $fileName, [string] $algorithm = "MD5") {
+function Get-Smarty-FolderHash([string] $rootFolder, [string] $algorithm = "MD5", [bool] $includeDates = $false) {
+  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+  $folderExists = (Test-Path $rootFolder -PathType Container)
+  if (-not $folderExists) { return $null; }
+  $colItems = Get-ChildItem $rootFolder -recurse -force | Where-Object {$_.PSIsContainer -eq $false} | Sort-Object -Property FullName
+  $summary=New-Object System.Collections.ArrayList;
+  $filesCount = 0;
+  foreach ($i in $colItems)
+  {
+      $filesCount++;
+      $fileHash = Get-Smarty-FileHash $i.FullName $algorithm;
+      if ($includeDates) { 
+        foreach($date in $i.CreationTimeUtc, $i.LastWriteTimeUtc) {
+          $fileHash += $date.ToString("s")
+        }
+      }
+      $_=$summary.Add($fileHash)
+  }
+  $utf8 = new-object System.Text.UTF8Encoding($false)
+  $summaryBytes = $utf8.GetBytes("$summary")
+  $hashAlg = [System.Security.Cryptography.HashAlgorithm]::Create($algorithm)
+  $retBytes = $hashAlg.ComputeHash($summaryBytes);
+  $ret = "$($retBytes | % { $_.ToString("X2") })".Replace(" ","")
+  TroubleShoot-Info "Hash $algorithm for folder " -Highlight $rootFolder " (" -Highlight $filesCount " files) took " -Highlight "$($startAt.ElapsedMilliseconds.ToString("n0"))" " ms"
+  return $ret;
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Speedy-Software-Product-List.ps1]
@@ -1202,9 +1231,12 @@ function ApplyCommonSqlServerState([Hashtable] $ret) {
   }
   if ($ret.Setup) {
     $ret["SetupSize"] = Get-DirectorySize $ret.Setup;
+    $ret["SetupHash_md5"] = Get-Smarty-FolderHash $ret.Setup "MD5"
+    $ret["SetupHash_sha512"] = Get-Smarty-FolderHash $ret.Setup "SHA512"
   }
   if ($ret.Media) {
     $ret["MediaSize"] = Get-DirectorySize $ret.Media;
+    $ret["MediaHash"] = Get-Smarty-FolderHash $ret.Media "SHA512"
   }
 }
 
