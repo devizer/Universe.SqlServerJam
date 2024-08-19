@@ -1453,7 +1453,8 @@ Get-Content $keywordsFile | Out-Host
 foreach($meta in Enumerate-SQLServer-Downloads) {
   if ($meta.CU) { foreach($update in $meta.CU) {
     Say "Try Update $($update.Id) for SQL Server $($meta.Version) $($meta.MediaType)"
-    Download-SqlServer-Update $meta.Version $meta.MediaType $update;
+    $result = Download-SqlServer-Update $meta.Version $meta.MediaType $update;
+    $result | Format-Table -AutoSize | Out-String -Width 256
   }}
 }
 
