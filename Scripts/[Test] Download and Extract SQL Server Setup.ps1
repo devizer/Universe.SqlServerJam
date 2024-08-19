@@ -1160,6 +1160,12 @@ function Download-Fresh-SQL-Server-and-Extract {
 
   $key="SQL-$version-$mediaType"
   $root=Combine-Path "$(Get-SqlServer-Downloads-Folder)" $key
+  if ($mediaType -eq "LocalDB") {
+     $mediaPath = $root
+  } else {
+     $mediaPath = Combine-Path "$(Get-SqlServer-Downloads-Folder)" "SQL-Setup-Compressed" "SQL-$Version-$mediaType" 
+  }
+  $setupPath="$root"
 
   Write-Host "Download Bootstrapper for '$key'"
   $url="";
@@ -1175,12 +1181,6 @@ function Download-Fresh-SQL-Server-and-Extract {
   }
 
   $exeBootstrap = Combine-Path "$(Get-SqlServer-Downloads-Folder)" "SQL-Setup-Bootstrapper" "SQL-$Version-$(IIf $isDeveloper "Developer" "Express")-Bootstapper.exe"
-  if ($mediaType -eq "LocalDB") {
-     $mediaPath = $root
-  } else {
-     $mediaPath = Combine-Path "$(Get-SqlServer-Downloads-Folder)" "SQL-Setup-Compressed" "SQL-$Version-$mediaType" 
-  }
-  $setupPath="$root"
 
   $isRawOk = Download-File-FailFree-and-Cached $exeBootstrap @($url)
   if (-not $isRawOk) {
@@ -1231,8 +1231,7 @@ function ApplyCommonSqlServerState([Hashtable] $ret) {
   }
   if ($ret.Setup) {
     $ret["SetupSize"] = Get-DirectorySize $ret.Setup;
-    $ret["SetupHash_md5"] = Get-Smarty-FolderHash $ret.Setup "MD5"
-    $ret["SetupHash_sha512"] = Get-Smarty-FolderHash $ret.Setup "SHA512"
+    $ret["SetupHash"] = Get-Smarty-FolderHash $ret.Setup "SHA512"
   }
   if ($ret.Media) {
     $ret["MediaSize"] = Get-DirectorySize $ret.Media;
@@ -1260,12 +1259,21 @@ function ExtractSqlServerSetup([string] $title, [string] $exeArchive, [string] $
 
 function Download-2010-SQL-Server-and-Extract {
   Param(
-    [string] $version,  # 2014|2012|2008R2-(x86|x64)
+    [string] $version,  # (2014|2012|2008R2|2008)-(x86|x64)
     [string] $mediaType # Core|Advanced|LocalDB (localdb is missing for 2008R2)
   )
 
   $key="SQL-$version-$mediaType"
   $root=Combine-Path "$(Get-SqlServer-Downloads-Folder)" $key
+  $mediaPath = Combine-Path "$(Get-SqlServer-Downloads-Folder)" "SQL-Setup-Compressed" "SQL-$Version-$mediaType"
+  $ext = IIf ($mediaType -eq "LocalDB") ".msi" ".exe"
+  $exeName = "SQL-$mediaType-$Version-ENU$ext"
+  $exeArchive = Combine-Path $mediaPath $exeName
+  $setupPath="$root"
+  if ($mediaType -eq "LocalDB") { 
+    $exeArchive = Combine-Path $setupPath $exeName
+    $mediaPath = $null;
+  }
 
   Write-Host "Download Media for '$key'"
   $url="";
@@ -1280,15 +1288,6 @@ function Download-2010-SQL-Server-and-Extract {
     return @{};
   }
 
-  $mediaPath = Combine-Path "$(Get-SqlServer-Downloads-Folder)" "SQL-Setup-Compressed" "SQL-$Version-$mediaType"
-  $ext = IIf ($mediaType -eq "LocalDB") ".msi" ".exe"
-  $exeName = "SQL-$mediaType-$Version-ENU$ext"
-  $exeArchive = Combine-Path $mediaPath $exeName
-  $setupPath="$root"
-  if ($mediaType -eq "LocalDB") { 
-    $exeArchive = Combine-Path $setupPath $exeName
-    $mediaPath = $null;
-  }
 
   Write-Host "Downloading media for version $version $mediaType. URL is '$url'. Setup file is '$exeArchive'";
   $isDownloadOk = Download-File-FailFree-and-Cached $exeArchive @($url)
@@ -1316,6 +1315,73 @@ function Download-2010-SQL-Server-and-Extract {
 
   ApplyCommonSqlServerState $ret;
   return $ret;
+}
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-SqlServer-Update.ps1]
+function Download-SqlServer-Update {
+  Param(
+    [string] $version,  # 2005...2022
+    [string] $mediaType, # LocalDB|Core|Advanced|Developer
+    [object] $update # {Id=;Url=;}
+  )
+  $ret = $update;
+  $key="SQL-$version-$($update.Id)"
+  $archivePath = Combine-Path "$(Get-SqlServer-Downloads-Folder)" $key
+  $archiveName = [System.IO.Path]::GetFileName($update.Url);
+  $archiveFullName = Combine-Path $archivePath $archiveName;
+  Write-Host "Downloading SQL Server update '$($update.Id)' for version $version $mediaType. URL is '$($update.Url)'"
+  $isDownloadOk = Download-File-FailFree-and-Cached $archiveFullName @("$($update.Url)")
+  if (-not $isDownloadOk) {
+    Write-Host "Download SQL Server update '$($update.Id)' for version $version $mediaType failed. URL is '$($update.Url)'" -ForegroundColor DarkRed;
+    return $ret;
+  }
+
+  $ret["UpdateFolder"] = $archivePath;
+  $ret["UpdateLauncher"] = $archiveFullName;
+  $ret["UpdateSize"] = (new-object System.IO.FileInfo($archiveFullName)).Length;
+  return $ret;
+}
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Enumerate-SQLServer-Downloads.ps1]
+function Enumerate-SQLServer-Downloads() {
+  $versions = "2005-x86", "2008-x86", "2008-x64", "2008R2-x86", "2008R2-x64", "2012-x86", "2012-x64", "2014-x86", "2014-x64", "2016", "2017", "2019", "2022";
+  [array]::Reverse($versions);
+  $mediaTypes = "LocalDB", "Core", "Advanced", "Developer";
+  [array]::Reverse($mediaTypes);
+  foreach($version in $versions) {
+  foreach($mediaType in $mediaTypes) {
+    $meta = Find-SQLServer-Meta $version $mediaType;
+    if ($meta) {
+      $meta;
+    }
+  }}
+}
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Find-SQLServer-Meta.ps1]
+function Find-SQLServer-Meta([string] $version, [string] $mediaType) {
+  $ret = @{ Version = $version; MediaType = $mediaType; }
+
+  $isMissingUpdates = ($version -like "2005-x86" -and $mediaType -eq "Core") -or ($mediaType -eq "LocalDB");
+
+  foreach($meta in $SqlServerDownloadLinks) {
+    if ($meta.Version -eq $version) {
+      $url = IIf ($mediaType -eq "Developer") $meta.BaseDev $meta.BaseExpress
+      $ret["Url"] = $url;
+      if (-not $isMissingUpdates) { $ret["CU"] = $meta.CU; }
+      return $ret;
+    }
+  }
+
+  foreach($meta in $SqlServer2010DownloadLinks) {
+    if ($meta.Version -eq $version) {
+      $url = $meta[$mediaType];
+      if ("$url") { 
+        $ret["Url"] = $url;
+        if (-not $isMissingUpdates) { $ret["CU"] = $meta.CU; }
+        return $ret;
+      }
+    }
+  }
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Find-SqlServer-SetupLogs.ps1]
@@ -1361,11 +1427,36 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
     $archiveName=$logsFolder.Substring([System.IO.Path]::GetPathRoot($logsFolder).Length).Replace("\", ([char]8594).ToString())
     Say "Pack '$archiveName.7z'"
     & "$sevenZip" @("a", "-y", "-mx=$compression", "-ms=on", "-mqs=on", "$toFolder\$archiveName.7z", "$logsFolder\*") | out-null
+    if (-not $?) {
+      Write-Host "Failed publishing '$archiveName' to folder '$toFolder'" -ForegroundColor DarkRed
+    }
   }
 }
 
 
 Write-Host "Try-BuildServerType: [$(Try-BuildServerType)], Is-BuildServer: $(Is-BuildServer)"
+
+# Build Keyswords
+$keywordsFile = Combine-Path (Get-SqlServer-Downloads-Folder) "Keywords.txt" 
+Remove-Item -Path $keywordsFile -Force -EA SilentlyContinue | out-null;
+foreach($meta in Enumerate-SQLServer-Downloads) {
+  $update = $meta.CU | Select -First 1;
+  if ("$update") {
+    Append-All-Text $keywordsFile "$($meta.Version) $($meta.MediaType) $($update.Id)$([Environment]::NewLine)"
+  }
+  Append-All-Text $keywordsFile "$($meta.Version) $($meta.MediaType)$([Environment]::NewLine)"
+}
+Get-Content $keywordsFile | Out-Host
+# exit 0;
+
+foreach($meta in Enumerate-SQLServer-Downloads) {
+  if ($meta.CU) { foreach($update in $meta.CU) {
+    Say "Try Update $($update.Id) for SQL Server $($meta.Version) $($meta.MediaType)"
+    Download-SqlServer-Update $meta.Version $meta.MediaType $update;
+  }}
+}
+
+
 
 $SqlServer2010DownloadLinks | ConvertTo-Json -Depth 32
 foreach($mt in "LocalDB", "Core", "Advanced") {
