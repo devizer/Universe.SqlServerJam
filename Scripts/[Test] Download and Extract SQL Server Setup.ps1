@@ -1438,6 +1438,7 @@ Write-Host "Try-BuildServerType: [$(Try-BuildServerType)], Is-BuildServer: $(Is-
 
 # Build Keyswords
 $keywordsFile = Combine-Path (Get-SqlServer-Downloads-Folder) "Keywords.txt" 
+New-Item -Path (Get-SqlServer-Downloads-Folder) -ItemType Container -Force -EA SilentlyContinue | out-null;
 Remove-Item -Path $keywordsFile -Force -EA SilentlyContinue | out-null;
 foreach($meta in Enumerate-SQLServer-Downloads) {
   $update = $meta.CU | Select -First 1;
