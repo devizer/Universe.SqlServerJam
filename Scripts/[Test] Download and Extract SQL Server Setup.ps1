@@ -1119,6 +1119,8 @@ $SqlServer2010DownloadLinks = @(
       @{ Id="SP3"; Url="https://download.microsoft.com/download/D/7/A/D7A28B6C-FCFE-4F70-A902-B109388E01E9/ENU/SQLServer2008R2SP3-KB2979597-x86-ENU.exe" }
     )
   };
+  # https://archive.org/download/en_sql_server_2008_r2_developer_x86_x64_ia64_dvd_522665
+
   # 2008 SP2
   @{ 
     Version="2008-x64"; 
@@ -1151,8 +1153,8 @@ was: 9.0.2047 (sp1) https://ia601402.us.archive.org/34/items/Microsoft_SQL_Serve
 now: 9.0.5000 (sp4) https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2011/01/sqlserver2005expressadvancedsp4-kb2463332-x86-enu_b8640fde879a23a2372b27f158d54abb5079033e.exe
 #>
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-Fresh-SQL-Server.ps1]
-function Download-Fresh-SQL-Server-and-Extract {
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-Fresh-SQLServer.ps1]
+function Download-Fresh-SQLServer-and-Extract {
   Param(
     [string] $version,  # 2016|2017|2019|2022
     [string] $mediaType # LocalDB|Core|Advanced|Developer
@@ -1257,7 +1259,7 @@ function ExtractSqlServerSetup([string] $title, [string] $exeArchive, [string] $
   return $true;
 }
 
-function Download-2010-SQL-Server-and-Extract {
+function Download-2010-SQLServer-and-Extract {
   Param(
     [string] $version,  # (2014|2012|2008R2|2008)-(x86|x64)
     [string] $mediaType # Core|Advanced|LocalDB (localdb is missing for 2008R2)
@@ -1465,7 +1467,7 @@ foreach($mt in "LocalDB", "Core", "Advanced") {
 foreach($ver in @("2005-x86", "2008-x64", "2008-x86", "2008R2-x64", "2008R2-x86", "2012-x64", "2012-x86", "2014-x64", "2014-x86")) {
   if (($ver -like "2008*" -or $ver -like "2005*") -and $mt -eq "LocalDB") { continue; }
   Say "SQL Server $ver [$mt]"
-  $result = (Download-2010-SQL-Server-and-Extract $ver $mt)
+  $result = (Download-2010-SQLServer-and-Extract $ver $mt)
   # $result | Format-Table -AutoSize | Out-String -Width 256
   $result | Format-Table -AutoSize | Out-String -Width 256
 }}
@@ -1475,7 +1477,7 @@ $SqlServerDownloadLinks | ConvertTo-Json -Depth 32
 foreach($mt in "LocalDB", "Core", "Advanced", "Developer") {
 foreach($ver in @("2016", "2017", "2019", "2022")) {
   Say "SQL Server $ver [$mt]"
-  $result = (Download-Fresh-SQL-Server-and-Extract $ver $mt)
+  $result = (Download-Fresh-SQLServer-and-Extract $ver $mt)
   # $result | Format-Table -AutoSize | Out-String -Width 256
   $result | Format-Table -AutoSize | Out-String -Width 256
   if (-not (Is-BuildServer)) { sleep 5; }
