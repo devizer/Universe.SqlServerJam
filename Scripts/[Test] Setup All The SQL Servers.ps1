@@ -1542,7 +1542,7 @@ function Install-SQLServer {
 
   if ($major -eq 2005) {
     Write-Host "Workaround for 2005 logs"
-    sleep 12
+    sleep 120
     & taskkill.exe @("/t", "/f", "/im", "setup.exe")
   }
 }
