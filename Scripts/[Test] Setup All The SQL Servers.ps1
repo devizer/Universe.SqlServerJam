@@ -1529,7 +1529,7 @@ function Install-SQLServer {
       if ($setupApp -and $setupApp.Id) {
         Wait-Process -Id $setupApp.Id
         if ($setupApp.ExitCode -ne 0) {
-          Write-Host "$title Setup failed. Exit code $($extractApp.ExitCode).";
+          Write-Host "$title Setup failed. Exit code $($setupApp.ExitCode).";
         }
       } else {
         Write-Host "$title Setup failed." -ForegroundColor DarkRed;
