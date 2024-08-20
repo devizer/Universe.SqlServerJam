@@ -1542,11 +1542,13 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
   $sevenZip = Get-Full7z-Exe-FullPath-for-Windows -Version "1900"
   foreach($logsFolder in $folders) {
     $archiveName=$logsFolder.Substring([System.IO.Path]::GetPathRoot($logsFolder).Length).Replace("\", ([char]8594).ToString())
-    Say "Pack '$archiveName.7z'"
+    Say "Pack '$archiveName.7z' as `"$toFolder\$archiveName.7z`""
     & "$sevenZip" @("a", "-y", "-mx=$compression", "-ms=on", "-mqs=on", "$toFolder\$archiveName.7z", "$logsFolder\*") | out-null
     if (-not $?) {
       Write-Host "Failed publishing '$archiveName' to folder '$toFolder'" -ForegroundColor DarkRed
+      # return $false;
     }
+    # return $true;
   }
 }
 
