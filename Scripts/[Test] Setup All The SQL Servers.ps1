@@ -1527,7 +1527,7 @@ function Install-SQLServer {
     
     $setupArg = "/qn", "ADDLOCAL=$argFeatures", "INSTANCENAME=`"$instanceName`"", 
          "DISABLENETWORKPROTOCOLS=0", # 0: All, 1: None, 2: TCP only
-         "SQLACCOUNT=$($ENV:COMPUTERNAME)\SQL", "SQLPASSWORD=MeageStr0ng",
+         "SQLACCOUNT=$($ENV:COMPUTERNAME)\SQL2005", "SQLPASSWORD=MeageStr0ng",
          "SECURITYMODE=SQL", "SAPWD=`"$($options.Password)`"", 
          "INSTALLSQLDIR=`"$($options.InstallTo)`"";
 
