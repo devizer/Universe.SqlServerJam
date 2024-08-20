@@ -1530,4 +1530,4 @@ $toFolder = "$($Env:USERPROFILE)\SQL-Server-Logs\$([System.DateTime]::Now.ToStri
 $a="$($ENV:SYSTEM_ARTIFACTSDIRECTORY)"
 if ($a) { $toFolder = $a; }
 Write-Host "Total Folders: $((Find-SqlServer-SetupLogs).Count)"
-Publish-SQLServer-SetupLogs $toFolder -compression 9
+Publish-SQLServer-SetupLogs $toFolder -compression 1
