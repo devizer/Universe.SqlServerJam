@@ -13,7 +13,7 @@ jobs:
 - job: Install
   pool:
     vmImage: '$(IMAGE)'
-  timeoutInMinutes: 360
+  timeoutInMinutes: 60
   strategy:
     maxParallel: 4
     matrix:
