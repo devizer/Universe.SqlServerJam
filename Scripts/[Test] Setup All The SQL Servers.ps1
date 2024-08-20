@@ -730,7 +730,7 @@ function Get-PS1-Repo-Downloads-Folder() {
   if ($explicitRet) {
     New-Item -Path $explicitRet -ItemType Directory -Force -EA SilentlyContinue | Out-null
     $isExplicit = Test-Path -Path $explicitRet -PathType Container -EA SilentlyContinue;
-    if ($isExplicit) { return "$isExplicit"; }
+    if ($isExplicit) { return "$explicitRet"; }
   }
 
   If (Get-Os-Platform -eq "Windows") { $ret = "$($ENV:TEMP)" } else { $ret = "$($ENV:TMPDIR)" };
