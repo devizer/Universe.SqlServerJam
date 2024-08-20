@@ -36,6 +36,7 @@ jobs:
        cd Scripts
        powershell -f "[Test] Setup All The SQL Servers.ps1" *| tee "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\FULL-LOG.txt"
        gdr -PSProvider 'FileSystem'
+       # Install-Module -Force Platform-Info
     condition: succeededOrFailed()
     displayName: 'Install'
 

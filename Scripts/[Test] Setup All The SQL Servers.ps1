@@ -1530,6 +1530,7 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
 
 
 Write-Host "Try-BuildServerType: [$(Try-BuildServerType)], Is-BuildServer: $(Is-BuildServer)"
+Write-Host "$((Get-Memory-Info).Description)"
 
 $serverCounter = 0;
 foreach($meta in Enumerate-SQLServer-Downloads) {
@@ -1540,9 +1541,10 @@ foreach($meta in Enumerate-SQLServer-Downloads) {
   Say "INSTALL $($meta.Version) $($meta.MediaType) as [$instanceName]"
   $setupMeta = Download-SQLServer-and-Extract $meta.Version $meta.MediaType;
   Install-SQLServer $setupMeta $null $instanceName;
+  Say "Setup Finished. $((Get-Memory-Info).Description). Cleaning Up setup media"
   Say "Clean up"
   Remove-Item -Recurse -Force "$($setupMeta.Setup)" -ErrorAction SilentlyContinue | out-null
   Remove-Item -Recurse -Force "$($setupMeta.Media)" -ErrorAction SilentlyContinue | out-null
   get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
-  & net.exe stop "MSSQL`$$instanceName"
+  # & net.exe stop "MSSQL`$$instanceName"
 }
