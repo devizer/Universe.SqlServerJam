@@ -1515,7 +1515,7 @@ function Install-SQLServer {
   $argIACCEPTROPENLICENSETERMS = IIF ($major -le 2014) "" "/IACCEPTROPENLICENSETERMS";
   if ($major -eq 2005) {
     # SQL_Engine,SQL_Data_Files,SQL_Replication,SQL_FullText,SQL_SharedTools
-    $setupArg = "/qn", "ADDLOCAL=SQL_Engine,SQL_Replication,SQL_FullText", "INSTANCENAME=`"$instanceName`"", 
+    $setupArg = "/qn", "ADDLOCAL=SQL_Engine", "INSTANCENAME=`"$instanceName`"", 
          "DISABLENETWORKPROTOCOLS=0", "SECURITYMODE=SQL", 
          "SAPWD=`"$($options.Password)`"", "INSTALLSQLDIR=`"$($options.InstallTo)`"";
   } else {
