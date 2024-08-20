@@ -1507,7 +1507,7 @@ function Install-SQLServer {
   }
 
   Write-Host ">>> $($meta.Lancher) $setupArg"
-  & "$($meta.Lancher)" $setupArg
+  & "$($meta.Launcher)" $setupArg
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Publish-SQLServer-SetupLogs.ps1]
