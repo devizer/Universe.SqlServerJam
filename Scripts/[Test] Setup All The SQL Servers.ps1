@@ -728,8 +728,8 @@ function Get-Os-Platform {
 function Get-PS1-Repo-Downloads-Folder() {
   $explicitRet = "$($ENV:PS1_REPO_DOWNLOAD_FOLDER)";
   if ($explicitRet) {
-    New-Item -Path $ret -ItemType Directory -Force -EA SilentlyContinue | Out-null
-    $isExplicit = Test-Path -Path $ret -PathType Container -EA SilentlyContinue;
+    New-Item -Path $explicitRet -ItemType Directory -Force -EA SilentlyContinue | Out-null
+    $isExplicit = Test-Path -Path $explicitRet -PathType Container -EA SilentlyContinue;
     if ($isExplicit) { return "$isExplicit"; }
   }
 
