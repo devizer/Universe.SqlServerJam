@@ -1279,20 +1279,21 @@ function ApplyCommonSqlServerState([Hashtable] $ret) {
 
 function ExtractSqlServerSetup([string] $title, [string] $exeArchive, [string] $setupPath, [string] $quietArg <# /QS (Fresh) | /Q (prev) #>) {
   Write-Host "Extracting $title using [$($exeArchive)] to [$($setupPath)]"
-  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
-  $extractApp = Start-Process "$($exeArchive)" -ArgumentList @("$quietArg", "/x:`"$setupPath`"") -PassThru
-  if ($extractApp -and $extractApp.Id) {
-    Wait-Process -Id $extractApp.Id
-    if ($extractApp.ExitCode -ne 0) {
-      Write-Host "Extracting $title failed. Exit code $($extractApp.ExitCode)." -ForegroundColor DarkRed;
-      return $false;
-    }
-  } else {
-    Write-Host "Extracting $title. failed." -ForegroundColor DarkRed;
-    return $false;
-  }
-  Write-Host "Extraction of $title took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
-  return $true;
+  $extractStatus = Execute-Process-Smarty "$title unpacker" "$($exeArchive)" @("$quietArg", "/x:`"$setupPath`"") -WaitTimeout 1800
+  # $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+  # $extractApp = Start-Process "$($exeArchive)" -ArgumentList @("$quietArg", "/x:`"$setupPath`"") -PassThru
+  # if ($extractApp -and $extractApp.Id) {
+  #   Wait-Process -Id $extractApp.Id
+  #   if ($extractApp.ExitCode -ne 0) {
+  #     Write-Host "Extracting $title failed. Exit code $($extractApp.ExitCode)." -ForegroundColor DarkRed;
+  #     return $false;
+  #   }
+  # } else {
+  #   Write-Host "Extracting $title. failed." -ForegroundColor DarkRed;
+  #   return $false;
+  # }
+  # Write-Host "Extraction of $title took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
+  return ($extractStatus.ExitCode -eq 0);
 }
 
 function Download-2010-SQLServer-and-Extract {
@@ -1601,7 +1602,7 @@ function Install-SQLServer {
   }
   
   Write-Host ">>> $($meta.Launcher) $setupArg"
-  Execute-Process-Smarty "SQL Server $($meta.Version) $($meta.MediaType) Setup" $meta.Launcher $setupArg -WaitTimeout 3600
+  $setupStatus = Execute-Process-Smarty "SQL Server $($meta.Version) $($meta.MediaType) Setup" $meta.Launcher $setupArg -WaitTimeout 3600
 }
 
 
