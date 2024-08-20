@@ -1488,7 +1488,9 @@ function Install-SQLServer {
   $argQuiet = IIf ((Is-BuildServer) -or $meta.Version -like "2005*" -or $meta.Version -like "2008-*") "/Q" "/QUIETSIMPLE";
   $argProgress = "/INDICATEPROGRESS";
   $argProgress = "";
+  $argADDCURRENTUSERASSQLADMIN = IIf ($meta.MediaType -eq "Developer") "" "/ADDCURRENTUSERASSQLADMIN";
   if ($true -or $is2020) {
+    # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
     $setupArg = "$argQuiet", "/ENU", "$argProgress", "/ACTION=Install", 
     "/IAcceptSQLServerLicenseTerms", "/IACCEPTROPENLICENSETERMS", 
     "/UpdateEnabled=False", 
@@ -1500,7 +1502,7 @@ function Install-SQLServer {
     "/SQLSVCACCOUNT=`"NT AUTHORITY\SYSTEM`"", 
     "/SQLSVCSTARTUPTYPE=AUTOMATIC", 
     "/BROWSERSVCSTARTUPTYPE=AUTOMATIC", 
-    "/ADDCURRENTUSERASSQLADMIN", 
+    "$argADDCURRENTUSERASSQLADMIN", 
     "/SQLSYSADMINACCOUNTS=`"BUILTIN\ADMINISTRATORS`"", 
     "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
   } else {
