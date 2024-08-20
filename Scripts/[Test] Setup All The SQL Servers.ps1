@@ -726,12 +726,21 @@ function Get-Os-Platform {
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-PS1-Repo-Downloads-Folder.ps1]
 function Get-PS1-Repo-Downloads-Folder() {
-  $explicitRet = "$($ENV:PS1_REPO_DOWNLOAD_FOLDER)";
-  if ($explicitRet) {
-    New-Item -Path $explicitRet -ItemType Directory -Force -EA SilentlyContinue | Out-null
-    $isExplicit = Test-Path -Path $explicitRet -PathType Container -EA SilentlyContinue;
-    if ($isExplicit) { return "$explicitRet"; }
+  foreach($pair in (gci env:PS1_REPO_DOWNLOAD_FOLDER* | sort-object name)) {
+      $explicitRet = "$($pair.Value)";
+      if ($explicitRet) {
+        New-Item -Path $explicitRet -ItemType Directory -Force -EA SilentlyContinue | Out-null
+        $isExplicit = Test-Path -Path $explicitRet -PathType Container -EA SilentlyContinue;
+        if ($isExplicit) { return "$explicitRet"; }
+      }
   }
+
+  # $explicitRet = "$($ENV:PS1_REPO_DOWNLOAD_FOLDER)";
+  # if ($explicitRet) {
+  #  New-Item -Path $explicitRet -ItemType Directory -Force -EA SilentlyContinue | Out-null
+  #  $isExplicit = Test-Path -Path $explicitRet -PathType Container -EA SilentlyContinue;
+  #  if ($isExplicit) { return "$explicitRet"; }
+  # }
 
   If (Get-Os-Platform -eq "Windows") { $ret = "$($ENV:TEMP)" } else { $ret = "$($ENV:TMPDIR)" };
   $is1 = Test-Path -Path $ret -PathType Container -EA SilentlyContinue
