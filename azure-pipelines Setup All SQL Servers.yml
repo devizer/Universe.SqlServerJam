@@ -2,7 +2,9 @@ variables:
   NUGET_VERSION: 0.1
   PS1_TROUBLE_SHOOT: On
   # Short name is critical for 2017 and older
-  PS1_REPO_DOWNLOAD_FOLDER: 'D:\SQL-Media'
+  PS1_REPO_DOWNLOAD_FOLDER_1: 'B:\SQL-Media'
+  PS1_REPO_DOWNLOAD_FOLDER_2: 'D:\SQL-Media'
+  PS1_REPO_DOWNLOAD_FOLDER_3: 'C:\SQL-Media'
 
 trigger:
   branches:
