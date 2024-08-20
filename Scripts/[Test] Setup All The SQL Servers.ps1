@@ -1539,12 +1539,12 @@ Write-Host "$((Get-Memory-Info).Description)"
 
 $rawFilter = "$($ENV:TEST_SQL_VERSIONS)".Split(" ");
 foreach($meta in Enumerate-SQLServer-Downloads) {
-if ($rawFilter.Length -gt 0) {
-  $isIncluded = $null -ne ($rawFilter | ? { $meta.Version -match $_ });
-  if (-not $isIncluded) { continue; }
+  if ($rawFilter.Length -gt 0) {
+    $isIncluded = $null -ne ($rawFilter | ? { $meta.Version -match $_ });
+    if (-not $isIncluded) { continue; }
+  }
   Write-Host "Include [$($meta.Version) $($meta.MediaType)]"
 }
-
 
 $serverCounter = 0;
 foreach($meta in Enumerate-SQLServer-Downloads) {
