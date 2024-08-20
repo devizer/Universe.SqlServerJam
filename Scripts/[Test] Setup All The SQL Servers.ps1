@@ -726,6 +726,13 @@ function Get-Os-Platform {
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-PS1-Repo-Downloads-Folder.ps1]
 function Get-PS1-Repo-Downloads-Folder() {
+  $explicitRet = "$($ENV:PS1_REPO_DOWNLOAD_FOLDER)";
+  if ($explicitRet) {
+    New-Item -Path $ret -ItemType Directory -Force -EA SilentlyContinue | Out-null
+    $isExplicit = Test-Path -Path $ret -PathType Container -EA SilentlyContinue;
+    if ($isExplicit) { return "$isExplicit"; }
+  }
+
   If (Get-Os-Platform -eq "Windows") { $ret = "$($ENV:TEMP)" } else { $ret = "$($ENV:TMPDIR)" };
   $is1 = Test-Path -Path $ret -PathType Container -EA SilentlyContinue
   if (-not $is1) {
@@ -1560,9 +1567,12 @@ foreach($meta in Enumerate-SQLServer-Downloads) {
   Say "INSTALL #$serverCounter [$($meta.Version) $($meta.MediaType)] as [$instanceName]"
   $setupMeta = Download-SQLServer-and-Extract $meta.Version $meta.MediaType;
   Install-SQLServer $setupMeta $null $instanceName;
-  Say "Setup Finished. $((Get-Memory-Info).Description). Cleaning Up setup media"
-  Remove-Item -Recurse -Force "$($setupMeta.Setup)" -ErrorAction SilentlyContinue | out-null
-  Remove-Item -Recurse -Force "$($setupMeta.Media)" -ErrorAction SilentlyContinue | out-null
+  Say "Setup Finished. $((Get-Memory-Info).Description)"
+  if (Is-BuildServer) {
+    Write-Host "Cleaning up setup media"
+    Remove-Item -Recurse -Force "$($setupMeta.Setup)" -ErrorAction SilentlyContinue | out-null
+    Remove-Item -Recurse -Force "$($setupMeta.Media)" -ErrorAction SilentlyContinue | out-null
+  }
   get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
   # & net.exe stop "MSSQL`$$instanceName"
 }
