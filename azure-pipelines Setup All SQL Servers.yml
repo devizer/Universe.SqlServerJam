@@ -29,9 +29,13 @@ jobs:
         IMAGE: 'windows-2019'
         TEST_SQL_VERSIONS: '2017'
         TEST_SQL_UPDATES: False
-      '2008 2005 on Server2019':
+      '2008 2008R2 on Server2019':
         IMAGE: 'windows-2019'
-        TEST_SQL_VERSIONS: '2008 2005'
+        TEST_SQL_VERSIONS: '2008'
+        TEST_SQL_UPDATES: False
+      '2005 on Server2019':
+        IMAGE: 'windows-2019'
+        TEST_SQL_VERSIONS: '2005'
         TEST_SQL_UPDATES: False
 
   steps:
