@@ -41,7 +41,7 @@ jobs:
 
   - powershell: |
        cd Scripts
-       powershell -f "[Test] Setup All The SQL Servers.ps1" *| tee "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\FULL-LOG.txt"
+       powershell -f "[Test] Publish SQL Server Setup Logs.ps1" 
        gdr -PSProvider 'FileSystem'
     condition: succeededOrFailed()
     displayName: 'Publish Setup Logs'
