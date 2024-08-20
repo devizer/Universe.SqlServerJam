@@ -1485,7 +1485,7 @@ function Install-SQLServer {
   $major = ($meta.Version.Substring(0,4)) -as [int];
   $is2020 = $major -ge 2016;
   $setupArg=@();
-  $argQuiet = IIf ((IsBuild-Server) -or $meta.Version -like "2005*" -or $meta.Version -like "2008-*") "/Q" "/QUIETSIMPLE";
+  $argQuiet = IIf ((Is-BuildServer) -or $meta.Version -like "2005*" -or $meta.Version -like "2008-*") "/Q" "/QUIETSIMPLE";
   $argProgress = "/INDICATEPROGRESS";
   if ($true -or $is2020) {
     $setupArg = "$argQuiet", "/ENU", "$argProgress", "/ACTION=Install", 
@@ -1537,4 +1537,8 @@ foreach($meta in Enumerate-SQLServer-Downloads) {
   Say "INSTALL $($meta.Version) $($meta.MediaType) as [$instanceName]"
   $setupMeta = Download-SQLServer-and-Extract $meta.Version $meta.MediaType;
   Install-SQLServer $setupMeta $null $instanceName;
+  Say "Clean up"
+  Remove-Item -Recurse -Force "$($setupMeta.Setup)" -ErrorAction SilentlyContinue | out-null
+  Remove-Item -Recurse -Force "$($setupMeta.Media)" -ErrorAction SilentlyContinue | out-null
+  & net.exe stop "MSSQL`$$instanceName"
 }

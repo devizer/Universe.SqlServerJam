@@ -44,7 +44,7 @@ jobs:
        powershell -f "[Test] Setup All The SQL Servers.ps1" *| tee "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\FULL-LOG.txt"
        gdr -PSProvider 'FileSystem'
     condition: succeededOrFailed()
-    displayName: 'Install'
+    displayName: 'Publish Setup Logs'
 
   - bash: |
       set -eu; set -o pipefail
