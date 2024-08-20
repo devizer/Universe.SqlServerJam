@@ -1396,6 +1396,64 @@ function Enumerate-SQLServer-Downloads() {
   }}
 }
 
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Execute-Process-Smarty.ps1]
+function Execute-Process-Smarty {
+  Param(
+    [string] $title, 
+    [string] $launcher,
+    [string[]] $arguments,
+    [string] $workingDirectory = $null,
+    [int] $waitTimeout = 3600
+  )
+  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+
+  $ret = @{};
+  try { 
+    if ($workingDirectory) { 
+      $app = Start-Process "$launcher" -ArgumentList $arguments -PassThru;
+    } else {
+      $app = Start-Process "$launcher" -ArgumentList $arguments -PassThru -WorkingDirectory $workingDirectory;
+    }
+  } catch {
+    $err = $_.GetType() + ": " + $_.Message;
+    Write-Host "$title failed. $err" -ForegroundColor DarkRed;
+    $ret = @{Error = "$title failed. $err"; };
+  }
+  
+  if (-not $ret.Error) {
+    if ($app -and $app.Id) {
+      Wait-Process -Id $app.Id -Timeout $waitTimeout;
+      $exited = $app.HasExited;
+      if (-not $exited) { 
+        $ret = @{ Error = "$title timed out." };
+      }
+      if (-not $ret.Error) {
+        $ret = @{ExitCode = [int] $app.ExitCode};
+        if ($app.ExitCode -ne 0) {
+          $ret = @{ Error = "$title failed. Exit code $($app.ExitCode)." };
+        }
+      }
+    } else {
+      $ret = @{ Error = "$title failed." };
+    }
+  }
+
+  $isOk = ((-not $ret.Error) -and ($ret.ExitCode -eq 0));
+  $status = IIF $isOk "Succcefully completed" $ret.Error;
+  
+  if ($isOk) { 
+    Write-Host "$title $status. It took $($startAt.ElapsedMilliseconds.ToString("n0")) ms";
+  } else {
+    Write-Host "$title $status. It took $($startAt.ElapsedMilliseconds.ToString("n0")) ms";
+  }
+  
+  if (!$isOk -and ($app.Id)) {
+    # TODO: Windows Only
+    & taskkill.exe @("/t", "/f", "/pid", "$($app.Id)") | out-null;
+  }
+  return $ret;
+}
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Find-SQLServer-Meta.ps1]
 function Find-SQLServer-Meta([string] $version, [string] $mediaType) {
   $ret = @{ Version = $version; MediaType = $mediaType; }
@@ -1513,41 +1571,18 @@ function Install-SQLServer {
   $argADDCURRENTUSERASSQLADMIN = IIf ($meta.MediaType -eq "Developer") "" "/ADDCURRENTUSERASSQLADMIN";
   # 2008 and R2: The setting 'IACCEPTROPENLICENSETERMS' specified is not recognized.
   $argIACCEPTROPENLICENSETERMS = IIF ($major -le 2014) "" "/IACCEPTROPENLICENSETERMS";
-  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
   $title = "SQL Server $($meta.Version) $($meta.MediaType)"
   if ($major -eq 2005) {
     # SQL_Engine,SQL_Data_Files,SQL_Replication,SQL_FullText,SQL_SharedTools
     $argFeatures = IIf ($meta.MediaType -eq "Advanced") "SQL_Engine,SQL_FullText" "SQL_Engine";
     # /qb for unattended with basic UI
     
-    & net.exe @("user", "SQL2005", "MeageStr0ng", "/add")
-    & net.exe @("localgroup", "administrators", "SQL2005", "/add")
-    & SC.exe STOP SQLBrowser
-    & SC.exe DELETE SQLBrowser
-    
     $setupArg = "/qn", "ADDLOCAL=$argFeatures", "INSTANCENAME=`"$instanceName`"", 
-         "DISABLENETWORKPROTOCOLS=0", # 0: All, 1: None, 2: TCP only
-         "SQLACCOUNT=$($ENV:COMPUTERNAME)\SQL2005", "SQLPASSWORD=MeageStr0ng",
+         "DISABLENETWORKPROTOCOLS=1", # 0: All, 1: None, 2: TCP only
          "SECURITYMODE=SQL", "SAPWD=`"$($options.Password)`"", 
          "INSTALLSQLDIR=`"$($options.InstallTo)`"";
 
-      Write-Host ">>> $($meta.Launcher) $setupArg"
-      # & "$($meta.Launcher)" $setupArg
-
-      $setupApp = Start-Process "$($meta.Launcher)" -ArgumentList $setupArg -PassThru
-      if ($setupApp -and $setupApp.Id) {
-        Wait-Process -Id $setupApp.Id
-        if ($setupApp.ExitCode -ne 0) {
-          Write-Host "$title Setup failed. Exit code $($setupApp.ExitCode).";
-        }
-      } else {
-        Write-Host "$title Setup failed." -ForegroundColor DarkRed;
-      }
-
-      Write-Host "Workaround for 2005 logs"
-      sleep 1
-      & taskkill.exe @("/t", "/f", "/im", "setup.exe")
-
+    # Write-Host "Workaround for 2005 logs"; sleep 1; & taskkill.exe @("/t", "/f", "/im", "setup.exe");
   } else {
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
     $setupArg = "$argQuiet", "/ENU", "$argProgress", "/ACTION=Install", 
@@ -1564,12 +1599,12 @@ function Install-SQLServer {
     "$argADDCURRENTUSERASSQLADMIN", 
     "/SQLSYSADMINACCOUNTS=`"BUILTIN\ADMINISTRATORS`"", 
     "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
-    
-    Write-Host ">>> $($meta.Launcher) $setupArg"
-    & "$($meta.Launcher)" $setupArg
   }
-  Write-Host "$title Setup took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
+  
+  Write-Host ">>> $($meta.Launcher) $setupArg"
+  Execute-Process-Smarty "SQL Server $($meta.Version) $($meta.MediaType) Setup" $meta.Launcher $setupArg -WaitTimeout 3600
 }
+
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Publish-SQLServer-SetupLogs.ps1]
 function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
