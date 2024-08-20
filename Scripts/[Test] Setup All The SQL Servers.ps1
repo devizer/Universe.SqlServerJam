@@ -1576,5 +1576,10 @@ foreach($meta in Enumerate-SQLServer-Downloads) {
     Remove-Item -Recurse -Force "$($setupMeta.Media)" -ErrorAction SilentlyContinue | out-null
   }
   get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
+  if ("$($ENV:SYSTEM_ARTIFACTSDIRECTORY)") {
+    write-host "publishing setup logs"
+    Publish-SQLServer-SetupLogs "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)" -compression 1
+  }
+
   # & net.exe stop "MSSQL`$$instanceName"
 }
