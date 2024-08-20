@@ -1487,6 +1487,7 @@ function Install-SQLServer {
   $setupArg=@();
   $argQuiet = IIf ((Is-BuildServer) -or $meta.Version -like "2005*" -or $meta.Version -like "2008-*") "/Q" "/QUIETSIMPLE";
   $argProgress = "/INDICATEPROGRESS";
+  $argProgress = "";
   if ($true -or $is2020) {
     $setupArg = "$argQuiet", "/ENU", "$argProgress", "/ACTION=Install", 
     "/IAcceptSQLServerLicenseTerms", "/IACCEPTROPENLICENSETERMS", 
