@@ -1513,6 +1513,8 @@ function Install-SQLServer {
   $argADDCURRENTUSERASSQLADMIN = IIf ($meta.MediaType -eq "Developer") "" "/ADDCURRENTUSERASSQLADMIN";
   # 2008 and R2: The setting 'IACCEPTROPENLICENSETERMS' specified is not recognized.
   $argIACCEPTROPENLICENSETERMS = IIF ($major -le 2014) "" "/IACCEPTROPENLICENSETERMS";
+  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+  $title = "SQL Server $($meta.Version) $($meta.MediaType)"
   if ($major -eq 2005) {
     # SQL_Engine,SQL_Data_Files,SQL_Replication,SQL_FullText,SQL_SharedTools
     $argFeatures = IIf ($meta.MediaType -eq "Advanced") "SQL_Engine,SQL_FullText" "SQL_Engine";
@@ -1520,6 +1522,23 @@ function Install-SQLServer {
     $setupArg = "/qn", "ADDLOCAL=$argFeatures", "INSTANCENAME=`"$instanceName`"", 
          "DISABLENETWORKPROTOCOLS=0", "SECURITYMODE=SQL", 
          "SAPWD=`"$($options.Password)`"", "INSTALLSQLDIR=`"$($options.InstallTo)`"";
+      Write-Host ">>> $($meta.Launcher) $setupArg"
+      # & "$($meta.Launcher)" $setupArg
+
+      $setupApp = Start-Process "$($meta.Launcher)" -ArgumentList $setupArg -PassThru
+      if ($setupApp -and $setupApp.Id) {
+        Wait-Process -Id $setupApp.Id
+        if ($setupApp.ExitCode -ne 0) {
+          Write-Host "$title Setup failed. Exit code $($extractApp.ExitCode).";
+        }
+      } else {
+        Write-Host "$title Setup failed." -ForegroundColor DarkRed;
+      }
+
+      Write-Host "Workaround for 2005 logs"
+      sleep 1
+      & taskkill.exe @("/t", "/f", "/im", "setup.exe")
+
   } else {
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
     $setupArg = "$argQuiet", "/ENU", "$argProgress", "/ACTION=Install", 
@@ -1536,15 +1555,11 @@ function Install-SQLServer {
     "$argADDCURRENTUSERASSQLADMIN", 
     "/SQLSYSADMINACCOUNTS=`"BUILTIN\ADMINISTRATORS`"", 
     "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
+    
+    Write-Host ">>> $($meta.Launcher) $setupArg"
+    & "$($meta.Launcher)" $setupArg
   }
-  Write-Host ">>> $($meta.Launcher) $setupArg"
-  & "$($meta.Launcher)" $setupArg
-
-  if ($major -eq 2005) {
-    Write-Host "Workaround for 2005 logs"
-    sleep 120
-    & taskkill.exe @("/t", "/f", "/im", "setup.exe")
-  }
+  Write-Host "$title Setup took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Publish-SQLServer-SetupLogs.ps1]
