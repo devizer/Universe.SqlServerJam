@@ -1500,10 +1500,12 @@ function Install-SQLServer {
   $argProgress = "/INDICATEPROGRESS";
   $argProgress = "";
   $argADDCURRENTUSERASSQLADMIN = IIf ($meta.MediaType -eq "Developer") "" "/ADDCURRENTUSERASSQLADMIN";
+  # 2008 and R2: The setting 'IACCEPTROPENLICENSETERMS' specified is not recognized.
+  $argIACCEPTROPENLICENSETERMS = IIF ($major -le 2008) "" "/IACCEPTROPENLICENSETERMS";
   if ($true -or $is2020) {
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
     $setupArg = "$argQuiet", "/ENU", "$argProgress", "/ACTION=Install", 
-    "/IAcceptSQLServerLicenseTerms", "/IACCEPTROPENLICENSETERMS", 
+    "/IAcceptSQLServerLicenseTerms", "$argIACCEPTROPENLICENSETERMS", 
     "/UpdateEnabled=False", 
     "/FEATURES=`"$($options.Features)`"", 
     "/INSTANCENAME=`"$instanceName`"", 
