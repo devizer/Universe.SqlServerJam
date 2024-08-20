@@ -1540,5 +1540,6 @@ foreach($meta in Enumerate-SQLServer-Downloads) {
   Say "Clean up"
   Remove-Item -Recurse -Force "$($setupMeta.Setup)" -ErrorAction SilentlyContinue | out-null
   Remove-Item -Recurse -Force "$($setupMeta.Media)" -ErrorAction SilentlyContinue | out-null
+  get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
   & net.exe stop "MSSQL`$$instanceName"
 }
