@@ -15,7 +15,7 @@ jobs:
     vmImage: '$(IMAGE)'
   timeoutInMinutes: 60
   strategy:
-    maxParallel: 4
+    maxParallel: 5
     matrix:
       '2022 2019 on Server2019':
         IMAGE: 'windows-2019'
