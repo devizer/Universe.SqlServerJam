@@ -1506,7 +1506,7 @@ function Install-SQLServer {
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
     $setupArg = "$argQuiet", "/ENU", "$argProgress", "/ACTION=Install", 
     "/IAcceptSQLServerLicenseTerms", "$argIACCEPTROPENLICENSETERMS", 
-    "/UpdateEnabled=False", 
+    # "/UpdateEnabled=False", TODO TODO TODO TODO TODO TODO TODO TODO TODO 
     "/FEATURES=`"$($options.Features)`"", 
     "/INSTANCENAME=`"$instanceName`"", 
     "/INSTANCEDIR=`"$($options.InstallTo)`"", 
