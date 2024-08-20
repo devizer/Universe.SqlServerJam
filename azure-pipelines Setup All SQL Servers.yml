@@ -17,7 +17,7 @@ jobs:
   pool:
     vmImage: '$(IMAGE)'
   timeoutInMinutes: 120
-  cancelTimeoutInMinutes: 6
+  cancelTimeoutInMinutes: 7
   strategy:
     maxParallel: 6
     matrix:
@@ -43,6 +43,10 @@ jobs:
         TEST_SQL_UPDATES: False
       '2005 on Server2019':
         IMAGE: 'windows-2019'
+        TEST_SQL_VERSIONS: '2005'
+        TEST_SQL_UPDATES: False
+      '2005 on Server2022':
+        IMAGE: 'windows-2022'
         TEST_SQL_VERSIONS: '2005'
         TEST_SQL_UPDATES: False
 
