@@ -1,6 +1,7 @@
 variables:
   NUGET_VERSION: 0.1
   PS1_TROUBLE_SHOOT: On
+  # Short name is critical for 2017 and older
   PS1_REPO_DOWNLOAD_FOLDER: 'D:\SQL-Setup'
 
 trigger:
@@ -21,13 +22,13 @@ jobs:
         IMAGE: 'windows-2019'
         TEST_SQL_VERSIONS: '2022 2019'
         TEST_SQL_UPDATES: False
-      '2017 2016 2014 2012 on Server2019':
-        IMAGE: 'windows-2019'
-        TEST_SQL_VERSIONS: '2017 2016 2014 2012'
-        TEST_SQL_UPDATES: False
       '2017 on Server2019':
         IMAGE: 'windows-2019'
         TEST_SQL_VERSIONS: '2017'
+        TEST_SQL_UPDATES: False
+      '2016 2014 2012 on Server2019':
+        IMAGE: 'windows-2019'
+        TEST_SQL_VERSIONS: '2016 2014 2012'
         TEST_SQL_UPDATES: False
       '2008 2008R2 on Server2019':
         IMAGE: 'windows-2019'
