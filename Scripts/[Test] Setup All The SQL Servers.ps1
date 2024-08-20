@@ -1410,12 +1410,9 @@ function Execute-Process-Smarty {
   $ret = @{};
   try { 
     if ($workingDirectory) { 
-      Write-Host "WTH: $launcher $arguments [WORKDIR=$workingDirectory]"
       $app = Start-Process "$launcher" -ArgumentList $arguments -WorkingDirectory $workingDirectory -PassThru;
     } else {
-      Write-Host "WTH: $launcher $arguments"
       $app = Start-Process "$launcher" -ArgumentList $arguments -PassThru;
-
     }
   } catch {
     $err = "$($_.GetType()): '$($_.Message)'";
