@@ -722,6 +722,22 @@ function Get-Os-Platform {
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-PS1-Repo-Downloads-Folder.ps1]
 function Get-PS1-Repo-Downloads-Folder() {
+  foreach($pair in (gci env:PS1_REPO_DOWNLOAD_FOLDER* | sort-object name)) {
+      $explicitRet = "$($pair.Value)";
+      if ($explicitRet) {
+        New-Item -Path $explicitRet -ItemType Directory -Force -EA SilentlyContinue | Out-null
+        $isExplicit = Test-Path -Path $explicitRet -PathType Container -EA SilentlyContinue;
+        if ($isExplicit) { return "$explicitRet"; }
+      }
+  }
+
+  # $explicitRet = "$($ENV:PS1_REPO_DOWNLOAD_FOLDER)";
+  # if ($explicitRet) {
+  #  New-Item -Path $explicitRet -ItemType Directory -Force -EA SilentlyContinue | Out-null
+  #  $isExplicit = Test-Path -Path $explicitRet -PathType Container -EA SilentlyContinue;
+  #  if ($isExplicit) { return "$explicitRet"; }
+  # }
+
   If (Get-Os-Platform -eq "Windows") { $ret = "$($ENV:TEMP)" } else { $ret = "$($ENV:TMPDIR)" };
   $is1 = Test-Path -Path $ret -PathType Container -EA SilentlyContinue
   if (-not $is1) {
@@ -1485,12 +1501,17 @@ function Install-SQLServer {
   $major = ($meta.Version.Substring(0,4)) -as [int];
   $is2020 = $major -ge 2016;
   $setupArg=@();
-  $argQuiet = IIf ((IsBuild-Server) -or $meta.Version -like "2005*" -or $meta.Version -like "2008-*") "/Q" "/QUIETSIMPLE";
+  $argQuiet = IIf ((Is-BuildServer) -or $meta.Version -like "2005*" -or $meta.Version -like "2008-*") "/Q" "/QUIETSIMPLE";
   $argProgress = "/INDICATEPROGRESS";
+  $argProgress = "";
+  $argADDCURRENTUSERASSQLADMIN = IIf ($meta.MediaType -eq "Developer") "" "/ADDCURRENTUSERASSQLADMIN";
+  # 2008 and R2: The setting 'IACCEPTROPENLICENSETERMS' specified is not recognized.
+  $argIACCEPTROPENLICENSETERMS = IIF ($major -le 2014) "" "/IACCEPTROPENLICENSETERMS";
   if ($true -or $is2020) {
+    # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
     $setupArg = "$argQuiet", "/ENU", "$argProgress", "/ACTION=Install", 
-    "/IAcceptSQLServerLicenseTerms", "/IACCEPTROPENLICENSETERMS", 
-    "/UpdateEnabled=False", 
+    "/IAcceptSQLServerLicenseTerms", "$argIACCEPTROPENLICENSETERMS", 
+    # "/UpdateEnabled=False", TODO TODO TODO TODO TODO TODO TODO TODO TODO 
     "/FEATURES=`"$($options.Features)`"", 
     "/INSTANCENAME=`"$instanceName`"", 
     "/INSTANCEDIR=`"$($options.InstallTo)`"", 
@@ -1499,7 +1520,7 @@ function Install-SQLServer {
     "/SQLSVCACCOUNT=`"NT AUTHORITY\SYSTEM`"", 
     "/SQLSVCSTARTUPTYPE=AUTOMATIC", 
     "/BROWSERSVCSTARTUPTYPE=AUTOMATIC", 
-    "/ADDCURRENTUSERASSQLADMIN", 
+    "$argADDCURRENTUSERASSQLADMIN", 
     "/SQLSYSADMINACCOUNTS=`"BUILTIN\ADMINISTRATORS`"", 
     "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
   } else {
@@ -1507,7 +1528,7 @@ function Install-SQLServer {
   }
 
   Write-Host ">>> $($meta.Lancher) $setupArg"
-  & "$($meta.Lancher)" $setupArg
+  & "$($meta.Launcher)" $setupArg
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Publish-SQLServer-SetupLogs.ps1]

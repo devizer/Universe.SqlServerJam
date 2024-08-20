@@ -722,6 +722,22 @@ function Get-Os-Platform {
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-PS1-Repo-Downloads-Folder.ps1]
 function Get-PS1-Repo-Downloads-Folder() {
+  foreach($pair in (gci env:PS1_REPO_DOWNLOAD_FOLDER* | sort-object name)) {
+      $explicitRet = "$($pair.Value)";
+      if ($explicitRet) {
+        New-Item -Path $explicitRet -ItemType Directory -Force -EA SilentlyContinue | Out-null
+        $isExplicit = Test-Path -Path $explicitRet -PathType Container -EA SilentlyContinue;
+        if ($isExplicit) { return "$explicitRet"; }
+      }
+  }
+
+  # $explicitRet = "$($ENV:PS1_REPO_DOWNLOAD_FOLDER)";
+  # if ($explicitRet) {
+  #  New-Item -Path $explicitRet -ItemType Directory -Force -EA SilentlyContinue | Out-null
+  #  $isExplicit = Test-Path -Path $explicitRet -PathType Container -EA SilentlyContinue;
+  #  if ($isExplicit) { return "$explicitRet"; }
+  # }
+
   If (Get-Os-Platform -eq "Windows") { $ret = "$($ENV:TEMP)" } else { $ret = "$($ENV:TMPDIR)" };
   $is1 = Test-Path -Path $ret -PathType Container -EA SilentlyContinue
   if (-not $is1) {
@@ -1042,7 +1058,7 @@ $SqlServerDownloadLinks = @(
       @{ Id="1.KB5040946"; Url="https://download.microsoft.com/download/d/a/1/da18aac1-2cd0-4c52-b30d-39c3172cd156/SQLServer2016-KB5040946-x64.exe"; }
     )
   };
-  @{ 
+  @{
     Version="2017";
     BaseDev    ="https://download.microsoft.com/download/5/A/7/5A7065A2-C81C-4A31-9972-8A31AC9388C1/SQLServer2017-SSEI-Dev.exe";
     BaseExpress="https://download.microsoft.com/download/5/E/9/5E9B18CC-8FD5-467E-B5BF-BADE39C51F73/SQLServer2017-SSEI-Expr.exe"
@@ -1154,6 +1170,20 @@ now: 9.0.5000 (sp4) https://catalog.s.download.windowsupdate.com/msdownload/upda
 #>
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-Fresh-SQLServer.ps1]
+function Download-SQLServer-and-Extract {
+  Param(
+    [string] $version,  # 2016|2017|2019|2022
+    [string] $mediaType # LocalDB|Core|Advanced|Developer
+  )
+  $major = ($meta.Version.Substring(0,4)) -as [int];
+  $is2020 = $major -ge 2016;
+  if ($is2020) { 
+    Download-Fresh-SQLServer-and-Extract $version $mediaType;
+  } else {
+    Download-2010-SQLServer-and-Extract $version $mediaType;
+  }
+}
+
 function Download-Fresh-SQLServer-and-Extract {
   Param(
     [string] $version,  # 2016|2017|2019|2022
@@ -1326,7 +1356,7 @@ function Download-SqlServer-Update {
     [string] $mediaType, # LocalDB|Core|Advanced|Developer
     [object] $update # {Id=;Url=;}
   )
-  $ret = $update;
+  $ret = $update.Clone();
   $key="SQL-$version-$($update.Id)"
   $archivePath = Combine-Path "$(Get-SqlServer-Downloads-Folder)" $key
   $archiveName = [System.IO.Path]::GetFileName($update.Url);
@@ -1338,6 +1368,7 @@ function Download-SqlServer-Update {
     return $ret;
   }
 
+  $ret["UpdateId"] = $update.Id;
   $ret["UpdateFolder"] = $archivePath;
   $ret["UpdateLauncher"] = $archiveFullName;
   $ret["UpdateSize"] = (new-object System.IO.FileInfo($archiveFullName)).Length;
@@ -1418,6 +1449,86 @@ function Find-SqlServer-SetupLogs() {
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Get-SqlServer-Downloads-Folder.ps1]
 function Get-SqlServer-Downloads-Folder() {
   return Combine-Path "$(Get-PS1-Repo-Downloads-Folder)";
+}
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Get-System-Drive.ps1]
+function Get-System-Drive() { $ret = "$($Env:SystemDrive)"; $c = "$([System.IO.Path]::DirectorySeparatorChar)"; if (-not ($ret.EndsWith($c))) { $ret += $c; }; return $ret; }
+  
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Install-SQLServer.ps1]
+<# 
+
+META
+----
+LauncherSize   133032                                                                                                                          
+SetupHash      2D975BB24E872383C63D676105DFAF548972FA82970A8DB0AAC4E161555C8411466850F1442DDD988542FDB1B2205C08C1A8A97EEB9F1DD3AF7B49BFB80D7A21
+SetupSize      1349103806                                                                                                                      
+Version        2022                                                                                                                            
+MediaType      Developer                                                                                                                       
+Setup          C:\Users\VSSADM~1\AppData\Local\Temp\PS1 Repo Downloads\SQL-2022-Developer                                                 
+Launcher       C:\Users\VSSADM~1\AppData\Local\Temp\PS1 Repo Downloads\SQL-2022-Developer\Setup.exe                                       
+MediaSize      1233861846                                                                                                                      
+MediaHash      70DF481879338B608231D7FD0F518642CFAF481708E2EA6343DC217C56D5AF7182008EDB8CDF4D96652D44BD7A4B7FA6F3CD1CBAF7A8E3771760B169390F46F4
+Media          C:\Users\VSSADM~1\AppData\Local\Temp\PS1 Repo Downloads\SQL-Setup-Compressed\SQL-2022-Developer                         
+
+UPDATE
+------
+UpdateFolder   C:\Users\VSSADM~1\AppData\Local\Temp\PS1 Repo Downloads\SQL-2022-CU14                                        
+Url            https://download.microsoft.com/download/9/6/8/96819b0c-c8fb-4b44-91b5-c97015bbda9f/SQLServer2022-KB5038325-x64.exe
+UpdateSize     463846640                                                                                                         
+UpdateId       CU14                                                                                                              
+UpdateLauncher C:\Users\VSSADM~1\AppData\Local\Temp\PS1 Repo Downloads\SQL-2022-CU14\SQLServer2022-KB5038325-x64.exe        
+
+#>
+
+function Install-SQLServer {
+  Param(
+    [object] $meta,
+    [object] $update, # optional, 
+    [string] $instanceName
+  )
+
+  $defaultOptions = @{
+    InstallTo = Combine-Path "$(Get-System-Drive)" "SQL";
+    Password = "``1qazxsw2";
+    Tcp = 1;
+    NamedPipe = 1;
+    SysAdmins = "BUILTIN\ADMINISTRATORS";
+    Features = "SQLENGINE,REPLICATION,FullText";
+  }
+  $options = $defaultOptions.Clone();
+
+  $major = ($meta.Version.Substring(0,4)) -as [int];
+  $is2020 = $major -ge 2016;
+  $setupArg=@();
+  $argQuiet = IIf ((Is-BuildServer) -or $meta.Version -like "2005*" -or $meta.Version -like "2008-*") "/Q" "/QUIETSIMPLE";
+  $argProgress = "/INDICATEPROGRESS";
+  $argProgress = "";
+  $argADDCURRENTUSERASSQLADMIN = IIf ($meta.MediaType -eq "Developer") "" "/ADDCURRENTUSERASSQLADMIN";
+  # 2008 and R2: The setting 'IACCEPTROPENLICENSETERMS' specified is not recognized.
+  $argIACCEPTROPENLICENSETERMS = IIF ($major -le 2014) "" "/IACCEPTROPENLICENSETERMS";
+  if ($true -or $is2020) {
+    # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
+    $setupArg = "$argQuiet", "/ENU", "$argProgress", "/ACTION=Install", 
+    "/IAcceptSQLServerLicenseTerms", "$argIACCEPTROPENLICENSETERMS", 
+    # "/UpdateEnabled=False", TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+    "/FEATURES=`"$($options.Features)`"", 
+    "/INSTANCENAME=`"$instanceName`"", 
+    "/INSTANCEDIR=`"$($options.InstallTo)`"", 
+    "/SECURITYMODE=`"SQL`"", 
+    "/SAPWD=`"$($options.Password)`"", 
+    "/SQLSVCACCOUNT=`"NT AUTHORITY\SYSTEM`"", 
+    "/SQLSVCSTARTUPTYPE=AUTOMATIC", 
+    "/BROWSERSVCSTARTUPTYPE=AUTOMATIC", 
+    "$argADDCURRENTUSERASSQLADMIN", 
+    "/SQLSYSADMINACCOUNTS=`"BUILTIN\ADMINISTRATORS`"", 
+    "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
+  } else {
+    
+  }
+
+  Write-Host ">>> $($meta.Lancher) $setupArg"
+  & "$($meta.Launcher)" $setupArg
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Publish-SQLServer-SetupLogs.ps1]
