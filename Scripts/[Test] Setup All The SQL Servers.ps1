@@ -1519,9 +1519,18 @@ function Install-SQLServer {
     # SQL_Engine,SQL_Data_Files,SQL_Replication,SQL_FullText,SQL_SharedTools
     $argFeatures = IIf ($meta.MediaType -eq "Advanced") "SQL_Engine,SQL_FullText" "SQL_Engine";
     # /qb for unattended with basic UI
+    
+    & net.exe @("user", "SQL2005", "MeageStr0ng", "/add")
+    & net.exe @("localgroup", "administrators", "SQL2005", "/add")
+    & SC.exe STOP SQLBrowser
+    & SC.exe DELETE SQLBrowser
+    
     $setupArg = "/qn", "ADDLOCAL=$argFeatures", "INSTANCENAME=`"$instanceName`"", 
-         "DISABLENETWORKPROTOCOLS=0", "SECURITYMODE=SQL", 
-         "SAPWD=`"$($options.Password)`"", "INSTALLSQLDIR=`"$($options.InstallTo)`"";
+         "DISABLENETWORKPROTOCOLS=0", # 0: All, 1: None, 2: TCP only
+         "SQLACCOUNT=$($ENV:COMPUTERNAME)\SQL", "SQLPASSWORD=MeageStr0ng",
+         "SECURITYMODE=SQL", "SAPWD=`"$($options.Password)`"", 
+         "INSTALLSQLDIR=`"$($options.InstallTo)`"";
+
       Write-Host ">>> $($meta.Launcher) $setupArg"
       # & "$($meta.Launcher)" $setupArg
 
@@ -1613,7 +1622,7 @@ foreach($meta in Enumerate-SQLServer-Downloads) {
     Remove-Item -Recurse -Force "$($setupMeta.Setup)" -ErrorAction SilentlyContinue | out-null
     Remove-Item -Recurse -Force "$($setupMeta.Media)" -ErrorAction SilentlyContinue | out-null
   }
-  get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
+  get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 -or $_.Name -match "browser" -or $_.DisplayName -match "browser"  } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
   if ("$($ENV:SYSTEM_ARTIFACTSDIRECTORY)") {
     write-host "publishing setup logs"
     Publish-SQLServer-SetupLogs "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)" -compression 1
