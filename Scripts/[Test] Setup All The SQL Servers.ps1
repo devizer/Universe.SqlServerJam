@@ -1539,6 +1539,7 @@ Write-Host "$((Get-Memory-Info).Description)"
 
 $rawFilter = "$($ENV:TEST_SQL_VERSIONS)".Split(" ");
 foreach($meta in Enumerate-SQLServer-Downloads) {
+  if ($meta.MediaType -eq "LocalDB") { continue; }
   if ($rawFilter.Length -gt 0) {
     $isIncluded = $null -ne ($rawFilter | ? { $meta.Version -match $_ });
     if (-not $isIncluded) { continue; }
@@ -1550,6 +1551,10 @@ $serverCounter = 0;
 foreach($meta in Enumerate-SQLServer-Downloads) {
   if ("$update") { continue; }
   if ($meta.MediaType -eq "LocalDB") { continue; }
+  if ($rawFilter.Length -gt 0) {
+    $isIncluded = $null -ne ($rawFilter | ? { $meta.Version -match $_ });
+    if (-not $isIncluded) { continue; }
+  }
   $serverCounter++;
   $instanceName = $meta.MediaType.Substring(0,3).ToUpper() + "_" + $meta.Version.Replace("-", "_");
   Say "INSTALL #$serverCounter [$($meta.Version) $($meta.MediaType)] as [$instanceName]"
