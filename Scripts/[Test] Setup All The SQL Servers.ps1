@@ -1279,7 +1279,7 @@ function ApplyCommonSqlServerState([Hashtable] $ret) {
 
 function ExtractSqlServerSetup([string] $title, [string] $exeArchive, [string] $setupPath, [string] $quietArg <# /QS (Fresh) | /Q (prev) #>) {
   Write-Host "Extracting $title using [$($exeArchive)] to [$($setupPath)]"
-  $extractStatus = Execute-Process-Smarty "$title unpacker" "$($exeArchive)" @("$quietArg", "/x:`"$setupPath`"") -WaitTimeout 1800
+  $extractStatus = Execute-Process-Smarty "$title Unpacker" "$($exeArchive)" @("$quietArg", "/x:`"$setupPath`"") -WaitTimeout 1800
   # $startAt = [System.Diagnostics.Stopwatch]::StartNew()
   # $extractApp = Start-Process "$($exeArchive)" -ArgumentList @("$quietArg", "/x:`"$setupPath`"") -PassThru
   # if ($extractApp -and $extractApp.Id) {
@@ -1406,6 +1406,7 @@ function Execute-Process-Smarty {
     [string] $workingDirectory = $null,
     [int] $waitTimeout = 3600
   )
+  Troubleshoot-Info "[$title] `"$launcher`" $arguments";
   $startAt = [System.Diagnostics.Stopwatch]::StartNew()
 
   $ret = @{};
@@ -1601,7 +1602,7 @@ function Install-SQLServer {
     "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
   }
   
-  Write-Host ">>> $($meta.Launcher) $setupArg"
+  # Write-Host ">>> $($meta.Launcher) $setupArg"
   $setupStatus = Execute-Process-Smarty "SQL Server $($meta.Version) $($meta.MediaType) Setup" $meta.Launcher $setupArg -WaitTimeout 3600
 }
 
