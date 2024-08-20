@@ -1514,7 +1514,8 @@ function Install-SQLServer {
   # 2008 and R2: The setting 'IACCEPTROPENLICENSETERMS' specified is not recognized.
   $argIACCEPTROPENLICENSETERMS = IIF ($major -le 2014) "" "/IACCEPTROPENLICENSETERMS";
   if ($major -eq 2005) {
-    $setupArg = "/qn", "ADDLOCAL=SQL_Engine", "INSTANCENAME=`"$instanceName`"", 
+    # SQL_Engine,SQL_Data_Files,SQL_Replication,SQL_FullText,SQL_SharedTools
+    $setupArg = "/qn", "ADDLOCAL=SQL_Engine,SQL_Replication,SQL_FullText", "INSTANCENAME=`"$instanceName`"", 
          "DISABLENETWORKPROTOCOLS=0", "SECURITYMODE=SQL", 
          "SAPWD=`"$($options.Password)`"", "INSTALLSQLDIR=`"$($options.InstallTo)`"";
   } else {
@@ -1534,8 +1535,14 @@ function Install-SQLServer {
     "/SQLSYSADMINACCOUNTS=`"BUILTIN\ADMINISTRATORS`"", 
     "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
   }
-  Write-Host ">>> $($meta.Lancher) $setupArg"
+  Write-Host ">>> $($meta.Launcher) $setupArg"
   & "$($meta.Launcher)" $setupArg
+
+  if ($major -eq 2005) {
+    Write-Host "Workaround for 2005 logs"
+    sleep 120
+    & taskkill.exe @("/t", "/f", "/im", "setup.exe")
+  }
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Publish-SQLServer-SetupLogs.ps1]
