@@ -1,5 +1,9 @@
 $ErrorActionPreference="Stop"
 
+# SET TEST_SQL_VERSIONS=2019 2022"
+# SET TEST_SQL_VERSIONS=2017 2016 2014 2012"
+# SET TEST_SQL_VERSIONS=2008 2005"
+
 # Include Detected: [ ..\Includes\*.ps1 ]
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\$Full7zLinksMetadata.ps1]
 $Full7zLinksMetadata_onWindows = @(
@@ -1529,8 +1533,18 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
 }
 
 
+Write-Host "RAW Filter: [$($ENV:TEST_SQL_VERSIONS)]"
 Write-Host "Try-BuildServerType: [$(Try-BuildServerType)], Is-BuildServer: $(Is-BuildServer)"
 Write-Host "$((Get-Memory-Info).Description)"
+
+$rawFilter = "$($ENV:TEST_SQL_VERSIONS)".Split(" ");
+foreach($meta in Enumerate-SQLServer-Downloads) {
+if ($rawFilter.Length -gt 0) {
+  $isIncluded = $null -ne ($rawFilter | ? { $meta.Version -match $_ });
+  if (-not $isIncluded) { continue; }
+  Write-Host "Include [$($meta.Version) $($meta.MediaType)]"
+}
+
 
 $serverCounter = 0;
 foreach($meta in Enumerate-SQLServer-Downloads) {
@@ -1538,11 +1552,10 @@ foreach($meta in Enumerate-SQLServer-Downloads) {
   if ($meta.MediaType -eq "LocalDB") { continue; }
   $serverCounter++;
   $instanceName = $meta.MediaType.Substring(0,3).ToUpper() + "_" + $meta.Version.Replace("-", "_");
-  Say "INSTALL $($meta.Version) $($meta.MediaType) as [$instanceName]"
+  Say "INSTALL #$serverCounter [$($meta.Version) $($meta.MediaType)] as [$instanceName]"
   $setupMeta = Download-SQLServer-and-Extract $meta.Version $meta.MediaType;
   Install-SQLServer $setupMeta $null $instanceName;
   Say "Setup Finished. $((Get-Memory-Info).Description). Cleaning Up setup media"
-  Say "Clean up"
   Remove-Item -Recurse -Force "$($setupMeta.Setup)" -ErrorAction SilentlyContinue | out-null
   Remove-Item -Recurse -Force "$($setupMeta.Media)" -ErrorAction SilentlyContinue | out-null
   get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName

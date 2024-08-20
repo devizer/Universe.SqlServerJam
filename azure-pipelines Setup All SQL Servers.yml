@@ -16,12 +16,18 @@ jobs:
   strategy:
     maxParallel: 4
     matrix:
-      'Tiny on 2019':
+      '2022 2019 on Server2019':
         IMAGE: 'windows-2019'
-        PGTYPE: tiny
-      'Tiny on 2022':
-        IMAGE: 'windows-2022'
-        PGTYPE: tiny
+        TEST_SQL_VERSIONS: '2022 2019'
+        TEST_SQL_UPDATES: False
+      '2017 2016 2014 2012 on Server2019':
+        IMAGE: 'windows-2019'
+        TEST_SQL_VERSIONS: '2017 2016 2014 2012'
+        TEST_SQL_UPDATES: False
+      '2008 2005 on Server2019':
+        IMAGE: 'windows-2019'
+        TEST_SQL_VERSIONS: '2008 2005'
+        TEST_SQL_UPDATES: False
 
   steps:
 
