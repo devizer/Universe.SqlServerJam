@@ -4,6 +4,8 @@ $ErrorActionPreference="Stop"
 # SET TEST_SQL_VERSIONS=2017 2016 2014 2012"
 # SET TEST_SQL_VERSIONS=2008 2005"
 
+# Aster '2014 Advanced' restart is required for '2014 Core'
+
 # Include Detected: [ ..\Includes\*.ps1 ]
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\$Full7zLinksMetadata.ps1]
 $Full7zLinksMetadata_onWindows = @(
@@ -1511,7 +1513,11 @@ function Install-SQLServer {
   $argADDCURRENTUSERASSQLADMIN = IIf ($meta.MediaType -eq "Developer") "" "/ADDCURRENTUSERASSQLADMIN";
   # 2008 and R2: The setting 'IACCEPTROPENLICENSETERMS' specified is not recognized.
   $argIACCEPTROPENLICENSETERMS = IIF ($major -le 2014) "" "/IACCEPTROPENLICENSETERMS";
-  if ($true -or $is2020) {
+  if ($major -eq 2005) {
+    $setupArg = "/qn", "ADDLOCAL=SQL_Engine", "INSTANCENAME=`"$instanceName`"", 
+         "DISABLENETWORKPROTOCOLS=0", "SECURITYMODE=SQL", 
+         "SAPWD=`"$($options.Password)`"", "INSTALLSQLDIR=`"$($options.InstallTo)`"";
+  } else {
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
     $setupArg = "$argQuiet", "/ENU", "$argProgress", "/ACTION=Install", 
     "/IAcceptSQLServerLicenseTerms", "$argIACCEPTROPENLICENSETERMS", 
@@ -1527,10 +1533,7 @@ function Install-SQLServer {
     "$argADDCURRENTUSERASSQLADMIN", 
     "/SQLSYSADMINACCOUNTS=`"BUILTIN\ADMINISTRATORS`"", 
     "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
-  } else {
-    
   }
-
   Write-Host ">>> $($meta.Lancher) $setupArg"
   & "$($meta.Launcher)" $setupArg
 }
