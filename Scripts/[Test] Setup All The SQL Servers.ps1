@@ -1415,7 +1415,7 @@ function Execute-Process-Smarty {
       $app = Start-Process "$launcher" -ArgumentList $arguments -PassThru -WorkingDirectory $workingDirectory;
     }
   } catch {
-    $err = $_.GetType() + ": " + $_.Message;
+    $err = "$($_.GetType()): $($_.Message)";
     Write-Host "$title failed. $err" -ForegroundColor DarkRed;
     $ret = @{Error = "$title failed. $err"; };
   }
