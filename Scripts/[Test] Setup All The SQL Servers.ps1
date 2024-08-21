@@ -1567,12 +1567,6 @@ function Install-SQLServer {
   $major = ($meta.Version.Substring(0,4)) -as [int];
   $is2020 = $major -ge 2016;
   $setupArg=@();
-  $argQuiet = IIf ((Is-BuildServer) -or $meta.Version -like "2005*" -or $meta.Version -like "2008-*") "/Q" "/QUIETSIMPLE";
-  $argProgress = "/INDICATEPROGRESS";
-  $argProgress = "";
-  $argADDCURRENTUSERASSQLADMIN = IIf ($meta.MediaType -eq "Developer") "" "/ADDCURRENTUSERASSQLADMIN";
-  # 2008 and R2: The setting 'IACCEPTROPENLICENSETERMS' specified is not recognized.
-  $argIACCEPTROPENLICENSETERMS = IIF ($major -le 2014) "" "/IACCEPTROPENLICENSETERMS";
   $title = "SQL Server $($meta.Version) $($meta.MediaType)"
   if ($major -eq 2005) {
     # SQL_Engine,SQL_Data_Files,SQL_Replication,SQL_FullText,SQL_SharedTools
@@ -1588,11 +1582,36 @@ function Install-SQLServer {
 
     # Write-Host "Workaround for 2005 logs"; sleep 1; & taskkill.exe @("/t", "/f", "/im", "setup.exe");
   } else {
+<#
+"%AppData%\Temp\%KEY%\Setup\Setup.exe" /Q /INDICATEPROGRESS /Action=Install ^
+  /ADDCURRENTUSERASSQLADMIN ^
+  /FEATURES=SQL ^
+  /INSTANCENAME=%NEW_SQL_INSTANCE_NAME% ^
+  /SECURITYMODE=SQL /SAPWD=`1qazxsw2 ^
+  /SQLSVCACCOUNT="NT AUTHORITY\SYSTEM" ^
+  /INSTANCEDIR="%SystemDrive%\SQL" ^
+  /INSTALLSHAREDDIR="%SystemDrive%\SQL\x64b" ^
+  /INSTALLSHAREDWOWDIR="%SystemDrive%\SQL\x86b" ^
+  /SQLSYSADMINACCOUNTS="BUILTIN\ADMINISTRATORS" ^
+  /TCPENABLED=1 /NPENABLED=1
+ 
+#>
+    $argQuiet = IIf ((Is-BuildServer) -or $meta.Version -like "2005*" -or $meta.Version -like "2008-*") "/Q" "/QUIETSIMPLE";
+    $argProgress = "/INDICATEPROGRESS";
+    $argProgress = "";
+    $argADDCURRENTUSERASSQLADMIN = IIf ($meta.MediaType -eq "Developer") "" "/ADDCURRENTUSERASSQLADMIN";
+    # 2008 and R2: The setting 'IACCEPTROPENLICENSETERMS' specified is not recognized.
+    $argIACCEPTROPENLICENSETERMS = IIF ($major -le 2014) "" "/IACCEPTROPENLICENSETERMS";
+    
+    # 2008-xXX
+    $argFeatures = IIf ($meta.Version -match "2008-") "SQL" "$($options.Features)"
+    $argENU = IIf ($meta.Version -match "2008-") "" "/ENU"
+
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
-    $setupArg = "$argQuiet", "/ENU", "$argProgress", "/ACTION=Install", 
+    $setupArg = "$argQuiet", "$argENU", "$argProgress", "/ACTION=Install", 
     "/IAcceptSQLServerLicenseTerms", "$argIACCEPTROPENLICENSETERMS", 
     # "/UpdateEnabled=False", TODO TODO TODO TODO TODO TODO TODO TODO TODO 
-    "/FEATURES=`"$($options.Features)`"", 
+    "/FEATURES=`"$argFeatures`"", 
     "/INSTANCENAME=`"$instanceName`"", 
     "/INSTANCEDIR=`"$($options.InstallTo)`"", 
     "/SECURITYMODE=`"SQL`"", 
