@@ -1697,7 +1697,6 @@ foreach($meta in Enumerate-SQLServer-Downloads) {
   $instanceName = $meta.MediaType.Substring(0,3).ToUpper() + "_" + $meta.Version.Replace("-", "_");
   Say "INSTALL #$serverCounter [$($meta.Version) $($meta.MediaType)] as [$instanceName]"
   $setupMeta = Download-SQLServer-and-Extract $meta.Version $meta.MediaType;
-  if 
   Install-SQLServer $setupMeta $null $instanceName;
   Say "Setup Finished. $((Get-Memory-Info).Description)"
   if (Is-BuildServer) {
