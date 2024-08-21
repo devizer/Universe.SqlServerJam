@@ -1603,6 +1603,7 @@ function Install-SQLServer {
     "$argADDCURRENTUSERASSQLADMIN", 
     "/SQLSYSADMINACCOUNTS=`"BUILTIN\ADMINISTRATORS`"", 
     "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
+    Write-Host ">>> `"$($meta.Launcher)`" $setupArg"
     & "$($meta.Launcher)" $setupArg
   }
   
