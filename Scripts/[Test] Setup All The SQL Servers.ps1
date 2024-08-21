@@ -1095,8 +1095,10 @@ $SqlServerDownloadLinks = @(
 $SqlServer2010DownloadLinks = @(
   @{ 
     Version="2014-x64"; #SP3
-    Core ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x64_ENU.exe" 
-    Advanced="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x64_ENU.exe" #SP3, 
+    Core     ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x64_ENU.exe" 
+    Advanced ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x64_ENU.exe" #SP3, 
+    Developer="https://archive.org/download/sql-server-2014-enterprise-sp-1-x-64/SQL_Server_2014_Enterprise_SP1_x64.rar"
+    DeveloperFormat="ISO-IN-ARCHIVE"
     LocalDB ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x64/SqlLocalDB.msi"
     CU=@(
     )
@@ -1322,13 +1324,18 @@ function Download-2010-SQLServer-and-Extract {
   foreach($meta in $SqlServer2010DownloadLinks) {
     if ($meta.Version -eq $version) {
       $url = $meta[$mediaType]
+      $urlFormat=$meta["$($mediaType)Format"]
+      if ($urlFormat) {
+        $ext = ".$urlFormat".ToLower();
+        $exeName = "SQL-$mediaType-$Version-ENU$ext"
+        $exeArchive = Combine-Path $mediaPath $exeName
+      }
     }
   }
   if (-not $url) {
     Write-Host "Unknown SQL Server version $version $mediaType" -ForegroundColor DarkRed;
     return @{};
   }
-
 
   Write-Host "Downloading media for version $version $mediaType. URL is '$url'. Setup file is '$exeArchive'";
   $isDownloadOk = Download-File-FailFree-and-Cached $exeArchive @($url)
@@ -1344,13 +1351,25 @@ function Download-2010-SQLServer-and-Extract {
   }
   else 
   {
-    $isExtractOk = ExtractSqlServerSetup "SQL Server $version $mediaType" $exeArchive $setupPath "/Q"
-    if ($isExtractOk) {
-      $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
-      $ret["Setup"] = $setupPath;
-      $ret["Media"] = $mediaPath;
-    } else {
-      return @{};
+    if ($urlFormat -eq $null)
+    {
+      $isExtractOk = ExtractSqlServerSetup "SQL Server $version $mediaType" $exeArchive $setupPath "/Q"
+      if ($isExtractOk) {
+        $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
+        $ret["Setup"] = $setupPath;
+        $ret["Media"] = $mediaPath;
+      } else {
+        return @{};
+      }
+    } elseif ($urlFormat -eq "ISO-In-Archive") {
+      $sevenZip = Get-Full7z-Exe-FullPath-for-Windows -Version "1900"
+      $isoFolder = Combine-Path $mediaPath "iso"
+      Write-Host "Extract '$exeArchive' to '$isoFolder'"
+      & "$sevenZip" @("x", "-y", "-o`"$isoFolder`"", "$exeArchive") | out-null
+      $isoFile = Get-ChildItem -Path "$isoFolder" -Filter "*.iso" | Select -First 1
+      Write-Host "ISO found: '$($isoFile.FullName)' $($isoFile.Length.ToString("n0")) bytes"
+      Write-Host "Extract '$($isoFile.FullName)' to '$setupPath'"
+      & "$sevenZip" @("x", "-y", "-o`"$setupPath`"", "$($isoFile.FullName)") | out-null
     }
   }
 
