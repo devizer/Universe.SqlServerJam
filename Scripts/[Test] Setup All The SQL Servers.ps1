@@ -1555,6 +1555,12 @@ function Install-SQLServer {
     [string] $instanceName
   )
 
+  if (-not $meta.LauncherSize) {
+    Write-Host "[Install-SQLServer] Wromg `$meta argument. Probably download failed";
+    $meta | fl | out-host
+    return;
+  }
+
   $defaultOptions = @{
     InstallTo = Combine-Path "$(Get-System-Drive)" "SQL";
     Password = "``1qazxsw2";
@@ -1654,16 +1660,22 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
 }
 
 
-Write-Host "RAW Filter: [$($ENV:TEST_SQL_VERSIONS)]"
+Write-Host "RAW SQL VERSION Filter: [$($ENV:TEST_SQL_VERSIONS)]"
+Write-Host "RAW SQL MEDIA Filter: [$($ENV:TEST_SQL_MEDIA)]"
 Write-Host "Try-BuildServerType: [$(Try-BuildServerType)], Is-BuildServer: $(Is-BuildServer)"
 Write-Host "$((Get-Memory-Info).Description)"
 
-$rawFilter = "$($ENV:TEST_SQL_VERSIONS)".Split(" ");
+$rawFilterVersion = "$($ENV:TEST_SQL_VERSIONS)".Split(" ");
+$rawFilterMedia = "$($ENV:TEST_SQL_MEDIA)".Split(" ");
 foreach($meta in Enumerate-SQLServer-Downloads) {
   if ($meta.MediaType -eq "LocalDB") { continue; }
-  if ($rawFilter.Length -gt 0) {
-    $isIncluded = $null -ne ($rawFilter | ? { $meta.Version -match $_ });
-    if (-not $isIncluded) { continue; }
+  if ($rawFilterVersion.Length -gt 0) {
+    $isIncludedVersion = $null -ne ($rawFilterVersion | ? { $meta.Version -match $_ });
+    if (-not $isIncludedVersion) { continue; }
+  }
+  if ($rawFilterMedia.Length -gt 0) {
+    $isIncludedMedia = $null -ne ($rawFilterMedia | ? { $meta.MediaType -match $_ });
+    if (-not $isIncludedMedia) { continue; }
   }
   Write-Host "Include [$($meta.Version) $($meta.MediaType)]"
 }
@@ -1672,14 +1684,20 @@ $serverCounter = 0;
 foreach($meta in Enumerate-SQLServer-Downloads) {
   if ("$update") { continue; }
   if ($meta.MediaType -eq "LocalDB") { continue; }
-  if ($rawFilter.Length -gt 0) {
-    $isIncluded = $null -ne ($rawFilter | ? { $meta.Version -match $_ });
-    if (-not $isIncluded) { continue; }
+  if ($rawFilterVersion.Length -gt 0) {
+    $isIncludedVersion = $null -ne ($rawFilterVersion | ? { $meta.Version -match $_ });
+    if (-not $isIncludedVersion) { continue; }
   }
+  if ($rawFilterMedia.Length -gt 0) {
+    $isIncludedMedia = $null -ne ($rawFilterMedia | ? { $meta.MediaType -match $_ });
+    if (-not $isIncludedMedia) { continue; }
+  }
+
   $serverCounter++;
   $instanceName = $meta.MediaType.Substring(0,3).ToUpper() + "_" + $meta.Version.Replace("-", "_");
   Say "INSTALL #$serverCounter [$($meta.Version) $($meta.MediaType)] as [$instanceName]"
   $setupMeta = Download-SQLServer-and-Extract $meta.Version $meta.MediaType;
+  if 
   Install-SQLServer $setupMeta $null $instanceName;
   Say "Setup Finished. $((Get-Memory-Info).Description)"
   if (Is-BuildServer) {
