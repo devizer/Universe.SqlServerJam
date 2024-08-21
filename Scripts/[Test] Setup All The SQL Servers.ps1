@@ -1606,10 +1606,11 @@ function Install-SQLServer {
     # 2008-xXX
     $argFeatures = IIf ($meta.Version -match "2008-") "SQL" "$($options.Features)"
     $argENU = IIf ($meta.Version -match "2008-") "" "/ENU"
+    $argIACCEPTSQLSERVERLICENSETERMS = IIf ($meta.Version -match "2008-") "" "/IAcceptSQLServerLicenseTerms"
 
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
     $setupArg = "$argQuiet", "$argENU", "$argProgress", "/ACTION=Install", 
-    "/IAcceptSQLServerLicenseTerms", "$argIACCEPTROPENLICENSETERMS", 
+    "$argIACCEPTSQLSERVERLICENSETERMS", "$argIACCEPTROPENLICENSETERMS", 
     # "/UpdateEnabled=False", TODO TODO TODO TODO TODO TODO TODO TODO TODO 
     "/FEATURES=`"$argFeatures`"", 
     "/INSTANCENAME=`"$instanceName`"", 
