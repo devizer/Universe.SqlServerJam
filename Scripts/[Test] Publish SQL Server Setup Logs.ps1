@@ -228,7 +228,8 @@ function Download-File-Managed([string] $url, [string]$outfile) {
   $okAria=$false; try { & aria2c.exe -h *| out-null; $okAria=$? } catch {}
   if ($okAria) {
     Troubleshoot-Info "Starting download `"" -Highlight "$url" "`" using aria2c as `"" -Highlight "$outfile" "`""
-    & aria2c.exe @("--allow-overwrite=true", "--check-certificate=false", "-s", "12", "-x", "12", "-k", "2M", "-j", "12", "-d", "$($dirName)", "-o", "$([System.IO.Path]::GetFileName($outfile))", "$url");
+    # "-k", "2M",
+    & aria2c.exe @("--allow-overwrite=true", "--check-certificate=false", "-s", "12", "-x", "12", "-j", "12", "-d", "$($dirName)", "-o", "$([System.IO.Path]::GetFileName($outfile))", "$url");
     if ($?) { <# Write-Host "aria2 rocks ($([System.IO.Path]::GetFileName($outfile)))"; #> return $true; }
   }
   elseif (([System.Environment]::OSVersion.Version.Major) -eq 5) {
@@ -252,6 +253,7 @@ function Download-File-Managed([string] $url, [string]$outfile) {
       # Write-Host $_.Exception -ForegroundColor DarkRed; 
       if ($i -lt 3) {
         Write-Host "The download of the '$url' url failed.$([System.Environment]::NewLine)Retrying, $($i+1) of 3. $($_.Exception.Message)" -ForegroundColor Red;
+        sleep 1;
       } else {
         Write-Host "Unable to download of the '$url' url.$([System.Environment]::NewLine)$($_.Exception.Message)" -ForegroundColor Red;
       }
@@ -1088,8 +1090,10 @@ $SqlServerDownloadLinks = @(
 $SqlServer2010DownloadLinks = @(
   @{ 
     Version="2014-x64"; #SP3
-    Core ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x64_ENU.exe" 
-    Advanced="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x64_ENU.exe" #SP3, 
+    Core     ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x64_ENU.exe" 
+    Advanced ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x64_ENU.exe" #SP3, 
+    Developer="https://archive.org/download/sql-server-2014-enterprise-sp-1-x-64/SQL_Server_2014_Enterprise_SP1_x64.rar" #SP1
+    DeveloperFormat="ISO-In-Archive"
     LocalDB ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x64/SqlLocalDB.msi"
     CU=@(
     )
@@ -1121,7 +1125,7 @@ $SqlServer2010DownloadLinks = @(
 
   @{ 
     Version="2008R2-x64"; #SP2
-    Core ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x64_ENU.exe" 
+    Core    ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x64_ENU.exe" 
     Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x64_ENU.exe" 
     CU=@(
       @{ Id="SP3"; Url="https://download.microsoft.com/download/D/7/A/D7A28B6C-FCFE-4F70-A902-B109388E01E9/ENU/SQLServer2008R2SP3-KB2979597-x64-ENU.exe" }
@@ -1129,7 +1133,7 @@ $SqlServer2010DownloadLinks = @(
   };
   @{ 
     Version="2008R2-x86"; #SP2
-    Core ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x86_ENU.exe" 
+    Core    ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x86_ENU.exe" 
     Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x86_ENU.exe"
     CU=@(
       @{ Id="SP3"; Url="https://download.microsoft.com/download/D/7/A/D7A28B6C-FCFE-4F70-A902-B109388E01E9/ENU/SQLServer2008R2SP3-KB2979597-x86-ENU.exe" }
@@ -1140,16 +1144,17 @@ $SqlServer2010DownloadLinks = @(
   # 2008 SP2
   @{ 
     Version="2008-x64"; 
-    Core    ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x64_ENU.exe"  #SP2
-    Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x64_ENU.exe" #RTM
+    Core    ="https://web.archive.org/web/20160617214727/https://download.microsoft.com/download/0/F/D/0FD88169-F86F-46E1-8B3B-56C44F6E9505/SQLEXPR_x64_ENU.exe"  #SP3
+    Advanced="https://download.microsoft.com/download/e/9/b/e9bcf5d7-2421-464f-94dc-0c694ba1b5a4/SQLEXPRADV_x64_ENU.exe" #RTM
     CU=@(
       @{ Id="SP4"; Url="https://download.microsoft.com/download/5/E/7/5E7A89F7-C013-4090-901E-1A0F86B6A94C/ENU/SQLServer2008SP4-KB2979596-x64-ENU.exe" }
     )
+    
   };
   @{ 
     Version ="2008-x86"; #SP2
-    Core    ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x86_ENU.exe" #SP2
-    Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x86_ENU.exe" #RTM
+    Core    ="https://web.archive.org/web/20160617214727/https://download.microsoft.com/download/0/F/D/0FD88169-F86F-46E1-8B3B-56C44F6E9505/SQLEXPR_x86_ENU.exe" #SP3
+    Advanced="https://download.microsoft.com/download/e/9/b/e9bcf5d7-2421-464f-94dc-0c694ba1b5a4/SQLEXPRADV_x86_ENU.exe" #RTM
     CU=@(
       @{ Id="SP4"; Url="https://download.microsoft.com/download/5/E/7/5E7A89F7-C013-4090-901E-1A0F86B6A94C/ENU/SQLServer2008SP4-KB2979596-x86-ENU.exe" }
     )
@@ -1273,20 +1278,21 @@ function ApplyCommonSqlServerState([Hashtable] $ret) {
 
 function ExtractSqlServerSetup([string] $title, [string] $exeArchive, [string] $setupPath, [string] $quietArg <# /QS (Fresh) | /Q (prev) #>) {
   Write-Host "Extracting $title using [$($exeArchive)] to [$($setupPath)]"
-  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
-  $extractApp = Start-Process "$($exeArchive)" -ArgumentList @("$quietArg", "/x:`"$setupPath`"") -PassThru
-  if ($extractApp -and $extractApp.Id) {
-    Wait-Process -Id $extractApp.Id
-    if ($extractApp.ExitCode -ne 0) {
-      Write-Host "Extracting $title failed. Exit code $($extractApp.ExitCode)." -ForegroundColor DarkRed;
-      return $false;
-    }
-  } else {
-    Write-Host "Extracting $title. failed." -ForegroundColor DarkRed;
-    return $false;
-  }
-  Write-Host "Extraction of $title took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
-  return $true;
+  $extractStatus = Execute-Process-Smarty "$title Unpacker" "$($exeArchive)" @("$quietArg", "/x:`"$setupPath`"") -WaitTimeout 1800
+  # $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+  # $extractApp = Start-Process "$($exeArchive)" -ArgumentList @("$quietArg", "/x:`"$setupPath`"") -PassThru
+  # if ($extractApp -and $extractApp.Id) {
+  #   Wait-Process -Id $extractApp.Id
+  #   if ($extractApp.ExitCode -ne 0) {
+  #     Write-Host "Extracting $title failed. Exit code $($extractApp.ExitCode)." -ForegroundColor DarkRed;
+  #     return $false;
+  #   }
+  # } else {
+  #   Write-Host "Extracting $title. failed." -ForegroundColor DarkRed;
+  #   return $false;
+  # }
+  # Write-Host "Extraction of $title took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
+  return ($extractStatus.ExitCode -eq 0);
 }
 
 function Download-2010-SQLServer-and-Extract {
@@ -1313,13 +1319,18 @@ function Download-2010-SQLServer-and-Extract {
   foreach($meta in $SqlServer2010DownloadLinks) {
     if ($meta.Version -eq $version) {
       $url = $meta[$mediaType]
+      $urlFormat=$meta["$($mediaType)Format"]
+      if ($urlFormat) {
+        $ext = ".$urlFormat".ToLower();
+        $exeName = "SQL-$mediaType-$Version-ENU$ext"
+        $exeArchive = Combine-Path $mediaPath $exeName
+      }
     }
   }
   if (-not $url) {
     Write-Host "Unknown SQL Server version $version $mediaType" -ForegroundColor DarkRed;
     return @{};
   }
-
 
   Write-Host "Downloading media for version $version $mediaType. URL is '$url'. Setup file is '$exeArchive'";
   $isDownloadOk = Download-File-FailFree-and-Cached $exeArchive @($url)
@@ -1335,13 +1346,28 @@ function Download-2010-SQLServer-and-Extract {
   }
   else 
   {
-    $isExtractOk = ExtractSqlServerSetup "SQL Server $version $mediaType" $exeArchive $setupPath "/Q"
-    if ($isExtractOk) {
+    if ($urlFormat -eq $null)
+    {
+      $isExtractOk = ExtractSqlServerSetup "SQL Server $version $mediaType" $exeArchive $setupPath "/Q"
+      if ($isExtractOk) {
+        $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
+        $ret["Setup"] = $setupPath;
+        $ret["Media"] = $mediaPath;
+      } else {
+        return @{};
+      }
+    } elseif ($urlFormat -eq "ISO-In-Archive") {
+      $sevenZip = Get-Full7z-Exe-FullPath-for-Windows -Version "1900"
+      $isoFolder = Combine-Path $mediaPath "iso"
+      Write-Host "Extract '$exeArchive' to '$isoFolder'"
+      & "$sevenZip" @("x", "-y", "-o`"$isoFolder`"", "$exeArchive") | out-null
+      $isoFile = Get-ChildItem -Path "$isoFolder" -Filter "*.iso" | Select -First 1
+      Write-Host "ISO found: '$($isoFile.FullName)' $($isoFile.Length.ToString("n0")) bytes"
+      Write-Host "Extract '$($isoFile.FullName)' to '$setupPath'"
+      & "$sevenZip" @("x", "-y", "-o`"$setupPath`"", "$($isoFile.FullName)") | out-null
       $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
       $ret["Setup"] = $setupPath;
       $ret["Media"] = $mediaPath;
-    } else {
-      return @{};
     }
   }
 
@@ -1388,6 +1414,64 @@ function Enumerate-SQLServer-Downloads() {
       $meta;
     }
   }}
+}
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Execute-Process-Smarty.ps1]
+function Execute-Process-Smarty {
+  Param(
+    [string] $title, 
+    [string] $launcher,
+    [string[]] $arguments,
+    [string] $workingDirectory = $null,
+    [int] $waitTimeout = 3600
+  )
+  Troubleshoot-Info "[$title] `"$launcher`" $arguments";
+  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+
+  $ret = @{};
+  try { 
+    if ($workingDirectory) { 
+      $app = Start-Process "$launcher" -ArgumentList $arguments -WorkingDirectory $workingDirectory -PassThru;
+    } else {
+      $app = Start-Process "$launcher" -ArgumentList $arguments -PassThru;
+    }
+  } catch {
+    $err = "$($_.GetType()): '$($_.Message)'";
+    $ret = @{Error = "$title failed. $err"; };
+  }
+  
+  if (-not $ret.Error) {
+    if ($app -and $app.Id) {
+      Wait-Process -Id $app.Id -Timeout $waitTimeout;
+      $exited = $app.HasExited;
+      if (-not $exited) { 
+        $ret = @{ Error = "$title timed out." };
+      }
+      if (-not $ret.Error) {
+        $ret = @{ExitCode = [int] $app.ExitCode};
+        if ($app.ExitCode -ne 0) {
+          $ret = @{ Error = "$title failed. Exit code $($app.ExitCode)." };
+        }
+      }
+    } else {
+      $ret = @{ Error = "$title failed." };
+    }
+  }
+
+  $isOk = ((-not $ret.Error) -and ($ret.ExitCode -eq 0));
+  $status = IIF $isOk "Succefully completed" $ret.Error;
+  
+  if ($isOk) { 
+    Write-Host "$title $status. It took $($startAt.ElapsedMilliseconds.ToString("n0")) ms";
+  } else {
+    Write-Host "$title $status. It took $($startAt.ElapsedMilliseconds.ToString("n0")) ms" -ForegroundColor DarkRed;
+  }
+  
+  if (!$isOk -and ($app.Id)) {
+    # TODO: Windows Only
+    & taskkill.exe @("/t", "/f", "/pid", "$($app.Id)") | out-null;
+  }
+  return $ret;
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Find-SQLServer-Meta.ps1]
@@ -1488,6 +1572,12 @@ function Install-SQLServer {
     [string] $instanceName
   )
 
+  if (-not $meta.LauncherSize) {
+    Write-Host "[Install-SQLServer] Wromg `$meta argument. Probably download failed";
+    $meta | fl | out-host
+    return;
+  }
+
   $defaultOptions = @{
     InstallTo = Combine-Path "$(Get-System-Drive)" "SQL";
     Password = "``1qazxsw2";
@@ -1501,18 +1591,55 @@ function Install-SQLServer {
   $major = ($meta.Version.Substring(0,4)) -as [int];
   $is2020 = $major -ge 2016;
   $setupArg=@();
-  $argQuiet = IIf ((Is-BuildServer) -or $meta.Version -like "2005*" -or $meta.Version -like "2008-*") "/Q" "/QUIETSIMPLE";
-  $argProgress = "/INDICATEPROGRESS";
-  $argProgress = "";
-  $argADDCURRENTUSERASSQLADMIN = IIf ($meta.MediaType -eq "Developer") "" "/ADDCURRENTUSERASSQLADMIN";
-  # 2008 and R2: The setting 'IACCEPTROPENLICENSETERMS' specified is not recognized.
-  $argIACCEPTROPENLICENSETERMS = IIF ($major -le 2014) "" "/IACCEPTROPENLICENSETERMS";
-  if ($true -or $is2020) {
+  $title = "SQL Server $($meta.Version) $($meta.MediaType)"
+  if ($major -eq 2005) {
+    # SQL_Engine,SQL_Data_Files,SQL_Replication,SQL_FullText,SQL_SharedTools
+    $argFeatures = IIf ($meta.MediaType -eq "Advanced") "SQL_Engine,SQL_FullText" "SQL_Engine";
+    # /qb for unattended with basic UI
+    
+    $setupArg = "/qn", "ADDLOCAL=$argFeatures", "INSTANCENAME=`"$instanceName`"", 
+         "DISABLENETWORKPROTOCOLS=0", # 0: All, 1: None, 2: TCP only
+         "SECURITYMODE=SQL", "SAPWD=`"$($options.Password)`"", 
+         "INSTALLSQLDIR=`"$($options.InstallTo)`"";
+
+    $setupStatus = Execute-Process-Smarty "SQL Server $($meta.Version) $($meta.MediaType) Setup" $meta.Launcher $setupArg -WaitTimeout 3600
+
+    # Write-Host "Workaround for 2005 logs"; sleep 1; & taskkill.exe @("/t", "/f", "/im", "setup.exe");
+  } else {
+<# 2008
+"%AppData%\Temp\%KEY%\Setup\Setup.exe" /Q /INDICATEPROGRESS /Action=Install ^
+  /ADDCURRENTUSERASSQLADMIN ^
+  /FEATURES=SQL ^
+  /INSTANCENAME=%NEW_SQL_INSTANCE_NAME% ^
+  /SECURITYMODE=SQL /SAPWD=`1qazxsw2 ^
+  /SQLSVCACCOUNT="NT AUTHORITY\SYSTEM" ^
+  /INSTANCEDIR="%SystemDrive%\SQL" ^
+  /INSTALLSHAREDDIR="%SystemDrive%\SQL\x64b" ^
+  /INSTALLSHAREDWOWDIR="%SystemDrive%\SQL\x86b" ^
+  /SQLSYSADMINACCOUNTS="BUILTIN\ADMINISTRATORS" ^
+  /TCPENABLED=1 /NPENABLED=1
+ 
+#>
+    $argFeatures = IIf ($meta.MediaType -eq "Advanced") "SQL_Engine,SQL_FullText" "SQL_Engine";
+    $argQuiet = IIf ((Is-BuildServer) -or $meta.Version -like "2005*" -or $meta.Version -like "2008-*") "/Q" "/QUIETSIMPLE";
+    $argProgress = "/INDICATEPROGRESS";
+    $argProgress = "";
+    $argADDCURRENTUSERASSQLADMIN = IIf ($meta.MediaType -eq "Developer") "" "/ADDCURRENTUSERASSQLADMIN";
+    # 2008 and R2: The setting 'IACCEPTROPENLICENSETERMS' specified is not recognized.
+    $argIACCEPTROPENLICENSETERMS = IIF ($major -le 2014) "" "/IACCEPTROPENLICENSETERMS";
+    
+    # 2008-xXX features
+    $argFeatures = "$($options.Features)"
+    if ($meta.Version -match "2008-") { $argFeatures = IIf ($meta.MediaType -eq "Core") "SQLENGINE" "SQLENGINE,FULLTEXT"; }
+
+    $argENU = IIf ($meta.Version -match "2008-") "" "/ENU"
+    $argIACCEPTSQLSERVERLICENSETERMS = IIf ($meta.Version -match "2008-") "" "/IAcceptSQLServerLicenseTerms"
+
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
-    $setupArg = "$argQuiet", "/ENU", "$argProgress", "/ACTION=Install", 
-    "/IAcceptSQLServerLicenseTerms", "$argIACCEPTROPENLICENSETERMS", 
+    $setupArg = "$argQuiet", "$argENU", "$argProgress", "/ACTION=Install", 
+    "$argIACCEPTSQLSERVERLICENSETERMS", "$argIACCEPTROPENLICENSETERMS", 
     # "/UpdateEnabled=False", TODO TODO TODO TODO TODO TODO TODO TODO TODO 
-    "/FEATURES=`"$($options.Features)`"", 
+    "/FEATURES=`"$argFeatures`"", 
     "/INSTANCENAME=`"$instanceName`"", 
     "/INSTANCEDIR=`"$($options.InstallTo)`"", 
     "/SECURITYMODE=`"SQL`"", 
@@ -1523,13 +1650,17 @@ function Install-SQLServer {
     "$argADDCURRENTUSERASSQLADMIN", 
     "/SQLSYSADMINACCOUNTS=`"BUILTIN\ADMINISTRATORS`"", 
     "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
-  } else {
-    
+    Write-Host ">>> `"$($meta.Launcher)`" $setupArg"
+    & "$($meta.Launcher)" $setupArg
+    if (-not $?) {
+      Write-Host "Warning! Setup '$($meta.Launcher)' failed" -ForeGroundColor DarkRed
+    }
   }
+  
+  # Write-Host ">>> $($meta.Launcher) $setupArg"
 
-  Write-Host ">>> $($meta.Lancher) $setupArg"
-  & "$($meta.Launcher)" $setupArg
 }
+
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Publish-SQLServer-SetupLogs.ps1]
 function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {

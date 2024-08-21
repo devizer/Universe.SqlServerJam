@@ -1652,6 +1652,9 @@ function Install-SQLServer {
     "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
     Write-Host ">>> `"$($meta.Launcher)`" $setupArg"
     & "$($meta.Launcher)" $setupArg
+    if (-not $?) {
+      Write-Host "Warning! Setup '$($meta.Launcher)' failed" -ForeGroundColor DarkRed
+    }
   }
   
   # Write-Host ">>> $($meta.Launcher) $setupArg"
