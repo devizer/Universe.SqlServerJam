@@ -85,6 +85,7 @@ jobs:
        cd Scripts
        powershell -f "[Test] Setup All The SQL Servers.ps1" *| tee "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\FULL-LOG.txt"
        gdr -PSProvider 'FileSystem'
+       Get-WmiObject -class "Win32_PageFileUsage" -namespace "root\CIMV2" -computername localhost
        # Install-Module -Force Platform-Info
     condition: succeededOrFailed()
     displayName: 'Install'
@@ -102,6 +103,7 @@ jobs:
        & 7z x LocalSqlDiscovery-net4.5.7z -oc:\Temp\
        cd c:\Temp\LocalSqlDiscovery-net4.5
        .\SHOW-SQL-Servers.cmd 
+       Get-WmiObject -class "Win32_PageFileUsage" -namespace "root\CIMV2" -computername localhost
     condition: succeededOrFailed()
     displayName: 'Show SQL Servers'
 
