@@ -41,7 +41,7 @@ jobs:
         IMAGE: 'windows-2022'
         TEST_SQL_VERSIONS: '2008'
         TEST_SQL_UPDATES: False
-      '2008- on Server2022':
+      '2008 on Server2022':
         IMAGE: 'windows-2022'
         TEST_SQL_VERSIONS: '2008-'
         TEST_SQL_UPDATES: False
