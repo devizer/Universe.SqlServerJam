@@ -18,8 +18,8 @@ jobs:
     matrix:
       'on 2019':
         IMAGE: 'windows-2019'
-      'on 2022':
-        IMAGE: 'windows-2022'
+      # 'on 2022':
+      #  IMAGE: 'windows-2022'
 
   steps:
 
