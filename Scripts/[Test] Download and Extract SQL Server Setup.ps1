@@ -1690,6 +1690,12 @@ foreach($meta in Enumerate-SQLServer-Downloads) {
 Get-Content $keywordsFile | Out-Host
 # exit 0;
 
+$ver="2014-x64"; $mt="Developer";
+Say "SQL Server $ver [$mt]"
+$result = (Download-2010-SQLServer-and-Extract $ver $mt)
+$result | Format-Table -AutoSize | Out-String -Width 256
+
+
 foreach($meta in Enumerate-SQLServer-Downloads) {
   if ($meta.CU) { foreach($update in $meta.CU) {
     Say "Try Update $($update.Id) for SQL Server $($meta.Version) $($meta.MediaType)"
@@ -1697,13 +1703,6 @@ foreach($meta in Enumerate-SQLServer-Downloads) {
     $result | Format-Table -AutoSize | Out-String -Width 256
   }}
 }
-
-
-$ver="2014-x64"; $mt="Developer";
-Say "SQL Server $ver [$mt]"
-$result = (Download-2010-SQLServer-and-Extract $ver $mt)
-$result | Format-Table -AutoSize | Out-String -Width 256
-
 
 $SqlServer2010DownloadLinks | ConvertTo-Json -Depth 32
 foreach($mt in "LocalDB", "Core", "Advanced") {
