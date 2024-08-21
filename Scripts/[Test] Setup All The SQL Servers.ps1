@@ -1582,7 +1582,7 @@ function Install-SQLServer {
 
     # Write-Host "Workaround for 2005 logs"; sleep 1; & taskkill.exe @("/t", "/f", "/im", "setup.exe");
   } else {
-<#
+<# 2008
 "%AppData%\Temp\%KEY%\Setup\Setup.exe" /Q /INDICATEPROGRESS /Action=Install ^
   /ADDCURRENTUSERASSQLADMIN ^
   /FEATURES=SQL ^
@@ -1596,6 +1596,7 @@ function Install-SQLServer {
   /TCPENABLED=1 /NPENABLED=1
  
 #>
+    $argFeatures = IIf ($meta.MediaType -eq "Advanced") "SQL_Engine,SQL_FullText" "SQL_Engine";
     $argQuiet = IIf ((Is-BuildServer) -or $meta.Version -like "2005*" -or $meta.Version -like "2008-*") "/Q" "/QUIETSIMPLE";
     $argProgress = "/INDICATEPROGRESS";
     $argProgress = "";
@@ -1603,8 +1604,10 @@ function Install-SQLServer {
     # 2008 and R2: The setting 'IACCEPTROPENLICENSETERMS' specified is not recognized.
     $argIACCEPTROPENLICENSETERMS = IIF ($major -le 2014) "" "/IACCEPTROPENLICENSETERMS";
     
-    # 2008-xXX
-    $argFeatures = IIf ($meta.Version -match "2008-") "SQL" "$($options.Features)"
+    # 2008-xXX features
+    $argFeatures = "$($options.Features)"
+    if ($meta.Version -match "2008-") { $argFeatures = IIf ($meta.MediaType -eq "Advanced") "SQL_Engine,SQL_FullText" "SQL_Engine"; }
+
     $argENU = IIf ($meta.Version -match "2008-") "" "/ENU"
     $argIACCEPTSQLSERVERLICENSETERMS = IIf ($meta.Version -match "2008-") "" "/IAcceptSQLServerLicenseTerms"
 
