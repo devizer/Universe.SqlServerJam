@@ -1606,7 +1606,7 @@ function Install-SQLServer {
     
     # 2008-xXX features
     $argFeatures = "$($options.Features)"
-    if ($meta.Version -match "2008-") { $argFeatures = IIf ($meta.MediaType -eq "Advanced") "SQL_Engine,SQL_FullText" "SQL_Engine"; }
+    if ($meta.Version -match "2008-") { $argFeatures = IIf ($meta.MediaType -eq "Core") "SQLENGINE" "SQLENGINE,FULLTEXT"; }
 
     $argENU = IIf ($meta.Version -match "2008-") "" "/ENU"
     $argIACCEPTSQLSERVERLICENSETERMS = IIf ($meta.Version -match "2008-") "" "/IAcceptSQLServerLicenseTerms"
