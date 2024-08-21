@@ -1171,7 +1171,9 @@ $SqlServer2010DownloadLinks = @(
   @{ 
     Version="2005-x86"; 
     Core    ="https://sourceforge.net/projects/db-engine/files/database-engine-x86-9.0.5000.exe/download"  #SP4
-    Advanced="https://ia601402.us.archive.org/34/items/Microsoft_SQL_Server_2005/en_sql_2005_express_adv.exe" #SP1
+    # Advanced="https://ia601402.us.archive.org/34/items/Microsoft_SQL_Server_2005/en_sql_2005_express_adv.exe" #SP1
+    # Advanced="https://archive.org/download/Microsoft_SQL_Server_2005/en_sql_2005_express_adv.exe" #SP1
+    Advanced="https://archive.org/download/SQLEXPR_ADV_2005_SP2/SQLEXPR_ADV.EXE"
     CU=@(
       # Core already SP4
       @{ Id="SP4"; Url="https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2011/01/sqlserver2005expressadvancedsp4-kb2463332-x86-enu_b8640fde879a23a2372b27f158d54abb5079033e.exe" }
@@ -1179,6 +1181,7 @@ $SqlServer2010DownloadLinks = @(
   };
 )
 <#
+              (sp2) https://archive.org/download/SQLEXPR_ADV_2005_SP2/SQLEXPR_ADV.EXE
 was: 9.0.2047 (sp1) https://ia601402.us.archive.org/34/items/Microsoft_SQL_Server_2005/en_sql_2005_express_adv.exe
 now: 9.0.5000 (sp4) https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2011/01/sqlserver2005expressadvancedsp4-kb2463332-x86-enu_b8640fde879a23a2372b27f158d54abb5079033e.exe
 #>
