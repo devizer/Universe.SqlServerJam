@@ -1579,7 +1579,7 @@ function Install-SQLServer {
     # /qb for unattended with basic UI
     
     $setupArg = "/qn", "ADDLOCAL=$argFeatures", "INSTANCENAME=`"$instanceName`"", 
-         "DISABLENETWORKPROTOCOLS=1", # 0: All, 1: None, 2: TCP only
+         "DISABLENETWORKPROTOCOLS=0", # 0: All, 1: None, 2: TCP only
          "SECURITYMODE=SQL", "SAPWD=`"$($options.Password)`"", 
          "INSTALLSQLDIR=`"$($options.InstallTo)`"";
 
