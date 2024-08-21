@@ -101,7 +101,7 @@ jobs:
        cd Scripts
        & 7z x LocalSqlDiscovery-net4.5.7z -oc:\Temp\
        cd c:\Temp\LocalSqlDiscovery-net4.5
-       SHOW-SQL-Servers.cmd 
+       .\SHOW-SQL-Servers.cmd 
     condition: succeededOrFailed()
     displayName: 'Show SQL Servers'
 
