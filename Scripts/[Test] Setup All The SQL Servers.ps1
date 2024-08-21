@@ -258,6 +258,7 @@ function Download-File-Managed([string] $url, [string]$outfile) {
       # Write-Host $_.Exception -ForegroundColor DarkRed; 
       if ($i -lt 3) {
         Write-Host "The download of the '$url' url failed.$([System.Environment]::NewLine)Retrying, $($i+1) of 3. $($_.Exception.Message)" -ForegroundColor Red;
+        sleep 1;
       } else {
         Write-Host "Unable to download of the '$url' url.$([System.Environment]::NewLine)$($_.Exception.Message)" -ForegroundColor Red;
       }
