@@ -1440,12 +1440,12 @@ function Execute-Process-Smarty {
   }
 
   $isOk = ((-not $ret.Error) -and ($ret.ExitCode -eq 0));
-  $status = IIF $isOk "Succcefully completed" $ret.Error;
+  $status = IIF $isOk "Succefully completed" $ret.Error;
   
   if ($isOk) { 
     Write-Host "$title $status. It took $($startAt.ElapsedMilliseconds.ToString("n0")) ms";
   } else {
-    Write-Host "$title $status. It took $($startAt.ElapsedMilliseconds.ToString("n0")) ms";
+    Write-Host "$title $status. It took $($startAt.ElapsedMilliseconds.ToString("n0")) ms" -ForegroundColor DarkRed;
   }
   
   if (!$isOk -and ($app.Id)) {
@@ -1583,6 +1583,8 @@ function Install-SQLServer {
          "SECURITYMODE=SQL", "SAPWD=`"$($options.Password)`"", 
          "INSTALLSQLDIR=`"$($options.InstallTo)`"";
 
+    $setupStatus = Execute-Process-Smarty "SQL Server $($meta.Version) $($meta.MediaType) Setup" $meta.Launcher $setupArg -WaitTimeout 3600
+
     # Write-Host "Workaround for 2005 logs"; sleep 1; & taskkill.exe @("/t", "/f", "/im", "setup.exe");
   } else {
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
@@ -1600,10 +1602,11 @@ function Install-SQLServer {
     "$argADDCURRENTUSERASSQLADMIN", 
     "/SQLSYSADMINACCOUNTS=`"BUILTIN\ADMINISTRATORS`"", 
     "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
+    & "$($meta.Launcher)" $setupArg
   }
   
   # Write-Host ">>> $($meta.Launcher) $setupArg"
-  $setupStatus = Execute-Process-Smarty "SQL Server $($meta.Version) $($meta.MediaType) Setup" $meta.Launcher $setupArg -WaitTimeout 3600
+
 }
 
 
