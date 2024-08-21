@@ -234,7 +234,8 @@ function Download-File-Managed([string] $url, [string]$outfile) {
   $okAria=$false; try { & aria2c.exe -h *| out-null; $okAria=$? } catch {}
   if ($okAria) {
     Troubleshoot-Info "Starting download `"" -Highlight "$url" "`" using aria2c as `"" -Highlight "$outfile" "`""
-    & aria2c.exe @("--allow-overwrite=true", "--check-certificate=false", "-s", "12", "-x", "12", "-k", "2M", "-j", "12", "-d", "$($dirName)", "-o", "$([System.IO.Path]::GetFileName($outfile))", "$url");
+    # "-k", "2M",
+    & aria2c.exe @("--allow-overwrite=true", "--check-certificate=false", "-s", "12", "-x", "12", "-j", "12", "-d", "$($dirName)", "-o", "$([System.IO.Path]::GetFileName($outfile))", "$url");
     if ($?) { <# Write-Host "aria2 rocks ($([System.IO.Path]::GetFileName($outfile)))"; #> return $true; }
   }
   elseif (([System.Environment]::OSVersion.Version.Major) -eq 5) {
@@ -1097,8 +1098,8 @@ $SqlServer2010DownloadLinks = @(
     Version="2014-x64"; #SP3
     Core     ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x64_ENU.exe" 
     Advanced ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x64_ENU.exe" #SP3, 
-    Developer="https://archive.org/download/sql-server-2014-enterprise-sp-1-x-64/SQL_Server_2014_Enterprise_SP1_x64.rar"
-    DeveloperFormat="ISO-IN-ARCHIVE"
+    Developer="https://archive.org/download/sql-server-2014-enterprise-sp-1-x-64/SQL_Server_2014_Enterprise_SP1_x64.rar" #SP1
+    DeveloperFormat="ISO-In-Archive"
     LocalDB ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x64/SqlLocalDB.msi"
     CU=@(
     )
@@ -1370,6 +1371,9 @@ function Download-2010-SQLServer-and-Extract {
       Write-Host "ISO found: '$($isoFile.FullName)' $($isoFile.Length.ToString("n0")) bytes"
       Write-Host "Extract '$($isoFile.FullName)' to '$setupPath'"
       & "$sevenZip" @("x", "-y", "-o`"$setupPath`"", "$($isoFile.FullName)") | out-null
+      $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
+      $ret["Setup"] = $setupPath;
+      $ret["Media"] = $mediaPath;
     }
   }
 
