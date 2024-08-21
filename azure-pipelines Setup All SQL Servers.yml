@@ -50,6 +50,10 @@ jobs:
         IMAGE: 'windows-2022'
         TEST_SQL_VERSIONS: '2008'
         TEST_SQL_UPDATES: False
+      '2008R2 on Server2022':
+        IMAGE: 'windows-2022'
+        TEST_SQL_VERSIONS: '2008R2'
+        TEST_SQL_UPDATES: False
 
       '2022 2019 2017 2016 on Server2019':
         IMAGE: 'windows-2019'
@@ -70,6 +74,10 @@ jobs:
       '2008 2008R2 on Server2019':
         IMAGE: 'windows-2019'
         TEST_SQL_VERSIONS: '2008'
+        TEST_SQL_UPDATES: False
+      '2008R2 on Server2019':
+        IMAGE: 'windows-2019'
+        TEST_SQL_VERSIONS: '2008R2'
         TEST_SQL_UPDATES: False
 
   steps:
