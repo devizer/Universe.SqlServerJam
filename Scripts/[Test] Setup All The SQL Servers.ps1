@@ -1146,7 +1146,7 @@ $SqlServer2010DownloadLinks = @(
   # 2008 SP2
   @{ 
     Version="2008-x64"; 
-    Core    ="https://web.archive.org/web/20160617214727/https://download.microsoft.com/download/0/F/D/0FD88169-F86F-46E1-8B3B-56C44F6E9505/SQLEXPR_x64_ENU.exe"  #SP2
+    Core    ="https://web.archive.org/web/20160617214727/https://download.microsoft.com/download/0/F/D/0FD88169-F86F-46E1-8B3B-56C44F6E9505/SQLEXPR_x64_ENU.exe"  #SP3
     Advanced="https://download.microsoft.com/download/e/9/b/e9bcf5d7-2421-464f-94dc-0c694ba1b5a4/SQLEXPRADV_x64_ENU.exe" #RTM
     CU=@(
       @{ Id="SP4"; Url="https://download.microsoft.com/download/5/E/7/5E7A89F7-C013-4090-901E-1A0F86B6A94C/ENU/SQLServer2008SP4-KB2979596-x64-ENU.exe" }
@@ -1155,7 +1155,7 @@ $SqlServer2010DownloadLinks = @(
   };
   @{ 
     Version ="2008-x86"; #SP2
-    Core    ="https://web.archive.org/web/20160617214727/https://download.microsoft.com/download/0/F/D/0FD88169-F86F-46E1-8B3B-56C44F6E9505/SQLEXPR_x86_ENU.exe" #SP2
+    Core    ="https://web.archive.org/web/20160617214727/https://download.microsoft.com/download/0/F/D/0FD88169-F86F-46E1-8B3B-56C44F6E9505/SQLEXPR_x86_ENU.exe" #SP3
     Advanced="https://download.microsoft.com/download/e/9/b/e9bcf5d7-2421-464f-94dc-0c694ba1b5a4/SQLEXPRADV_x86_ENU.exe" #RTM
     CU=@(
       @{ Id="SP4"; Url="https://download.microsoft.com/download/5/E/7/5E7A89F7-C013-4090-901E-1A0F86B6A94C/ENU/SQLServer2008SP4-KB2979596-x86-ENU.exe" }
