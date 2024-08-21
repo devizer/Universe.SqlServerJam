@@ -1378,6 +1378,7 @@ function Download-2010-SQLServer-and-Extract {
       $ret["Setup"] = $setupPath;
       $ret["Media"] = $mediaPath;
     } elseif ($urlFormat -eq "Archive") {
+      $sevenZip = Get-Full7z-Exe-FullPath-for-Windows -Version "1900"
       Write-Host "Extract '$exeArchive' to '$setupPath'"
       & "$sevenZip" @("x", "-y", "-o`"$setupPath`"", "$exeArchive") | out-null
       $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
