@@ -1,6 +1,7 @@
 variables:
   NUGET_VERSION: 0.1
   PS1_TROUBLE_SHOOT: On
+  PS1_REPO_DOWNLOAD_FOLDER_1: 'C:\SQL-Downloads'
 
 trigger:
   branches:
