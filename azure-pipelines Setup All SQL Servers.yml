@@ -78,14 +78,15 @@ jobs:
       Write-Host "CPU: $((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
 
       gdr -PSProvider 'FileSystem'
-
+      
+      Set-WMIInstance -class Win32_PageFileSetting -Arguments @{name="d:\pagefile.sys";InitialSize=2000;MaximumSize=2000}
+      Get-WmiObject -class "Win32_PageFileUsage" -namespace "root\CIMV2" -computername localhost | Format-Table Caption, Name, PeakUsage, AllocatedBaseSize, CurrentUsage -AutoSize | Out-String -Width 256
     displayName: 'Bootstrap'
 
   - powershell: |
        cd Scripts
        powershell -f "[Test] Setup All The SQL Servers.ps1" *| tee "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\FULL-LOG.txt"
        gdr -PSProvider 'FileSystem'
-       Get-WmiObject -class "Win32_PageFileUsage" -namespace "root\CIMV2" -computername localhost | Format-Table Caption, Name, PeakUsage, AllocatedBaseSize, CurrentUsage -AutoSize | Out-String -Width 256
        # Install-Module -Force Platform-Info
     condition: succeededOrFailed()
     displayName: 'Install'
