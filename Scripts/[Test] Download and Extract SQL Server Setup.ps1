@@ -1158,6 +1158,8 @@ $SqlServer2010DownloadLinks = @(
     Version="2008R2-x64"; #SP2
     Core    ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x64_ENU.exe" 
     Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x64_ENU.exe" 
+    Developer="https://archive.org/download/sql_server_2008r2_sp3_developer_edition_x86_x64_ia64/sql_server_2008r2_sp3_developer_edition_x64.7z"
+    DeveloperFormat="Archive"
     CU=@(
       @{ Id="SP3"; Url="https://download.microsoft.com/download/D/7/A/D7A28B6C-FCFE-4F70-A902-B109388E01E9/ENU/SQLServer2008R2SP3-KB2979597-x64-ENU.exe" }
     )
@@ -1166,6 +1168,8 @@ $SqlServer2010DownloadLinks = @(
     Version="2008R2-x86"; #SP2
     Core    ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x86_ENU.exe" 
     Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x86_ENU.exe"
+    Developer="https://archive.org/download/sql_server_2008r2_sp3_developer_edition_x86_x64_ia64/sql_server_2008r2_sp4_developer_edition_x86.7z"
+    DeveloperFormat="Archive"
     CU=@(
       @{ Id="SP3"; Url="https://download.microsoft.com/download/D/7/A/D7A28B6C-FCFE-4F70-A902-B109388E01E9/ENU/SQLServer2008R2SP3-KB2979597-x86-ENU.exe" }
     )
@@ -1675,6 +1679,9 @@ function Install-SQLServer {
     # 2008 and R2: The setting 'IACCEPTROPENLICENSETERMS' specified is not recognized.
     $argIACCEPTROPENLICENSETERMS = IIF ($major -le 2014) "" "/IACCEPTROPENLICENSETERMS";
     
+    # 2008 R2 Dev 10.50.6000.34: /AGTSVCACCOUNT="NT AUTHORITY\SYSTEM" required on Windows 2016+
+    $argAGTSVCACCOUNT = IIF ($meta.Version -like "2008R2*" -and $meta.MediaType -eq "Developer") "/AGTSVCACCOUNT=`"NT AUTHORITY\SYSTEM`"" "";
+    
     # 2008-xXX features
     $argFeatures = "$($options.Features)"
     if ($meta.Version -match "2008-") { $argFeatures = IIf ($meta.MediaType -eq "Core") "SQLENGINE" "SQLENGINE,FULLTEXT"; }
@@ -1691,7 +1698,7 @@ function Install-SQLServer {
     "/INSTANCEDIR=`"$($options.InstallTo)`"", 
     "/SECURITYMODE=`"SQL`"", 
     "/SAPWD=`"$($options.Password)`"", 
-    "/SQLSVCACCOUNT=`"NT AUTHORITY\SYSTEM`"", 
+    "/SQLSVCACCOUNT=`"NT AUTHORITY\SYSTEM`"", "$argAGTSVCACCOUNT",
     "/SQLSVCSTARTUPTYPE=AUTOMATIC", 
     "/BROWSERSVCSTARTUPTYPE=AUTOMATIC", 
     "$argADDCURRENTUSERASSQLADMIN", 
@@ -1743,7 +1750,7 @@ foreach($meta in Enumerate-SQLServer-Downloads) {
 Get-Content $keywordsFile | Out-Host
 # exit 0;
 
-foreach($ver in "2012-x86", "2012-x64", "2014-x64") {
+foreach($ver in "2008R2-x86", "2008R2-x64", "2012-x86", "2012-x64", "2014-x64") {
   $mt="Developer";
   Say "SQL Server $ver [$mt]"
   $result = (Download-2010-SQLServer-and-Extract $ver $mt)
