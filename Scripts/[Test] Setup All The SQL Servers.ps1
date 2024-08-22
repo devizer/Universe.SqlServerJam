@@ -240,9 +240,9 @@ function Download-File-Managed([string] $url, [string]$outfile) {
     if ($?) { 
       <# Write-Host "aria2 rocks ($([System.IO.Path]::GetFileName($outfile)))"; #> 
       try { $length = (new-object System.IO.FileInfo($outfile)).Length; } catch {}; $milliSeconds = $startAt.ElapsedMilliseconds;
-      $size=""; if ($length -gt 0) { $size=" ('$($length.ToString("n0"))' bytes)"; }
+      $size=""; if ($length -gt 0) { $size=" ($($length.ToString("n0")) bytes)"; }
       $speed=""; if ($length -gt 0 -and $milliSeconds -gt 0) { $speed=" Speed is $(($length*1000/1024/$milliSeconds).ToString("n0")) Kb/s."; }
-      $duration=""; if ($milliSeconds -gt 0) {$duration=" It took $(($duration/1000.).ToString("n1")) seconds."; }
+      $duration=""; if ($milliSeconds -gt 0) {$duration=" It took $(($milliSeconds/1000.).ToString("n1")) seconds."; }
       Write-Host "Download of '$outfile'$($size) completed.$($duration)$($speed)"
       return $true; 
     }
@@ -262,9 +262,9 @@ function Download-File-Managed([string] $url, [string]$outfile) {
       $startAt = [System.Diagnostics.Stopwatch]::StartNew()
       $d.DownloadFile("$url","$outfile"); 
       try { $length = (new-object System.IO.FileInfo($outfile)).Length; } catch {}; $milliSeconds = $startAt.ElapsedMilliseconds;
-      $size=""; if ($length -gt 0) { $size=" ('$($length.ToString("n0"))' bytes)"; }
+      $size=""; if ($length -gt 0) { $size=" ($($length.ToString("n0")) bytes)"; }
       $speed=""; if ($length -gt 0 -and $milliSeconds -gt 0) { $speed=" Speed is $(($length*1000/1024/$milliSeconds).ToString("n0")) Kb/s."; }
-      $duration=""; if ($milliSeconds -gt 0) {$duration=" It took $(($duration/1000.).ToString("n1")) seconds."; }
+      $duration=""; if ($milliSeconds -gt 0) {$duration=" It took $(($milliSeconds/1000.).ToString("n1")) seconds."; }
       Write-Host "Download of '$outfile'$($size) completed.$($duration)$($speed)"
       return $true
     } 
