@@ -1680,7 +1680,6 @@ function Install-SQLServer {
     $argADDCURRENTUSERASSQLADMIN = IIf ($meta.MediaType -eq "Developer") "" "/ADDCURRENTUSERASSQLADMIN";
     # 2008 and R2: The setting 'IACCEPTROPENLICENSETERMS' specified is not recognized.
     $argIACCEPTROPENLICENSETERMS = IIF ($major -le 2014) "" "/IACCEPTROPENLICENSETERMS";
-    $argProductId = IIF ($major -le 2014 -and $meta.MediaType -eq "Developer") "/PID=82YJF-9RP6B-YQV9M-VXQFR-YJBGX" "";
     
     # 2008-xXX features
     $argFeatures = "$($options.Features)"
@@ -1690,7 +1689,7 @@ function Install-SQLServer {
     $argIACCEPTSQLSERVERLICENSETERMS = IIf ($meta.Version -match "2008-") "" "/IAcceptSQLServerLicenseTerms"
 
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
-    $setupArg = "$argQuiet", "$argENU", "$argProgress", "/ACTION=Install", $argProductId,
+    $setupArg = "$argQuiet", "$argENU", "$argProgress", "/ACTION=Install",
     "$argIACCEPTSQLSERVERLICENSETERMS", "$argIACCEPTROPENLICENSETERMS", 
     # "/UpdateEnabled=False", TODO TODO TODO TODO TODO TODO TODO TODO TODO 
     "/FEATURES=`"$argFeatures`"", 
