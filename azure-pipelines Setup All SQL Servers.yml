@@ -21,6 +21,15 @@ jobs:
   strategy:
     maxParallel: 10
     matrix:
+      '2008R2-x64 on Server2019':
+        IMAGE: 'windows-2019'
+        TEST_SQL_VERSIONS: '2008R2-x64'
+        TEST_SQL_UPDATES: False
+      '2008R2-x86 on Server2019':
+        IMAGE: 'windows-2019'
+        TEST_SQL_VERSIONS: '2008R2-x86'
+        TEST_SQL_UPDATES: False
+
       '2012-x86 Developer on Server2022':
         IMAGE: 'windows-2022'
         TEST_SQL_VERSIONS: '2012-x86'
@@ -93,14 +102,6 @@ jobs:
       '2005 on Server2019':
         IMAGE: 'windows-2019'
         TEST_SQL_VERSIONS: '2005'
-        TEST_SQL_UPDATES: False
-      '2008R2-x64 on Server2019':
-        IMAGE: 'windows-2019'
-        TEST_SQL_VERSIONS: '2008R2-x64'
-        TEST_SQL_UPDATES: False
-      '2008R2-x86 on Server2019':
-        IMAGE: 'windows-2019'
-        TEST_SQL_VERSIONS: '2008R2-x86'
         TEST_SQL_UPDATES: False
       '2008-x64 on Server2019':
         IMAGE: 'windows-2019'
