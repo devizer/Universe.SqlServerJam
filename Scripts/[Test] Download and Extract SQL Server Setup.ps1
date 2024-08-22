@@ -486,6 +486,15 @@ function Get-DirectorySize([string] $path) {
   }
 }
 
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Folder-Size.ps1]
+function Get-Folder-Size([string] $folder) {
+  if (Test-Path "$folder" -PathType Container) {
+     $subFolderItems = Get-ChildItem "$folder" -recurse -force | Where-Object {$_.PSIsContainer -eq $false} | Measure-Object -property Length -sum | Select-Object Sum
+     return $subFolderItems.sum;
+  }
+}
+
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Full7z-Exe-FullPath-for-Windows.ps1]
 # arch: x86|x64|arm64
 # version: 1604|2301
@@ -1257,7 +1266,12 @@ function Download-Fresh-SQLServer-and-Extract {
     Write-Host "Media download for version $version $mediaType. failed" -ForegroundColor DarkRed;
     return @{};
   }
-  Write-Host "Media download took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
+  
+  try { $length = Get-Folder-Size $mediaPath; } catch {}; $milliSeconds = $startAt.ElapsedMilliseconds;
+  $size=""; if ($length -gt 0) { $size=" ($($length.ToString("n0")) bytes)"; }
+  $speed=""; if ($length -gt 0 -and $milliSeconds -gt 0) { $speed=" Speed is $(($length*1000/1024/$milliSeconds).ToString("n0")) Kb/s."; }
+  $duration=""; if ($milliSeconds -gt 0) {$duration=" It took $(($milliSeconds/1000.).ToString("n1")) seconds."; }
+  Write-Host "Media '$mediaPath'$($size) download complete.$($duration)$($speed)"
 
   $ret = @{ Version=$version; MediaType=$mediaType; };
   if ($mediaType -eq "LocalDB") {

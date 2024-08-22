@@ -16,11 +16,22 @@ jobs:
 - job: Install
   pool:
     vmImage: '$(IMAGE)'
-  timeoutInMinutes: 150
+  timeoutInMinutes: 180
   cancelTimeoutInMinutes: 7
   strategy:
     maxParallel: 10
     matrix:
+      'Developer 2022 2019 2017 2016 2014 on Server2022':
+        IMAGE: 'windows-2019'
+        TEST_SQL_VERSIONS: '2022 2019 2017 2016 2014'
+        TEST_SQL_MEDIA: Developer
+        TEST_SQL_UPDATES: False
+      'Developer 2022 2019 2017 2016 2014 on Server2019':
+        IMAGE: 'windows-2019'
+        TEST_SQL_VERSIONS: '2022 2019 2017 2016 2014'
+        TEST_SQL_MEDIA: Developer
+        TEST_SQL_UPDATES: False
+
       '2014 Developer on Server2022':
         IMAGE: 'windows-2019'
         TEST_SQL_VERSIONS: '2014'
