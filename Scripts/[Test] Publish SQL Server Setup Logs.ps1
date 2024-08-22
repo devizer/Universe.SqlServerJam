@@ -229,8 +229,16 @@ function Download-File-Managed([string] $url, [string]$outfile) {
   if ($okAria) {
     Troubleshoot-Info "Starting download `"" -Highlight "$url" "`" using aria2c as `"" -Highlight "$outfile" "`""
     # "-k", "2M",
+    $startAt = [System.Diagnostics.Stopwatch]::StartNew()
     & aria2c.exe @("--allow-overwrite=true", "--check-certificate=false", "-s", "12", "-x", "12", "-j", "12", "-d", "$($dirName)", "-o", "$([System.IO.Path]::GetFileName($outfile))", "$url");
-    if ($?) { <# Write-Host "aria2 rocks ($([System.IO.Path]::GetFileName($outfile)))"; #> return $true; }
+    if ($?) { 
+      <# Write-Host "aria2 rocks ($([System.IO.Path]::GetFileName($outfile)))"; #> 
+      try { $length = (new-object System.IO.FileInfo($outfile)).Length; } catch {}; $milliSeconds = $startAt.ElapsedMilliseconds;
+      $size=""; if ($length -gt 0) { $size=" Size is '$($length.ToString("n0"))' bytes."; }
+      $speed=""; if ($length -gt 0 -and $milliSeconds -gt 0) { $speed=" Speed is $(($length*1000/1024/$milliSeconds).ToString("n0")) Kb/s."; }
+      Write-Host "Download of '$outfile' completed.$($size)$($speed)"
+      return $true; 
+    }
   }
   elseif (([System.Environment]::OSVersion.Version.Major) -eq 5) {
     Write-Host "Warning! Windows XP and Server 2003 requires aria2c.exe in the PATH for downloading." -ForegroundColor Red; 
@@ -244,7 +252,12 @@ function Download-File-Managed([string] $url, [string]$outfile) {
     $d=new-object System.Net.WebClient;
     # $d.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36");
     try {
+      $startAt = [System.Diagnostics.Stopwatch]::StartNew()
       $d.DownloadFile("$url","$outfile"); 
+      try { $length = (new-object System.IO.FileInfo($outfile)).Length; } catch {}; $milliSeconds = $startAt.ElapsedMilliseconds;
+      $size=""; if ($length -gt 0) { $size=" Size is '$($length.ToString("n0"))' bytes."; }
+      $speed=""; if ($length -gt 0 -and $milliSeconds -gt 0) { $speed=" Speed is $(($length*1000/1024/$milliSeconds).ToString("n0")) Kb/s."; }
+      Write-Host "Download of '$outfile' completed.$($size)$($speed)"
       return $true
     } 
     catch { 
@@ -1092,8 +1105,11 @@ $SqlServer2010DownloadLinks = @(
     Version="2014-x64"; #SP3
     Core     ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x64_ENU.exe" 
     Advanced ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x64_ENU.exe" #SP3, 
-    Developer="https://archive.org/download/sql-server-2014-enterprise-sp-1-x-64/SQL_Server_2014_Enterprise_SP1_x64.rar" #SP1
-    DeveloperFormat="ISO-In-Archive"
+    # SP1 does not work on Pipeline
+    # Developer="https://archive.org/download/sql-server-2014-enterprise-sp-1-x-64/SQL_Server_2014_Enterprise_SP1_x64.rar" #SP1
+    # DeveloperFormat="ISO-In-Archive"
+    Developer="https://archive.org/download/sql_server_2014_sp3_developer_edition_x64.7z/sql_server_2014_sp3_developer_edition_x64.7z" #SP3, 12.0.6024
+    DeveloperFormat="Archive"
     LocalDB ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x64/SqlLocalDB.msi"
     CU=@(
     )
@@ -1162,7 +1178,9 @@ $SqlServer2010DownloadLinks = @(
   @{ 
     Version="2005-x86"; 
     Core    ="https://sourceforge.net/projects/db-engine/files/database-engine-x86-9.0.5000.exe/download"  #SP4
-    Advanced="https://ia601402.us.archive.org/34/items/Microsoft_SQL_Server_2005/en_sql_2005_express_adv.exe" #SP1
+    # Advanced="https://ia601402.us.archive.org/34/items/Microsoft_SQL_Server_2005/en_sql_2005_express_adv.exe" #SP1
+    # Advanced="https://archive.org/download/Microsoft_SQL_Server_2005/en_sql_2005_express_adv.exe" #SP1
+    Advanced="https://archive.org/download/SQLEXPR_ADV_2005_SP2/SQLEXPR_ADV.EXE"
     CU=@(
       # Core already SP4
       @{ Id="SP4"; Url="https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2011/01/sqlserver2005expressadvancedsp4-kb2463332-x86-enu_b8640fde879a23a2372b27f158d54abb5079033e.exe" }
@@ -1170,6 +1188,7 @@ $SqlServer2010DownloadLinks = @(
   };
 )
 <#
+              (sp2) https://archive.org/download/SQLEXPR_ADV_2005_SP2/SQLEXPR_ADV.EXE
 was: 9.0.2047 (sp1) https://ia601402.us.archive.org/34/items/Microsoft_SQL_Server_2005/en_sql_2005_express_adv.exe
 now: 9.0.5000 (sp4) https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2011/01/sqlserver2005expressadvancedsp4-kb2463332-x86-enu_b8640fde879a23a2372b27f158d54abb5079033e.exe
 #>
@@ -1368,6 +1387,15 @@ function Download-2010-SQLServer-and-Extract {
       $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
       $ret["Setup"] = $setupPath;
       $ret["Media"] = $mediaPath;
+    } elseif ($urlFormat -eq "Archive") {
+      $sevenZip = Get-Full7z-Exe-FullPath-for-Windows -Version "1900"
+      Write-Host "Extract '$exeArchive' to '$setupPath'"
+      & "$sevenZip" @("x", "-y", "-o`"$setupPath`"", "$exeArchive") | out-null
+      $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
+      $ret["Setup"] = $setupPath;
+      $ret["Media"] = $mediaPath;
+    } else {
+      Write-Host "Warning! Unknown format '$urlFormat' for '$url')" -ForegroundColor DarkRed
     }
   }
 
