@@ -1125,7 +1125,7 @@ $SqlServer2010DownloadLinks = @(
     # SP1 does not work on Pipeline
     # Developer="https://archive.org/download/sql-server-2014-enterprise-sp-1-x-64/SQL_Server_2014_Enterprise_SP1_x64.rar" #SP1
     # DeveloperFormat="ISO-In-Archive"
-    Developer="https://archive.org/download/sql_server_2014_sp3_developer_edition_x64.7z/sql_server_2014_sp3_developer_x64.7z" #SP3, 12.0.6024
+    Developer="https://archive.org/download/sql_server_2014_sp3_developer_edition_x64.7z/sql_server_2014_sp3_developer_edition_x64.7z" #SP3, 12.0.6024
     DeveloperFormat="Archive"
     LocalDB ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x64/SqlLocalDB.msi"
     CU=@(
@@ -1143,6 +1143,8 @@ $SqlServer2010DownloadLinks = @(
     Version="2012-x64"; #SP4
     Core ="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/SQLEXPR_x64_ENU.exe" 
     Advanced="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/SQLEXPRADV_x64_ENU.exe" 
+    Developer="https://archive.org/download/sql_server_2012_sp4_developer_x86_x64/sql_server_2012_sp4_developer_x64.7z" # 11.0.7001.0 SP4
+    DeveloperFormat="Archive"
     LocalDB ="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/ENU/x64/SqlLocalDB.msi"
     CU=@(
     )
@@ -1151,6 +1153,8 @@ $SqlServer2010DownloadLinks = @(
     Version="2012-x86"; #SP4
     Core ="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/SQLEXPR_x86_ENU.exe" 
     Advanced="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/SQLEXPRADV_x86_ENU.exe"
+    Developer="https://archive.org/download/sql_server_2012_sp4_developer_x86_x64/sql_server_2012_sp4_developer_x86.7z" # 11.0.7001.0 SP4
+    DeveloperFormat="Archive"
     LocalDB ="https://download.microsoft.com/download/B/D/E/BDE8FAD6-33E5-44F6-B714-348F73E602B6/ENU/x86/SqlLocalDB.msi"
     CU=@(
     )
