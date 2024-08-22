@@ -1125,7 +1125,7 @@ $SqlServer2010DownloadLinks = @(
     # SP1 does not work on Pipeline
     # Developer="https://archive.org/download/sql-server-2014-enterprise-sp-1-x-64/SQL_Server_2014_Enterprise_SP1_x64.rar" #SP1
     # DeveloperFormat="ISO-In-Archive"
-    Developer="https://archive.org/download/sql_server_2014_sp3_developer_edition_x64.7z/sql_server_2014_sp3_developer_edition_x64.7z" #SP3, 12.0.6024
+    Developer="https://archive.org/download/sql_server_2014_sp3_developer_edition_x64.7z/sql_server_2014_sp3_developer_x64.7z" #SP3, 12.0.6024
     DeveloperFormat="Archive"
     LocalDB ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x64/SqlLocalDB.msi"
     CU=@(
@@ -1400,18 +1400,17 @@ function Download-2010-SQLServer-and-Extract {
     } elseif ($urlFormat -eq "ISO-In-Archive") {
       $sevenZip = Get-Full7z-Exe-FullPath-for-Windows -Version "1900"
       $isoFolder = Combine-Path $mediaPath "iso"
-      Write-Host "Extract '$exeArchive' to '$isoFolder'"
+      Write-Host "Extracting '$exeArchive' to '$isoFolder'"
       & "$sevenZip" @("x", "-y", "-o`"$isoFolder`"", "$exeArchive") | out-null
       $isoFile = Get-ChildItem -Path "$isoFolder" -Filter "*.iso" | Select -First 1
-      Write-Host "ISO found: '$($isoFile.FullName)' $($isoFile.Length.ToString("n0")) bytes"
-      Write-Host "Extract '$($isoFile.FullName)' to '$setupPath'"
+      Write-Host "ISO found: '$($isoFile.FullName)' ($($isoFile.Length.ToString("n0")) bytes). Extracting it to '$setupPath'";
       & "$sevenZip" @("x", "-y", "-o`"$setupPath`"", "$($isoFile.FullName)") | out-null
       $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
       $ret["Setup"] = $setupPath;
       $ret["Media"] = $mediaPath;
     } elseif ($urlFormat -eq "Archive") {
       $sevenZip = Get-Full7z-Exe-FullPath-for-Windows -Version "1900"
-      Write-Host "Extract '$exeArchive' to '$setupPath'"
+      Write-Host "Extracting '$exeArchive' to '$setupPath'"
       & "$sevenZip" @("x", "-y", "-o`"$setupPath`"", "$exeArchive") | out-null
       $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
       $ret["Setup"] = $setupPath;
