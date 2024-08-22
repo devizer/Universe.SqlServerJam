@@ -235,8 +235,16 @@ function Download-File-Managed([string] $url, [string]$outfile) {
   if ($okAria) {
     Troubleshoot-Info "Starting download `"" -Highlight "$url" "`" using aria2c as `"" -Highlight "$outfile" "`""
     # "-k", "2M",
+    $startAt = [System.Diagnostics.Stopwatch]::StartNew()
     & aria2c.exe @("--allow-overwrite=true", "--check-certificate=false", "-s", "12", "-x", "12", "-j", "12", "-d", "$($dirName)", "-o", "$([System.IO.Path]::GetFileName($outfile))", "$url");
-    if ($?) { <# Write-Host "aria2 rocks ($([System.IO.Path]::GetFileName($outfile)))"; #> return $true; }
+    if ($?) { 
+      <# Write-Host "aria2 rocks ($([System.IO.Path]::GetFileName($outfile)))"; #> 
+      try { $length = (new-object System.IO.File($outfile)).Length; } catch {}; $milliSeconds = $startAt.ElapsedMilliseconds;
+      $size=IIF ($length -gt 0) " Size is '$(length.ToString("n0")) bytes." ""
+      $speed=IIF ($length -gt 0 -and $milliSeconds -gt 0) " Speed is '$(($length*1000/1024/$milliSeconds).ToString("n0")) Kb/s'" ""
+      Write-Host "Download of '$outfile' completed.$($size)$($speed)"
+      return $true; 
+    }
   }
   elseif (([System.Environment]::OSVersion.Version.Major) -eq 5) {
     Write-Host "Warning! Windows XP and Server 2003 requires aria2c.exe in the PATH for downloading." -ForegroundColor Red; 
@@ -250,7 +258,12 @@ function Download-File-Managed([string] $url, [string]$outfile) {
     $d=new-object System.Net.WebClient;
     # $d.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36");
     try {
+      $startAt = [System.Diagnostics.Stopwatch]::StartNew()
       $d.DownloadFile("$url","$outfile"); 
+      try { $length = (new-object System.IO.File($outfile)).Length; } catch {}; $milliSeconds = $startAt.ElapsedMilliseconds;
+      $size=IIF ($length -gt 0) " Size is '$(length.ToString("n0")) bytes." ""
+      $speed=IIF ($length -gt 0 -and $milliSeconds -gt 0) " Speed is '$(($length*1000/1024/$milliSeconds).ToString("n0")) Kb/s'" ""
+      Write-Host "Download of '$outfile' completed.$($size)$($speed)"
       return $true
     } 
     catch { 
@@ -1101,7 +1114,7 @@ $SqlServer2010DownloadLinks = @(
     # SP1 does not work on Pipeline
     # Developer="https://archive.org/download/sql-server-2014-enterprise-sp-1-x-64/SQL_Server_2014_Enterprise_SP1_x64.rar" #SP1
     # DeveloperFormat="ISO-In-Archive"
-    Developer="https://archive.org/download/sql_server_2014_sp3_developer_edition_x64.7z/sql_server_2014_sp3_developer_edition_x64.7z" #SP3
+    Developer="https://archive.org/download/sql_server_2014_sp3_developer_edition_x64.7z/sql_server_2014_sp3_developer_edition_x64.7z" #SP3, 12.0.6024
     DeveloperFormat="Archive"
     LocalDB ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x64/SqlLocalDB.msi"
     CU=@(
