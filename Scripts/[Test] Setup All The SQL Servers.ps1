@@ -243,7 +243,7 @@ function Download-File-Managed([string] $url, [string]$outfile) {
       $size=""; if ($length -gt 0) { $size=" ('$($length.ToString("n0"))' bytes)"; }
       $speed=""; if ($length -gt 0 -and $milliSeconds -gt 0) { $speed=" Speed is $(($length*1000/1024/$milliSeconds).ToString("n0")) Kb/s."; }
       $duration=""; if ($milliSeconds -gt 0) {$duration=" It took $(($duration/1000.).ToString("n1")) seconds."; }
-      Write-Host "Download of '$outfile'$(size) completed.$(duration)$($speed)"
+      Write-Host "Download of '$outfile'$($size) completed.$($duration)$($speed)"
       return $true; 
     }
   }
@@ -265,7 +265,7 @@ function Download-File-Managed([string] $url, [string]$outfile) {
       $size=""; if ($length -gt 0) { $size=" ('$($length.ToString("n0"))' bytes)"; }
       $speed=""; if ($length -gt 0 -and $milliSeconds -gt 0) { $speed=" Speed is $(($length*1000/1024/$milliSeconds).ToString("n0")) Kb/s."; }
       $duration=""; if ($milliSeconds -gt 0) {$duration=" It took $(($duration/1000.).ToString("n1")) seconds."; }
-      Write-Host "Download of '$outfile'$(size) completed.$(duration)$($speed)"
+      Write-Host "Download of '$outfile'$($size) completed.$($duration)$($speed)"
       return $true
     } 
     catch { 
