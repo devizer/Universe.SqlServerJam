@@ -1084,43 +1084,7 @@ function Troubleshoot-Info-Prev([string] $message) {
 
 # Black DarkBlue DarkGreen DarkCyan DarkRed DarkMagenta DarkYellow Gray DarkGray Blue Green Cyan Red Magenta Yellow White
 # Include Detected: [ ..\Includes.SqlServer\*.ps1 ]
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\$SqlServerLinksMetadata.ps1]
-$SqlServerDownloadLinks = @(
-  @{ 
-    Version="2016";
-    BaseDev    ="https://download.microsoft.com/download/c/5/0/c50d5f5e-1adf-43eb-bf16-205f7eab1944/SQLServer2016-SSEI-Dev.exe"; #SP3, 3.0 Gb
-    BaseExpress="https://download.microsoft.com/download/f/a/8/fa83d147-63d1-449c-b22d-5fef9bd5bb46/SQLServer2016-SSEI-Expr.exe" #SP3, 
-    CU=@(
-      @{ Id="1.KB5040946"; Url="https://download.microsoft.com/download/d/a/1/da18aac1-2cd0-4c52-b30d-39c3172cd156/SQLServer2016-KB5040946-x64.exe"; }
-    )
-  };
-  @{
-    Version="2017";
-    BaseDev    ="https://download.microsoft.com/download/5/A/7/5A7065A2-C81C-4A31-9972-8A31AC9388C1/SQLServer2017-SSEI-Dev.exe";
-    BaseExpress="https://download.microsoft.com/download/5/E/9/5E9B18CC-8FD5-467E-B5BF-BADE39C51F73/SQLServer2017-SSEI-Expr.exe"
-    CU=@(
-      @{ Id="CU31"; Url="https://download.microsoft.com/download/C/4/F/C4F908C9-98ED-4E5F-88D5-7D6A5004AEBD/SQLServer2017-KB5016884-x64.exe"; }
-    )
-  };
-  @{ 
-    Version="2019";
-    BaseDev    ="https://download.microsoft.com/download/d/a/2/da259851-b941-459d-989c-54a18a5d44dd/SQL2019-SSEI-Dev.exe";
-    BaseExpress="https://download.microsoft.com/download/7/f/8/7f8a9c43-8c8a-4f7c-9f92-83c18d96b681/SQL2019-SSEI-Expr.exe"
-    CU=@(
-      @{ Id="CU28"; Url="https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5039747-x64.exe"; }
-    )
-  };
-  @{ 
-    Version="2022";
-    BaseDev    ="https://download.microsoft.com/download/c/c/9/cc9c6797-383c-4b24-8920-dc057c1de9d3/SQL2022-SSEI-Dev.exe";
-    BaseExpress="https://download.microsoft.com/download/5/1/4/5145fe04-4d30-4b85-b0d1-39533663a2f1/SQL2022-SSEI-Expr.exe"
-    CU=@(
-      @{ Id="CU14"; Url="https://download.microsoft.com/download/9/6/8/96819b0c-c8fb-4b44-91b5-c97015bbda9f/SQLServer2022-KB5038325-x64.exe"; }
-    )
-  };
-)
-
-# $SqlServerDownloadLinks | ConvertTo-Json -Depth 32
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\$SqlServer2010DownloadLinks.ps1]
 $SqlServer2010DownloadLinks = @(
   @{ 
     Version="2014-x64"; #SP3
@@ -1221,138 +1185,104 @@ $SqlServer2010DownloadLinks = @(
 was: 9.0.2047 (sp1) https://ia601402.us.archive.org/34/items/Microsoft_SQL_Server_2005/en_sql_2005_express_adv.exe
 now: 9.0.5000 (sp4) https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2011/01/sqlserver2005expressadvancedsp4-kb2463332-x86-enu_b8640fde879a23a2372b27f158d54abb5079033e.exe
 #>
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\$SqlServerAlreadyUpdatedList.ps1]
 $SqlServerAlreadyUpdatedList = @(
   @{ Version = "2008R2-x64"; MediaType = "Developer"; },
   @{ Version = "2008R2-x86"; MediaType = "Developer"; },
   @{ Version = "2005-x86";   MediaType = "Core"; }
 );
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-Fresh-SQLServer.ps1]
-function Download-SQLServer-and-Extract {
-  Param(
-    [string] $version,  # 2016|2017|2019|2022
-    [string] $mediaType # LocalDB|Core|Advanced|Developer
-  )
-  $major = ($meta.Version.Substring(0,4)) -as [int];
-  $is2020 = $major -ge 2016;
-  if ($is2020) { 
-    Download-Fresh-SQLServer-and-Extract $version $mediaType;
-  } else {
-    Download-2010-SQLServer-and-Extract $version $mediaType;
-  }
-}
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\$SqlServerDownloadLinks.ps1]
+$SqlServerDownloadLinks = @(
+   @{
+      Version="2022"
+      Advanced="https://download.microsoft.com/download/3/8/d/38de7036-2433-4207-8eae-06e247e17b25/SQLEXPRADV_x64_ENU.exe"
+      Core="https://download.microsoft.com/download/3/8/d/38de7036-2433-4207-8eae-06e247e17b25/SQLEXPR_x64_ENU.exe"
+      LocalDB="https://download.microsoft.com/download/3/8/d/38de7036-2433-4207-8eae-06e247e17b25/SqlLocalDB.msi"
+      Developer=@(
+         "https://download.microsoft.com/download/3/8/d/38de7036-2433-4207-8eae-06e247e17b25/SQLServer2022-DEV-x64-ENU.box",
+         "https://download.microsoft.com/download/3/8/d/38de7036-2433-4207-8eae-06e247e17b25/SQLServer2022-DEV-x64-ENU.exe")
+      CU=@(
+        @{ Id="CU14"; Url="https://download.microsoft.com/download/9/6/8/96819b0c-c8fb-4b44-91b5-c97015bbda9f/SQLServer2022-KB5038325-x64.exe"; }
+      )
+   },
+   @{
+      Version="2019"
+      Advanced="https://download.microsoft.com/download/8/4/c/84c6c430-e0f5-476d-bf43-eaaa222a72e0/SQLEXPRADV_x64_ENU.exe"
+      Core="https://download.microsoft.com/download/8/4/c/84c6c430-e0f5-476d-bf43-eaaa222a72e0/SQLEXPR_x64_ENU.exe"
+      LocalDB="https://download.microsoft.com/download/8/4/c/84c6c430-e0f5-476d-bf43-eaaa222a72e0/SqlLocalDB.msi"
+      Developer=@(
+         "https://download.microsoft.com/download/8/4/c/84c6c430-e0f5-476d-bf43-eaaa222a72e0/SQLServer2019-DEV-x64-ENU.box",
+         "https://download.microsoft.com/download/8/4/c/84c6c430-e0f5-476d-bf43-eaaa222a72e0/SQLServer2019-DEV-x64-ENU.exe")
+      CU=@(
+        @{ Id="CU28"; Url="https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5039747-x64.exe"; }
+      )
+   },
+   @{
+      Version="2017"
+      Advanced="https://download.microsoft.com/download/E/F/2/EF23C21D-7860-4F05-88CE-39AA114B014B/SQLEXPRADV_x64_ENU.exe"
+      Core="https://download.microsoft.com/download/E/F/2/EF23C21D-7860-4F05-88CE-39AA114B014B/SQLEXPR_x64_ENU.exe"
+      LocalDB="https://download.microsoft.com/download/E/F/2/EF23C21D-7860-4F05-88CE-39AA114B014B/SqlLocalDB.msi"
+      Developer=@(
+         "https://download.microsoft.com/download/E/F/2/EF23C21D-7860-4F05-88CE-39AA114B014B/SQLServer2017-DEV-x64-ENU.box",
+         "https://download.microsoft.com/download/E/F/2/EF23C21D-7860-4F05-88CE-39AA114B014B/SQLServer2017-DEV-x64-ENU.exe")
+      CU=@(
+        @{ Id="CU31"; Url="https://download.microsoft.com/download/C/4/F/C4F908C9-98ED-4E5F-88D5-7D6A5004AEBD/SQLServer2017-KB5016884-x64.exe"; }
+      )
+   },
+   @{
+      Version="2016"
+      Advanced="https://download.microsoft.com/download/f/9/8/f982347c-fee3-4b3e-a8dc-c95383aa3020/sql16_sp3_dlc/en-us/SQLEXPRADV_x64_ENU.exe"
+      Core="https://download.microsoft.com/download/f/9/8/f982347c-fee3-4b3e-a8dc-c95383aa3020/sql16_sp3_dlc/en-us/SQLEXPR_x64_ENU.exe"
+      LocalDB="https://download.microsoft.com/download/f/9/8/f982347c-fee3-4b3e-a8dc-c95383aa3020/sql16_sp3_dlc/en-us/SqlLocalDB.msi"
+      Developer=@(
+        "https://download.microsoft.com/download/f/9/8/f982347c-fee3-4b3e-a8dc-c95383aa3020/sql16_sp3_dlc/en-us/SQLServer2016SP3-FullSlipstream-DEV-x64-ENU.box",
+        "https://download.microsoft.com/download/f/9/8/f982347c-fee3-4b3e-a8dc-c95383aa3020/sql16_sp3_dlc/en-us/SQLServer2016SP3-FullSlipstream-DEV-x64-ENU.exe")
+      CU=@(
+        @{ Id="1.KB5040946"; Url="https://download.microsoft.com/download/d/a/1/da18aac1-2cd0-4c52-b30d-39c3172cd156/SQLServer2016-KB5040946-x64.exe"; }
+      )
+   }
+);
 
-function Download-Fresh-SQLServer-and-Extract {
-  Param(
-    [string] $version,  # 2016|2017|2019|2022
-    [string] $mediaType # LocalDB|Core|Advanced|Developer
-  )
+$SqlServerDownloadLinks_Via_Manager = @(
+  @{ 
+    Version="2016";
+    BaseDev    ="https://download.microsoft.com/download/c/5/0/c50d5f5e-1adf-43eb-bf16-205f7eab1944/SQLServer2016-SSEI-Dev.exe"; #SP3, 3.0 Gb
+    BaseExpress="https://download.microsoft.com/download/f/a/8/fa83d147-63d1-449c-b22d-5fef9bd5bb46/SQLServer2016-SSEI-Expr.exe" #SP3, 
+    CU=@(
+      @{ Id="1.KB5040946"; Url="https://download.microsoft.com/download/d/a/1/da18aac1-2cd0-4c52-b30d-39c3172cd156/SQLServer2016-KB5040946-x64.exe"; }
+    )
+  };
+  @{
+    Version="2017";
+    BaseDev    ="https://download.microsoft.com/download/5/A/7/5A7065A2-C81C-4A31-9972-8A31AC9388C1/SQLServer2017-SSEI-Dev.exe";
+    BaseExpress="https://download.microsoft.com/download/5/E/9/5E9B18CC-8FD5-467E-B5BF-BADE39C51F73/SQLServer2017-SSEI-Expr.exe"
+    CU=@(
+      @{ Id="CU31"; Url="https://download.microsoft.com/download/C/4/F/C4F908C9-98ED-4E5F-88D5-7D6A5004AEBD/SQLServer2017-KB5016884-x64.exe"; }
+    )
+  };
+  @{ 
+    Version="2019";
+    BaseDev    ="https://download.microsoft.com/download/d/a/2/da259851-b941-459d-989c-54a18a5d44dd/SQL2019-SSEI-Dev.exe";
+    BaseExpress="https://download.microsoft.com/download/7/f/8/7f8a9c43-8c8a-4f7c-9f92-83c18d96b681/SQL2019-SSEI-Expr.exe"
+    CU=@(
+      @{ Id="CU28"; Url="https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5039747-x64.exe"; }
+    )
+  };
+  @{ 
+    Version="2022";
+    BaseDev    ="https://download.microsoft.com/download/c/c/9/cc9c6797-383c-4b24-8920-dc057c1de9d3/SQL2022-SSEI-Dev.exe";
+    BaseExpress="https://download.microsoft.com/download/5/1/4/5145fe04-4d30-4b85-b0d1-39533663a2f1/SQL2022-SSEI-Expr.exe"
+    CU=@(
+      @{ Id="CU14"; Url="https://download.microsoft.com/download/9/6/8/96819b0c-c8fb-4b44-91b5-c97015bbda9f/SQLServer2022-KB5038325-x64.exe"; }
+    )
+  };
+)
 
-  $key="SQL-$version-$mediaType"
-  $root=Combine-Path "$(Get-SqlServer-Downloads-Folder)" $key
-  if ($mediaType -eq "LocalDB") {
-     $mediaPath = $root
-  } else {
-     $mediaPath = Combine-Path "$(Get-SqlServer-Downloads-Folder)" "SQL-Setup-Compressed" "SQL-$Version-$mediaType" 
-  }
-  $setupPath="$root"
+# $SqlServerDownloadLinks | ConvertTo-Json -Depth 32
 
-  Write-Host "Download Bootstrapper for '$key'"
-  $url="";
-  $isDeveloper = [bool]($mediaType -eq "Developer");
-  foreach($meta in $SqlServerDownloadLinks) {
-    if ($meta.Version -eq $version) {
-      $url = IIf $isDeveloper $meta.BaseDev $meta.BaseExpress
-    }
-  }
-  if (-not $url) {
-    Write-Host "Unknown SQL Server version $version" -ForegroundColor DarkRed;
-    return @{};
-  }
-
-  $exeBootstrap = Combine-Path "$(Get-SqlServer-Downloads-Folder)" "SQL-Setup-Bootstrapper" "SQL-$Version-$(IIf $isDeveloper "Developer" "Express")-Bootstapper.exe"
-
-  $isRawOk = Download-File-FailFree-and-Cached $exeBootstrap @($url)
-  if (-not $isRawOk) {
-    Write-Host "Download bootstrapper for version $version failed. URL is '$url'" -ForegroundColor DarkRed;
-    return @{};
-  }
-  
-  Write-Host "Download SQL Server $version media '$mediaType'"
-  $mt = IIf $isDeveloper "CAB" $mediaType;
-  # echo Y | "%outfile%" /ENU /Q /Action=Download /MEDIATYPE=%MT% /MEDIAPATH="%Work%\SETUPFILES"
-  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
-  $hideProgressBar=IIF (Is-BuildServer) " /HIDEPROGRESSBAR" "";
-  & cmd.exe @("/c", "echo Y | `"$exeBootstrap`" /ENU /Q$hideProgressBar /Action=Download /MEDIATYPE=$mt /MEDIAPATH=`"$mediaPath`"")
-  # & "$exeBootstrap" @("/ENU", "/Q", "/Action=Download", "/MEDIATYPE=$mt", "/MEDIAPATH=`"$mediaPath`"");
-  if (-not $?) {
-    Write-Host "Media download for version $version $mediaType. failed" -ForegroundColor DarkRed;
-    return @{};
-  }
-  
-  try { $length = Get-Folder-Size $mediaPath; } catch {}; $milliSeconds = $startAt.ElapsedMilliseconds;
-  $size=""; if ($length -gt 0) { $size=" ($($length.ToString("n0")) bytes)"; }
-  $speed=""; if ($length -gt 0 -and $milliSeconds -gt 0) { $speed=" Speed is $(($length*1000/1024/$milliSeconds).ToString("n0")) Kb/s."; }
-  $duration=""; if ($milliSeconds -gt 0) {$duration=" It took $(($milliSeconds/1000.).ToString("n1")) seconds."; }
-  Write-Host "Media '$mediaPath'$($size) download complete.$($duration)$($speed)"
-
-  $ret = @{ Version=$version; MediaType=$mediaType; };
-  if ($mediaType -eq "LocalDB") {
-    $ret["Launcher"] = Combine-Path $mediaPath "en-US" "SqlLocalDB.msi";
-    $ret["Setup"] = $setupPath;
-  }
-  else
-  {
-    $exeArchive = Get-ChildItem -Path "$mediaPath" -Filter "*.exe" | Select -First 1
-    $quietArg = IIF (Is-BuildServer) "/Q" "/QS"
-    $isExtractOk = ExtractSqlServerSetup "SQL Server $version $mediaType" $exeArchive.FullName $setupPath "$quietArg"
-    if ($isExtractOk) {
-      $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
-      $ret["Setup"] = $setupPath;
-      $ret["Media"] = $mediaPath;
-    } else {
-      return @{};
-    }
-  }
-
-  ApplyCommonSqlServerState $ret;
-  return $ret;
-}
-
-function ApplyCommonSqlServerState([Hashtable] $ret) {
-  if ($ret.Launcher) {
-    try { $size = (New-Object System.IO.FileInfo($ret.Launcher)).Length; } catch {Write-Host "Warning $($_)"; }
-    $ret["LauncherSize"] = $size;
-  }
-  if ($ret.Setup) {
-    $ret["SetupSize"] = Get-DirectorySize $ret.Setup;
-    $ret["SetupHash"] = Get-Smarty-FolderHash $ret.Setup "SHA512"
-  }
-  if ($ret.Media) {
-    $ret["MediaSize"] = Get-DirectorySize $ret.Media;
-    # $ret["MediaHash"] = Get-Smarty-FolderHash $ret.Media "SHA512"
-  }
-}
-
-function ExtractSqlServerSetup([string] $title, [string] $exeArchive, [string] $setupPath, [string] $quietArg <# /QS (Fresh) | /Q (prev) #>) {
-  Write-Host "Extracting $title using [$($exeArchive)] to [$($setupPath)]"
-  $extractStatus = Execute-Process-Smarty "$title Unpacker" "$($exeArchive)" @("$quietArg", "/x:`"$setupPath`"") -WaitTimeout 1800
-  # $startAt = [System.Diagnostics.Stopwatch]::StartNew()
-  # $extractApp = Start-Process "$($exeArchive)" -ArgumentList @("$quietArg", "/x:`"$setupPath`"") -PassThru
-  # if ($extractApp -and $extractApp.Id) {
-  #   Wait-Process -Id $extractApp.Id
-  #   if ($extractApp.ExitCode -ne 0) {
-  #     Write-Host "Extracting $title failed. Exit code $($extractApp.ExitCode)." -ForegroundColor DarkRed;
-  #     return $false;
-  #   }
-  # } else {
-  #   Write-Host "Extracting $title. failed." -ForegroundColor DarkRed;
-  #   return $false;
-  # }
-  # Write-Host "Extraction of $title took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
-  return ($extractStatus.ExitCode -eq 0);
-}
-
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-2010-SQLServer-and-Extract.ps1]
 function Download-2010-SQLServer-and-Extract {
   Param(
     [string] $version,  # (2014|2012|2008R2|2008)-(x86|x64)
@@ -1439,6 +1369,223 @@ function Download-2010-SQLServer-and-Extract {
 
   ApplyCommonSqlServerState $ret;
   return $ret;
+}
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-Fresh-SQLServer-and-Extract.ps1]
+function Download-Fresh-SQLServer-and-Extract {
+  Param(
+    [string] $version,  # 2016|2017|2019|2022
+    [string] $mediaType # LocalDB|Core|Advanced|Developer
+  )
+
+  $key="SQL-$version-$mediaType"
+  $root=Combine-Path "$(Get-SqlServer-Downloads-Folder)" $key
+  if ($mediaType -eq "LocalDB") {
+     $mediaPath = $root
+  } else {
+     $mediaPath = Combine-Path "$(Get-SqlServer-Downloads-Folder)" "SQL-Setup-Compressed" "SQL-$Version-$mediaType" 
+  }
+  $setupPath="$root"
+
+  Write-Host "Download and Extract SQL Server $version media '$mediaType' to `"$setupPath`""
+  $url="";
+  foreach($meta in $SqlServerDownloadLinks) {
+    if ($meta.Version -eq $version) {
+      $url = $meta["$mediaType"]
+    }
+  }
+  if (-not $url) {
+    Write-Host "Unknown SQL Server version $version" -ForegroundColor DarkRed;
+    return @{};
+  }
+
+  Troubleshoot-Info "URL(s) IS " -Highlight "$url"
+  $urlList = IIF ($url -is [array]) $url @($url);
+  foreach($nextUrl in $urlList) {
+    $fileName=[System.IO.Path]::GetFileName($nextUrl);
+    $fileFull = Combine-Path $mediaPath $fileName
+    $isDownloadOk = Download-File-FailFree-and-Cached $fileFull @($nextUrl)
+    if (-not $isDownloadOk) {
+      Write-Host "Download bootstrapper for version $version failed. Unable to download URL '$nextUrl' as '$fileFull'" -ForegroundColor DarkRed;
+      return @{};
+    }
+  }
+  
+  $ext = IIF ($mediaType -eq "LocalDB") "msi" "exe"
+  $exeArchive = Get-ChildItem -Path "$mediaPath" -Filter "*.$ext" | Select -First 1
+  Write-Host "(Exe|Msi) Archive `"$exeArchive`""
+  $ret = @{ Version=$version; MediaType=$mediaType; };
+  if ($mediaType -eq "LocalDB") {
+    $ret["Launcher"] = Combine-Path $setupPath $exeArchive;
+    $ret["Setup"] = $setupPath;
+  }
+  else
+  {
+    $quietArg = IIF (Is-BuildServer) "/Q" "/QS"
+    $isExtractOk = ExtractSqlServerSetup "SQL Server $version $mediaType" $exeArchive.FullName $setupPath "$quietArg"
+    if ($isExtractOk) {
+      $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
+      $ret["Setup"] = $setupPath;
+      $ret["Media"] = $mediaPath;
+    } else {
+      return @{};
+    }
+  }
+
+  ApplyCommonSqlServerState $ret;
+  return $ret;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function Download-Fresh-SQLServer-and-Extract-Via-Manager {
+  Param(
+    [string] $version,  # 2016|2017|2019|2022
+    [string] $mediaType # LocalDB|Core|Advanced|Developer
+  )
+
+  $key="SQL-$version-$mediaType"
+  $root=Combine-Path "$(Get-SqlServer-Downloads-Folder)" $key
+  if ($mediaType -eq "LocalDB") {
+     $mediaPath = $root
+  } else {
+     $mediaPath = Combine-Path "$(Get-SqlServer-Downloads-Folder)" "SQL-Setup-Compressed" "SQL-$Version-$mediaType" 
+  }
+  $setupPath="$root"
+
+  Write-Host "Download Bootstrapper for '$key'"
+  $url="";
+  $isDeveloper = [bool]($mediaType -eq "Developer");
+  foreach($meta in $SqlServerDownloadLinks) {
+    if ($meta.Version -eq $version) {
+      $url = IIf $isDeveloper $meta.BaseDev $meta.BaseExpress
+    }
+  }
+  if (-not $url) {
+    Write-Host "Unknown SQL Server version $version" -ForegroundColor DarkRed;
+    return @{};
+  }
+
+  $exeBootstrap = Combine-Path "$(Get-SqlServer-Downloads-Folder)" "SQL-Setup-Bootstrapper" "SQL-$Version-$(IIf $isDeveloper "Developer" "Express")-Bootstapper.exe"
+
+  $isRawOk = Download-File-FailFree-and-Cached $exeBootstrap @($url)
+  if (-not $isRawOk) {
+    Write-Host "Download bootstrapper for version $version failed. URL is '$url'" -ForegroundColor DarkRed;
+    return @{};
+  }
+  
+  Write-Host "Download SQL Server $version media '$mediaType'"
+  $mt = IIf $isDeveloper "CAB" $mediaType;
+  # echo Y | "%outfile%" /ENU /Q /Action=Download /MEDIATYPE=%MT% /MEDIAPATH="%Work%\SETUPFILES"
+  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+  $hideProgressBar=IIF (Is-BuildServer) " /HIDEPROGRESSBAR" "";
+  & cmd.exe @("/c", "echo Y | `"$exeBootstrap`" /ENU /Q$hideProgressBar /Action=Download /MEDIATYPE=$mt /MEDIAPATH=`"$mediaPath`"")
+  # & "$exeBootstrap" @("/ENU", "/Q", "/Action=Download", "/MEDIATYPE=$mt", "/MEDIAPATH=`"$mediaPath`"");
+  if (-not $?) {
+    Write-Host "Media download for version $version $mediaType. failed" -ForegroundColor DarkRed;
+    return @{};
+  }
+  
+  try { $length = Get-Folder-Size $mediaPath; } catch {}; $milliSeconds = $startAt.ElapsedMilliseconds;
+  $size=""; if ($length -gt 0) { $size=" ($($length.ToString("n0")) bytes)"; }
+  $speed=""; if ($length -gt 0 -and $milliSeconds -gt 0) { $speed=" Speed is $(($length*1000/1024/$milliSeconds).ToString("n0")) Kb/s."; }
+  $duration=""; if ($milliSeconds -gt 0) {$duration=" It took $(($milliSeconds/1000.).ToString("n1")) seconds."; }
+  Write-Host "Media '$mediaPath'$($size) download complete.$($duration)$($speed)"
+
+  $ret = @{ Version=$version; MediaType=$mediaType; };
+  if ($mediaType -eq "LocalDB") {
+    $ret["Launcher"] = Combine-Path $mediaPath "en-US" "SqlLocalDB.msi";
+    $ret["Setup"] = $setupPath;
+  }
+  else
+  {
+    $exeArchive = Get-ChildItem -Path "$mediaPath" -Filter "*.exe" | Select -First 1
+    $quietArg = IIF (Is-BuildServer) "/Q" "/QS"
+    $isExtractOk = ExtractSqlServerSetup "SQL Server $version $mediaType" $exeArchive.FullName $setupPath "$quietArg"
+    if ($isExtractOk) {
+      $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
+      $ret["Setup"] = $setupPath;
+      $ret["Media"] = $mediaPath;
+    } else {
+      return @{};
+    }
+  }
+
+  ApplyCommonSqlServerState $ret;
+  return $ret;
+}
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-SQLServer-and-Extract.ps1]
+function Download-SQLServer-and-Extract {
+  Param(
+    [string] $version,  # 2016|2017|2019|2022
+    [string] $mediaType # LocalDB|Core|Advanced|Developer
+  )
+  $major = ($meta.Version.Substring(0,4)) -as [int];
+  $is2020 = $major -ge 2016;
+  if ($is2020) { 
+    Download-Fresh-SQLServer-and-Extract $version $mediaType;
+  } else {
+    Download-2010-SQLServer-and-Extract $version $mediaType;
+  }
+}
+
+function ApplyCommonSqlServerState([Hashtable] $ret) {
+  if ($ret.Launcher) {
+    try { $size = (New-Object System.IO.FileInfo($ret.Launcher)).Length; } catch {Write-Host "Warning $($_)"; }
+    $ret["LauncherSize"] = $size;
+  }
+  if ($ret.Setup) {
+    $ret["SetupSize"] = Get-DirectorySize $ret.Setup;
+    $ret["SetupHash"] = Get-Smarty-FolderHash $ret.Setup "SHA512"
+  }
+  if ($ret.Media) {
+    $ret["MediaSize"] = Get-DirectorySize $ret.Media;
+    # $ret["MediaHash"] = Get-Smarty-FolderHash $ret.Media "SHA512"
+  }
+}
+
+function ExtractSqlServerSetup([string] $title, [string] $exeArchive, [string] $setupPath, [string] $quietArg <# /QS (Fresh) | /Q (prev) #>) {
+  Write-Host "Extracting $title using [$($exeArchive)] to [$($setupPath)]"
+  $extractStatus = Execute-Process-Smarty "$title Unpacker" "$($exeArchive)" @("$quietArg", "/x:`"$setupPath`"") -WaitTimeout 1800
+  # $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+  # $extractApp = Start-Process "$($exeArchive)" -ArgumentList @("$quietArg", "/x:`"$setupPath`"") -PassThru
+  # if ($extractApp -and $extractApp.Id) {
+  #   Wait-Process -Id $extractApp.Id
+  #   if ($extractApp.ExitCode -ne 0) {
+  #     Write-Host "Extracting $title failed. Exit code $($extractApp.ExitCode)." -ForegroundColor DarkRed;
+  #     return $false;
+  #   }
+  # } else {
+  #   Write-Host "Extracting $title. failed." -ForegroundColor DarkRed;
+  #   return $false;
+  # }
+  # Write-Host "Extraction of $title took $($startAt.ElapsedMilliseconds.ToString("n0")) ms"
+  return ($extractStatus.ExitCode -eq 0);
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-SqlServer-Update.ps1]
@@ -1561,7 +1708,9 @@ function Find-SQLServer-Meta([string] $version, [string] $mediaType) {
 
   foreach($meta in $SqlServerDownloadLinks) {
     if ($meta.Version -eq $version) {
-      $url = IIf ($mediaType -eq "Developer") $meta.BaseDev $meta.BaseExpress
+      # In case of via manager
+      # $url = IIf ($mediaType -eq "Developer") $meta.BaseDev $meta.BaseExpress
+      $url = $meta["$mediaType"]
       $ret["Url"] = $url;
       if (-not $isMissingUpdates) { $ret["CU"] = $meta.CU; }
       return $ret;
@@ -1776,18 +1925,6 @@ foreach($meta in Enumerate-Plain-SQLServer-Downloads | ? $filter) {
 $keywordsFile = Combine-Path (Get-SqlServer-Downloads-Folder) "Keywords.txt" 
 Write-All-Text $keywordsFile $keywords;
 Get-Content $keywordsFile | Out-Host
-# exit 0;
-
-
-$counter = 0;
-foreach($meta in Enumerate-Plain-SQLServer-Downloads) {
-  if ($meta.Update) {
-    $counter++;
-    Say "TRY DOWNLOAD UPDATE #$($counter) '$($meta.UpdateId)' $($meta.Keywords)"
-    $result = Download-SqlServer-Update $meta.Version $meta.MediaType $meta.Update;
-    $result | Format-Table -AutoSize | Out-String -Width 256
-  }
-}
 
 $filter = {$major = ($_.Version.Substring(0,4)) -as [int]; return $major -eq 2017 -and $_.UpdateId -eq $null -and $_.MediaType -eq "Developer";}
 $filter = {$_.UpdateId -eq $null}
@@ -1803,3 +1940,15 @@ foreach($meta in Enumerate-Plain-SQLServer-Downloads | ? $filter) {
   }
 }
 Say "DONE"
+
+
+$counter = 0;
+foreach($meta in Enumerate-Plain-SQLServer-Downloads) {
+  if ($meta.Update) {
+    $counter++;
+    Say "TRY DOWNLOAD UPDATE #$($counter) '$($meta.UpdateId)' $($meta.Keywords)"
+    $result = Download-SqlServer-Update $meta.Version $meta.MediaType $meta.Update;
+    $result | Format-Table -AutoSize | Out-String -Width 256
+  }
+}
+
