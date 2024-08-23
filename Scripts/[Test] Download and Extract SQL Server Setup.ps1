@@ -1487,7 +1487,7 @@ function Enumerate-Plain-SQLServer-Downloads() {
     if ("$($meta.CU)") {
       foreach($update in $meta.CU) {
         $counter++;
-        @{ Version=$meta.Version; MediaType=$meta.MediaType; UpdateId=$update.Id; Keywords="$($meta.Version) $($meta.MediaType) $($update.Id)"};
+        @{ Version=$meta.Version; MediaType=$meta.MediaType; UpdateId=$update.Id; Update=$update; Keywords="$($meta.Version) $($meta.MediaType) $($update.Id)"};
       }
     }
     @{ Version=$meta.Version; MediaType=$meta.MediaType; Keywords="$($meta.Version) $($meta.MediaType)"};
@@ -1767,8 +1767,8 @@ Write-Host "Try-BuildServerType: [$(Try-BuildServerType)], Is-BuildServer: $(Is-
 # Build Keyswords
 $keywords = "";
 $counter = 0;
-$filter = {$true}
 $filter = {$_.UpdateId -eq $null}
+$filter = {$true}
 foreach($meta in Enumerate-Plain-SQLServer-Downloads | ? $filter) {
   $counter++;
   $keywords += "$("{0,3}" -f $counter)| $($meta.Keywords)$([Environment]::NewLine)"
@@ -1778,11 +1778,23 @@ Write-All-Text $keywordsFile $keywords;
 Get-Content $keywordsFile | Out-Host
 # exit 0;
 
+
+$counter = 0;
+foreach($meta in Enumerate-Plain-SQLServer-Downloads) {
+  if ($meta.Update) {
+    $counter++;
+    Say "TRY DOWNLOAD UPDATE #$($counter) '$($meta.UpdateId)' $($meta.Keywords)"
+    $result = Download-SqlServer-Update $meta.Version $meta.MediaType $meta.Update;
+    $result | Format-Table -AutoSize | Out-String -Width 256
+  }
+}
+
 $filter = {$major = ($_.Version.Substring(0,4)) -as [int]; return $major -eq 2017 -and $_.UpdateId -eq $null -and $_.MediaType -eq "Developer";}
 $filter = {$_.UpdateId -eq $null}
+$counter = 0;
 foreach($meta in Enumerate-Plain-SQLServer-Downloads | ? $filter) {
   $counter++;
-  $keywords += "$("{0,3}" -f $counter)| $($meta.Keywords)$([Environment]::NewLine)"
+  $keywords += "TRY DOWNLOAD SQL #$($counter) $($meta.Keywords)"
   Say "$($meta.Keywords)"
   $downloadResult = Download-SQLServer-and-Extract $meta.Version $meta.MediaType
   $downloadResult | Format-Table -AutoSize | Out-String -Width 256

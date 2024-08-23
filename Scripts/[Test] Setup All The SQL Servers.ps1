@@ -1493,7 +1493,7 @@ function Enumerate-Plain-SQLServer-Downloads() {
     if ("$($meta.CU)") {
       foreach($update in $meta.CU) {
         $counter++;
-        @{ Version=$meta.Version; MediaType=$meta.MediaType; UpdateId=$update.Id; Keywords="$($meta.Version) $($meta.MediaType) $($update.Id)"};
+        @{ Version=$meta.Version; MediaType=$meta.MediaType; UpdateId=$update.Id; Update=$update; Keywords="$($meta.Version) $($meta.MediaType) $($update.Id)"};
       }
     }
     @{ Version=$meta.Version; MediaType=$meta.MediaType; Keywords="$($meta.Version) $($meta.MediaType)"};
