@@ -1794,8 +1794,7 @@ $filter = {$_.UpdateId -eq $null}
 $counter = 0;
 foreach($meta in Enumerate-Plain-SQLServer-Downloads | ? $filter) {
   $counter++;
-  $keywords += "TRY DOWNLOAD SQL #$($counter) $($meta.Keywords)"
-  Say "$($meta.Keywords)"
+  Say "TRY DOWNLOAD SQL #$($counter) $($meta.Keywords)"
   $downloadResult = Download-SQLServer-and-Extract $meta.Version $meta.MediaType
   $downloadResult | Format-Table -AutoSize | Out-String -Width 256
   if ((Is-BuildServer) -and ($downloadResult.Media)) {
