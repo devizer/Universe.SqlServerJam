@@ -128,7 +128,17 @@ $VcRuntimeLinksMetadata = @(
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Append-All-Text.ps1]
 function Append-All-Text( [string]$file, [string]$text ) {
-  $utf8=new-object System.Text.UTF8Encoding($false); [System.IO.File]::AppendAllText($file, $text, $utf8);
+  $dirName=[System.IO.Path]::GetDirectoryName($file)
+  if ($dirName) { $_ = [System.IO.Directory]::CreateDirectory($dirName); }
+  $utf8=new-object System.Text.UTF8Encoding($false); 
+  [System.IO.File]::AppendAllText($file, $text, $utf8);
+}
+
+function Write-All-Text( [string]$file, [string]$text ) {
+  $dirName=[System.IO.Path]::GetDirectoryName($file)
+  if ($dirName) { $_ = [System.IO.Directory]::CreateDirectory($dirName); }
+  $utf8=new-object System.Text.UTF8Encoding($false); 
+  [System.IO.File]::WriteAllText($file, $text, $utf8);
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Bootstrap-Aria2-If-Required.ps1]
@@ -1127,7 +1137,7 @@ $SqlServer2010DownloadLinks = @(
   };
   @{ 
     Version="2014-x86"; #SP3
-    Core ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x86_ENU.exe" 
+    Core    ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x86_ENU.exe" 
     Advanced="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x86_ENU.exe"
     LocalDB ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x86/SqlLocalDB.msi"
     CU=@(
@@ -1211,6 +1221,11 @@ $SqlServer2010DownloadLinks = @(
 was: 9.0.2047 (sp1) https://ia601402.us.archive.org/34/items/Microsoft_SQL_Server_2005/en_sql_2005_express_adv.exe
 now: 9.0.5000 (sp4) https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2011/01/sqlserver2005expressadvancedsp4-kb2463332-x86-enu_b8640fde879a23a2372b27f158d54abb5079033e.exe
 #>
+$SqlServerAlreadyUpdatedList = @(
+  @{ Version = "2008R2-x64"; MediaType = "Developer"; },
+  @{ Version = "2008R2-x86"; MediaType = "Developer"; },
+  @{ Version = "2005-x86";   MediaType = "Core"; }
+);
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-Fresh-SQLServer.ps1]
 function Download-SQLServer-and-Extract {
@@ -1315,7 +1330,7 @@ function ApplyCommonSqlServerState([Hashtable] $ret) {
   }
   if ($ret.Media) {
     $ret["MediaSize"] = Get-DirectorySize $ret.Media;
-    $ret["MediaHash"] = Get-Smarty-FolderHash $ret.Media "SHA512"
+    # $ret["MediaHash"] = Get-Smarty-FolderHash $ret.Media "SHA512"
   }
 }
 
@@ -1467,6 +1482,18 @@ function Enumerate-SQLServer-Downloads() {
   }}
 }
 
+function Enumerate-Plain-SQLServer-Downloads() {
+  foreach($meta in Enumerate-SQLServer-Downloads) {
+    if ("$($meta.CU)") {
+      foreach($update in $meta.CU) {
+        $counter++;
+        @{ Version=$meta.Version; MediaType=$meta.MediaType; UpdateId=$update.Id; Keywords="$($meta.Version) $($meta.MediaType) $($update.Id)"};
+      }
+    }
+    @{ Version=$meta.Version; MediaType=$meta.MediaType; Keywords="$($meta.Version) $($meta.MediaType)"};
+  }
+}
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Execute-Process-Smarty.ps1]
 function Execute-Process-Smarty {
   Param(
@@ -1529,7 +1556,8 @@ function Execute-Process-Smarty {
 function Find-SQLServer-Meta([string] $version, [string] $mediaType) {
   $ret = @{ Version = $version; MediaType = $mediaType; }
 
-  $isMissingUpdates = ($version -like "2005-x86" -and $mediaType -eq "Core") -or ($mediaType -eq "LocalDB");
+  $missingParticular = $null -ne ($SqlServerAlreadyUpdatedList | where { $_.Version -eq $version -and $_.MediaType -eq $mediaType});
+  $isMissingUpdates = $missingParticular -or ($mediaType -eq "LocalDB");
 
   foreach($meta in $SqlServerDownloadLinks) {
     if ($meta.Version -eq $version) {
@@ -1723,7 +1751,7 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
   $sevenZip = Get-Full7z-Exe-FullPath-for-Windows -Version "1900"
   foreach($logsFolder in $folders) {
     $archiveName=$logsFolder.Substring([System.IO.Path]::GetPathRoot($logsFolder).Length).Replace("\", ([char]8594).ToString())
-    Say "Pack '$archiveName.7z' as `"$toFolder\$archiveName.7z`""
+    Say "Pack '$logsFolder' as `"$toFolder\$archiveName.7z`""
     & "$sevenZip" @("a", "-y", "-mx=$compression", "-ms=on", "-mqs=on", "$toFolder\$archiveName.7z", "$logsFolder\*") | out-null
     if (-not $?) {
       Write-Host "Failed publishing '$archiveName' to folder '$toFolder'" -ForegroundColor DarkRed
@@ -1737,69 +1765,30 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
 Write-Host "Try-BuildServerType: [$(Try-BuildServerType)], Is-BuildServer: $(Is-BuildServer)"
 
 # Build Keyswords
-$keywordsFile = Combine-Path (Get-SqlServer-Downloads-Folder) "Keywords.txt" 
-New-Item -Path (Get-SqlServer-Downloads-Folder) -ItemType Container -Force -EA SilentlyContinue | out-null;
-Remove-Item -Path $keywordsFile -Force -EA SilentlyContinue | out-null;
-foreach($meta in Enumerate-SQLServer-Downloads) {
-  $update = $meta.CU | Select -First 1;
-  if ("$update") {
-    Append-All-Text $keywordsFile "$($meta.Version) $($meta.MediaType) $($update.Id)$([Environment]::NewLine)"
-  }
-  Append-All-Text $keywordsFile "$($meta.Version) $($meta.MediaType)$([Environment]::NewLine)"
+$keywords = "";
+$counter = 0;
+$filter = {$true}
+$filter = {$_.UpdateId -eq $null}
+foreach($meta in Enumerate-Plain-SQLServer-Downloads | ? $filter) {
+  $counter++;
+  $keywords += "$("{0,3}" -f $counter)| $($meta.Keywords)$([Environment]::NewLine)"
 }
+$keywordsFile = Combine-Path (Get-SqlServer-Downloads-Folder) "Keywords.txt" 
+Write-All-Text $keywordsFile $keywords;
 Get-Content $keywordsFile | Out-Host
 # exit 0;
 
-foreach($ver in "2008R2-x86", "2008R2-x64", "2012-x86", "2012-x64", "2014-x64") {
-  $mt="Developer";
-  Say "SQL Server $ver [$mt]"
-  $result = (Download-2010-SQLServer-and-Extract $ver $mt)
-  $result | Format-Table -AutoSize | Out-String -Width 256
-}
-
-
-foreach($meta in Enumerate-SQLServer-Downloads) {
-  if ($meta.CU) { foreach($update in $meta.CU) {
-    Say "Try Update $($update.Id) for SQL Server $($meta.Version) $($meta.MediaType)"
-    $result = Download-SqlServer-Update $meta.Version $meta.MediaType $update;
-    $result | Format-Table -AutoSize | Out-String -Width 256
-  }}
-}
-
-$SqlServer2010DownloadLinks | ConvertTo-Json -Depth 32
-foreach($mt in "LocalDB", "Core", "Advanced") {
-foreach($ver in @("2005-x86", "2008-x64", "2008-x86", "2008R2-x64", "2008R2-x86", "2012-x64", "2012-x86", "2014-x64", "2014-x86")) {
-  if (($ver -like "2008*" -or $ver -like "2005*") -and $mt -eq "LocalDB") { continue; }
-  Say "SQL Server $ver [$mt]"
-  $result = (Download-2010-SQLServer-and-Extract $ver $mt)
-  # $result | Format-Table -AutoSize | Out-String -Width 256
-  $result | Format-Table -AutoSize | Out-String -Width 256
-}}
-Say "DONE: SQL 2010"
-
-$SqlServerDownloadLinks | ConvertTo-Json -Depth 32
-foreach($mt in "LocalDB", "Core", "Advanced", "Developer") {
-foreach($ver in @("2016", "2017", "2019", "2022")) {
-  Say "SQL Server $ver [$mt]"
-  $result = (Download-Fresh-SQLServer-and-Extract $ver $mt)
-  # $result | Format-Table -AutoSize | Out-String -Width 256
-  $result | Format-Table -AutoSize | Out-String -Width 256
-  if (-not (Is-BuildServer)) { sleep 5; }
-}}
-Say "DONE: Fresh SQL"
-
-function Show-Tree-Size([string] $startFolder, [int] $depth = 2) {
-  $colItems = Get-ChildItem $startFolder -recurse -force -depth $depth | Where-Object {$_.PSIsContainer -eq $true} | % {$_.FullName} | Sort-Object
-  foreach ($i in $colItems)
-  {
-      $subFolderItems = Get-ChildItem $i -recurse -force | Where-Object {$_.PSIsContainer -eq $false} | Measure-Object -property Length -sum | Select-Object Sum
-      $size = ($subFolderItems.sum / 1MB).ToString("n2").PadLeft(12) + " Mb"
-      $size + " " + $i
+$filter = {$major = ($_.Version.Substring(0,4)) -as [int]; return $major -eq 2017 -and $_.UpdateId -eq $null -and $_.MediaType -eq "Developer";}
+$filter = {$_.UpdateId -eq $null}
+foreach($meta in Enumerate-Plain-SQLServer-Downloads | ? $filter) {
+  $counter++;
+  $keywords += "$("{0,3}" -f $counter)| $($meta.Keywords)$([Environment]::NewLine)"
+  Say "$($meta.Keywords)"
+  $downloadResult = Download-SQLServer-and-Extract $meta.Version $meta.MediaType
+  $downloadResult | Format-Table -AutoSize | Out-String -Width 256
+  if ((Is-BuildServer) -and ($downloadResult.Media)) {
+    Write-Host "Clean up '$($downloadResult.Media)' ..."
+    Remove-Item -Recurse -Force "$($downloadResult.Media)" -ErrorAction SilentlyContinue | out-null
   }
 }
-
-$startFolder = Get-SqlServer-Downloads-Folder;
-Show-Tree-Size $startFolder 0
-
-$startFolder = Combine-Path (Get-SqlServer-Downloads-Folder) "SQL-Setup-Compressed";
-Show-Tree-Size $startFolder 0
+Say "DONE"

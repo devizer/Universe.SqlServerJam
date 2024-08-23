@@ -134,7 +134,17 @@ $VcRuntimeLinksMetadata = @(
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Append-All-Text.ps1]
 function Append-All-Text( [string]$file, [string]$text ) {
-  $utf8=new-object System.Text.UTF8Encoding($false); [System.IO.File]::AppendAllText($file, $text, $utf8);
+  $dirName=[System.IO.Path]::GetDirectoryName($file)
+  if ($dirName) { $_ = [System.IO.Directory]::CreateDirectory($dirName); }
+  $utf8=new-object System.Text.UTF8Encoding($false); 
+  [System.IO.File]::AppendAllText($file, $text, $utf8);
+}
+
+function Write-All-Text( [string]$file, [string]$text ) {
+  $dirName=[System.IO.Path]::GetDirectoryName($file)
+  if ($dirName) { $_ = [System.IO.Directory]::CreateDirectory($dirName); }
+  $utf8=new-object System.Text.UTF8Encoding($false); 
+  [System.IO.File]::WriteAllText($file, $text, $utf8);
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Bootstrap-Aria2-If-Required.ps1]
@@ -1133,7 +1143,7 @@ $SqlServer2010DownloadLinks = @(
   };
   @{ 
     Version="2014-x86"; #SP3
-    Core ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x86_ENU.exe" 
+    Core    ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x86_ENU.exe" 
     Advanced="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x86_ENU.exe"
     LocalDB ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x86/SqlLocalDB.msi"
     CU=@(
@@ -1217,6 +1227,11 @@ $SqlServer2010DownloadLinks = @(
 was: 9.0.2047 (sp1) https://ia601402.us.archive.org/34/items/Microsoft_SQL_Server_2005/en_sql_2005_express_adv.exe
 now: 9.0.5000 (sp4) https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2011/01/sqlserver2005expressadvancedsp4-kb2463332-x86-enu_b8640fde879a23a2372b27f158d54abb5079033e.exe
 #>
+$SqlServerAlreadyUpdatedList = @(
+  @{ Version = "2008R2-x64"; MediaType = "Developer"; },
+  @{ Version = "2008R2-x86"; MediaType = "Developer"; },
+  @{ Version = "2005-x86";   MediaType = "Core"; }
+);
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-Fresh-SQLServer.ps1]
 function Download-SQLServer-and-Extract {
@@ -1321,7 +1336,7 @@ function ApplyCommonSqlServerState([Hashtable] $ret) {
   }
   if ($ret.Media) {
     $ret["MediaSize"] = Get-DirectorySize $ret.Media;
-    $ret["MediaHash"] = Get-Smarty-FolderHash $ret.Media "SHA512"
+    # $ret["MediaHash"] = Get-Smarty-FolderHash $ret.Media "SHA512"
   }
 }
 
@@ -1473,6 +1488,18 @@ function Enumerate-SQLServer-Downloads() {
   }}
 }
 
+function Enumerate-Plain-SQLServer-Downloads() {
+  foreach($meta in Enumerate-SQLServer-Downloads) {
+    if ("$($meta.CU)") {
+      foreach($update in $meta.CU) {
+        $counter++;
+        @{ Version=$meta.Version; MediaType=$meta.MediaType; UpdateId=$update.Id; Keywords="$($meta.Version) $($meta.MediaType) $($update.Id)"};
+      }
+    }
+    @{ Version=$meta.Version; MediaType=$meta.MediaType; Keywords="$($meta.Version) $($meta.MediaType)"};
+  }
+}
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Execute-Process-Smarty.ps1]
 function Execute-Process-Smarty {
   Param(
@@ -1535,7 +1562,8 @@ function Execute-Process-Smarty {
 function Find-SQLServer-Meta([string] $version, [string] $mediaType) {
   $ret = @{ Version = $version; MediaType = $mediaType; }
 
-  $isMissingUpdates = ($version -like "2005-x86" -and $mediaType -eq "Core") -or ($mediaType -eq "LocalDB");
+  $missingParticular = $null -ne ($SqlServerAlreadyUpdatedList | where { $_.Version -eq $version -and $_.MediaType -eq $mediaType});
+  $isMissingUpdates = $missingParticular -or ($mediaType -eq "LocalDB");
 
   foreach($meta in $SqlServerDownloadLinks) {
     if ($meta.Version -eq $version) {
@@ -1729,7 +1757,7 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
   $sevenZip = Get-Full7z-Exe-FullPath-for-Windows -Version "1900"
   foreach($logsFolder in $folders) {
     $archiveName=$logsFolder.Substring([System.IO.Path]::GetPathRoot($logsFolder).Length).Replace("\", ([char]8594).ToString())
-    Say "Pack '$archiveName.7z' as `"$toFolder\$archiveName.7z`""
+    Say "Pack '$logsFolder' as `"$toFolder\$archiveName.7z`""
     & "$sevenZip" @("a", "-y", "-mx=$compression", "-ms=on", "-mqs=on", "$toFolder\$archiveName.7z", "$logsFolder\*") | out-null
     if (-not $?) {
       Write-Host "Failed publishing '$archiveName' to folder '$toFolder'" -ForegroundColor DarkRed
