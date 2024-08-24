@@ -1873,6 +1873,8 @@ function Install-SQLServer {
 
     $setupStatus = Execute-Process-Smarty "SQL Server $($meta.Version) $($meta.MediaType) Setup" $meta.Launcher $setupArg -WaitTimeout 3600
 
+    # TODO: Exec Patch
+
     # Write-Host "Workaround for 2005 logs"; sleep 1; & taskkill.exe @("/t", "/f", "/im", "setup.exe");
   } else {
 <# 2008
@@ -1934,14 +1936,23 @@ function Install-SQLServer {
     }
 
     if ("$update" -and (-not $hasUpdateSourceArgument)) {
+      $title = "SQL Server Updater to $($update.UpdateId)"
       if ($meta.Version -like "2008R2") {
+        # OK on "2008R2"
         $argIACCEPTSQLSERVERLICENSETERMS = IIF ($major -le 2008) "" "/IAcceptSQLServerLicenseTerms"
         $updateCommandLine = @("/q", "$argIACCEPTSQLSERVERLICENSETERMS", "/Action=Patch", "/InstanceName=$instanceName");
-        $upgradeResult = Execute-Process-Smarty "SQL Server Updater to $($update.UpdateId)" $update.UpdateLauncher $updateCommandLine
+        $upgradeResult = Execute-Process-Smarty "$title" $update.UpdateLauncher $updateCommandLine
         $upgradeResult | Format-Table
       }
       else {
+        # OK on "2008"
+        Write-Host "Starting $title"
         & "$($update.UpdateLauncher)" @("/Q", "/Action=Patch", "/InstanceName=$instanceName");
+        if (-not $?) {
+          Write-Host "$title failed" -ForegroundColor DarkRed
+        } else { 
+          Write-Host "$title successfilly complete" -ForegroundColor DarkRed
+        }
       }
     }
   }
