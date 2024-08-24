@@ -22,196 +22,196 @@ jobs:
   strategy:
     maxParallel: 10
     matrix:
-      '#1 [2022 Developer Update] on svr-19':
+      '#1 [2022 Developer Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2022 Developer Update'
-      '#2 [2022 Developer] on svr-19':
+      '#2 [2022 Developer]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2022 Developer'
-      '#3 [2022 Advanced Update] on svr-19':
+      '#3 [2022 Advanced Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2022 Advanced Update'
-      '#4 [2022 Advanced] on svr-19':
+      '#4 [2022 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2022 Advanced'
-      '#5 [2022 Core Update] on svr-19':
+      '#5 [2022 Core Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2022 Core Update'
-      '#6 [2022 Core] on svr-19':
+      '#6 [2022 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2022 Core'
-      '#7 [2022 LocalDB] on svr-19':
+      '#7 [2022 LocalDB]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2022 LocalDB'
-      '#8 [2019 Developer Update] on svr-19':
+      '#8 [2019 Developer Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2019 Developer Update'
-      '#9 [2019 Developer] on svr-19':
+      '#9 [2019 Developer]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2019 Developer'
-      '#10 [2019 Advanced Update] on svr-19':
+      '#10 [2019 Advanced Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2019 Advanced Update'
-      '#11 [2019 Advanced] on svr-19':
+      '#11 [2019 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2019 Advanced'
-      '#12 [2019 Core Update] on svr-19':
+      '#12 [2019 Core Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2019 Core Update'
-      '#13 [2019 Core] on svr-19':
+      '#13 [2019 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2019 Core'
-      '#14 [2019 LocalDB] on svr-19':
+      '#14 [2019 LocalDB]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2019 LocalDB'
-      '#15 [2017 Developer Update] on svr-19':
+      '#15 [2017 Developer Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2017 Developer Update'
-      '#16 [2017 Developer] on svr-19':
+      '#16 [2017 Developer]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2017 Developer'
-      '#17 [2017 Advanced Update] on svr-19':
+      '#17 [2017 Advanced Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2017 Advanced Update'
-      '#18 [2017 Advanced] on svr-19':
+      '#18 [2017 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2017 Advanced'
-      '#19 [2017 Core Update] on svr-19':
+      '#19 [2017 Core Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2017 Core Update'
-      '#20 [2017 Core] on svr-19':
+      '#20 [2017 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2017 Core'
-      '#21 [2017 LocalDB] on svr-19':
+      '#21 [2017 LocalDB]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2017 LocalDB'
-      '#22 [2016 Developer Update] on svr-19':
+      '#22 [2016 Developer Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2016 Developer Update'
-      '#23 [2016 Developer] on svr-19':
+      '#23 [2016 Developer]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2016 Developer'
-      '#24 [2016 Advanced Update] on svr-19':
+      '#24 [2016 Advanced Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2016 Advanced Update'
-      '#25 [2016 Advanced] on svr-19':
+      '#25 [2016 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2016 Advanced'
-      '#26 [2016 Core Update] on svr-19':
+      '#26 [2016 Core Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2016 Core Update'
-      '#27 [2016 Core] on svr-19':
+      '#27 [2016 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2016 Core'
-      '#28 [2016 LocalDB] on svr-19':
+      '#28 [2016 LocalDB]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2016 LocalDB'
-      '#29 [2014-x64 Developer] on svr-19':
+      '#29 [2014-x64 Developer]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2014-x64 Developer'
-      '#30 [2014-x64 Advanced] on svr-19':
+      '#30 [2014-x64 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2014-x64 Advanced'
-      '#31 [2014-x64 Core] on svr-19':
+      '#31 [2014-x64 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2014-x64 Core'
-      '#32 [2014-x64 LocalDB] on svr-19':
+      '#32 [2014-x64 LocalDB]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2014-x64 LocalDB'
-      '#33 [2014-x86 Advanced] on svr-19':
+      '#33 [2014-x86 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2014-x86 Advanced'
-      '#34 [2014-x86 Core] on svr-19':
+      '#34 [2014-x86 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2014-x86 Core'
-      '#35 [2014-x86 LocalDB] on svr-19':
+      '#35 [2014-x86 LocalDB]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2014-x86 LocalDB'
-      '#36 [2012-x64 Developer] on svr-19':
+      '#36 [2012-x64 Developer]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x64 Developer'
-      '#37 [2012-x64 Advanced] on svr-19':
+      '#37 [2012-x64 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x64 Advanced'
-      '#38 [2012-x64 Core] on svr-19':
+      '#38 [2012-x64 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x64 Core'
-      '#39 [2012-x64 LocalDB] on svr-19':
+      '#39 [2012-x64 LocalDB]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x64 LocalDB'
-      '#40 [2012-x86 Developer] on svr-19':
+      '#40 [2012-x86 Developer]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x86 Developer'
-      '#41 [2012-x86 Advanced] on svr-19':
+      '#41 [2012-x86 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x86 Advanced'
-      '#42 [2012-x86 Core] on svr-19':
+      '#42 [2012-x86 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x86 Core'
-      '#43 [2012-x86 LocalDB] on svr-19':
+      '#43 [2012-x86 LocalDB]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x86 LocalDB'
-      '#44 [2008R2-x64 Developer] on svr-19':
+      '#44 [2008R2-x64 Developer]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x64 Developer'
-      '#45 [2008R2-x64 Advanced Update] on svr-19':
+      '#45 [2008R2-x64 Advanced Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x64 Advanced Update'
-      '#46 [2008R2-x64 Advanced] on svr-19':
+      '#46 [2008R2-x64 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x64 Advanced'
-      '#47 [2008R2-x64 Core Update] on svr-19':
+      '#47 [2008R2-x64 Core Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x64 Core Update'
-      '#48 [2008R2-x64 Core] on svr-19':
+      '#48 [2008R2-x64 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x64 Core'
-      '#49 [2008R2-x86 Developer] on svr-19':
+      '#49 [2008R2-x86 Developer]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x86 Developer'
-      '#50 [2008R2-x86 Advanced Update] on svr-19':
+      '#50 [2008R2-x86 Advanced Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x86 Advanced Update'
-      '#51 [2008R2-x86 Advanced] on svr-19':
+      '#51 [2008R2-x86 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x86 Advanced'
-      '#52 [2008R2-x86 Core Update] on svr-19':
+      '#52 [2008R2-x86 Core Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x86 Core Update'
-      '#53 [2008R2-x86 Core] on svr-19':
+      '#53 [2008R2-x86 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x86 Core'
-      '#54 [2008-x64 Advanced Update] on svr-19':
+      '#54 [2008-x64 Advanced Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x64 Advanced Update'
-      '#55 [2008-x64 Advanced] on svr-19':
+      '#55 [2008-x64 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x64 Advanced'
-      '#56 [2008-x64 Core Update] on svr-19':
+      '#56 [2008-x64 Core Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x64 Core Update'
-      '#57 [2008-x64 Core] on svr-19':
+      '#57 [2008-x64 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x64 Core'
-      '#58 [2008-x86 Advanced Update] on svr-19':
+      '#58 [2008-x86 Advanced Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x86 Advanced Update'
-      '#59 [2008-x86 Advanced] on svr-19':
+      '#59 [2008-x86 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x86 Advanced'
-      '#60 [2008-x86 Core Update] on svr-19':
+      '#60 [2008-x86 Core Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x86 Core Update'
-      '#61 [2008-x86 Core] on svr-19':
+      '#61 [2008-x86 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x86 Core'
-      '#62 [2005-x86 Advanced Update] on svr-19':
+      '#62 [2005-x86 Advanced Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2005-x86 Advanced Update'
-      '#63 [2005-x86 Advanced] on svr-19':
+      '#63 [2005-x86 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2005-x86 Advanced'
-      '#64 [2005-x86 Core] on svr-19':
+      '#64 [2005-x86 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2005-x86 Core'
 
