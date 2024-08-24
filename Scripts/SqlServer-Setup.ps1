@@ -1992,6 +1992,7 @@ $servers | Format-Table-Smarty
 foreach($server in $servers) {
   Say "TRY DOWNLOAD SQL SERVER $($server.Version) $($server.MediaType)"
   $setupMeta = Download-SQLServer-and-Extract $server.Version $server.MediaType;
+  $setupMeta | Format-Table -AutoSize | Out-String -Width 256
   $resultGetUpdate = $null;
   if ($server.UpdateId) {
     Say "TRY DOWNLOAD UPDATE $($server.UpdateId)"
