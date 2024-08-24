@@ -1908,7 +1908,7 @@ function Install-SQLServer {
     $argIACCEPTSQLSERVERLICENSETERMS = IIf ($meta.Version -match "2008-") "" "/IAcceptSQLServerLicenseTerms"
 
     $argUpdateEnabled = IIF ([bool]"$update") "/UpdateEnabled=True" ""
-    $argUpdateSource = If ("$update") { "/UpdateUpdateSource=`"$($update.UpdateFolder)`"" } else { "" };
+    $argUpdateSource = If ("$update") { "/UpdateSource=`"$($update.UpdateFolder)`"" } else { "" };
 
 
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
