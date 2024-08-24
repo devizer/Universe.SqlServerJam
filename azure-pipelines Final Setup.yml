@@ -265,3 +265,39 @@ jobs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
       artifactName: '$(Agent.JobName)'
 
+
+
+
+
+
+
+- job: 'Combine'
+  condition: succeededOrFailed()
+  pool:
+    vmImage: 'windows-2022'
+  timeoutInMinutes: 30
+  dependsOn:
+    - Install
+
+  steps: 
+
+  - task: DownloadPipelineArtifact@2
+    condition: succeededOrFailed()
+    displayName: 'Download of all platforms to $(RAW_ARTIFACTS_DIR)'
+    inputs:
+      path: '$(SYSTEM.ARTIFACTSDIRECTORY)\All'
+      patterns: 
+        "**"
+    
+  - powershell: |
+       cd $ENV:SYSTEM_ARTIFACTSDIRECTORY
+       7z a -sdel -mx=1 Combined.7z *
+    condition: succeededOrFailed()
+    displayName: 'Prepare Artifacts'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(SYSTEM.ARTIFACTSDIRECTORY)'
+      artifactName: 'Combined benchmark (and artifacts)'
