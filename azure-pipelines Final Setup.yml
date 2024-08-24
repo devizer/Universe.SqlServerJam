@@ -250,7 +250,7 @@ jobs:
        $Utf8 = New-Object System.Text.UTF8Encoding $False
        $sqlDef = "{0,-20}" -f "$($ENV:SQL_SERVERS)"
        $mediumVersionFormatted = "{0,-60}" -f "$mediumVersion"
-       [System.IO.File]::WriteAllLines("$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\VERSION.LOG", "$sqlDef | $mediumVersionFormatted", $utf8)
+       [System.IO.File]::WriteAllLines("$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\VERSION.LOG", "| $sqlDef | $mediumVersionFormatted |", $utf8)
        
        Get-WmiObject -class "Win32_PageFileUsage" -namespace "root\CIMV2" -computername localhost | Format-Table Caption, Name, PeakUsage, AllocatedBaseSize, CurrentUsage -AutoSize | Out-String -Width 256
     condition: succeededOrFailed()
