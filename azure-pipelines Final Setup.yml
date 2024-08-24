@@ -302,7 +302,7 @@ jobs:
     
   - powershell: |
        cd $ENV:SYSTEM_ARTIFACTSDIRECTORY
-       7z a -sdel -mx=1 Combined.7z *
+       7z a -sdel -mx=1 "SQL Servers Combined.7z" *
     condition: succeededOrFailed()
     displayName: 'Prepare Artifacts'
 
@@ -311,4 +311,4 @@ jobs:
     displayName: 'Publish'
     inputs:
       pathtoPublish: '$(SYSTEM.ARTIFACTSDIRECTORY)'
-      artifactName: 'Combined'
+      artifactName: 'SQL Servers Combined'
