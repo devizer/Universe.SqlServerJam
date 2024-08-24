@@ -248,8 +248,8 @@ jobs:
        & .\SHOW-SQL-Servers.cmd *| tee "$outputFile"
        $mediumVersion = Get-Content "$outputFile" | ? {$_ -match "Medium Version"} | % {$_.Split(":") | Select -Last 1}
        $Utf8 = New-Object System.Text.UTF8Encoding $False
-       $sqlDef = "{0,-28}" -f "$($ENV:SQL_SERVERS)"
-       $mediumVersionFormatted = "{0,-74}" -f "$mediumVersion"
+       $sqlDef = "{0,-33}" -f "$($ENV:SQL_SERVERS)"
+       $mediumVersionFormatted = "{0,-77}" -f "$mediumVersion"
        [System.IO.File]::WriteAllLines("$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\VERSION.LOG", "| $sqlDef | $mediumVersionFormatted |", $utf8)
        
        Get-WmiObject -class "Win32_PageFileUsage" -namespace "root\CIMV2" -computername localhost | Format-Table Caption, Name, PeakUsage, AllocatedBaseSize, CurrentUsage -AutoSize | Out-String -Width 256
@@ -305,7 +305,7 @@ jobs:
        cd $ENV:SYSTEM_ARTIFACTSDIRECTORY
        $reportLines = Get-ChildItem -Path "." -Filter "VERSION.LOG" -recurse -force | Sort-Object -Property FullName -Descending | % {$_.FullName} | % { [System.IO.File]::ReadAllText($_).Trim(@([char]13,[char]10)) }
        $reportLines > FULL-REPORT.TXT
-       & 7z @("a", "-sdel", "-mx=9", "-ms=on", "-mqs=on", "-xr!FULL-REPORT.TXT", "SQL Servers Combined.7z" "*");
+       & 7z @("a", "-sdel", "-mx=2", "-ms=on", "-mqs=on", "-xr!FULL-REPORT.TXT", "SQL Servers Combined.7z", "*");
     condition: succeededOrFailed()
     displayName: 'Prepare Artifacts'
 
