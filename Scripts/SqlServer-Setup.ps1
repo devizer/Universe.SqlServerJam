@@ -1559,7 +1559,7 @@ function Download-SQLServer-and-Extract {
     [string] $version,  # 2016|2017|2019|2022
     [string] $mediaType # LocalDB|Core|Advanced|Developer
   )
-  $major = ($meta.Version.Substring(0,4)) -as [int];
+  $major = ($version.Substring(0,4)) -as [int];
   $is2020 = $major -ge 2016;
   if ($is2020) { 
     Download-Fresh-SQLServer-and-Extract $version $mediaType;
