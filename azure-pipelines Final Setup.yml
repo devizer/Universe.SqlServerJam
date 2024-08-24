@@ -248,8 +248,8 @@ jobs:
        & .\SHOW-SQL-Servers.cmd *| tee "$outputFile"
        $mediumVersion = Get-Content "$outputFile" | ? {$_ -match "Medium Version"} | % {$_.Split(":") | Select -Last 1}
        $Utf8 = New-Object System.Text.UTF8Encoding $False
-       $sqlDef = "{0,-20}" -f "$($ENV:SQL_SERVERS)"
-       $mediumVersionFormatted = "{0,-80}" -f "$mediumVersion"
+       $sqlDef = "{0,-28}" -f "$($ENV:SQL_SERVERS)"
+       $mediumVersionFormatted = "{0,-74}" -f "$mediumVersion"
        [System.IO.File]::WriteAllLines("$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\VERSION.LOG", "| $sqlDef | $mediumVersionFormatted |", $utf8)
        
        Get-WmiObject -class "Win32_PageFileUsage" -namespace "root\CIMV2" -computername localhost | Format-Table Caption, Name, PeakUsage, AllocatedBaseSize, CurrentUsage -AutoSize | Out-String -Width 256
