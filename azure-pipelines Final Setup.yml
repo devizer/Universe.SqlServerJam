@@ -14,6 +14,7 @@ trigger:
 jobs:
 
 - job: Install
+  displayName: '→'
   pool:
     vmImage: '$(IMAGE)'
   timeoutInMinutes: 180
