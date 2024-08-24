@@ -1903,8 +1903,9 @@ function Install-SQLServer {
     $argENU = IIf ($meta.Version -match "2008-") "" "/ENU"
     $argIACCEPTSQLSERVERLICENSETERMS = IIf ($meta.Version -match "2008-") "" "/IAcceptSQLServerLicenseTerms"
 
-    $argUpdateEnabled = IIF ([bool]"$update") "/UpdateEnabled=True" ""
-    $argUpdateSource = If ("$update") { "/UpdateSource=`"$($update.UpdateFolder)`"" } else { "" };
+    $hasUpdateSourceArgument = ($major -ge 2012);
+    $argUpdateEnabled = IIF ([bool]"$update" -and $hasUpdateSourceArgument) "/UpdateEnabled=True" ""
+    $argUpdateSource = If ("$update" -and $hasUpdateSourceArgument) { "/UpdateSource=`"$($update.UpdateFolder)`"" } else { "" };
 
 
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
@@ -1926,6 +1927,12 @@ function Install-SQLServer {
     & "$($meta.Launcher)" $setupArg
     if (-not $?) {
       Write-Host "Warning! Setup '$($meta.Launcher)' failed" -ForeGroundColor DarkRed
+    }
+
+    if ("$update" -and (-not $hasUpdateSourceArgument)) {
+      $updateCommandLine = @("/q", "/IAcceptSQLServerLicenseTerms", "/Action=Patch", "/InstanceName=$instanceName");
+      $upgradeResult = Execute-Process-Smarty "SQL Server Updater to $($update.UpdateId)" $update.UpdateLauncher $updateCommandLine
+      $upgradeResult | Format-Table-Smarty
     }
   }
   
