@@ -1025,6 +1025,14 @@ function Say { # param( [string] $message )
     Write-Host "$args" -ForegroundColor Yellow
 }
 $Global:_Say_Stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Smart-Format.ps1]
+function Format-Table-Smarty
+{ 
+   $arr = (@($Input) | % { [PSCustomObject]$_} | Format-Table -AutoSize | Out-String -Width 2048).Split(@([char]13, [char]10)) | ? { "$_".Length -gt 0 };
+   if (-not $arr) { return; }
+   [string]::Join([Environment]::NewLine, $arr);
+}
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Start-Stopwatch.ps1]
 function Start-Stopwatch() {
   $ret = [PSCustomObject] @{
@@ -1152,7 +1160,7 @@ $SqlServer2010DownloadLinks = @(
     Version="2008R2-x86"; #SP2
     Core    ="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPR_x86_ENU.exe" 
     Advanced="https://download.microsoft.com/download/0/4/B/04BE03CD-EAF3-4797-9D8D-2E08E316C998/SQLEXPRADV_x86_ENU.exe"
-    Developer="https://archive.org/download/sql_server_2008r2_sp3_developer_edition_x86_x64_ia64/sql_server_2008r2_sp4_developer_edition_x86.7z"
+    Developer="https://archive.org/download/sql_server_2008r2_sp3_developer_edition_x86_x64_ia64/sql_server_2008r2_sp3_developer_edition_x86.7z"
     DeveloperFormat="Archive"
     CU=@(
       @{ Id="SP3"; Url="https://download.microsoft.com/download/D/7/A/D7A28B6C-FCFE-4F70-A902-B109388E01E9/ENU/SQLServer2008R2SP3-KB2979597-x86-ENU.exe" }
@@ -1624,6 +1632,17 @@ function Download-SqlServer-Update {
   return $ret;
 }
 
+<#
+Name           Value                                                                                                             
+----           -----                                                                                                             
+Url            https://download.microsoft.com/download/C/4/F/C4F908C9-98ED-4E5F-88D5-7D6A5004AEBD/SQLServer2017-KB5016884-x64.exe
+Id             CU31                                                                                                              
+UpdateId       CU31                                                                                                              
+UpdateSize     561206208                                                                                                         
+UpdateFolder   C:\SQL-Downloads\SQL-2017-CU31                                                                                    
+UpdateLauncher C:\SQL-Downloads\SQL-2017-CU31\SQLServer2017-KB5016884-x64.exe                                                    
+#>
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Enumerate-SQLServer-Downloads.ps1]
 function Enumerate-SQLServer-Downloads() {
   $versions = "2005-x86", "2008-x86", "2008-x64", "2008R2-x86", "2008R2-x64", "2012-x86", "2012-x64", "2014-x86", "2014-x64", "2016", "2017", "2019", "2022";
@@ -1641,13 +1660,14 @@ function Enumerate-SQLServer-Downloads() {
 
 function Enumerate-Plain-SQLServer-Downloads() {
   foreach($meta in Enumerate-SQLServer-Downloads) {
+    $baselineKeywords="$($meta.Version) $($meta.MediaType)"
     if ("$($meta.CU)") {
       foreach($update in $meta.CU) {
         $counter++;
-        @{ Version=$meta.Version; MediaType=$meta.MediaType; UpdateId=$update.Id; Update=$update; Keywords="$($meta.Version) $($meta.MediaType) $($update.Id)"};
+        @{ Version=$meta.Version; MediaType=$meta.MediaType; UpdateId=$update.Id; Update=$update; Keywords="$baselineKeywords $($update.Id)"; NormalizedKeywords="$baselineKeywords Update"; };
       }
     }
-    @{ Version=$meta.Version; MediaType=$meta.MediaType; Keywords="$($meta.Version) $($meta.MediaType)"};
+    @{ Version=$meta.Version; MediaType=$meta.MediaType; Keywords="$baselineKeywords"; NormalizedKeywords="$baselineKeywords"};
   }
 }
 
@@ -1903,6 +1923,55 @@ function Install-SQLServer {
 }
 
 
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Parse-SqlServers.ps1]
+function Parse-SqlServers { param( [string] $list)
+    # Say "Installing SQL Server(s) by tags: $list"
+    $rawServerList = "$list".Split(@([char]44, [char]59));
+    foreach($sqlDef in $rawServerList) {
+        $arr = $sqlDef.Split(@([char]58));
+        $sqlKey = $arr[0];
+        if ($arr.Length -gt 1) { $instanceName=$arr[1].Trim(); } else {  $instanceName=$null; }
+        $tags=@("$sqlKey".Split([char]32) | % {$_.Trim()} | where { $_.Length -gt 0 } )
+        if ($tags.Count -gt 0) {
+            $version = "$($tags[0])";
+            try { $major = $version.Substring(0,4) -as [int] } catch {}
+            $versionHasBits = ($version -like "*-x86" -or $version -like "*-x64")
+            if ((-not $versionHasBits) -and ($major -le 2014)) { 
+              $version += IIF ($major -eq 2005) "-x86" "-$(Get-CPU-Architecture-Suffix-for-Windows)"; 
+            }
+            $missingDeveloper = ($version -like "2005*" -or $version -like "2014-x86" -or $version -like "2008-*");
+            $mediaType = IIF ($tags.Count -ge 2) $tags[1] (IIF $missingDeveloper "Advanced" "Developer")
+            $rawUpdate = IIF ($tags.Count -ge 3) $tags[2] ""
+
+            if ($instanceName -eq $null) {
+              $instanceName = $mediaType.Substring(0,3).ToUpper() + "_" + $version.Replace("-", "_");
+            }
+            $instanceName = "$($instanceName.ToUpper())"
+
+            $normalizedMeta = Find-SQLServer-Meta $version $mediaType
+            if (-not $normalizedMeta) {
+              Write-Warning "Unknwon SQL Server version $version mediatype $mediaType" 
+            }
+            else {
+              # Version and MediaType are clarified. 
+              # First (latest) update if not found
+              if ($rawUpdate) {
+                $update = $normalizedMeta.CU | ? { $_.Id -eq $rawUpdate } | Select -First 1;
+                if (-not $update) { $update = $normalizedMeta.CU | Select -First 1; }
+                $updateId = IIF ([bool]"$update") $update.Id $null;
+              } else {
+                $updateId = $null;
+                $update = $null;
+              }
+
+              @{Version = $version; MediaType = $mediaType; UpdateId = "$updateId"; Update = $update; InstanceName = $instanceName; }
+            }
+        }
+    }
+}
+<#
+  2014 --> 2014-x64 Developer on x64, 
+#>
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Publish-SQLServer-SetupLogs.ps1]
 function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
   New-Item -ItemType Directory -Path "$toFolder" -EA SilentlyContinue | out-null

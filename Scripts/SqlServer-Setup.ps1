@@ -1,4 +1,6 @@
-$ErrorActionPreference="Stop"
+Param(
+  [string] $sqlServers
+)
 
 # Include Detected: [ ..\Includes\*.ps1 ]
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\$Full7zLinksMetadata.ps1]
@@ -1984,44 +1986,18 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
 }
 
 
-Write-Host "Try-BuildServerType: [$(Try-BuildServerType)], Is-BuildServer: $(Is-BuildServer)"
-
-# Build Keyswords
-$keywords = "";
-$counter = 0;
-$filter = {$_.UpdateId -eq $null}
-$filter = {$true}
-foreach($meta in Enumerate-Plain-SQLServer-Downloads | ? $filter) {
-  $counter++;
-  $keywords += "$("{0,3}" -f $counter)| $($meta.Keywords)$([Environment]::NewLine)"
-}
-$keywordsFile = Combine-Path (Get-SqlServer-Downloads-Folder) "Keywords.txt" 
-Write-All-Text $keywordsFile $keywords;
-Get-Content $keywordsFile | Out-Host
-
-$filter = {$major = ($_.Version.Substring(0,4)) -as [int]; return $major -eq 2017 -and $_.UpdateId -eq $null -and $_.MediaType -eq "Developer";}
-$filter = {$_.UpdateId -eq $null}
-$counter = 0;
-foreach($meta in Enumerate-Plain-SQLServer-Downloads | ? $filter) {
-  $counter++;
-  Say "TRY DOWNLOAD SQL #$($counter): [$($meta.Keywords)]"
-  $downloadResult = Download-SQLServer-and-Extract $meta.Version $meta.MediaType
-  $downloadResult | Format-Table -AutoSize | Out-String -Width 256
-  if ((Is-BuildServer) -and ($downloadResult.Media)) {
-    Write-Host "Clean up '$($downloadResult.Media)' ..."
-    Remove-Item -Recurse -Force "$($downloadResult.Media)" -ErrorAction SilentlyContinue | out-null
+Say "SQL_SERVERS argument: `"$sqlServers`""
+$servers = Parse-SqlServers $sqlServers
+$servers | Format-Table-Smarty
+foreach($server in $servers) {
+  Say "TRY DOWNLOAD SQL SERVER $($server.Version) $($server.MediaType)"
+  $setupMeta = Download-SQLServer-and-Extract $server.Version $server.MediaType;
+  $resultGetUpdate = $null;
+  if ($server.UpdateId) {
+    Say "TRY DOWNLOAD UPDATE $($server.UpdateId)"
+    $resultGetUpdate = Download-SqlServer-Update $server.Version $server.MediaType $server.Update;
+    $resultGetUpdate | Format-Table -AutoSize | Out-String -Width 256
   }
+  Install-SQLServer $setupMeta $resultGetUpdate $server.InstanceName;
+  Say "Setup Finished. $((Get-Memory-Info).Description)"
 }
-Say "DONE"
-
-
-$counter = 0;
-foreach($meta in Enumerate-Plain-SQLServer-Downloads) {
-  if ($meta.Update) {
-    $counter++;
-    Say "TRY DOWNLOAD UPDATE #$($counter): Id='$($meta.UpdateId)' [$($meta.Keywords)]"
-    $result = Download-SqlServer-Update $meta.Version $meta.MediaType $meta.Update;
-    $result | Format-Table -AutoSize | Out-String -Width 256
-  }
-}
-
