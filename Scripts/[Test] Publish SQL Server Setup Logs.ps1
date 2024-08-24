@@ -1573,7 +1573,9 @@ function ApplyCommonSqlServerState([Hashtable] $ret) {
   }
   if ($ret.Setup) {
     $ret["SetupSize"] = Get-DirectorySize $ret.Setup;
-    $ret["SetupHash"] = Get-Smarty-FolderHash $ret.Setup "SHA512"
+    if (Is-SqlServer-Setup-Cache-Enabled) { 
+      $ret["SetupHash"] = Get-Smarty-FolderHash $ret.Setup "SHA512"
+    }
   }
   if ($ret.Media) {
     $ret["MediaSize"] = Get-DirectorySize $ret.Media;
@@ -1917,6 +1919,8 @@ function Install-SQLServer {
 }
 
 
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Is-SqlServer-Setup-Cache-Enabled.ps1]
+function Is-SqlServer-Setup-Cache-Enabled() { $false; }
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Parse-SqlServers.ps1]
 function Parse-SqlServers { param( [string] $list)
     # Say "Installing SQL Server(s) by tags: $list"
