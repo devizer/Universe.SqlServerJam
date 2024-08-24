@@ -1829,9 +1829,18 @@ function Install-SQLServer {
   )
 
   if (-not $meta.LauncherSize) {
-    Write-Host "[Install-SQLServer] Wromg `$meta argument. Probably download failed";
-    $meta | fl | out-host
+    Write-Host "[Install-SQLServer] Invalid `$meta argument. Probably download failed";
+    $meta | Format-Table-Smarty
     return;
+  }
+
+  if ($update) {
+    $isUpdateValid = ("$($update.UpdateSize)" -and "$($update.UpdateFolder)" -and "$($update.UpdateLauncher)")
+    if (-not $isUpdateValid) {
+    Write-Host "[Install-SQLServer] Invalid `$update argument. Probably download failed";
+    $update | Format-Table-Smarty
+    return;
+    }
   }
 
   $defaultOptions = @{
@@ -1894,10 +1903,14 @@ function Install-SQLServer {
     $argENU = IIf ($meta.Version -match "2008-") "" "/ENU"
     $argIACCEPTSQLSERVERLICENSETERMS = IIf ($meta.Version -match "2008-") "" "/IAcceptSQLServerLicenseTerms"
 
+    $argUpdateEnabled = IIF ([bool]"$update") "/UpdateEnabled=True" ""
+    $argUpdateSource = If ("$update") { "/UpdateUpdateSource=`"$($update.UpdateFolder)`"" } else { "" };
+
+
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
     $setupArg = "$argQuiet", "$argENU", "$argProgress", "/ACTION=Install",
     "$argIACCEPTSQLSERVERLICENSETERMS", "$argIACCEPTROPENLICENSETERMS", 
-    # "/UpdateEnabled=False", TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+    "$argUpdateEnabled", "$argUpdateSource",
     "/FEATURES=`"$argFeatures`"", 
     "/INSTANCENAME=`"$instanceName`"", 
     "/INSTANCEDIR=`"$($options.InstallTo)`"", 
@@ -1923,8 +1936,8 @@ function Install-SQLServer {
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Is-SqlServer-Setup-Cache-Enabled.ps1]
 function Is-SqlServer-Setup-Cache-Enabled() { $false; }
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Parse-SqlServers.ps1]
-function Parse-SqlServers { param( [string] $list)
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Parse-SqlServers-Input.ps1]
+function Parse-SqlServers-Input { param( [string] $list)
     # Say "Installing SQL Server(s) by tags: $list"
     $rawServerList = "$list".Split(@([char]44, [char]59));
     foreach($sqlDef in $rawServerList) {
@@ -1991,7 +2004,7 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
 
 
 Say "SQL_SERVERS argument: `"$sqlServers`""
-$servers = Parse-SqlServers $sqlServers
+$servers = Parse-SqlServers-Input $sqlServers
 $servers | Format-Table-Smarty
 foreach($server in $servers) {
   Say "TRY DOWNLOAD SQL SERVER $($server.Version) $($server.MediaType)"
