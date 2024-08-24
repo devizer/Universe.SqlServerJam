@@ -1930,7 +1930,8 @@ function Install-SQLServer {
     }
 
     if ("$update" -and (-not $hasUpdateSourceArgument)) {
-      $updateCommandLine = @("/q", "/IAcceptSQLServerLicenseTerms", "/Action=Patch", "/InstanceName=$instanceName");
+      $argIACCEPTSQLSERVERLICENSETERMS = IIF ($major -le 2008) "" "/IAcceptSQLServerLicenseTerms"
+      $updateCommandLine = @("/q", "$argIACCEPTSQLSERVERLICENSETERMS", "/Action=Patch", "/InstanceName=$instanceName");
       $upgradeResult = Execute-Process-Smarty "SQL Server Updater to $($update.UpdateId)" $update.UpdateLauncher $updateCommandLine
       $upgradeResult | Format-Table-Smarty
     }
