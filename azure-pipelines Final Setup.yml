@@ -246,7 +246,7 @@ jobs:
        cd c:\Temp\LocalSqlDiscovery-net4.5
        $outputFile = "SHOW-SQL-Servers.log"
        & .\SHOW-SQL-Servers.cmd *| tee "$outputFile"
-       $mediumVersion = (Get-Content -Raw "$outputFile" | ? {$_ -match "Medium Version"}
+       $mediumVersion = Get-Content -Raw "$outputFile" | ? {$_ -match "Medium Version"}
        $Utf8 = New-Object System.Text.UTF8Encoding $False
        [System.IO.File]::WriteAllLines("$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\VERSION.LOG", $mediumVersion, $utf8)
        
