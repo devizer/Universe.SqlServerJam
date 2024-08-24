@@ -304,7 +304,7 @@ jobs:
   - powershell: |
        cd $ENV:SYSTEM_ARTIFACTSDIRECTORY
        $reportLines = Get-ChildItem -Path "." -Filter "VERSION.LOG" -recurse -force | Sort-Object -Property FullName -Descending | % {$_.FullName} | % { [System.IO.File]::ReadAllText($_).Trim(@([char]13,[char]10)) }
-       echo $reportLines > FULL-REPORT.TXT
+       $reportLines > FULL-REPORT.TXT
        & 7z @("a", "-sdel", "-mx=9", "-ms=on", "-mqs=on", "-xr!FULL-REPORT.TXT", "SQL Servers Combined.7z" "*");
     condition: succeededOrFailed()
     displayName: 'Prepare Artifacts'
