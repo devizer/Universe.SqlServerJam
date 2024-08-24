@@ -224,7 +224,7 @@ jobs:
 
   - powershell: |
        cd Scripts
-       powershell -f SqlServer-Setup.ps1 -SqlServers "$()" *| tee "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\FULL-LOG.txt"
+       powershell -f SqlServer-Setup.ps1 -SqlServers "$($ENV:SQL_SERVERS)" *| tee "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\FULL-LOG.txt"
        gdr -PSProvider 'FileSystem'
        # Install-Module -Force Platform-Info
     condition: succeededOrFailed()
@@ -239,8 +239,9 @@ jobs:
     displayName: 'Publish Setup Logs'
 
   - powershell: |
+       Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions" -Recurse -Force -EA SilentlyContinue
        cd Scripts
-       & 7z x LocalSqlDiscovery-net4.5.7z -oc:\Temp\
+       & 7z x LocalSqlDiscovery-net4.5.7z -oc:\Temp\ > $null
        cd c:\Temp\LocalSqlDiscovery-net4.5
        .\SHOW-SQL-Servers.cmd 
        Get-WmiObject -class "Win32_PageFileUsage" -namespace "root\CIMV2" -computername localhost | Format-Table Caption, Name, PeakUsage, AllocatedBaseSize, CurrentUsage -AutoSize | Out-String -Width 256
