@@ -22,6 +22,37 @@ jobs:
   strategy:
     maxParallel: 10
     matrix:
+      '#12 [2008R2-x86 Core]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2008R2-x86 Core'
+      '#13 [2008R2-x86 Core Update]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2008R2-x86 Core Update'
+      '#14 [2008R2-x86 Advanced]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2008R2-x86 Advanced'
+      '#15 [2008R2-x86 Advanced Update]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2008R2-x86 Advanced Update'
+      '#16 [2008R2-x86 Developer]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2008R2-x86 Developer'
+      '#17 [2008R2-x64 Core]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2008R2-x64 Core'
+      '#18 [2008R2-x64 Core Update]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2008R2-x64 Core Update'
+      '#19 [2008R2-x64 Advanced]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2008R2-x64 Advanced'
+      '#20 [2008R2-x64 Advanced Update]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2008R2-x64 Advanced Update'
+      '#21 [2008R2-x64 Developer]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2008R2-x64 Developer'
+
       '#01 [2005-x86 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2005-x86 Core'
@@ -55,36 +86,6 @@ jobs:
       '#11 [2008-x64 Advanced Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x64 Advanced Update'
-      '#12 [2008R2-x86 Core]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2008R2-x86 Core'
-      '#13 [2008R2-x86 Core Update]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2008R2-x86 Core Update'
-      '#14 [2008R2-x86 Advanced]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2008R2-x86 Advanced'
-      '#15 [2008R2-x86 Advanced Update]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2008R2-x86 Advanced Update'
-      '#16 [2008R2-x86 Developer]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2008R2-x86 Developer'
-      '#17 [2008R2-x64 Core]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2008R2-x64 Core'
-      '#18 [2008R2-x64 Core Update]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2008R2-x64 Core Update'
-      '#19 [2008R2-x64 Advanced]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2008R2-x64 Advanced'
-      '#20 [2008R2-x64 Advanced Update]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2008R2-x64 Advanced Update'
-      '#21 [2008R2-x64 Developer]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2008R2-x64 Developer'
       '#22 [2012-x86 LocalDB]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x86 LocalDB'
