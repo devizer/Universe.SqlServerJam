@@ -1956,7 +1956,8 @@ function Install-SQLServer {
         # OK on "2008"
         Say "Starting $title"
         $argIACCEPTSQLSERVERLICENSETERMS = IIF ($major -le 2008) "" "/IAcceptSQLServerLicenseTerms"
-        $commandLine = @("/Q", "/IAcceptSQLServerLicenseTerms", "/Action=Patch", "/InstanceName=$instanceName");
+        # No "/IAcceptSQLServerLicenseTerms",
+        $commandLine = @("/Q", "/Action=Patch", "/InstanceName=$instanceName");
         Write-Host ">>> $($update.UpdateLauncher) $commandLine"
         & "$($update.UpdateLauncher)" $commandLine
         if (-not $?) {
