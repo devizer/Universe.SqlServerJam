@@ -1689,7 +1689,7 @@ function Execute-Process-Smarty {
       $app = Start-Process "$launcher" -ArgumentList $arguments -PassThru;
     }
   } catch {
-    $err = "$($_.GetType()): '$($_.Message)'";
+    $err = "$($_.Exception.GetType()): '$($_.Exception.Message)'";
     $ret = @{Error = "$title failed. $err"; };
   }
   
