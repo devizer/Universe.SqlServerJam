@@ -1874,10 +1874,13 @@ function Install-SQLServer {
     $setupStatus = Execute-Process-Smarty "SQL Server $($meta.Version) $($meta.MediaType) Setup" $meta.Launcher $setupArg -WaitTimeout 3600
     $setupStatus | Format-Table-Smarty | Out-Host
 
+    # Exec Patch
     if ($update) {
-      $title = "SQL Server Updater to $($update.UpdateId)"
+      $title = "SQL Server Upgrade to $($update.UpdateId)"
       Write-Host "Starting $title"
-      & "$($update.UpdateLauncher)" @("/Q", "$argIACCEPTSQLSERVERLICENSETERMS", "/Action=Patch", "/InstanceName=$instanceName");
+      $commandLine = @("/QUIET", "/Action=Patch", "/InstanceName=$instanceName");
+      Write-Host ">>> $($update.UpdateLauncher) $commandLine"
+      & "$($update.UpdateLauncher)" $commandLine;
       if (-not $?) {
         Write-Host "$title failed" -ForegroundColor DarkRed
       } else { 
@@ -1886,7 +1889,6 @@ function Install-SQLServer {
     }
 
 
-    # TODO: Exec Patch
 
     # Write-Host "Workaround for 2005 logs"; sleep 1; & taskkill.exe @("/t", "/f", "/im", "setup.exe");
   } else {
@@ -1961,7 +1963,9 @@ function Install-SQLServer {
         # OK on "2008"
         Say "Starting $title"
         $argIACCEPTSQLSERVERLICENSETERMS = IIF ($major -le 2008) "" "/IAcceptSQLServerLicenseTerms"
-        & "$($update.UpdateLauncher)" @("/Q", "$argIACCEPTSQLSERVERLICENSETERMS", "/Action=Patch", "/InstanceName=$instanceName");
+        $commandLine = @("/Q", "$argIACCEPTSQLSERVERLICENSETERMS", "/Action=Patch", "/InstanceName=$instanceName");
+        Write-Host ">>> $($update.UpdateLauncher) $commandLine"
+        & "$($update.UpdateLauncher)" $commandLine
         if (-not $?) {
           Say "$title failed"
         } else { 

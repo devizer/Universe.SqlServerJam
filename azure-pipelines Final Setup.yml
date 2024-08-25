@@ -22,6 +22,9 @@ jobs:
   strategy:
     maxParallel: 10
     matrix:
+      '#03 [2005-x86 Advanced Update]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2005-x86 Advanced Update'
       '#12 [2008R2-x86 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x86 Core'
@@ -59,9 +62,6 @@ jobs:
       '#02 [2005-x86 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2005-x86 Advanced'
-      '#03 [2005-x86 Advanced Update]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2005-x86 Advanced Update'
       '#04 [2008-x86 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x86 Core'
