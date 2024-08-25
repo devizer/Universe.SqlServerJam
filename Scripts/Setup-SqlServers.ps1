@@ -1838,7 +1838,7 @@ function Install-SQLServer {
     $isUpdateValid = ("$($update.UpdateSize)" -and "$($update.UpdateFolder)" -and "$($update.UpdateLauncher)")
     if (-not $isUpdateValid) {
     Write-Host "[Install-SQLServer] Invalid `$update argument. Probably download failed";
-    $update | Format-Table-Smarty
+    $update | Format-Table-Smarty | Out-Host
     return;
     }
   }
@@ -1868,14 +1868,17 @@ function Install-SQLServer {
          "INSTALLSQLDIR=`"$($options.InstallTo)`"";
 
     $setupStatus = Execute-Process-Smarty "SQL Server $($meta.Version) $($meta.MediaType) Setup" $meta.Launcher $setupArg -WaitTimeout 3600
+    $setupStatus | Format-Table-Smarty | Out-Host
 
-    Write-Host "Starting $title"
-    $argIACCEPTSQLSERVERLICENSETERMS = IIF ($major -le 2008) "" "/IAcceptSQLServerLicenseTerms"
-    & "$($update.UpdateLauncher)" @("/Q", "$argIACCEPTSQLSERVERLICENSETERMS", "/Action=Patch", "/InstanceName=$instanceName");
-    if (-not $?) {
-      Write-Host "$title failed" -ForegroundColor DarkRed
-    } else { 
-      Write-Host "$title successfilly complete" -ForegroundColor DarkRed
+    if ($update) {
+      $title = "SQL Server Updater to $($update.UpdateId)"
+      Write-Host "Starting $title"
+      & "$($update.UpdateLauncher)" @("/Q", "$argIACCEPTSQLSERVERLICENSETERMS", "/Action=Patch", "/InstanceName=$instanceName");
+      if (-not $?) {
+        Write-Host "$title failed" -ForegroundColor DarkRed
+      } else { 
+        Write-Host "$title successfilly complete" -ForegroundColor DarkRed
+      }
     }
 
 
@@ -1952,13 +1955,13 @@ function Install-SQLServer {
       }
       else {
         # OK on "2008"
-        Write-Host "Starting $title"
+        Say "Starting $title"
         $argIACCEPTSQLSERVERLICENSETERMS = IIF ($major -le 2008) "" "/IAcceptSQLServerLicenseTerms"
         & "$($update.UpdateLauncher)" @("/Q", "$argIACCEPTSQLSERVERLICENSETERMS", "/Action=Patch", "/InstanceName=$instanceName");
         if (-not $?) {
-          Write-Host "$title failed" -ForegroundColor DarkRed
+          Say "$title failed"
         } else { 
-          Write-Host "$title successfilly complete" -ForegroundColor DarkRed
+          Say "$title successfilly complete"
         }
       }
     }
