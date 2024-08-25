@@ -1872,7 +1872,7 @@ function Install-SQLServer {
 
     # Exec Patch
     if ($update) {
-      $title = "SQL Server Upgrade to $($update.UpdateId)"
+      $title = "SQL Server $($meta.Version) Upgrade to $($update.UpdateId)"
       Write-Host "Starting $title"
       $commandLine = @("/QUIET", "/Action=Patch", "/InstanceName=$instanceName");
       Write-Host ">>> $($update.UpdateLauncher) $commandLine"
@@ -1947,7 +1947,7 @@ function Install-SQLServer {
     }
 
     if ("$update" -and (-not $hasUpdateSourceArgument)) {
-      $title = "SQL Server Updater to $($update.UpdateId)"
+      $title = "SQL Server $($meta.Version) Upgrade to $($update.UpdateId)"
       if ($meta.Version -like "2008R2*") { # "2008R2*"
         # OK on "2008R2"
         $updateCommandLine = @("/QUIET", "/IAcceptSQLServerLicenseTerms", "/Action=Patch", "/InstanceName=$instanceName"); # SP3 ok
