@@ -1937,10 +1937,10 @@ function Install-SQLServer {
 
     if ("$update" -and (-not $hasUpdateSourceArgument)) {
       $title = "SQL Server Updater to $($update.UpdateId)"
-      if ($meta.Version -like "2008R2") {
+      if ($meta.Version -like "2008R2*") { # "2008R2*"
         # OK on "2008R2"
         $argIACCEPTSQLSERVERLICENSETERMS = IIF ($major -le 2008) "" "/IAcceptSQLServerLicenseTerms"
-        $updateCommandLine = @("/q", "$argIACCEPTSQLSERVERLICENSETERMS", "/Action=Patch", "/InstanceName=$instanceName");
+        $updateCommandLine = @("/Q", "$argIACCEPTSQLSERVERLICENSETERMS", "/Action=Patch", "/InstanceName=$instanceName");
         $upgradeResult = Execute-Process-Smarty "$title" $update.UpdateLauncher $updateCommandLine
         $upgradeResult | Format-Table
       }
