@@ -1877,15 +1877,9 @@ function Install-SQLServer {
     # Exec Patch
     if ($update) {
       $title = "SQL Server $($meta.Version) Upgrade to $($update.UpdateId)"
-      Write-Host "Starting $title"
-      $commandLine = @("/QUIET", "/Action=Patch", "/InstanceName=$instanceName");
-      Write-Host ">>> $($update.UpdateLauncher) $commandLine"
-      & "$($update.UpdateLauncher)" $commandLine;
-      if (-not $?) {
-        Write-Host "$title failed" -ForegroundColor DarkRed
-      } else { 
-        Write-Host "$title successfilly complete" -ForegroundColor DarkRed
-      }
+      $updateCommandLine = @("/QUIET", "/Action=Patch", "/InstanceName=$instanceName");
+      $upgradeResult = Execute-Process-Smarty "$title" $update.UpdateLauncher $updateCommandLine
+      $upgradeResult | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
     }
 
 
@@ -1952,25 +1946,18 @@ function Install-SQLServer {
 
     if ("$update" -and (-not $hasUpdateSourceArgument)) {
       $title = "SQL Server $($meta.Version) Upgrade to $($update.UpdateId)"
-      if ($meta.Version -like "2008R2*") { # "2008R2*"
-        # OK on "2008R2"
+      if ($meta.Version -like "2008R2*") { 
+        Say "Starting $title"
         $updateCommandLine = @("/QUIET", "/IAcceptSQLServerLicenseTerms", "/Action=Patch", "/InstanceName=$instanceName"); # SP3 ok
         $upgradeResult = Execute-Process-Smarty "$title" $update.UpdateLauncher $updateCommandLine
-        $upgradeResult | Format-Table
+        $upgradeResult | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
       }
       else {
         # OK on "2008"
         Say "Starting $title"
-        $argIACCEPTSQLSERVERLICENSETERMS = IIF ($major -le 2008) "" "/IAcceptSQLServerLicenseTerms"
-        # No "/IAcceptSQLServerLicenseTerms",
-        $commandLine = @("/Q", "/Action=Patch", "/InstanceName=$instanceName");
-        Write-Host ">>> $($update.UpdateLauncher) $commandLine"
-        & "$($update.UpdateLauncher)" $commandLine
-        if (-not $?) {
-          Say "$title failed"
-        } else { 
-          Say "$title successfilly complete"
-        }
+        $updateCommandLine = @("/QUIET", "/Action=Patch", "/InstanceName=$instanceName");
+        $upgradeResult = Execute-Process-Smarty "$title" $update.UpdateLauncher $updateCommandLine
+        $upgradeResult | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
       }
     }
   }
