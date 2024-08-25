@@ -22,6 +22,22 @@ jobs:
   strategy:
     maxParallel: 10
     matrix:
+      '#16 [2008R2-x86 Developer]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2008R2-x86 Developer'
+      '#21 [2008R2-x64 Developer]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2008R2-x64 Developer'
+      '#25 [2012-x86 Developer]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2012-x86 Developer'
+      '#29 [2012-x64 Developer]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2012-x64 Developer'
+      '#36 [2014-x64 Developer]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2014-x64 Developer'
+
       '#05 [2008-x86 Core Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x86 Core Update'
@@ -41,9 +57,6 @@ jobs:
       '#15 [2008R2-x86 Advanced Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x86 Advanced Update'
-      '#16 [2008R2-x86 Developer]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2008R2-x86 Developer'
       '#17 [2008R2-x64 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x64 Core'
@@ -56,9 +69,6 @@ jobs:
       '#20 [2008R2-x64 Advanced Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x64 Advanced Update'
-      '#21 [2008R2-x64 Developer]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2008R2-x64 Developer'
 
       '#01 [2005-x86 Core]':
              IMAGE: 'windows-2019'
@@ -96,9 +106,6 @@ jobs:
       '#24 [2012-x86 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x86 Advanced'
-      '#25 [2012-x86 Developer]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2012-x86 Developer'
       '#26 [2012-x64 LocalDB]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x64 LocalDB'
@@ -108,9 +115,6 @@ jobs:
       '#28 [2012-x64 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x64 Advanced'
-      '#29 [2012-x64 Developer]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2012-x64 Developer'
       '#30 [2014-x86 LocalDB]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2014-x86 LocalDB'
@@ -129,9 +133,6 @@ jobs:
       '#35 [2014-x64 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2014-x64 Advanced'
-      '#36 [2014-x64 Developer]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2014-x64 Developer'
       '#37 [2016 LocalDB]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2016 LocalDB'
