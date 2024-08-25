@@ -1948,10 +1948,9 @@ function Install-SQLServer {
 
     if ("$update" -and (-not $hasUpdateSourceArgument)) {
       $title = "SQL Server Updater to $($update.UpdateId)"
-      if ($false -and $meta.Version -like "2008R2*") { # "2008R2*"
+      if ($meta.Version -like "2008R2*") { # "2008R2*"
         # OK on "2008R2"
-        $argIACCEPTSQLSERVERLICENSETERMS = IIF ($major -le 2008) "" "/IAcceptSQLServerLicenseTerms"
-        $updateCommandLine = @("/Q", "$argIACCEPTSQLSERVERLICENSETERMS", "/Action=Patch", "/InstanceName=$instanceName");
+        $updateCommandLine = @("/QUIET", "/IAcceptSQLServerLicenseTerms", "/Action=Patch", "/InstanceName=$instanceName"); # SP3 ok
         $upgradeResult = Execute-Process-Smarty "$title" $update.UpdateLauncher $updateCommandLine
         $upgradeResult | Format-Table
       }
@@ -1959,7 +1958,7 @@ function Install-SQLServer {
         # OK on "2008"
         Say "Starting $title"
         $argIACCEPTSQLSERVERLICENSETERMS = IIF ($major -le 2008) "" "/IAcceptSQLServerLicenseTerms"
-        $commandLine = @("/Q", "$argIACCEPTSQLSERVERLICENSETERMS", "/Action=Patch", "/InstanceName=$instanceName");
+        $commandLine = @("/Q", "/IAcceptSQLServerLicenseTerms", "/Action=Patch", "/InstanceName=$instanceName");
         Write-Host ">>> $($update.UpdateLauncher) $commandLine"
         & "$($update.UpdateLauncher)" $commandLine
         if (-not $?) {
