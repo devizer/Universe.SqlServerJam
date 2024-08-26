@@ -202,9 +202,6 @@ jobs:
       '#57 [2019 Developer Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2019 Developer Update'
-      '#58 [2022 LocalDB]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2022 LocalDB'
       '#59 [2022 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2022 Core'
@@ -246,7 +243,10 @@ jobs:
     displayName: 'Publish Setup Logs'
 
   - powershell: |
-       Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions" -Recurse -Force -EA SilentlyContinue
+       if (-not ("$($ENV:SQL_SERVERS)" -match "LocalDB")) {
+         Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions" -Recurse -Force -EA SilentlyContinue
+       }
+       
        cd Scripts
        & 7z.exe x LocalSqlDiscovery-net4.5.7z -oc:\Temp\ > $null
        cd c:\Temp\LocalSqlDiscovery-net4.5
