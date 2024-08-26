@@ -22,6 +22,12 @@ jobs:
   strategy:
     maxParallel: 10
     matrix:
+      '#39 [2016 Core Update]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2016 Core Update'
+      '#64 [2022 Developer Update]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2022 Developer Update'
       '#16 [2008R2-x86 Developer]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x86 Developer'
@@ -139,9 +145,6 @@ jobs:
       '#38 [2016 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2016 Core'
-      '#39 [2016 Core Update]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2016 Core Update'
       '#40 [2016 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2016 Advanced'
@@ -214,9 +217,6 @@ jobs:
       '#63 [2022 Developer]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2022 Developer'
-      '#64 [2022 Developer Update]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2022 Developer Update'
 
   steps:
 
