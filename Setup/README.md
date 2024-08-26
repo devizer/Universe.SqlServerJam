@@ -1,4 +1,4 @@
-| Version                           |  Details                                                                      |
+| Version                           |  Version                                                                      |
 | --------------------------------- |  ---------------------------------------------------------------------------- |
 | 2022 Developer Update             |  16.0.4135.4 RTM CU14 Developer Edition (64-bit)                              |
 | 2022 Developer                    |  16.0.1000.6 RTM Developer Edition (64-bit)                                   |
