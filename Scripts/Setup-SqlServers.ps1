@@ -2058,7 +2058,7 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
   }
 }
 
-$cpuName = "$((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
+$cpuName = "$((Get-WmiObject Win32_Processor).Name)"
 
 Say "SQL_SERVERS argument: `"$sqlServers`""
 $servers = Parse-SqlServers-Input $sqlServers
