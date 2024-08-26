@@ -2,6 +2,16 @@ Param(
   [string] $sqlServers
 )
 
+<#
+TODO: 
+  DataDir,
+  LogDir,
+  BackupDir,
+  TempDir,
+  MaxRam,
+
+#>
+
 # Include Detected: [ ..\Includes\*.ps1 ]
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\$Full7zLinksMetadata.ps1]
 $Full7zLinksMetadata_onWindows = @(
@@ -1856,7 +1866,7 @@ function Install-SQLServer {
   $major = ($meta.Version.Substring(0,4)) -as [int];
   $is2020 = $major -ge 2016;
   $setupArg=@();
-  $title = "SQL Server $($meta.Version) $($meta.MediaType)"
+  $title = "SQL Server $($meta.Version) $($meta.MediaType) Setup"
   if ($major -eq 2005) {
     # SQL_Engine,SQL_Data_Files,SQL_Replication,SQL_FullText,SQL_SharedTools
     $argFeatures = IIf ($meta.MediaType -eq "Advanced") "SQL_Engine,SQL_FullText" "SQL_Engine";
@@ -1934,11 +1944,13 @@ function Install-SQLServer {
     "$argADDCURRENTUSERASSQLADMIN", 
     "/SQLSYSADMINACCOUNTS=`"BUILTIN\ADMINISTRATORS`"", 
     "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
-    Write-Host ">>> `"$($meta.Launcher)`" $setupArg"
-    & "$($meta.Launcher)" $setupArg
-    if (-not $?) {
-      Write-Host "Warning! Setup '$($meta.Launcher)' failed" -ForeGroundColor DarkRed
-    }
+    # Write-Host ">>> `"$($meta.Launcher)`" $setupArg"
+    # & "$($meta.Launcher)" $setupArg
+    # if (-not $?) {
+    #   Write-Host "Warning! Setup '$($meta.Launcher)' failed" -ForeGroundColor DarkRed
+    # }
+    $setupStatus = Execute-Process-Smarty "$title" $meta.Launcher $setupArg -WaitTimeout 3600
+    $setupStatus | Format-Table-Smarty | Out-Host
 
     if ("$update" -and (-not $hasUpdateSourceArgument)) {
       $title = "SQL Server $($meta.Version) Upgrade to $($update.UpdateId)"
