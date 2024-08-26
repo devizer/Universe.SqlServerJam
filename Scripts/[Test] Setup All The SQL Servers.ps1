@@ -1682,9 +1682,9 @@ function Execute-Process-Smarty {
     [string] $workingDirectory = $null,
     [int] $waitTimeout = 3600
   )
+  $arguments = @($arguments | ? { "$_".Trim() -ne "" })
   Troubleshoot-Info "[$title] `"$launcher`" $arguments";
   $startAt = [System.Diagnostics.Stopwatch]::StartNew()
-  $arguments = @($arguments | ? { "$_" -ne "" })
 
   $ret = @{};
   try { 
@@ -1717,7 +1717,7 @@ function Execute-Process-Smarty {
   }
 
   $isOk = ((-not $ret.Error) -and ($ret.ExitCode -eq 0));
-  $status = IIF $isOk "Succefully completed" $ret.Error;
+  $status = IIF $isOk "Successfully completed" $ret.Error;
   
   if ($isOk) { 
     Write-Host "$title $status. It took $($startAt.ElapsedMilliseconds.ToString("n0")) ms";
@@ -1837,6 +1837,15 @@ function Install-SQLServer {
     Write-Host "[Install-SQLServer] Invalid `$meta argument. Probably download failed";
     $meta | Format-Table-Smarty
     return;
+  }
+
+  if ($meta.MediaType -eq "LocalDB") {
+     Write-Host "Installing LocalDB MSI `"$msiFileName`""
+     $logDir = if ("$($ENV:SYSTEM_ARTIFACTSDIRECTORY)") { "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)" } else { "$($ENV:TEMP)" }
+     $setupCommandLine = @("/c", "msiexec.exe", "/i", "`"$($meta.Launcher)`"", "IACCEPTSQLLOCALDBLICENSETERMS=YES", "/qn", "/L*v", "SqlLocalDB-Setup-$($meta.Version).log");
+     $setupStatus = Execute-Process-Smarty "SQL LocalDB $($meta.Version) Setup" $meta.Launcher $setupArg -WaitTimeout 1800
+     $setupStatus | Format-Table-Smarty | Out-Host
+     return;
   }
 
   if ($update) {

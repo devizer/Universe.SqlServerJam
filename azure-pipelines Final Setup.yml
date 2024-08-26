@@ -22,6 +22,9 @@ jobs:
   strategy:
     maxParallel: 10
     matrix:
+      '#58 [2022 LocalDB]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2022 LocalDB'
       '#39 [2016 Core Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2016 Core Update'
