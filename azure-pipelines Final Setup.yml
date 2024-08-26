@@ -1,4 +1,13 @@
-variables:
+schedules:
+- cron: '30 3 * * *'
+  # https://learn.microsoft.com/en-us/azure/devops/pipelines/process/scheduled-triggers?view=azure-devops&tabs=yaml
+  displayName: 'Daily build at 3:30 AM'
+  branches:
+    include:
+    - master
+    
+    
+ variables:
   NUGET_VERSION: 0.1
   PS1_TROUBLE_SHOOT: On
   # Short name is critical for 2017 and older
@@ -9,7 +18,7 @@ variables:
 trigger:
   branches:
     include:
-    - main
+    - manual
 
 jobs:
 
@@ -233,6 +242,7 @@ jobs:
     displayName: 'Uninstall LocalDB'
 
   - powershell: |
+       $ENV:DEBUG_LOG_FOLDER = "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)"
        cd Scripts
        powershell -f Setup-SqlServers.ps1 -SqlServers "$($ENV:SQL_SERVERS)" *| tee "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\FULL-LOG.txt"
        get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 -or $_.Name -match "browser" -or $_.DisplayName -match "browser"  } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName

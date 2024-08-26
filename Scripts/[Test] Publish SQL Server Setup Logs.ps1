@@ -868,10 +868,12 @@ function Get-Speedy-Software-Product-List() {
     $keys = Get-ChildItem $origin.Path -EA SilentlyContinue
     if ($keys) {
       foreach($key in $keys) {
+        # Write-Host "$($key.Name): $key"
         $ret += New-Object PSObject -Property @{
             Name    = "$($key.GetValue('DisplayName'))"
             Vendor  = "$($key.GetValue('Publisher'))"
             Version = "$($key.GetValue('DisplayVersion'))"
+            IdentifyingNumber = [System.IO.Path]::GetFileName("$($key.Name)")
             Origin  = $origin.Origin
         }
       }
@@ -879,6 +881,9 @@ function Get-Speedy-Software-Product-List() {
   }
   return $ret | where { "$($_.Name)" -ne "" -and "$($_.Vendor)" -ne "" } | Sort-Object Vendor, Name, Version, Origin -Unique
 }
+
+# Get-Speedy-Software-Product-List | ft
+# $localDbList = Get-Speedy-Software-Product-List | ? { $_.Name -match "LocalDB" -and $_.Vendor -match "Microsoft" }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Has-Cmd.ps1]
 function Has-Cmd {

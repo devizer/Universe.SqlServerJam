@@ -880,10 +880,12 @@ function Get-Speedy-Software-Product-List() {
     $keys = Get-ChildItem $origin.Path -EA SilentlyContinue
     if ($keys) {
       foreach($key in $keys) {
+        # Write-Host "$($key.Name): $key"
         $ret += New-Object PSObject -Property @{
             Name    = "$($key.GetValue('DisplayName'))"
             Vendor  = "$($key.GetValue('Publisher'))"
             Version = "$($key.GetValue('DisplayVersion'))"
+            IdentifyingNumber = [System.IO.Path]::GetFileName("$($key.Name)")
             Origin  = $origin.Origin
         }
       }
@@ -891,6 +893,9 @@ function Get-Speedy-Software-Product-List() {
   }
   return $ret | where { "$($_.Name)" -ne "" -and "$($_.Vendor)" -ne "" } | Sort-Object Vendor, Name, Version, Origin -Unique
 }
+
+# Get-Speedy-Software-Product-List | ft
+# $localDbList = Get-Speedy-Software-Product-List | ? { $_.Name -match "LocalDB" -and $_.Vendor -match "Microsoft" }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Has-Cmd.ps1]
 function Has-Cmd {
@@ -2053,11 +2058,14 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
   }
 }
 
+$cpuName = "$((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
 
 Say "SQL_SERVERS argument: `"$sqlServers`""
 $servers = Parse-SqlServers-Input $sqlServers
 $servers | Format-Table-Smarty
+$jsonReport = @();
 foreach($server in $servers) {
+  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
   Say "TRY DOWNLOAD SQL SERVER $($server.Version) $($server.MediaType)"
   $setupMeta = Download-SQLServer-and-Extract $server.Version $server.MediaType;
   $setupMeta | Format-Table -AutoSize | Out-String -Width 256
@@ -2067,6 +2075,16 @@ foreach($server in $servers) {
     $resultGetUpdate = Download-SqlServer-Update $server.Version $server.MediaType $server.Update;
     $resultGetUpdate | Format-Table -AutoSize | Out-String -Width 256
   }
+  $secondsDownload = $startAt.ElapsedMilliseconds / 1000.0;
+  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
   Install-SQLServer $setupMeta $resultGetUpdate $server.InstanceName;
   Say "Setup Finished. $((Get-Memory-Info).Description)"
+  $secondsInstall = $startAt.ElapsedMilliseconds / 1000.0;
+  $jsonReport += @{ Version=$server.Version; MediaType=$server.MediaType; SecondsDownload = $secondsDownload; SecondsInstall = $secondsInstall; Cpu = $cpuName; }
 }
+
+if ("$($ENV:DEBUG_LOG_FOLDER)")
+{
+   $jsonReport | ConvertTo-Json | Out-File "$($ENV:DEBUG_LOG_FOLDER)\SQL Setup Benchmark.json"
+}
+
