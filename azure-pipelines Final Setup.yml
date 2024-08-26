@@ -22,6 +22,15 @@ jobs:
   strategy:
     maxParallel: 10
     matrix:
+      '#26 [2012-x64 LocalDB]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2012-x64 LocalDB'
+      '#30 [2014-x86 LocalDB]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2014-x86 LocalDB'
+      '#37 [2016 LocalDB]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2016 LocalDB'
       '#58 [2022 LocalDB]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2022 LocalDB'
@@ -115,18 +124,12 @@ jobs:
       '#24 [2012-x86 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x86 Advanced'
-      '#26 [2012-x64 LocalDB]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2012-x64 LocalDB'
       '#27 [2012-x64 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x64 Core'
       '#28 [2012-x64 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x64 Advanced'
-      '#30 [2014-x86 LocalDB]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2014-x86 LocalDB'
       '#31 [2014-x86 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2014-x86 Core'
@@ -142,9 +145,6 @@ jobs:
       '#35 [2014-x64 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2014-x64 Advanced'
-      '#37 [2016 LocalDB]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2016 LocalDB'
       '#38 [2016 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2016 Core'
@@ -230,7 +230,7 @@ jobs:
        cd Scripts
        powershell -f Uninstall-LocalDB.ps1
     condition: contains(variables['SQL_SERVERS'], 'LocalDB')
-    displayName: 'Install'
+    displayName: 'Uninstall LocalDB'
 
   - powershell: |
        cd Scripts
