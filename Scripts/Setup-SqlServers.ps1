@@ -1690,6 +1690,7 @@ function Execute-Process-Smarty {
   )
   Troubleshoot-Info "[$title] `"$launcher`" $arguments";
   $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+  $arguments = @($arguments | ? { "$_" -ne "" })
 
   $ret = @{};
   try { 
