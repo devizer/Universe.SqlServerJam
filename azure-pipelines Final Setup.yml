@@ -7,7 +7,7 @@ schedules:
     - master
     
     
- variables:
+variables:
   NUGET_VERSION: 0.1
   PS1_TROUBLE_SHOOT: On
   # Short name is critical for 2017 and older
