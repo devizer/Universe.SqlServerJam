@@ -273,6 +273,7 @@ jobs:
        $sqlDef = "{0,-33}" -f "$($ENV:SQL_SERVERS)"
        $mediumVersionFormatted = "{0,-77}" -f "$mediumVersion"
        [System.IO.File]::WriteAllLines("$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\VERSION.LOG", "| $sqlDef | $mediumVersionFormatted |", $utf8)
+       [System.IO.File]::WriteAllLines("$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\Medium Version.txt", "$mediumVersion", $utf8)
        
        Get-WmiObject -class "Win32_PageFileUsage" -namespace "root\CIMV2" -computername localhost | Format-Table Caption, Name, PeakUsage, AllocatedBaseSize, CurrentUsage -AutoSize | Out-String -Width 256
     condition: succeededOrFailed()
@@ -325,7 +326,21 @@ jobs:
     
   - powershell: |
        cd $ENV:SYSTEM_ARTIFACTSDIRECTORY
-       $reportLines = Get-ChildItem -Path "." -Filter "VERSION.LOG" -recurse -force | Sort-Object -Property FullName -Descending | % {$_.FullName} | % { [System.IO.File]::ReadAllText($_).Trim(@([char]13,[char]10)) }
+       $reportLines = Get-ChildItem -Path "." -Filter "VERSION.LOG" -recurse -force | Sort-Object -Property FullName -Descending | % {$_.FullName} | % { 
+         $dir = [System.IO.Path]::GetDirectoryName($_)
+         $jsonFile = "$dir\SQL Setup Benchmark.json"
+         $jsonString=[System.IO.File]::ReadAllText($jsonFile)
+         $jsonObject = @($jsonString | ConvertFrom-Json) | Select -First 1
+         $secondsInstall=$jsonObject.SecondsInstall
+         $secondsDownload=$jsonObject.SecondsDownload
+         $cpu=$jsonObject.Cpu
+         $columns = [System.IO.File]::ReadAllText($_).Trim(@([char]13,[char]10)) 
+         foreach($val in $secondsDownload, $secondsInstall, ($secondsDownload + $secondsInstall), $cpu) {
+           $valFormatted = If ($val -is [decimal]) { (new-object DateTime(0)).Add([TimeSpan]::FromSeconds($val)).ToString("mm:ss.f").PadRight(9); } else { "$val".PadRight(50) }
+           $columns += $valFormatted + " |"
+         }
+         "$columns"
+       }
        $reportLines > FULL-REPORT.TXT
        & 7z @("a", "-sdel", "-mx=2", "-ms=on", "-mqs=on", "-xr!FULL-REPORT.TXT", "SQL Servers Combined.7z", "*");
     condition: succeededOrFailed()
