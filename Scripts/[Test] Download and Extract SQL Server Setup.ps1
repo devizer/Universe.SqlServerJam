@@ -1986,7 +1986,7 @@ function Parse-SqlServers-Input { param( [string] $list)
     $rawServerList = "$list".Split(@([char]44, [char]59));
     foreach($sqlDef in $rawServerList) {
         $arr = $sqlDef.Split(@([char]58));
-        $sqlKey = $arr[0];
+        $sqlKey = "$($arr[0])".Trim();
         if ($arr.Length -gt 1) { $instanceName=$arr[1].Trim(); } else {  $instanceName=$null; }
         $tags=@("$sqlKey".Split([char]32) | % {$_.Trim()} | where { $_.Length -gt 0 } )
         if ($tags.Count -gt 0) {
@@ -2021,7 +2021,7 @@ function Parse-SqlServers-Input { param( [string] $list)
                 $update = $null;
               }
 
-              @{Version = $version; MediaType = $mediaType; UpdateId = "$updateId"; Update = $update; InstanceName = $instanceName; }
+              @{Version = $version; MediaType = $mediaType; UpdateId = "$updateId"; Update = $update; InstanceName = $instanceName; Definition=$sqlKey }
             }
         }
     }
