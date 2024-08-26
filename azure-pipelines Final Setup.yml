@@ -229,7 +229,7 @@ jobs:
   - powershell: |
        cd Scripts
        powershell -f Uninstall-LocalDB.ps1
-    condition: contains(variables['SQL_SERVERS'], "LocalDB")
+    condition: contains(variables['SQL_SERVERS'], 'LocalDB')
     displayName: 'Install'
 
   - powershell: |
