@@ -1,4 +1,4 @@
-| Version                           |  Details                                                                      | Download | Install  | Total    | At Intel Xeon               |
+| Version                           |  Version                                                                      | Download | Install  | Total    | At Intel Xeon               |
 | --------------------------------- |  ---------------------------------------------------------------------------- | -------- | -------- | -------- | --------------------------- |
 | 2022 Developer Update             |  16.0.4135.4 RTM CU14 Developer Edition (64-bit)                              |00:44.5   |04:43.8   |05:28.4   |Platinum 8272CL, 2.60GHz     |
 | 2022 Developer                    |  16.0.1000.6 RTM Developer Edition (64-bit)                                   |00:35.5   |04:06.5   |04:42.0   |E5-2673 v4, 2.30GHz          |
