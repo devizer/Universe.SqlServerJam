@@ -1837,7 +1837,7 @@ function Install-SQLServer {
      Write-Host "Installing LocalDB MSI `"$($meta.Launcher)`" Version $($meta.Version)"
      $logDir = if ("$($ENV:SYSTEM_ARTIFACTSDIRECTORY)") { "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)" } else { "$($ENV:TEMP)" }
      $setupCommandLine = @("/c", "msiexec.exe", "/i", "`"$($meta.Launcher)`"", "IACCEPTSQLLOCALDBLICENSETERMS=YES", "/qn", "/L*v", "SqlLocalDB-Setup-$($meta.Version).log");
-     $setupStatus = Execute-Process-Smarty "SQL LocalDB $($meta.Version) Setup" $meta.Launcher $setupCommandLine -WaitTimeout 1800
+     $setupStatus = Execute-Process-Smarty "SQL LocalDB $($meta.Version) Setup" "cmd.exe" $setupCommandLine -WaitTimeout 1800
      $setupStatus | Format-Table-Smarty | Out-Host
      return;
   }
