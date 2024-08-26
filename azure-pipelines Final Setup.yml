@@ -28,6 +28,9 @@ jobs:
       '#30 [2014-x86 LocalDB]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2014-x86 LocalDB'
+      '#33 [2014-x64 LocalDB]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2014-x64 LocalDB'
       '#37 [2016 LocalDB]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2016 LocalDB'
@@ -136,9 +139,6 @@ jobs:
       '#32 [2014-x86 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2014-x86 Advanced'
-      '#33 [2014-x64 LocalDB]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2014-x64 LocalDB'
       '#34 [2014-x64 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2014-x64 Core'
