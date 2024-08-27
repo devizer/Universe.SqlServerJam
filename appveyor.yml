@@ -93,7 +93,7 @@ init:
         & sc.exe delete $_.Name;
       }
       gdr -PSProvider 'FileSystem' | Format-Table -AutoSize | Out-String -Width 2048
-      & cmd.exe /c "printenv | sort"
+      # & cmd.exe /c "printenv | sort"
 
 build_script:
 
