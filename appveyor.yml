@@ -1,4 +1,4 @@
-version: 'SqlServers-Setup-1.1'
+version: 'SqlServers-Setup-1.1.*'
 max_jobs: 1
 image:
 # SQL Server 2019 needs the Visual Studio 2019 image
