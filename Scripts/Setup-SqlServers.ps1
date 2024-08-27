@@ -1709,25 +1709,33 @@ function Execute-Process-Smarty {
     $ret = @{Error = "$title failed. $err"; };
   }
   
+  $exitCode = $null;
+  $okExitCode = $false;
   if (-not $ret.Error) {
     if ($app -and $app.Id) {
-      Wait-Process -Id $app.Id -Timeout $waitTimeout;
-      $exited = $app.HasExited;
-      if (-not $exited) { 
+      $isExited = $app.WaitForExit(1000*$waitTimeout);
+      if (-not $isExited) { 
         $ret = @{ Error = "$title timed out." };
       }
       if (-not $ret.Error) {
-        $ret = @{ExitCode = [int] $app.ExitCode};
-        if ($app.ExitCode -ne 0) {
-          $ret = @{ Error = "$title failed. Exit code $($app.ExitCode)." };
+        sleep 0.01 # background tasks
+        $exitCode = [int] $app.ExitCode;
+        $isLegacy = ([System.Environment]::OSVersion.Version.Major) -eq 5;
+        if ($isExited -and $isLegacy -and "$exitCode" -eq "") { $exitCode = 0; }
+        $okExitCode = $exitCode -eq 0;
+        # Write-Host "Exit Code = [$exitCode], okExitCode = [$okExitCode]"
+        $ret = @{ExitCode = $exitCode};
+        if (-not $okExitCode) {
+          $err = "$title failed."; if ($app.ExitCode) { $err += " Exit code $($app.ExitCode)."; }
+          $ret = @{ Error = $err };
         }
       }
     } else {
-      $ret = @{ Error = "$title failed." };
+      if (-not "$($ret.Error)") { $ret["Error"] = "$title failed."; }
     }
   }
 
-  $isOk = ((-not $ret.Error) -and ($ret.ExitCode -eq 0));
+  $isOk = ((-not $ret.Error) -and $okExitCode);
   $status = IIF $isOk "Successfully completed" $ret.Error;
   
   if ($isOk) { 
