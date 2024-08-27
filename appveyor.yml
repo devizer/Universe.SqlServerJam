@@ -84,6 +84,8 @@ environment:
 
 init:
 - ps: |
+      New-Item -Path "C:\Artifacts" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
+      New-Item -Path "C:\Temp" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
       Write-Host "CPU: $((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
       get-wmiobject win32_service | where {$_.Name -Like "MSSQL`$*" } | % { 
         echo "DELETING MSSQL SERVER SERVICE [$($_.Name)]";
@@ -92,7 +94,6 @@ init:
       }
       gdr -PSProvider 'FileSystem' | Format-Table -AutoSize | Out-String -Width 2048
       & cmd.exe /c "printenv | sort"
-      New-Item -Path "C:\Artifacts" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
 
 build_script:
 
