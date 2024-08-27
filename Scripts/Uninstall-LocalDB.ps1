@@ -2061,7 +2061,7 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
 }
 
 
-$localDbList = Get-Speedy-Software-Product-List | ? { $_.Name -match "LocalDB" -and $_.Vendor -match "Microsoft" }
+$localDbList = @(Get-Speedy-Software-Product-List | ? { $_.Name -match "LocalDB" -and $_.Vendor -match "Microsoft" })
 $names = $localDbList | % { $_.Name }
 Write-Host "Total LocalDB Installed: $($localDbList.Count), $names"
 
