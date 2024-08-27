@@ -1397,7 +1397,7 @@ function Download-Fresh-SQLServer-and-Extract {
     [string] $mediaType # LocalDB|Core|Advanced|Developer
   )
 
-  $rootMedia=Combine-Path "$(Get-SqlServer-Media-Folder)" "SQL-$version-$mediaType-Cpmpressed"
+  $rootMedia=Combine-Path "$(Get-SqlServer-Media-Folder)" "SQL-$version-$mediaType-Compressed"
   $rootSetup=Combine-Path "$(Get-SqlServer-Setup-Folder)" "SQL-$version-$mediaType"
   if ($mediaType -eq "LocalDB") {
      $mediaPath = $rootSetup
