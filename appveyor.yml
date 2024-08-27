@@ -49,9 +49,10 @@ test_script:
       & .\SHOW-SQL-Servers.cmd *| tee "$outputFile"
       popd
 
+      $isOk = (Get-Content "c:\Temp\SHOW-SQL-Servers.log") -match "Medium Version";
+      Write-Host "IS OK: $isOk"
       if ("$($ENV:SqlServers)" -match "LocalDB") {
         #???????? Check up LocalDB Is Installed
-        $isOk = (Get-Content "SHOW-SQL-Servers.log") -match "Medium Version";
         if (-not $isOk) { throw "LocalDB Not Found or Not Responding"; }
       } else {
         $sqlServers = @(get-wmiobject win32_service | where {$_.Name -Like "MSSQL`$*" })
