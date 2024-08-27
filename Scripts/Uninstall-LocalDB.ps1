@@ -1320,7 +1320,7 @@ function Download-2010-SQLServer-and-Extract {
     $mediaPath = $null;
   }
 
-  Write-Host "Download Media for '$key'"
+  Write-Host "Download Media for '$version $mediaType'"
   $url="";
   $isDeveloper = [bool]($mediaType -eq "Developer");
   foreach($meta in $SqlServer2010DownloadLinks) {
