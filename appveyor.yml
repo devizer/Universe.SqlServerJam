@@ -1,0 +1,35 @@
+version: 'SqlServers-Setup-1.1'
+max_jobs: 1
+image:
+# SQL Server 2019 needs the Visual Studio 2019 image
+- Visual Studio 2017
+- Visual Studio 2022
+
+environment:
+  matrix:
+
+    - SqlServers: '2022 Core'
+    - SqlServers: '2022 LocalDB'
+    - SqlServers: '2022 Developer'
+      
+
+init:
+- ps: |
+      Write-Host "CPU: $((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
+      gdr -PSProvider 'FileSystem'
+      & cmd.exe /c "printenv | sort"
+      
+install:
+- ps: |
+      cd Scripts
+      powershell -f Setup-SqlServers.ps1 -SqlServers "$($ENV:SqlServers)" *| tee "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\FULL-LOG.txt"
+      get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 -or $_.Name -match "browser" -or $_.DisplayName -match "browser"  } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
+    
+test_script:
+- ps: |
+      cd Scripts
+      & 7z.exe x LocalSqlDiscovery-net4.5.7z -oc:\Temp\ > $null
+      cd c:\Temp\LocalSqlDiscovery-net4.5
+      $outputFile = "SHOW-SQL-Servers.log"
+      & .\SHOW-SQL-Servers.cmd *| tee "$outputFile"
+
