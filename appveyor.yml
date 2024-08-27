@@ -35,7 +35,7 @@ build_script:
 
 - ps: |
       cd Scripts
-      if ("$($ENV:SqlServers)" -match "LocalDB") { & powershell.exe -f Uninstall-LocalDB.ps1; }
+      if ("$($ENV:SqlServers)" -match "LocalDB") { & powershell.exe -f Uninstall-LocalDB.ps1; } else { Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions" -Recurse -Force -EA SilentlyContinue; }
       
 - ps: |
       powershell -f Setup-SqlServers.ps1 -SqlServers "$($ENV:SqlServers)" 
