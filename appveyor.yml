@@ -113,10 +113,17 @@ test_script:
       pushd c:\Temp\LocalSqlDiscovery-net4.5
       $outputFile = "SHOW-SQL-Servers.log"
       & .\SHOW-SQL-Servers.cmd *| tee "$outputFile"
+
+      $reportJsonFullName = "c:\Temp\LocalSqlDiscovery-net4.5\SHOW-SQL-Servers.log"
+      $isOk = (Get-Content "c:\Temp\LocalSqlDiscovery-net4.5\SHOW-SQL-Servers.log") -match "Medium Version";
+      $mediumVersion = "$isOk".Split(":") | Select -Last 1;
+      Write-Host "IS OK: $isOk"
+
+      $jsonObject = [PSCustomObject] (Get-Content -Raw "Benchmark\SQL Setup Benchmark.json" | ConvertFrom-Json)
+      $jsonObject | Add-Member -MemberType NoteProperty -Name "MediumVersion" -Value $mediumVersion
+      $jsonObject | ConvertTo-Json | Out-File $reportJsonFullName -Force
       popd
 
-      $isOk = (Get-Content "c:\Temp\LocalSqlDiscovery-net4.5\SHOW-SQL-Servers.log") -match "Medium Version";
-      Write-Host "IS OK: $isOk"
       if ("$($ENV:SqlServers)" -match "LocalDB") {
         #???????? Check up LocalDB Is Installed
         if (-not $isOk) { throw "LocalDB Not Found or Not Responding"; }
