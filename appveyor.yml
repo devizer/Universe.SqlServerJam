@@ -128,5 +128,5 @@ test_script:
 artifacts:
 
   # pushing a single file
-  - path: "Benchmark\SQL Setup Benchmark.json"
+  - path: 'Benchmark\SQL Setup Benchmark.json'
     # name: "SqlServer Setup Benchmark $(SqlServers).zip"
