@@ -102,6 +102,7 @@ build_script:
       if ("$($ENV:SqlServers)" -match "LocalDB") { & powershell.exe -f Uninstall-LocalDB.ps1; } else { Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions" -Recurse -Force -EA SilentlyContinue; }
       
 - ps: |
+      powershell -f Force-Install-Aria2c.ps1
       powershell -f Setup-SqlServers.ps1 -SqlServers "$($ENV:SqlServers)" 
       get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 -or $_.Name -match "browser" -or $_.DisplayName -match "browser"  } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName -AutoSize | Out-String -Width 2048
       
