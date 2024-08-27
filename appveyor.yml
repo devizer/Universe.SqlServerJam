@@ -114,7 +114,7 @@ test_script:
       $outputFile = "SHOW-SQL-Servers.log"
       & .\SHOW-SQL-Servers.cmd *| tee "$outputFile"
 
-      $reportJsonFullName = "c:\Temp\LocalSqlDiscovery-net4.5\SHOW-SQL-Servers.log"
+      $reportJsonFullName = "$($ENV:APPVEYOR_BUILD_FOLDER)\Benchmark\SQL Setup Benchmark.json"
       $isOk = (Get-Content "c:\Temp\LocalSqlDiscovery-net4.5\SHOW-SQL-Servers.log") -match "Medium Version";
       $mediumVersion = "$isOk".Split(":") | Select -Last 1;
       Write-Host "IS OK: $isOk"
