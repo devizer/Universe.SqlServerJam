@@ -1443,7 +1443,7 @@ function Download-Fresh-SQLServer-and-Extract {
   Write-Host "(Exe|Msi) Archive `"$exeArchive`""
   $ret = @{ Version=$version; MediaType=$mediaType; };
   if ($mediaType -eq "LocalDB") {
-    $ret["Launcher"] = $exeArchive;
+    $ret["Launcher"] = Combine-Path $setupPath $exeArchive;
     $ret["Setup"] = $setupPath;
   }
   else
@@ -1600,7 +1600,7 @@ function ApplyCommonSqlServerState([Hashtable] $ret) {
 
 function ExtractSqlServerSetup([string] $title, [string] $exeArchive, [string] $setupPath, [string] $quietArg <# /QS (Fresh) | /Q (prev) #>) {
   Write-Host "Extracting $title using [$($exeArchive)] to [$($setupPath)]"
-  $extractStatus = Execute-Process-Smarty "$title Unpacker" "$($exeArchive)" @("$quietArg", "/x:`"$setupPath`"") -WaitTimeout 1800
+  $extractStatus = Execute-Process-Smarty "$title Unpacker" "$($exeArchive)" @("$quietArg", "/X:`"$setupPath`"") -WaitTimeout 1800
   # $startAt = [System.Diagnostics.Stopwatch]::StartNew()
   # $extractApp = Start-Process "$($exeArchive)" -ArgumentList @("$quietArg", "/x:`"$setupPath`"") -PassThru
   # if ($extractApp -and $extractApp.Id) {
