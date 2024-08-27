@@ -24,8 +24,10 @@ environment:
 init:
 - ps: |
       Write-Host "CPU: $((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
+      cd Scripts
 
-      if ("$($ENV:SqlServers)" -match "LocalDB") { powershell -f Uninstall-LocalDB.ps1; }
+- ps: |
+      if ("$($ENV:SqlServers)" -match "LocalDB") { & powershell.exe -f Uninstall-LocalDB.ps1; }
       get-wmiobject win32_service | where {$_.Name -Like "MSSQL`$*" } | % { 
         echo "DELETING $($_.Name)"
         if ("$($_.State)" -ne "Stopped") { & net.exe stop $_.Name; }
@@ -37,7 +39,6 @@ init:
       
 install:
 - ps: |
-      cd Scripts
       powershell -f Setup-SqlServers.ps1 -SqlServers "$($ENV:SqlServers)" 
       get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 -or $_.Name -match "browser" -or $_.DisplayName -match "browser"  } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName -AutoSize | Out-String -Width 2048
 
