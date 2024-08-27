@@ -1320,9 +1320,8 @@ function Download-2010-SQLServer-and-Extract {
     [string] $mediaType # Core|Advanced|LocalDB (localdb is missing for 2008R2)
   )
 
-  $key="SQL-$version-$mediaType"
-  $rootMedia=Combine-Path "$(Get-SqlServer-Media-Folder)" $key
-  $rootSetup=Combine-Path "$(Get-SqlServer-Setup-Folder)" $key
+  $rootMedia=Combine-Path "$(Get-SqlServer-Media-Folder)" "SQL-$version-$mediaType-Compressed"
+  $rootSetup=Combine-Path "$(Get-SqlServer-Setup-Folder)" "SQL-$version-$mediaType"
   $mediaPath = $rootMedia
   $ext = IIf ($mediaType -eq "LocalDB") ".msi" ".exe"
   $exeName = "SQL-$mediaType-$Version-ENU$ext"
@@ -1410,9 +1409,8 @@ function Download-Fresh-SQLServer-and-Extract {
     [string] $mediaType # LocalDB|Core|Advanced|Developer
   )
 
-  $key="SQL-$version-$mediaType"
-  $rootMedia=Combine-Path "$(Get-SqlServer-Media-Folder)" $key
-  $rootSetup=Combine-Path "$(Get-SqlServer-Setup-Folder)" $key
+  $rootMedia=Combine-Path "$(Get-SqlServer-Media-Folder)" "SQL-$version-$mediaType-Cpmpressed"
+  $rootSetup=Combine-Path "$(Get-SqlServer-Setup-Folder)" "SQL-$version-$mediaType"
   if ($mediaType -eq "LocalDB") {
      $mediaPath = $rootSetup
   } else {
@@ -1435,7 +1433,7 @@ function Download-Fresh-SQLServer-and-Extract {
   Troubleshoot-Info "URL(s) IS " -Highlight "$url"
   $urlList = IIF ($url -is [array]) $url @($url);
   foreach($nextUrl in $urlList) {
-    $fileName=[System.IO.Path]::GetFileName($nextUrl);
+    $fileName=[System.IO.Path]::GetFileName($nextUrl); # TODO: trim /download at the end
     $fileFull = Combine-Path $mediaPath $fileName
     $isDownloadOk = Download-File-FailFree-and-Cached $fileFull @($nextUrl)
     if (-not $isDownloadOk) {

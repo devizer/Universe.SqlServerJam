@@ -337,7 +337,7 @@ jobs:
          $columns = [System.IO.File]::ReadAllText($_).Trim(@([char]13,[char]10)) 
          foreach($val in $secondsDownload, $secondsInstall, ($secondsDownload + $secondsInstall), $cpu) {
            $valFormatted = If ($val -is [decimal]) { (new-object DateTime(0)).Add([TimeSpan]::FromSeconds($val)).ToString("mm:ss.f").PadRight(9); } else { "$val".PadRight(50) }
-           $columns += $valFormatted + " |"
+           $columns += "  " + $valFormatted + " |"
          }
          "$columns"
        }
