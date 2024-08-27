@@ -128,15 +128,13 @@ $VcRuntimeLinksMetadata = @(
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Append-All-Text.ps1]
 function Append-All-Text( [string]$file, [string]$text ) {
-  $dirName=[System.IO.Path]::GetDirectoryName($file)
-  if ($dirName) { $_ = [System.IO.Directory]::CreateDirectory($dirName); }
+  Create-Directory-for-File $file
   $utf8=new-object System.Text.UTF8Encoding($false); 
   [System.IO.File]::AppendAllText($file, $text, $utf8);
 }
 
 function Write-All-Text( [string]$file, [string]$text ) {
-  $dirName=[System.IO.Path]::GetDirectoryName($file)
-  if ($dirName) { $_ = [System.IO.Directory]::CreateDirectory($dirName); }
+  Create-Directory-for-File $file
   $utf8=new-object System.Text.UTF8Encoding($false); 
   [System.IO.File]::WriteAllText($file, $text, $utf8);
 }
@@ -170,6 +168,25 @@ function Bootstrap-Aria2-If-Required(
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Combine-Path.ps1]
 function Combine-Path($start) { foreach($a in $args) { $start=[System.IO.Path]::Combine($start, $a); }; $start }
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Create-Directory.ps1]
+function Create-Directory($dirName) { 
+  if ($dirName) { 
+    $err = $null;
+    try { 
+      $_ = [System.IO.Directory]::CreateDirectory($dirName); return; 
+    } catch {
+      $err = "Create-Directory failed for `"$dirName`". $($_.Exception.GetType().ToString()) $($_.Exception.Message)"
+      Write-Host "Warning! $err";
+      throw $err;
+    }
+  }
+}
+
+function Create-Directory-for-File($fileFullName) { 
+  $dirName=[System.IO.Path]::GetDirectoryName($fileFullName)
+  Create-Directory "$dirName";
+}
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Demo-Test-of-Is-Vc-Runtime-Installed.ps1]
 function Demo-Test-of-Is-Vc-Runtime-Installed() {
@@ -234,7 +251,7 @@ function Download-File-FailFree-and-Cached([string] $fullName, [string[]] $urlLi
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Download-File-Managed.ps1]
 function Download-File-Managed([string] $url, [string]$outfile) {
   $dirName=[System.IO.Path]::GetDirectoryName($outfile)
-  if ($dirName) { $_ = [System.IO.Directory]::CreateDirectory($dirName); }
+  Create-Directory "$dirName";
   $okAria=$false; try { & aria2c.exe -h *| out-null; $okAria=$? } catch {}
   if ($okAria) {
     Troubleshoot-Info "Starting download `"" -Highlight "$url" "`" using aria2c as `"" -Highlight "$outfile" "`""
@@ -792,8 +809,9 @@ function GetPersistentTempFolder([string] $envPrefix, [string] $pathSuffix) {
     if ("$ret" -eq "") { $ret="$($ENV:HOME)/.cache"; }; 
   }
   
-  if (-not ($ret -like "*\Temp" -or $ret -like "*/.cache")) { $ret += Combine-Path $ret "Temp"; }
-  $ret = Combine-Path $ret "$pathSuffix";
+  $separator="$([System.IO.Path]::DirectorySeparatorChar)"
+  if (-not ($ret -like "*\Temp" -or $ret -like "*/.cache")) { $ret += "$($separator)Temp"; }
+  $ret += "$($separator)$pathSuffix";
   return $ret;
 }
 
