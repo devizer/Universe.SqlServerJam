@@ -12,9 +12,11 @@ environment:
       PS1_TROUBLE_SHOOT: On
       SQLSERVERS_MEDIA_FOLDER: 'C:\SQL-Media'
       SQLSERVERS_SETUP_FOLDER: 'C:\SQL-Setup'
+      TEMP: 'C:\Temp'
 
   matrix:
 
+          - SqlServers: '2012-x64 Developer'
           - SqlServers: '2022 Developer Update'
           - SqlServers: '2022 Developer'
           - SqlServers: '2022 Advanced Update'
@@ -50,7 +52,7 @@ environment:
           - SqlServers: '2014-x86 Advanced'
           - SqlServers: '2014-x86 Core'
           - SqlServers: '2014-x86 LocalDB'
-          - SqlServers: '2012-x64 Developer'
+
           - SqlServers: '2012-x64 Advanced'
           - SqlServers: '2012-x64 Core'
           - SqlServers: '2012-x64 LocalDB'
@@ -117,6 +119,6 @@ test_script:
         if (-not $isOk) { throw "LocalDB Not Found or Not Responding"; }
       } else {
         $sqlServers = @(get-wmiobject win32_service | where {$_.Name -Like "MSSQL`$*" })
-        if ($sqlServers.Count -gt 1) { throw "At least *One* SQL Server Expected"; }
+        if ($sqlServers.Count -lt 1) { throw "At least *One* SQL Server Expected"; }
       }
 
