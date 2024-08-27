@@ -6,6 +6,12 @@ image:
 - Visual Studio 2022
 
 environment:
+  global:
+
+      PS1_TROUBLE_SHOOT: On
+      SQLSERVERS_MEDIA_FOLDER: 'C:\SQL-Media'
+      SQLSERVERS_SETUP_FOLDER: 'C:\SQL-Setup'
+
   matrix:
 
     - SqlServers: '2022 Core'
@@ -22,7 +28,7 @@ init:
 install:
 - ps: |
       cd Scripts
-      powershell -f Setup-SqlServers.ps1 -SqlServers "$($ENV:SqlServers)" *| tee "$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\FULL-LOG.txt"
+      powershell -f Setup-SqlServers.ps1 -SqlServers "$($ENV:SqlServers)"
       get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 -or $_.Name -match "browser" -or $_.DisplayName -match "browser"  } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
     
 test_script:
