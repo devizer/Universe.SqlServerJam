@@ -49,7 +49,7 @@ test_script:
       & .\SHOW-SQL-Servers.cmd *| tee "$outputFile"
       popd
 
-      $isOk = (Get-Content "c:\Temp\SHOW-SQL-Servers.log") -match "Medium Version";
+      $isOk = (Get-Content "c:\Temp\LocalSqlDiscovery-net4.5\SHOW-SQL-Servers.log") -match "Medium Version";
       Write-Host "IS OK: $isOk"
       if ("$($ENV:SqlServers)" -match "LocalDB") {
         #???????? Check up LocalDB Is Installed
