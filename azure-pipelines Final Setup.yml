@@ -11,9 +11,9 @@ variables:
   NUGET_VERSION: 0.1
   PS1_TROUBLE_SHOOT: On
   # Short name is critical for 2017 and older
-  SQLSERVERS_SETUP_FOLDER: 'D:\SQL-Media'
-  SQLSERVERS_SETUP_FOLDER_Alternative: 'C:\SQL-Media'
   SQLSERVERS_MEDIA_FOLDER: 'C:\SQL-Media'
+  SQLSERVERS_SETUP_FOLDER: 'D:\SQL-Setup'
+  SQLSERVERS_SETUP_FOLDER_Alternative: 'C:\SQL-Media'
 
 trigger:
   branches:
