@@ -30,7 +30,9 @@ install:
       cd Scripts
       powershell -f Setup-SqlServers.ps1 -SqlServers "$($ENV:SqlServers)"
       get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 -or $_.Name -match "browser" -or $_.DisplayName -match "browser"  } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
-    
+
+build_script:
+      
 test_script:
 - ps: |
       cd Scripts
