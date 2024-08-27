@@ -8,6 +8,7 @@ image:
 environment:
   global:
 
+      SYSTEM_ARTIFACTSDIRECTORY: 'C:\Artifacts'
       PS1_TROUBLE_SHOOT: On
       SQLSERVERS_MEDIA_FOLDER: 'C:\SQL-Media'
       SQLSERVERS_SETUP_FOLDER: 'C:\SQL-Setup'
@@ -22,16 +23,17 @@ environment:
 init:
 - ps: |
       Write-Host "CPU: $((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
-      gdr -PSProvider 'FileSystem'
+      gdr -PSProvider 'FileSystem' | Format-Table -AutoSize | Out-String -Width 2048
       & cmd.exe /c "printenv | sort"
+      New-Item -Path "C:\Artifacts" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
       
 install:
 - ps: |
       cd Scripts
-      powershell -f Setup-SqlServers.ps1 -SqlServers "$($ENV:SqlServers)"
+      powershell -f Setup-SqlServers.ps1 -SqlServers "$($ENV:SqlServers)" 
       get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 -or $_.Name -match "browser" -or $_.DisplayName -match "browser"  } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName
 
-build_script:
+build: off
       
 test_script:
 - ps: |
