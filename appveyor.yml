@@ -24,6 +24,8 @@ environment:
 init:
 - ps: |
       Write-Host "CPU: $((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
+
+      if ("$($ENV:SqlServers)" -match "LocalDB") { powershell -f Uninstall-LocalDB.ps1; }
       get-wmiobject win32_service | where {$_.Name -Like "MSSQL`$*" } | % { 
         echo "DELETING $($_.Name)"
         if ("$($_.State)" -ne "Stopped") { & net.exe stop $_.Name; }
@@ -44,7 +46,6 @@ build: off
 test_script:
 - ps: |
       & 7z.exe x LocalSqlDiscovery-net4.5.7z -oc:\Temp\ > $null
-      if ("$($ENV:SqlServers)" -match "LocalDB") { powershell -f Uninstall-LocalDB.ps1; }
       pushd c:\Temp\LocalSqlDiscovery-net4.5
       $outputFile = "SHOW-SQL-Servers.log"
       & .\SHOW-SQL-Servers.cmd *| tee "$outputFile"
