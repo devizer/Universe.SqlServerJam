@@ -768,7 +768,12 @@ function Get-Os-Platform {
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-PS1-Repo-Downloads-Folder.ps1]
 function Get-PS1-Repo-Downloads-Folder() {
-  foreach($pair in (gci env:PS1_REPO_DOWNLOAD_FOLDER* | sort-object name)) {
+  return (GetPersistentTempFolder "PS1_REPO_DOWNLOAD_FOLDER" "PS1 Repo Downloads");
+}
+
+function GetPersistentTempFolder([string] $envPrefix, [string] $pathSuffix) {
+  
+  foreach($pair in (gci env:$($envPrefix)* | sort-object name)) {
       $explicitRet = "$($pair.Value)";
       if ($explicitRet) {
         New-Item -Path $explicitRet -ItemType Directory -Force -EA SilentlyContinue | Out-null
@@ -776,13 +781,6 @@ function Get-PS1-Repo-Downloads-Folder() {
         if ($isExplicit) { return "$explicitRet"; }
       }
   }
-
-  # $explicitRet = "$($ENV:PS1_REPO_DOWNLOAD_FOLDER)";
-  # if ($explicitRet) {
-  #  New-Item -Path $explicitRet -ItemType Directory -Force -EA SilentlyContinue | Out-null
-  #  $isExplicit = Test-Path -Path $explicitRet -PathType Container -EA SilentlyContinue;
-  #  if ($isExplicit) { return "$explicitRet"; }
-  # }
 
   If (Get-Os-Platform -eq "Windows") { $ret = "$($ENV:TEMP)" } else { $ret = "$($ENV:TMPDIR)" };
   $is1 = Test-Path -Path $ret -PathType Container -EA SilentlyContinue
@@ -799,8 +797,12 @@ function Get-PS1-Repo-Downloads-Folder() {
     if ("$ret" -eq "") { $ret="$($ENV:APPDATA)"; }; 
     if ("$ret" -eq "") { $ret="$($ENV:HOME)/.cache"; }; 
   }
-  return Combine-Path $ret "Temp" "PS1 Repo Downloads";
+  
+  if (-not ($ret -like "*\Temp" -or $ret -like "*/.cache")) { $ret += Combine-Path $ret "Temp"; }
+  $ret = Combine-Path $ret "$pathSuffix";
+  return $ret;
 }
+
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Smarty-FileHash.ps1]
 # $algorithm: MD5|SHA1|SHA256|SHA384|SHA512
@@ -1313,12 +1315,13 @@ function Download-2010-SQLServer-and-Extract {
   )
 
   $key="SQL-$version-$mediaType"
-  $root=Combine-Path "$(Get-SqlServer-Downloads-Folder)" $key
-  $mediaPath = Combine-Path "$(Get-SqlServer-Downloads-Folder)" "SQL-Setup-Compressed" "SQL-$Version-$mediaType"
+  $rootMedia=Combine-Path "$(Get-SqlServer-Media-Folder)" $key
+  $rootSetup=Combine-Path "$(Get-SqlServer-Setup-Folder)" $key
+  $mediaPath = $rootMedia
   $ext = IIf ($mediaType -eq "LocalDB") ".msi" ".exe"
   $exeName = "SQL-$mediaType-$Version-ENU$ext"
   $exeArchive = Combine-Path $mediaPath $exeName
-  $setupPath="$root"
+  $setupPath="$rootSetup"
   if ($mediaType -eq "LocalDB") { 
     $exeArchive = Combine-Path $setupPath $exeName
     $mediaPath = $null;
@@ -1357,7 +1360,7 @@ function Download-2010-SQLServer-and-Extract {
   }
   else 
   {
-    if ($urlFormat -eq $null)
+    if ($null -eq $urlFormat)
     {
       $isExtractOk = ExtractSqlServerSetup "SQL Server $version $mediaType" $exeArchive $setupPath "/Q"
       if ($isExtractOk) {
@@ -1402,13 +1405,14 @@ function Download-Fresh-SQLServer-and-Extract {
   )
 
   $key="SQL-$version-$mediaType"
-  $root=Combine-Path "$(Get-SqlServer-Downloads-Folder)" $key
+  $rootMedia=Combine-Path "$(Get-SqlServer-Media-Folder)" $key
+  $rootSetup=Combine-Path "$(Get-SqlServer-Setup-Folder)" $key
   if ($mediaType -eq "LocalDB") {
-     $mediaPath = $root
+     $mediaPath = $rootSetup
   } else {
-     $mediaPath = Combine-Path "$(Get-SqlServer-Downloads-Folder)" "SQL-Setup-Compressed" "SQL-$Version-$mediaType" 
+     $mediaPath = $rootMedia
   }
-  $setupPath="$root"
+  $setupPath="$rootSetup"
 
   Write-Host "Download and Extract SQL Server $version media '$mediaType' to `"$setupPath`""
   $url="";
@@ -1439,7 +1443,7 @@ function Download-Fresh-SQLServer-and-Extract {
   Write-Host "(Exe|Msi) Archive `"$exeArchive`""
   $ret = @{ Version=$version; MediaType=$mediaType; };
   if ($mediaType -eq "LocalDB") {
-    $ret["Launcher"] = Combine-Path $setupPath $exeArchive;
+    $ret["Launcher"] = $exeArchive;
     $ret["Setup"] = $setupPath;
   }
   else
@@ -1621,9 +1625,9 @@ function Download-SqlServer-Update {
     [object] $update # {Id=;Url=;}
   )
   $ret = $update.Clone();
-  $key="SQL-$version-$($update.Id)"
-  $archivePath = Combine-Path "$(Get-SqlServer-Downloads-Folder)" $key
-  $archiveName = [System.IO.Path]::GetFileName($update.Url);
+  $key="SQL-$version-Update-$($update.Id)"
+  $archivePath = Combine-Path "$(Get-SqlServer-Media-Folder)" $key
+  $archiveName = [System.IO.Path]::GetFileName($update.Url); # TODO: trim /download at the end
   $archiveFullName = Combine-Path $archivePath $archiveName;
   Write-Host "Downloading SQL Server update '$($update.Id)' for version $version $mediaType. URL is '$($update.Url)'"
   $isDownloadOk = Download-File-FailFree-and-Cached $archiveFullName @("$($update.Url)")
@@ -1805,8 +1809,12 @@ function Find-SqlServer-SetupLogs() {
 
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Get-SqlServer-Downloads-Folder.ps1]
-function Get-SqlServer-Downloads-Folder() {
-  return Combine-Path "$(Get-PS1-Repo-Downloads-Folder)";
+function Get-SqlServer-Setup-Folder() {
+  return (GetPersistentTempFolder "SQLSERVERS_SETUP_FOLDER" "SQL-Setup");
+}
+
+function Get-SqlServer-Media-Folder() {
+  return (GetPersistentTempFolder "SQLSERVERS_MEDIA_FOLDER" "SQL Media");
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Get-System-Drive.ps1]
