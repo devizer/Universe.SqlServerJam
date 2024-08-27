@@ -1,16 +1,4 @@
-Param(
-  [string] $sqlServers
-)
-
-<#
-TODO: 
-  DataDir,
-  LogDir,
-  BackupDir,
-  TempDir,
-  MaxRam,
-
-#>
+$ErrorActionPreference="Stop"
 
 # Include Detected: [ ..\Includes\*.ps1 ]
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\$Full7zLinksMetadata.ps1]
@@ -2090,35 +2078,8 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
   }
 }
 
-$cpuName = "$((Get-WmiObject Win32_Processor).Name)"
 
-Say "SQL_SERVERS argument: `"$sqlServers`""
-$servers = Parse-SqlServers-Input $sqlServers
-$servers | Format-Table-Smarty
-$jsonReport = @();
-foreach($server in $servers) {
-  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
-  Say "TRY DOWNLOAD SQL SERVER $($server.Version) $($server.MediaType)"
-  $setupMeta = Download-SQLServer-and-Extract $server.Version $server.MediaType;
-  $setupMeta | Format-Table -AutoSize | Out-String -Width 256
-  $resultGetUpdate = $null;
-  if ($server.UpdateId) {
-    Say "TRY DOWNLOAD UPDATE $($server.UpdateId)"
-    $resultGetUpdate = Download-SqlServer-Update $server.Version $server.MediaType $server.Update;
-    $resultGetUpdate | Format-Table -AutoSize | Out-String -Width 256
-  }
-  $secondsDownload = $startAt.ElapsedMilliseconds / 1000.0;
-  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
-  Install-SQLServer $setupMeta $resultGetUpdate $server.InstanceName;
-  Say "Setup Finished. $((Get-Memory-Info).Description)"
-  $secondsInstall = $startAt.ElapsedMilliseconds / 1000.0;
-  $jsonReport += @{ Definition=$server.Definition; Version=$server.Version; MediaType=$server.MediaType; SecondsDownload = $secondsDownload; SecondsInstall = $secondsInstall; Cpu = $cpuName; }
+foreach($ver in "2008R2-x86", "2008R2-x64", "2012-x86", "2012-x64", "2014-x64") {
+  Say "DEVELOPER $ver"
+  Download-SQLServer-and-Extract $ver "Developer"
 }
-
-if ("$($ENV:DEBUG_LOG_FOLDER)")
-{
-   $reportJsonFullName = "$($ENV:DEBUG_LOG_FOLDER)\SQL Setup Benchmark.json"
-   Create-Directory-for-File $reportJsonFullName
-   $jsonReport | ConvertTo-Json | Out-File $reportJsonFullName -Force
-}
-

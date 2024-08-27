@@ -103,7 +103,7 @@ build_script:
       
 - ps: |
       powershell -f Force-Install-Aria2c.ps1
-      $ENV:DEBUG_LOG_FOLDER = $ENV:SYSTEM_ARTIFACTSDIRECTORY
+      $ENV:DEBUG_LOG_FOLDER = "$($ENV:APPVEYOR_BUILD_FOLDER)\Benchmark"
       powershell -f Setup-SqlServers.ps1 -SqlServers "$($ENV:SqlServers)" 
       get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 -or $_.Name -match "browser" -or $_.DisplayName -match "browser"  } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName -AutoSize | Out-String -Width 2048
       
@@ -128,5 +128,5 @@ test_script:
 artifacts:
 
   # pushing a single file
-  - path: $(SYSTEM_ARTIFACTSDIRECTORY)
-    name: "SqlServer Setup Benchmark $(SqlServers).zip"
+  - path: "Benchmark\SQL Setup Benchmark.json"
+    # name: "SqlServer Setup Benchmark $(SqlServers).zip"
