@@ -84,6 +84,8 @@ environment:
 
 init:
 - ps: |
+      get-content ~/.ssh/config
+      echo ""
       New-Item -Path "C:\Artifacts" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
       New-Item -Path "C:\Temp" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
       Write-Host "CPU: $((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
