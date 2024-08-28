@@ -87,6 +87,7 @@ init:
       New-Item -Path "C:\Artifacts" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
       New-Item -Path "C:\Temp" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
       Write-Host "CPU: $((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
+      Write-Host "OS: $((Get-WmiObject Win32_OperatingSystem | select -Property Caption | Select -First 1).Caption)"
       get-wmiobject win32_service | where {$_.Name -Like "MSSQL`$*" } | % { 
         echo "DELETING MSSQL SERVER SERVICE [$($_.Name)]";
         if ("$($_.State)" -ne "Stopped") { & net.exe stop $_.Name; };
@@ -100,11 +101,11 @@ build_script:
 - ps: |
       cd Scripts
       if ("$($ENV:SqlServers)" -match "LocalDB") { & powershell.exe -f Uninstall-LocalDB.ps1; } else { Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions" -Recurse -Force -EA SilentlyContinue; }
+      powershell -f Force-Install-Aria2c.ps1
       
 - ps: |
-      powershell -f Force-Install-Aria2c.ps1
       $ENV:DEBUG_LOG_FOLDER = "$($ENV:APPVEYOR_BUILD_FOLDER)\Benchmark"
-      powershell -f Setup-SqlServers.ps1 -SqlServers "$($ENV:SqlServers)" 
+      powershell -f Setup-SqlServers.ps1 -SqlServers "$($ENV:SqlServers)"
       get-wmiobject win32_service | where {$_.Name.ToLower().IndexOf("sql") -ge 0 -or $_.Name -match "browser" -or $_.DisplayName -match "browser"  } | sort-object -Property "DisplayName" | ft State, Name, DisplayName, StartMode, StartName -AutoSize | Out-String -Width 2048
       
 test_script:
@@ -126,15 +127,25 @@ test_script:
       popd
 
       if ("$($ENV:SqlServers)" -match "LocalDB") {
-        #???????? Check up LocalDB Is Installed
         if (-not $isOk) { throw "LocalDB Not Found or Not Responding"; }
       } else {
         $sqlServers = @(get-wmiobject win32_service | where {$_.Name -Like "MSSQL`$*" })
         if ($sqlServers.Count -lt 1) { throw "At least *One* SQL Server Expected"; }
       }
 
-artifacts:
+      & 7z.exe a -t7z -y "$($ENV:APPVEYOR_BUILD_FOLDER)\$($ENV:SqlServers) Benchmark.result7z" "$reportJsonFullName"
 
-  # pushing a single file
+artifacts:
   - path: 'Benchmark\SQL Setup Benchmark.json'
-    # name: "SqlServer Setup Benchmark $(SqlServers).zip"
+  - path: '/.*\.result7z/'
+
+deploy:
+  provider: FTP
+  protocol: sftp
+  host: frs.sourceforge.net
+  username:
+    secure: RkMxCcW3KL9W3bEDCWa1vQ==
+  password:
+    secure: LsWN2NVplPFnCfZUOg7TIA==
+  folder: /home/frs/p/gcc-precompiled/summary/sql-server-app-veyor/
+  artifact: '/.*\.result7z/'
