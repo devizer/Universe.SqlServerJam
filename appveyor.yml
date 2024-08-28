@@ -144,16 +144,16 @@ test_script:
       cd "$($ENV:APPVEYOR_BUILD_FOLDER)"
       $osName="$((Get-WmiObject Win32_OperatingSystem | select -Property Caption | Select -First 1).Caption)"
       $imageName="$(ENV:APPVEYOR_BUILD_WORKER_IMAGE)"
-      $artifactName="$imageName, $($ENV:SqlServers) Benchmark.result7z"
+      $artifactName="$imageName, $($ENV:SqlServers).Benchmark.Result.7z"
       echo "";echo "Store Benchmark as [$artifactName]"
       & 7z.exe a -t7z -y "$artifactName" "$reportJsonFullName"
-      ls *.result7z
+      ls *.Benchmark.Result.7z
 
-      & choco install -y winscp
+      & choco install -y --no-progress winscp
       $ENV:PATH="C:\Program Files (x86)\WinSCP;$($ENV:PATH)"
       & powershell.exe @("-f", "Scripts\sftp-put.ps1", "-Remote", "frs.sourceforge.net", "-Login", "archivarius", "-Password", "$($ENV:FTP_PASSKEY)", "-RemoteFolder", "/home/frs/p/gcc-precompiled/summary/sql-server-app-veyor/", "-Files", "$artifactName");
 
 artifacts:
   - path: 'Benchmark\SQL Setup Benchmark.json'
-  - path: '*.result7z'
+  - path: '*.Benchmark.Result.7z'
 
