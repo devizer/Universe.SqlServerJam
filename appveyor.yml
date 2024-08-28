@@ -2,8 +2,8 @@ version: 'Setup-SqlServers.ps1 Test {build}'
 max_jobs: 1
 image:
 # SQL Server 2019 needs the Visual Studio 2019 image
-- Visual Studio 2017
-# - Visual Studio 2022
+# - Visual Studio 2017
+- Visual Studio 2022
 
 environment:
   global:
@@ -12,6 +12,8 @@ environment:
       PS1_TROUBLE_SHOOT: On
       SQLSERVERS_MEDIA_FOLDER: 'C:\SQL-Media'
       SQLSERVERS_SETUP_FOLDER: 'C:\SQL-Setup'
+      FTP_PASSKEY:
+         secure: LsWN2NVplPFnCfZUOg7TIA==
       TEMP: 'C:\Temp'
 
   matrix:
@@ -100,7 +102,7 @@ init:
         & sc.exe delete $_.Name;
       }
       gdr -PSProvider 'FileSystem' | Format-Table -AutoSize | Out-String -Width 2048
-      # & cmd.exe /c "printenv | sort"
+      # & cmd.exe /c "printenv | sort" # not secure
 
 build_script:
 
@@ -140,20 +142,18 @@ test_script:
       }
 
       cd "$($ENV:APPVEYOR_BUILD_FOLDER)"
-      & 7z.exe a -t7z -y "$($ENV:SqlServers) Benchmark.result7z" "$reportJsonFullName"
+      $osName="$((Get-WmiObject Win32_OperatingSystem | select -Property Caption | Select -First 1).Caption)"
+      $imageName="$(ENV:APPVEYOR_BUILD_WORKER_IMAGE)"
+      $artifactName="$imageName, $($ENV:SqlServers) Benchmark.result7z"
+      echo "";echo "Store Benchmark as [$artifactName]"
+      & 7z.exe a -t7z -y "$artifactName" "$reportJsonFullName"
       ls *.result7z
+
+      & choco install -y winscp
+      $ENV:PATH="C:\Program Files (x86)\WinSCP;$($ENV:PATH)"
+      & powershell.exe @("-f", "Scripts\sftp-put.ps1", "-Remote", "frs.sourceforge.net", "-Login", "archivarius", "-Password", "$($ENV:FTP_PASSKEY)", "-RemoteFolder", "/home/frs/p/gcc-precompiled/summary/sql-server-app-veyor/", "-Files", "$artifactName");
 
 artifacts:
   - path: 'Benchmark\SQL Setup Benchmark.json'
-  - path: '/\.result7z/'
+  - path: '*.result7z'
 
-# deploy:
-#   provider: FTP
-#   protocol: sftp
-#   host: frs.sourceforge.net
-#   username:
-#     secure: RkMxCcW3KL9W3bEDCWa1vQ==
-#   password:
-#     secure: LsWN2NVplPFnCfZUOg7TIA==
-#   folder: /home/frs/p/gcc-precompiled/summary/sql-server-app-veyor/
-#   artifact: '/.*\.result7z/'
