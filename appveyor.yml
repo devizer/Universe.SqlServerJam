@@ -89,7 +89,7 @@ init:
       # echo "" | Out-File -Encoding ASCII "$($ENV:HOMEPATH)\.ssh\knownhosts"
       # get-content -Raw ~/.ssh/config
       # echo ""
-      & bash.exe -c "cat /etc/*release; time apt-get update; time apt-get install -y -q sshpass openssh-client"
+      & bash.exe -c "uname -a; cat /etc/*release; time apt-get update; time apt-get install -y -q sshpass openssh-client"
       New-Item -Path "C:\Artifacts" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
       New-Item -Path "C:\Temp" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
       Write-Host "CPU: $((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
