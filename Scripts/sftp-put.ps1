@@ -29,7 +29,7 @@ Param(
 )
  $batchFile = "$($ENV:LOCALAPPDATA)\$(([Guid]::NewGuid()).ToString("N")).txt"
  try {
-   Write-Host "BatchFile = [$batchFile]"
+   # Write-Host "BatchFile = [$batchFile]"
    $batch = @();
    $batch += "open sftp://$(UrlEncode $login):$(UrlEncode $password)@$($remote)/ -hostkey=`"acceptnew`""
    foreach($file in $files) {

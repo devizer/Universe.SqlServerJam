@@ -143,7 +143,7 @@ test_script:
 
       cd "$($ENV:APPVEYOR_BUILD_FOLDER)"
       $osName="$((Get-WmiObject Win32_OperatingSystem | select -Property Caption | Select -First 1).Caption)"
-      $imageName="$(ENV:APPVEYOR_BUILD_WORKER_IMAGE)"
+      $imageName="$($ENV:APPVEYOR_BUILD_WORKER_IMAGE)"
       $artifactName="$imageName, $($ENV:SqlServers).Benchmark.Result.7z"
       echo "";echo "Store Benchmark as [$artifactName]"
       & 7z.exe a -t7z -y "$artifactName" "$reportJsonFullName"
