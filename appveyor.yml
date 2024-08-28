@@ -84,8 +84,8 @@ environment:
 
 init:
 - ps: |
-      New-Item -Path "$($ENV:HOME)\.ssh" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
-      echo "Host *`r`n   StrictHostKeyChecking no\`r`n   UserKnownHostsFile=/dev/null`r`n" | Out-File -Encoding ASCII "$($ENV:HOME)\.ssh\config"
+      New-Item -Path "$($ENV:HOMEPATH)\.ssh" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
+      echo "Host *`r`n   StrictHostKeyChecking no\`r`n   UserKnownHostsFile=/dev/null`r`n" | Out-File -Encoding ASCII "$($ENV:HOMEPATH)\.ssh\config"
       get-content -Raw ~/.ssh/config
       echo ""
       scp -v
