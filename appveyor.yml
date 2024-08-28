@@ -139,7 +139,8 @@ test_script:
         if ($sqlServers.Count -lt 1) { throw "At least *One* SQL Server Expected"; }
       }
 
-      & 7z.exe a -t7z -y "$($ENV:APPVEYOR_BUILD_FOLDER)\$($ENV:SqlServers) Benchmark.result7z" "$reportJsonFullName"
+      cd "$($ENV:APPVEYOR_BUILD_FOLDER)"
+      & 7z.exe a -t7z -y "$($ENV:SqlServers) Benchmark.result7z" "$reportJsonFullName"
       ls *.result7z
 
 artifacts:
