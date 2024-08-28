@@ -86,8 +86,9 @@ init:
 - ps: |
       New-Item -Path "$($ENV:HOME)\.ssh" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
       echo "Host *`r`n   StrictHostKeyChecking no\`r`n   UserKnownHostsFile=/dev/null`r`n" | Out-File -Encoding ASCII "$($ENV:HOME)\.ssh\config"
-      get-content ~/.ssh/config
+      get-content -Raw ~/.ssh/config
       echo ""
+      scp -v
       New-Item -Path "C:\Artifacts" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
       New-Item -Path "C:\Temp" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
       Write-Host "CPU: $((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
