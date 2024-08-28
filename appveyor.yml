@@ -145,7 +145,7 @@ test_script:
 
 artifacts:
   - path: 'Benchmark\SQL Setup Benchmark.json'
-  - path: '/.*\.result7z/'
+  - path: '/\.result7z/'
 
 # deploy:
 #   provider: FTP
