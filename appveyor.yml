@@ -145,13 +145,13 @@ artifacts:
   - path: 'Benchmark\SQL Setup Benchmark.json'
   - path: '/.*\.result7z/'
 
-deploy:
-  provider: FTP
-  protocol: sftp
-  host: frs.sourceforge.net
-  username:
-    secure: RkMxCcW3KL9W3bEDCWa1vQ==
-  password:
-    secure: LsWN2NVplPFnCfZUOg7TIA==
-  folder: /home/frs/p/gcc-precompiled/summary/sql-server-app-veyor/
-  artifact: '/.*\.result7z/'
+# deploy:
+#   provider: FTP
+#   protocol: sftp
+#   host: frs.sourceforge.net
+#   username:
+#     secure: RkMxCcW3KL9W3bEDCWa1vQ==
+#   password:
+#     secure: LsWN2NVplPFnCfZUOg7TIA==
+#   folder: /home/frs/p/gcc-precompiled/summary/sql-server-app-veyor/
+#   artifact: '/.*\.result7z/'
