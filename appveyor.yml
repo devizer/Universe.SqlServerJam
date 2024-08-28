@@ -17,6 +17,8 @@ environment:
   matrix:
 
           - SqlServers: '2022 LocalDB'
+          - SqlServers: '2008-x86 Advanced Update'
+          - SqlServers: '2008-x86 Advanced'
           - SqlServers: '2012-x64 Developer'
           - SqlServers: '2022 Developer Update'
           - SqlServers: '2022 Developer'
@@ -74,8 +76,6 @@ environment:
           - SqlServers: '2008-x64 Advanced'
           - SqlServers: '2008-x64 Core Update'
           - SqlServers: '2008-x64 Core'
-          - SqlServers: '2008-x86 Advanced Update'
-          - SqlServers: '2008-x86 Advanced'
           - SqlServers: '2008-x86 Core Update'
           - SqlServers: '2008-x86 Core'
           - SqlServers: '2005-x86 Advanced Update'
