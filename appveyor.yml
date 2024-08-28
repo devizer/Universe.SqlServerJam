@@ -84,12 +84,12 @@ environment:
 
 init:
 - ps: |
-      New-Item -Path "$($ENV:HOMEPATH)\.ssh" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
-      echo "Host *`r`n   StrictHostKeyChecking no\`r`n   UserKnownHostsFile=$($ENV:HOMEPATH)\.ssh\knownhosts`r`n" | Out-File -Encoding ASCII "$($ENV:HOMEPATH)\.ssh\config"
-      echo "" | Out-File -Encoding ASCII "$($ENV:HOMEPATH)\.ssh\knownhosts"
-      get-content -Raw ~/.ssh/config
-      echo ""
-      & bash.exe -c "cat /etc/*release; apt update; apt-get install -y -q sshpass openssh-client"
+      # New-Item -Path "$($ENV:HOMEPATH)\.ssh" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
+      # echo "Host *`r`n   StrictHostKeyChecking no\`r`n   UserKnownHostsFile=$($ENV:HOMEPATH)\.ssh\knownhosts`r`n" | Out-File -Encoding ASCII "$($ENV:HOMEPATH)\.ssh\config"
+      # echo "" | Out-File -Encoding ASCII "$($ENV:HOMEPATH)\.ssh\knownhosts"
+      # get-content -Raw ~/.ssh/config
+      # echo ""
+      & bash.exe -c "cat /etc/*release; time apt-get update; time apt-get install -y -q sshpass openssh-client"
       New-Item -Path "C:\Artifacts" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
       New-Item -Path "C:\Temp" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
       Write-Host "CPU: $((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
