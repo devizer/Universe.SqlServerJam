@@ -10,6 +10,7 @@ if [[ "$(uname -s)" == Darwin ]] || [[ "$(uname -s)" == Linux ]]; then
 elif [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
   choco install 7zip --version 21.7.0 --force --allow-downgrade --no-progress
 fi
+if [[ -d /usr/local/bin ]]; then export PATH="/usr/local/bin:$PATH"; fi
 bash -c "7z b -mmt=1 -md=22"
 
 # Fix missing fio and nproc
