@@ -16,7 +16,7 @@ jobs:
       run: '& 7z b -mmt=1 -md=22'
 
   OnLinux:
-    runs-on: linux-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
