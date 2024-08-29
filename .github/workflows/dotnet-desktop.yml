@@ -1,0 +1,46 @@
+name: System Info
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  OnWindows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Cpu Benchmark
+      run: '& 7z -mmt=1 -md=22'
+
+  OnLinux:
+    runs-on: linux-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Cpu Benchmark
+      run: '& 7z -mmt=1 -md=22'
+
+  OnMacIntel:
+    runs-on: macos-13
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Cpu Benchmark
+      run: '& 7z -mmt=1 -md=22'
+
+  OnMacArm:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Cpu Benchmark
+      run: '& 7z -mmt=1 -md=22'
