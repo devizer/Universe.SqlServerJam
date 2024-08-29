@@ -5,7 +5,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  example_matrix:
+  Info:
     strategy:
       matrix:
         os: [windows-2022, windows-2019, ubuntu-latest, macos-13, macos-14]

@@ -1,4 +1,4 @@
-name: Setyp SQL Servers
+name: Setup SQL Servers
 
 on:
   push:
