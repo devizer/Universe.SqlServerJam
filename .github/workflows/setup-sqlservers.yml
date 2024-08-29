@@ -84,10 +84,28 @@ jobs:
     - name: Setup Sql Server
       env:
         SQL_SERVERS: ${{ matrix.SqlServers }}
-      run: |
-        cd Scripts
-        & powershell -f Setup-SqlServers.ps1 -SqlServers "$($ENV:SQL_SERVERS)"
+      run: '& powershell -f Scripts\Setup-SqlServers.ps1 -SqlServers "$($ENV:SQL_SERVERS)"'
 
-Write-Host "CPU: $((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
-      Write-Host "OS: $((Get-WmiObject Win32_OperatingSystem | select -Property Caption | Select -First 1).Caption)"
-      get-wmiobject win32_service | where {$_.Name -Like "MSSQL`$*" }
+    - name: Show SQL Servers
+      env:
+        SQL_SERVERS: ${{ matrix.SqlServers }}
+      run: |
+       $ENV:SYSTEM_ARTIFACTSDIRECTORY="C:\Temp"
+       if (-not ("$($ENV:SQL_SERVERS)" -match "LocalDB")) {
+         Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions" -Recurse -Force -EA SilentlyContinue
+       }
+       
+       cd Scripts
+       & 7z.exe x LocalSqlDiscovery-net4.5.7z -oc:\Temp\ > $null
+       cd c:\Temp\LocalSqlDiscovery-net4.5
+       $outputFile = "SHOW-SQL-Servers.log"
+       & .\SHOW-SQL-Servers.cmd *| tee "$outputFile"
+       $mediumVersion = Get-Content "$outputFile" | ? {$_ -match "Medium Version"} | % {$_.Split(":") | Select -Last 1}
+       $Utf8 = New-Object System.Text.UTF8Encoding $False
+       $sqlDef = "{0,-33}" -f "$($ENV:SQL_SERVERS)"
+       $mediumVersionFormatted = "{0,-77}" -f "$mediumVersion"
+       [System.IO.File]::WriteAllLines("$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\VERSION.LOG", "| $sqlDef | $mediumVersionFormatted |", $utf8)
+       [System.IO.File]::WriteAllLines("$($ENV:SYSTEM_ARTIFACTSDIRECTORY)\Medium Version.txt", "$mediumVersion", $utf8)
+       
+       Get-WmiObject -class "Win32_PageFileUsage" -namespace "root\CIMV2" -computername localhost | Format-Table Caption, Name, PeakUsage, AllocatedBaseSize, CurrentUsage -AutoSize | Out-String -Width 256
+
