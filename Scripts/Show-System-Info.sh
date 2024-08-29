@@ -1,4 +1,9 @@
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
+
+for suffix in p v m; do
+  echo "uname $suffix: $(uname -$suffix)"
+done
+
 Say "Benchmark for [$(Get-CpuName)]"
 if [[ "$(uname -s)" == Linux ]]; then
   export INSTALL_DIR=/usr/local/bin LINK_AS_7Z=/usr/local/bin/7z; script="https://master.dl.sourceforge.net/project/p7zz-repack/install-7zz.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
