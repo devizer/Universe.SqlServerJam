@@ -17,4 +17,4 @@ echo "NPROC: $(nproc)"
 
 Say "Disk Benchmark for [$HOME]"
 export DISABLE_UNICODE=true
-File-IO-Benchmark 'HOME' "$HOME" 1G 20 1
+File-IO-Benchmark 'HOME' "$HOME" 1G $(nproc)T 20 1
