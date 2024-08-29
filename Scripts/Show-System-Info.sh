@@ -8,14 +8,19 @@ fi
 
 # Fix missing fio and nproc
 if [[ "$(uname -s)" == Linux ]]; then
-   echo >/dev/null
+   Say "Linux Volumes"
+   sudo df -h -T
 elif [[ "$(uname -s)" == Darwin ]]; then
+   Say "MacOS Volumes"
+   sudo df -h
    brew install fio
    # install nproc
    echo '#!/usr/bin/env bash
          sysctl -n machdep.cpu.thread_count' | sudo tee /usr/local/bin/nproc > /dev/null
    sudo chmod +x /usr/local/bin/nproc
 elif [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
+   Say "Windows Volumes"
+   gdr -PSProvider 'FileSystem'
    choco install -y --no-progress fio
 else
   echo "Warning! Unknown OS"
