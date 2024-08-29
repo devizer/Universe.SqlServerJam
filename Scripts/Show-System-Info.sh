@@ -10,7 +10,7 @@ if [[ "$(uname -s)" == Darwin ]] || [[ "$(uname -s)" == Linux ]]; then
 elif [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
   choco install 7zip --version 21.7.0 --force --allow-downgrade --no-progress
 fi
-7z b -mmt=1 -md=22
+bash -c "7z b -mmt=1 -md=22"
 
 # Fix missing fio and nproc
 if [[ "$(uname -s)" == Linux ]]; then
