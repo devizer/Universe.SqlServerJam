@@ -20,7 +20,7 @@ elif [[ "$(uname -s)" == Darwin ]]; then
    sudo chmod +x /usr/local/bin/nproc
 elif [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
    Say "Windows Volumes"
-   gdr -PSProvider 'FileSystem'
+   powershell -c "gdr -PSProvider 'FileSystem'"
    choco install -y --no-progress fio
 else
   echo "Warning! Unknown OS"
