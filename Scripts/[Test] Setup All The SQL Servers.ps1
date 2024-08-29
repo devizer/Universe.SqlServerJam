@@ -941,6 +941,7 @@ function Try-BuildServerType() {
      "CODEBUILD_BUILD_ARN"
      "DRONE",
      "DSARI",
+     "GITHUB_ACTIONS",
      "GITLAB_CI",
      "GO_PIPELINE_LABEL",
      "HUDSON_URL",
