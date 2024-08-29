@@ -77,6 +77,6 @@ jobs:
       env:
         SQL_SERVERS: ${{ matrix.SqlServers }}
       run: |
-        cd Scritps
+        cd Scripts
         & powershell -f Setup-SqlServers.ps1 -SqlServers "$($ENV:SQL_SERVERS)"
 
