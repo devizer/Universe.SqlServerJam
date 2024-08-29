@@ -71,6 +71,14 @@ jobs:
       run: '& powershell -f Scripts\Uninstall-LocalDB.ps1'
 
     - name: Show Env
+      run: |
+        Write-Host "CPU: $((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
+        Write-Host "OS: $((Get-WmiObject Win32_OperatingSystem | select -Property Caption | Select -First 1).Caption)"
+        get-wmiobject win32_service | where {$_.Name -Like "MSSQL`$*" } | Format-Table -AutoSize | Out-String -Width 1111
+        
+        & cmd.exe /c "set|sort"
+
+    - name: Show Env
       run: '& cmd.exe /c "set|sort"'
 
     - name: Setup Sql Server
@@ -80,3 +88,6 @@ jobs:
         cd Scripts
         & powershell -f Setup-SqlServers.ps1 -SqlServers "$($ENV:SQL_SERVERS)"
 
+Write-Host "CPU: $((Get-WmiObject Win32_Processor).Name), $([System.Environment]::ProcessorCount) Cores"
+      Write-Host "OS: $((Get-WmiObject Win32_OperatingSystem | select -Property Caption | Select -First 1).Caption)"
+      get-wmiobject win32_service | where {$_.Name -Like "MSSQL`$*" }
