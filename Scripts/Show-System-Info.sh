@@ -6,14 +6,15 @@ Say "Benchmark for [$(Get-CpuName)]"
      echo >/dev/null
   elif [[ "$(uname -s)" == Darwin ]]; then
      brew install fio
-     alias nproc="sysctl -n machdep.cpu.thread_count"
+     # install nproc
+     echo '#!/usr/bin/env bash
+           sysctl -n machdep.cpu.thread_count' | sudo tee /usr/local/bin/nproc > /dev/null
+     sudo chmod +x /usr/local/bin/nproc
   elif [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
-     choco --version
      choco install -y --no-progress fio
   else
     echo "Warning! Unknown OS"
   fi
-
 
 Say "Disk Benchmark for [$HOME]"
 export DISABLE_UNICODE=true
