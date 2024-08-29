@@ -1,7 +1,7 @@
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
 
-for suffix in p v m; do
-  echo "uname $suffix: $(uname -$suffix)"
+for suffix in p v m r; do
+  echo "uname -$suffix: $(uname -$suffix)"
 done
 
 Say "Benchmark for [$(Get-CpuName)]"
