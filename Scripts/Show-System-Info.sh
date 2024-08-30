@@ -44,4 +44,9 @@ Say "Disk Benchmark for [$HOME]"
 export DISABLE_UNICODE=true
 File-IO-Benchmark 'HOME' "$HOME" 1G $(nproc)T 20 1
 
-
+secondDrive=""
+[[ -d /D ]] && secondDrive="/D"
+[[ -d /mnt ]] && secondDrive="/mnt"
+if [[ -n "$secondDrive" ]]; then
+  File-IO-Benchmark 'SECOND Drive' "$secondDrive" 1G $(nproc)T 20 1
+fi
