@@ -36,6 +36,9 @@ elif [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
    Say "Windows Volumes"
    powershell -c "gdr -PSProvider 'FileSystem'"
    choco install -y --no-progress fio
+   echo '#!/bin/bash
+         set -e; eval "$@" | sudo tee /usr/local/bin/sudo > /dev/null
+   chmod +x /usr/local/bin/sudo
 else
   echo "Warning! Unknown OS"
 fi
@@ -48,5 +51,5 @@ secondDrive=""
 [[ -d /D ]] && secondDrive="/D"
 [[ -d /mnt ]] && secondDrive="/mnt"
 if [[ -n "$secondDrive" ]]; then
-  File-IO-Benchmark 'SECOND Drive' "$secondDrive" 1G $(nproc)T 20 1
+  sudo File-IO-Benchmark 'SECOND Drive' "$secondDrive" 1G $(nproc)T 20 1
 fi
