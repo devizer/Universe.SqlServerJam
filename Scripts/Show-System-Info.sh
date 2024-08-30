@@ -1,5 +1,7 @@
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
 
+ls -la /D || true
+ls -la /d || true
 ls -la /mnt || true
 ls -la /mnt/D/ || true
 ls -la /cygdrive || true
