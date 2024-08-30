@@ -51,5 +51,5 @@ secondDrive=""
 [[ -d /D ]] && secondDrive="/D"
 [[ -d /mnt ]] && secondDrive="/mnt"
 if [[ -n "$secondDrive" ]]; then
-  sudo File-IO-Benchmark 'SECOND Drive' "$secondDrive" 1G $(nproc)T 20 1
+  sudo -E File-IO-Benchmark 'SECOND Drive' "$secondDrive" 1G $(nproc)T 20 1
 fi
