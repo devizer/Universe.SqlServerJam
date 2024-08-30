@@ -1,5 +1,8 @@
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
 
+ls -la /mnt || true
+ls -la /mnt/D/ || true
+
 for suffix in p v m r s; do
   echo "uname -$suffix: $(uname -$suffix)"
 done
@@ -36,3 +39,5 @@ fi
 Say "Disk Benchmark for [$HOME]"
 export DISABLE_UNICODE=true
 File-IO-Benchmark 'HOME' "$HOME" 1G $(nproc)T 20 1
+
+
