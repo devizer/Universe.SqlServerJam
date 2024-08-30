@@ -2,6 +2,8 @@ script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-b
 
 ls -la /mnt || true
 ls -la /mnt/D/ || true
+ls -la /cygdrive || true
+ls -la /cygdrive/d || true
 
 for suffix in p v m r s; do
   echo "uname -$suffix: $(uname -$suffix)"
