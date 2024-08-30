@@ -43,13 +43,14 @@ else
   echo "Warning! Unknown OS"
 fi
 
-Say "Disk Benchmark for [$HOME]"
 export DISABLE_UNICODE=true
+Say "Disk Benchmark for [$HOME]"
 File-IO-Benchmark 'HOME' "$HOME" 1G $(nproc)T 20 1
 
 secondDrive=""
 [[ -d /D ]] && secondDrive="/D"
 [[ -d /mnt ]] && secondDrive="/mnt"
 if [[ -n "$secondDrive" ]]; then
+  Say "Disk Benchmark for SECORD Drive [$HOME]"
   sudo -E File-IO-Benchmark 'SECOND Drive' "$secondDrive" 1G $(nproc)T 20 1
 fi
