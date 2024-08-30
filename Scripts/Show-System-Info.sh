@@ -37,8 +37,8 @@ elif [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
    powershell -c "gdr -PSProvider 'FileSystem'"
    choco install -y --no-progress fio
    echo '#!/bin/bash
-         set -e; eval "$@"' > /usr/local/bin/sudo
-   chmod +x /usr/local/bin/sudo
+         set -e; eval "$@"' > /usr/bin/sudo
+   chmod +x /usr/bin/sudo
 else
   echo "Warning! Unknown OS"
 fi
