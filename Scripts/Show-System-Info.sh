@@ -55,5 +55,5 @@ if [[ -n "$secondDrive" ]]; then
   sudo -E File-IO-Benchmark 'SECOND-Drive' "$secondDrive" 1G $(nproc)T 20 1 | tee fio-benchmark-2.log
 
   echo "";
-  cat fio-benchmark-1.log | tail -4
+  cat fio-benchmark-1.log | tail -5
 fi
