@@ -51,6 +51,6 @@ secondDrive=""
 [[ -d /D ]] && secondDrive="/D"
 [[ -d /mnt ]] && secondDrive="/mnt"
 if [[ -n "$secondDrive" ]]; then
-  Say "Disk Benchmark for SECORD Drive [$HOME]"
-  sudo -E File-IO-Benchmark 'SECOND Drive' "$secondDrive" 1G $(nproc)T 20 1
+  Say "Disk Benchmark for SECORD Drive [$secondDrive]"
+  sudo -E File-IO-Benchmark 'SECOND-Drive' "$secondDrive" 1G $(nproc)T 20 1
 fi
