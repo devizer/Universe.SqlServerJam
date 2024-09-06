@@ -2115,7 +2115,7 @@ TODO:
 #>
 
    $errors = @();
-   $cpuName = "$((Get-WmiObject Win32_Processor).Name)"
+   $cpuName = "$((Get-WmiObject Win32_Processor).Name)".Trim()
 
    Say "Setting up SQL Server(s) `"$sqlServers`". Cpu is '$cpuName'"
    $servers = Parse-SqlServers-Input $sqlServers
@@ -2155,6 +2155,6 @@ TODO:
 $setupErrors = Setup-SqlServers $sqlServers;
 $setupErrors | Out-Host
 
-if ($setupStatus.Error) { 
+if ($setupErrors) { 
   throw "$(@($setupErrors).Count) ERROR(S): $setupErrors"
 }

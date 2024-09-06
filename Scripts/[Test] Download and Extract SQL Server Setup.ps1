@@ -2103,7 +2103,7 @@ TODO:
 #>
 
    $errors = @();
-   $cpuName = "$((Get-WmiObject Win32_Processor).Name)"
+   $cpuName = "$((Get-WmiObject Win32_Processor).Name)".Trim()
 
    Say "Setting up SQL Server(s) `"$sqlServers`". Cpu is '$cpuName'"
    $servers = Parse-SqlServers-Input $sqlServers
