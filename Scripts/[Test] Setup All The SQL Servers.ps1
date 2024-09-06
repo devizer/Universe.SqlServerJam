@@ -1997,6 +1997,7 @@ function Install-SQLServer {
     # }
     $setupStatus = Execute-Process-Smarty "$title" $meta.Launcher $setupArg -WaitTimeout 3600
     $setupStatus | Format-Table-Smarty | Out-Host
+    
     $err = $setupStatus.Error;
 
     if ("$update" -and (-not $hasUpdateSourceArgument)) {
@@ -2047,10 +2048,12 @@ function Parse-SqlServers-Input { param( [string] $list)
             $mediaType = IIF ($tags.Count -ge 2) $tags[1] (IIF $missingDeveloper "Advanced" "Developer")
             $rawUpdate = IIF ($tags.Count -ge 3) $tags[2] ""
 
-            if ($instanceName -eq $null) {
+            if ($instanceName -eq $null -and $mediaType -ne "LocalDB") {
               $instanceName = $mediaType.Substring(0,3).ToUpper() + "_" + $version.Replace("-", "_");
             }
-            $instanceName = "$($instanceName.ToUpper())"
+            if ($instanceName -ne $null) {
+              $instanceName = "$($instanceName.ToUpper())"
+            }
 
             $normalizedMeta = Find-SQLServer-Meta $version $mediaType
             if (-not $normalizedMeta) {
@@ -2111,7 +2114,7 @@ TODO:
    $errors = @();
    $cpuName = "$((Get-WmiObject Win32_Processor).Name)".Trim()
 
-   Say "Setting up SQL Server(s) `"$sqlServers`". Cpu is '$cpuName'"
+   Say "Setting up SQL Server(s) `"$sqlServers`". Cpu is '$cpuName'. $((Get-Memory-Info).Description)"
    $servers = Parse-SqlServers-Input $sqlServers
    $servers | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
    $jsonReport = @();
