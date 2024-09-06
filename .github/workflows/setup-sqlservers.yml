@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-  build:
+  Setup:
 
     timeout-minutes: 30
     strategy:
@@ -136,3 +136,5 @@ jobs:
        
        Get-WmiObject -class "Win32_PageFileUsage" -namespace "root\CIMV2" -computername localhost | Format-Table Caption, Name, PeakUsage, AllocatedBaseSize, CurrentUsage -AutoSize | Out-String -Width 256
 
+       Write-Host "Medium Version: [$mediumVersion]"
+       if (-not $mediumVersion) { throw "SQL Server [$(ENV:SQL_SERVERS)] is missing or not responding"; }
