@@ -8,12 +8,13 @@ jobs:
 
   Setup:
 
-    timeout-minutes: 30
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
         SqlServers: [
           '2022 Developer, 2008 Core, 2005 Core',
+          '2022 Developer, 2019 Developer, 2017 Developer, 2016 Developer',
           '2022 LocalDB',
           '2022 Developer Update',
           '2022 Developer',
