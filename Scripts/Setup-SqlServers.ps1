@@ -2119,18 +2119,18 @@ TODO:
 
    Say "Setting up SQL Server(s) `"$sqlServers`". Cpu is '$cpuName'"
    $servers = Parse-SqlServers-Input $sqlServers
-   $servers | Format-Table -AutoSize | Out-String -Width 256
+   $servers | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
    $jsonReport = @();
    foreach($server in $servers) {
      $startAt = [System.Diagnostics.Stopwatch]::StartNew()
      Say "TRY DOWNLOAD SQL SERVER $($server.Version) $($server.MediaType)"
      $setupMeta = Download-SQLServer-and-Extract $server.Version $server.MediaType;
-     $setupMeta | Format-Table -AutoSize | Out-String -Width 256
+     $setupMeta | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
      $resultGetUpdate = $null;
      if ($server.UpdateId) {
        Say "TRY DOWNLOAD UPDATE $($server.UpdateId)"
        $resultGetUpdate = Download-SqlServer-Update $server.Version $server.MediaType $server.Update;
-       $resultGetUpdate | Format-Table -AutoSize | Out-String -Width 256
+       $resultGetUpdate | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
      }
      $secondsDownload = $startAt.ElapsedMilliseconds / 1000.0;
      $startAt = [System.Diagnostics.Stopwatch]::StartNew()
