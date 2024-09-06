@@ -10,7 +10,15 @@ jobs:
 
     strategy:
       matrix:
-        SqlServers: ["2022 LocalDB", "2022 Developer", "2022 Core", "2005 Core", "2005 Advanced", "2005 Advanced Update", "2008R2 Developer"]
+        SqlServers: [
+         "2022 LocalDB", 
+         "2022 Developer", 
+         "2022 Core", 
+         "2005 Core", 
+         "2005 Advanced", 
+         "2005 Advanced Update", 
+         "2008R2 Developer"
+        ]
 
     runs-on: windows-latest  
 
