@@ -1872,9 +1872,10 @@ function Install-SQLServer {
   )
 
   if (-not $meta.LauncherSize) {
-    Write-Host "[Install-SQLServer] Invalid `$meta argument. Probably download failed";
+    $err="[Install-SQLServer] Invalid `$meta argument. Probably download failed";
+    Write-Host $err;
     $meta | Format-Table-Smarty
-    return;
+    return @{ Error=$err; }
   }
 
   if ($meta.MediaType -eq "LocalDB") {
@@ -1883,15 +1884,16 @@ function Install-SQLServer {
      $setupCommandLine = @("/c", "msiexec.exe", "/i", "`"$($meta.Launcher)`"", "IACCEPTSQLLOCALDBLICENSETERMS=YES", "/qn", "/L*v", "SqlLocalDB-Setup-$($meta.Version).log");
      $setupStatus = Execute-Process-Smarty "SQL LocalDB $($meta.Version) Setup" "cmd.exe" $setupCommandLine -WaitTimeout 1800
      $setupStatus | Format-Table-Smarty | Out-Host
-     return;
+     return $setupStatus;
   }
 
   if ($update) {
     $isUpdateValid = ("$($update.UpdateSize)" -and "$($update.UpdateFolder)" -and "$($update.UpdateLauncher)")
     if (-not $isUpdateValid) {
-    Write-Host "[Install-SQLServer] Invalid `$update argument. Probably download failed";
-    $update | Format-Table-Smarty | Out-Host
-    return;
+      $err="[Install-SQLServer] Invalid `$update argument. Probably download failed";
+      Write-Host $err;
+      $update | Format-Table-Smarty | Out-Host
+      return @{ Error = $err };
     }
   }
 
@@ -1921,6 +1923,7 @@ function Install-SQLServer {
 
     $setupStatus = Execute-Process-Smarty "SQL Server $($meta.Version) $($meta.MediaType) Setup" $meta.Launcher $setupArg -WaitTimeout 3600
     $setupStatus | Format-Table-Smarty | Out-Host
+    $err=$setupStatus.Error;
 
     # Exec Patch
     if ($update) {
@@ -1928,9 +1931,10 @@ function Install-SQLServer {
       $updateCommandLine = @("/QUIET", "/Action=Patch", "/InstanceName=$instanceName");
       $upgradeResult = Execute-Process-Smarty "$title" $update.UpdateLauncher $updateCommandLine
       $upgradeResult | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
+      if ($upgradeResult.Error) { $err += " " + $upgradeResult.Error; }
     }
 
-
+    if ($err) { return @{ Error = $err }; }
 
     # Write-Host "Workaround for 2005 logs"; sleep 1; & taskkill.exe @("/t", "/f", "/im", "setup.exe");
   } else {
@@ -1993,6 +1997,7 @@ function Install-SQLServer {
     # }
     $setupStatus = Execute-Process-Smarty "$title" $meta.Launcher $setupArg -WaitTimeout 3600
     $setupStatus | Format-Table-Smarty | Out-Host
+    $err = $setupStatus.Error;
 
     if ("$update" -and (-not $hasUpdateSourceArgument)) {
       $title = "SQL Server $($meta.Version) Upgrade to $($update.UpdateId)"
@@ -2009,6 +2014,9 @@ function Install-SQLServer {
         $upgradeResult = Execute-Process-Smarty "$title" $update.UpdateLauncher $updateCommandLine
         $upgradeResult | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
       }
+
+      if ($upgradeResult -and $upgradeResult.Error) { $err += " " + $upgradeResult.Error; }
+      if ($err) { return @{ Error = $err }; }
     }
   }
   
@@ -2083,6 +2091,58 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
     }
     # return $true;
   }
+}
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Setup-SqlServers.ps1]
+function Setup-SqlServers() {
+Param(
+  [string] $sqlServers
+)
+
+<#
+TODO: 
+  DataDir,
+  LogDir,
+  BackupDir,
+  TempDir,
+  MaxRam,
+#>
+
+   $errors = @();
+   $cpuName = "$((Get-WmiObject Win32_Processor).Name)"
+
+   Say "Setting up SQL Server(s) `"$sqlServers`". Cpu is '$cpuName'"
+   $servers = Parse-SqlServers-Input $sqlServers
+   $servers | Format-Table -AutoSize | Out-String -Width 256
+   $jsonReport = @();
+   foreach($server in $servers) {
+     $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+     Say "TRY DOWNLOAD SQL SERVER $($server.Version) $($server.MediaType)"
+     $setupMeta = Download-SQLServer-and-Extract $server.Version $server.MediaType;
+     $setupMeta | Format-Table -AutoSize | Out-String -Width 256
+     $resultGetUpdate = $null;
+     if ($server.UpdateId) {
+       Say "TRY DOWNLOAD UPDATE $($server.UpdateId)"
+       $resultGetUpdate = Download-SqlServer-Update $server.Version $server.MediaType $server.Update;
+       $resultGetUpdate | Format-Table -AutoSize | Out-String -Width 256
+     }
+     $secondsDownload = $startAt.ElapsedMilliseconds / 1000.0;
+     $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+     $installStatus = Install-SQLServer $setupMeta $resultGetUpdate $server.InstanceName;
+     Say "SQL Server '$($server.Definition)' Setup Finished. $((Get-Memory-Info).Description)"
+     $secondsInstall = $startAt.ElapsedMilliseconds / 1000.0;
+     $jsonReport += @{ Definition=$server.Definition; Version=$server.Version; MediaType=$server.MediaType; SecondsDownload = $secondsDownload; SecondsInstall = $secondsInstall; Cpu = $cpuName; }
+     if ($installStatus -and $installStatus.Error) { $errors += "SQL Server '$($server.Definition)' Setup failed. $($installStatus.Error)"; }
+   }
+
+   if ("$($ENV:DEBUG_LOG_FOLDER)")
+   {
+      $reportJsonFullName = "$($ENV:DEBUG_LOG_FOLDER)\SQL Setup Benchmark.json"
+      Create-Directory-for-File $reportJsonFullName
+      $jsonReport | ConvertTo-Json | Out-File $reportJsonFullName -Force
+   }
+
+   return $errors;
 }
 
 
