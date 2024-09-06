@@ -2156,5 +2156,7 @@ $setupErrors = Setup-SqlServers $sqlServers;
 $setupErrors | Out-Host
 
 if ($setupErrors) { 
-  throw "$(@($setupErrors).Count) ERROR(S): $setupErrors"
+  $err="$(@($setupErrors).Count) ERROR(S): $setupErrors"
+  Write-Host $err -ForegroundColor DarkRed
+  throw "$err"
 }
