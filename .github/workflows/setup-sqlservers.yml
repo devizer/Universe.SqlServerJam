@@ -106,7 +106,7 @@ jobs:
     - name: Show Env
       run: |
         $PSVersionTable
-        $cpuName="$((Get-WmiObject Win32_Processor).Name)".Trim()
+        $cpuName="$((Get-CIMInstance Win32_Processor).Name)".Trim() # Get-WmiObject 
         Write-Host "CPU: $cpuName, $([System.Environment]::ProcessorCount) Cores"
         Write-Host "OS: $((Get-WmiObject Win32_OperatingSystem | select -Property Caption | Select -First 1).Caption)"
         get-wmiobject win32_service | where {$_.Name -Like "MSSQL`$*" } | Format-Table -AutoSize | Out-String -Width 1111
