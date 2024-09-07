@@ -105,6 +105,7 @@ jobs:
 
     - name: Show Env
       run: |
+        $PSVersionTable
         $cpuName="$((Get-WmiObject Win32_Processor).Name)".Trim()
         Write-Host "CPU: $cpuName, $([System.Environment]::ProcessorCount) Cores"
         Write-Host "OS: $((Get-WmiObject Win32_OperatingSystem | select -Property Caption | Select -First 1).Caption)"
