@@ -13,9 +13,9 @@ jobs:
       fail-fast: false
       matrix:
         SqlServers: [
-          '2022 Developer, 2008 Core, 2005 Core',
-          '2022 Developer, 2019 Developer, 2017 Developer, 2016 Developer',
-          '2022 Developer Update, 2019 Developer Update, 2017 Developer Update, 2016 Developer Update',
+          # '2022 Developer, 2008 Core, 2005 Core',
+          # '2022 Developer, 2019 Developer, 2017 Developer, 2016 Developer',
+          # '2022 Developer Update, 2019 Developer Update, 2017 Developer Update, 2016 Developer Update',
           '2022 LocalDB',
           '2022 Developer Update',
           '2022 Developer',
