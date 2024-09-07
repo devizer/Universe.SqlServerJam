@@ -143,6 +143,13 @@ jobs:
        Write-Host "Medium Version: [$mediumVersion]"
        if (-not $mediumVersion) { throw "SQL Server [$($ENV:SQL_SERVERS)] is missing or not responding"; }
 
+       # Put $mediumVersion into json file
+       $jsonFile = "$($ENV:DEBUG_LOG_FOLDER)\SQL Setup Benchmark.json"
+       $jsonString=[System.IO.File]::ReadAllText($jsonFile)
+       $jsonObject = @($jsonString | ConvertFrom-Json) | Select -First 1
+       $jsonObject.MediumVersion = $mediumVersion;
+       $jsonObject | ConvertTo-Json > "$jsonFile"
+
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       if: always()
