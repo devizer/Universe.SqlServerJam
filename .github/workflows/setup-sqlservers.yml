@@ -147,6 +147,25 @@ jobs:
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: 'Sql-Servers-Setup ${{ matrix.SqlServers }}'
+        name: 'Summary ${{ matrix.SqlServers }}'
         path: |
           C:\Artifacts
+
+  Combine:
+    needs: Setup
+    if: always()
+    timeout-minutes: 15
+    steps:
+
+    - name: Download all workflow run artifacts
+      uses: actions/download-artifact@v4
+      path: 'C:\Artifacts'
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: 'Combined Summary (Raw)'
+        path: |
+          C:\Artifacts
+
