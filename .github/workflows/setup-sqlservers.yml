@@ -88,6 +88,7 @@ jobs:
       PS1_TROUBLE_SHOOT: On
       SQLSERVERS_MEDIA_FOLDER: 'C:\Sql-Media'
       SQLSERVERS_SETUP_FOLDER: 'C:\Sql-Setup'
+      DEBUG_LOG_FOLDER: 'C:\Artifacts'
 
     steps:
     - name: Checkout
@@ -141,3 +142,10 @@ jobs:
 
        Write-Host "Medium Version: [$mediumVersion]"
        if (-not $mediumVersion) { throw "SQL Server [$($ENV:SQL_SERVERS)] is missing or not responding"; }
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: Sql-Servers-Setup
+        path: |
+          C:\Artifacts
