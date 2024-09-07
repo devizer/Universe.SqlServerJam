@@ -152,7 +152,7 @@ jobs:
        $jsonFile = "$($ENV:DEBUG_LOG_FOLDER)\SQL Setup Benchmark.json"
        $jsonString=[System.IO.File]::ReadAllText($jsonFile)
        $jsonObject = @($jsonString | ConvertFrom-Json) | Select -First 1
-       $jsonObject.MediumVersion = $mediumVersion;
+       $jsonObject["MediumVersion"] = $mediumVersion;
        $jsonObject | ConvertTo-Json > "$jsonFile"
 
     - name: Upload artifacts
