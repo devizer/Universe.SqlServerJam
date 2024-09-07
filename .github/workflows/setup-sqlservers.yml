@@ -152,6 +152,7 @@ jobs:
           C:\Artifacts
 
   Combine:
+    runs-on: windows-latest
     needs: Setup
     if: always()
     timeout-minutes: 15
