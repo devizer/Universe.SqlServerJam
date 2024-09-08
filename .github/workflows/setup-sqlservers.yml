@@ -52,7 +52,7 @@ jobs:
            '2014-x64 Advanced',
            '2014-x64 Core',
            '2014-x64 LocalDB',
-           '2014-x86 Developer',
+           '2014-x86 Developer', # new
            '2014-x86 Advanced',
            '2014-x86 Core',
            '2014-x86 LocalDB',
