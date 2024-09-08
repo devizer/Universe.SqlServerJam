@@ -2184,5 +2184,5 @@ foreach($meta in Enumerate-Plain-SQLServer-Downloads) {
   }
 }
 
-Show-Tree-Size (Get-SqlServer-Media-Folder) 0
-Show-Tree-Size (Get-SqlServer-Setup-Folder) 0
+Show-Tree (Get-SqlServer-Media-Folder) 0
+Show-Tree (Get-SqlServer-Setup-Folder) 0
