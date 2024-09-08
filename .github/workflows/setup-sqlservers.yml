@@ -146,7 +146,7 @@ jobs:
        
        Get-WmiObject -class "Win32_PageFileUsage" -namespace "root\CIMV2" -computername localhost | Format-Table Caption, Name, PeakUsage, AllocatedBaseSize, CurrentUsage -AutoSize | Out-String -Width 256
 
-       Write-Host "Medium Version: [$mediumVersion]"
+       echo "### SQL Medium Version: [$mediumVersion]" >> $GITHUB_STEP_SUMMARY
        if ($mediumVersion) { $mediumVersion > "$($ENV:DEBUG_LOG_FOLDER)\Medium Version"; }
        if (-not $mediumVersion) { throw "SQL Server [$($ENV:SQL_SERVERS)] is missing or not responding"; }
 
