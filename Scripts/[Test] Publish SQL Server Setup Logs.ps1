@@ -1139,9 +1139,11 @@ $SqlServer2010DownloadLinks = @(
   };
   @{ 
     Version="2014-x86"; #SP3
-    Core    ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x86_ENU.exe" 
-    Advanced="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x86_ENU.exe"
-    LocalDB ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x86/SqlLocalDB.msi"
+    Core     ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x86_ENU.exe" 
+    Advanced ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x86_ENU.exe"
+    Developer="https://archive.org/download/microsoft-sql-server-2014-enterprise-sp-3-32-bit/Microsoft%%20SQL%%20Server%%202014%%20Enterprise%%20SP3%%20%%2832Bit%%29.zip"
+    DeveloperFormat="ISO-In-Archive"
+    LocalDB  ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x86/SqlLocalDB.msi"
     CU=@(
     )
   };
