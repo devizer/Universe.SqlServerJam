@@ -345,6 +345,84 @@ function Download-Specific-VC-Runtime([string] $arch, [int] $version) {
   return "";
 }
 
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Execute-Process-Smarty.ps1]
+function Execute-Process-Smarty {
+  Param(
+    [string] $title, 
+    [string] $launcher,
+    [string[]] $arguments,
+    [string] $workingDirectory = $null,
+    [int] $waitTimeout = 3600
+  )
+  $arguments = @($arguments | ? { "$_".Trim() -ne "" })
+  Troubleshoot-Info "[$title] `"$launcher`" $arguments";
+  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+
+  $ret = @{};
+  try { 
+    if ($workingDirectory) { 
+      $app = Start-Process "$launcher" -ArgumentList $arguments -WorkingDirectory $workingDirectory -PassThru;
+    } else {
+      $app = Start-Process "$launcher" -ArgumentList $arguments -PassThru;
+    }
+  } catch {
+    $err = "$($_.Exception.GetType()): '$($_.Exception.Message)'";
+    $ret = @{Error = "$title failed. $err"; };
+  }
+  
+  $exitCode = $null;
+  $okExitCode = $false;
+  if (-not $ret.Error) {
+    if ($app -and $app.Id) {
+      $isExited = $app.WaitForExit(1000*$waitTimeout);
+      if (-not $isExited) { 
+        $ret = @{ Error = "$title timed out." };
+      }
+      if (-not $ret.Error) {
+        sleep 0.01 # background tasks
+        $exitCode = [int] $app.ExitCode;
+        $isLegacy = ([System.Environment]::OSVersion.Version.Major) -eq 5;
+        if ($isExited -and $isLegacy -and "$exitCode" -eq "") { $exitCode = 0; }
+        $okExitCode = $exitCode -eq 0;
+        # Write-Host "Exit Code = [$exitCode], okExitCode = [$okExitCode]"
+        $ret = @{ExitCode = $exitCode};
+        if (-not $okExitCode) {
+          $err = "$title failed."; if ($app.ExitCode) { $err += " Exit code $($app.ExitCode)."; }
+          $ret = @{ Error = $err };
+        }
+      }
+    } else {
+      if (-not "$($ret.Error)") { $ret["Error"] = "$title failed."; }
+    }
+  }
+
+  $isOk = ((-not $ret.Error) -and $okExitCode);
+  $status = IIF $isOk "Successfully completed" $ret.Error;
+  
+  if ($isOk) { 
+    Write-Host "$title $status. It took $($startAt.ElapsedMilliseconds.ToString("n0")) ms";
+  } else {
+    Write-Host "$title $status. It took $($startAt.ElapsedMilliseconds.ToString("n0")) ms" -ForegroundColor DarkRed;
+  }
+  
+  if (!$isOk -and ($app.Id)) {
+    # TODO: Windows Only
+    & taskkill.exe @("/t", "/f", "/pid", "$($app.Id)") | out-null;
+  }
+  return $ret;
+}
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Extract-Archive-by-Default-Full-7z.ps1]
+function Extract-Archive-by-Default-Full-7z([string] $fromArchive, [string] $toDirectory, $extractCommand = "x") {
+  New-Item -Path "$($toDirectory)" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
+  $full7zExe = "$(Get-Full7z-Exe-FullPath-for-Windows)"
+  try { $fileOnly = [System.IO.Path]::GetFileName($fromArchive); } catch { $fileOnly = $fromArchive; }
+  $execResult = Execute-Process-Smarty "'$fileOnly' Extractor" $full7zExe @($extractCommand, "-y", "-o`"$toDirectory`"");
+  $ret = $true;
+  if ($execResult -and $execResult.Error) { $ret = $fasle; }
+  return $ret;
+}
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-7z-Exe-FullPath-for-Windows.ps1]
 function Get-Mini7z-Exe-FullPath-for-Windows() {
   $algorithm="SHA512"
@@ -610,6 +688,7 @@ function ExtractArchiveByDefault7zFull([string] $fromArchive, [string] $toDirect
   $isExtractOk = $?;
   return $isExtractOk;
 }
+
 
 <# 
   https://www.7-zip.org/a/7z2301-arm64.exe
@@ -1141,8 +1220,10 @@ $SqlServer2010DownloadLinks = @(
     Version="2014-x86"; #SP3
     Core     ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x86_ENU.exe" 
     Advanced ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x86_ENU.exe"
-    Developer="https://archive.org/download/microsoft-sql-server-2014-enterprise-sp-3-32-bit/Microsoft%20SQL%20Server%202014%20Enterprise%20SP3%20%2832Bit%29.zip"
-    DeveloperFormat="ISO-In-Archive"
+    # Developer="https://archive.org/download/microsoft-sql-server-2014-enterprise-sp-3-32-bit/Microsoft%20SQL%20Server%202014%20Enterprise%20SP3%20%2832Bit%29.zip"
+    # DeveloperFormat="ISO-In-Archive"
+    Developer="https://sourceforge.net/projects/archived-sql-servers/files/sql_server_2014_sp3_developer_edition_x86.7z/download"
+    DeveloperFormat="Archive"
     LocalDB  ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x86/SqlLocalDB.msi"
     CU=@(
     )
@@ -1385,20 +1466,19 @@ function Download-2010-SQLServer-and-Extract {
         return @{};
       }
     } elseif ($urlFormat -eq "ISO-In-Archive") {
-      $sevenZip = Get-Full7z-Exe-FullPath-for-Windows -Version "1900"
       $isoFolder = Combine-Path $mediaPath "iso"
       Write-Host "Extracting '$exeArchive' to '$isoFolder'"
-      & "$sevenZip" @("x", "-y", "-o`"$isoFolder`"", "$exeArchive") | out-null
+      $isExtract1Ok = Extract-Archive-by-Default-Full-7z "$exeArchive" "$isoFolder"
       $isoFile = Get-ChildItem -Path "$isoFolder" -Filter "*.iso" | Select -First 1
       Write-Host "ISO found: '$($isoFile.FullName)' ($($isoFile.Length.ToString("n0")) bytes). Extracting it to '$setupPath'";
-      & "$sevenZip" @("x", "-y", "-o`"$setupPath`"", "$($isoFile.FullName)") | out-null
+      $isExtract2Ok = Extract-Archive-by-Default-Full-7z "$($isoFile.FullName)" "$setupPath"
       $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
       $ret["Setup"] = $setupPath;
       $ret["Media"] = $mediaPath;
     } elseif ($urlFormat -eq "Archive") {
-      $sevenZip = Get-Full7z-Exe-FullPath-for-Windows -Version "1900"
       Write-Host "Extracting '$exeArchive' to '$setupPath'"
       & "$sevenZip" @("x", "-y", "-o`"$setupPath`"", "$exeArchive") | out-null
+      $isExtract2Ok = Extract-Archive-by-Default-Full-7z "$exeArchive" "$setupPath"
       $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
       $ret["Setup"] = $setupPath;
       $ret["Media"] = $mediaPath;
@@ -1693,73 +1773,6 @@ function Enumerate-Plain-SQLServer-Downloads() {
     }
     @{ Version=$meta.Version; MediaType=$meta.MediaType; Keywords="$baselineKeywords"; NormalizedKeywords="$baselineKeywords"};
   }
-}
-
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Execute-Process-Smarty.ps1]
-function Execute-Process-Smarty {
-  Param(
-    [string] $title, 
-    [string] $launcher,
-    [string[]] $arguments,
-    [string] $workingDirectory = $null,
-    [int] $waitTimeout = 3600
-  )
-  $arguments = @($arguments | ? { "$_".Trim() -ne "" })
-  Troubleshoot-Info "[$title] `"$launcher`" $arguments";
-  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
-
-  $ret = @{};
-  try { 
-    if ($workingDirectory) { 
-      $app = Start-Process "$launcher" -ArgumentList $arguments -WorkingDirectory $workingDirectory -PassThru;
-    } else {
-      $app = Start-Process "$launcher" -ArgumentList $arguments -PassThru;
-    }
-  } catch {
-    $err = "$($_.Exception.GetType()): '$($_.Exception.Message)'";
-    $ret = @{Error = "$title failed. $err"; };
-  }
-  
-  $exitCode = $null;
-  $okExitCode = $false;
-  if (-not $ret.Error) {
-    if ($app -and $app.Id) {
-      $isExited = $app.WaitForExit(1000*$waitTimeout);
-      if (-not $isExited) { 
-        $ret = @{ Error = "$title timed out." };
-      }
-      if (-not $ret.Error) {
-        sleep 0.01 # background tasks
-        $exitCode = [int] $app.ExitCode;
-        $isLegacy = ([System.Environment]::OSVersion.Version.Major) -eq 5;
-        if ($isExited -and $isLegacy -and "$exitCode" -eq "") { $exitCode = 0; }
-        $okExitCode = $exitCode -eq 0;
-        # Write-Host "Exit Code = [$exitCode], okExitCode = [$okExitCode]"
-        $ret = @{ExitCode = $exitCode};
-        if (-not $okExitCode) {
-          $err = "$title failed."; if ($app.ExitCode) { $err += " Exit code $($app.ExitCode)."; }
-          $ret = @{ Error = $err };
-        }
-      }
-    } else {
-      if (-not "$($ret.Error)") { $ret["Error"] = "$title failed."; }
-    }
-  }
-
-  $isOk = ((-not $ret.Error) -and $okExitCode);
-  $status = IIF $isOk "Successfully completed" $ret.Error;
-  
-  if ($isOk) { 
-    Write-Host "$title $status. It took $($startAt.ElapsedMilliseconds.ToString("n0")) ms";
-  } else {
-    Write-Host "$title $status. It took $($startAt.ElapsedMilliseconds.ToString("n0")) ms" -ForegroundColor DarkRed;
-  }
-  
-  if (!$isOk -and ($app.Id)) {
-    # TODO: Windows Only
-    & taskkill.exe @("/t", "/f", "/pid", "$($app.Id)") | out-null;
-  }
-  return $ret;
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Find-SQLServer-Meta.ps1]
