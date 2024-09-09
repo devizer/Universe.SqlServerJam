@@ -1,4 +1,4 @@
-| Version                           |  Version                                                               | Download   | Install    | Total      | Intel Xeon CPU                 |
+| Argument                          |  Version                                                               | Download   | Install    | Total      | Intel Xeon CPU                 |
 | --------------------------------- |  --------------------------------------------------------------------- | ---------- | ---------- | ---------- | ------------------------------ |
 | 2022 Developer Update             |  16.0.4135.4 RTM CU14 Developer Edition (64-bit)                       |  00:54.5   |  04:38.9   |  05:33.4   |  Platinum 8272CL @ 2.60GHz     |
 | 2022 Developer                    |  16.0.1000.6 RTM Developer Edition (64-bit)                            |  00:39.7   |  03:37.1   |  04:16.9   |  Platinum 8272CL @ 2.60GHz     |
@@ -32,6 +32,7 @@
 | 2014-x64 Advanced                 |  12.0.6024.0 SP3 Express Edition (64-bit)                              |  00:57.6   |  04:35.4   |  05:33.0   |  Platinum 8272CL @ 2.60GHz     |
 | 2014-x64 Core                     |  12.0.6024.0 SP3 Express Edition (64-bit)                              |  00:17.6   |  03:35.6   |  03:53.3   |  Platinum 8272CL @ 2.60GHz     |
 | 2014-x64 LocalDB                  |  12.0.6024.0 SP3 LocalDB Express Edition (64-bit)                      |  00:01.6   |  00:08.1   |  00:09.7   |  Platinum 8272CL @ 2.60GHz     |
+| 2014-x86 Developer                |  12.0.6024.0 SP3 Developer Edition                                     |  02:47.7   |  05:58.7   |  08:46.4   |  E5-2673 v4 @ 2.30GHz          |
 | 2014-x86 Advanced                 |  12.0.6024.0 SP3 Express Edition                                       |  00:53.6   |  04:33.8   |  05:27.5   |  Platinum 8272CL @ 2.60GHz     |
 | 2014-x86 Core                     |  12.0.6024.0 SP3 Express Edition                                       |  00:15.7   |  03:34.6   |  03:50.4   |  Platinum 8272CL @ 2.60GHz     |
 | 2012-x64 Developer                |  11.0.7001.0 SP4 Developer Edition (64-bit)                            |  03:31.2   |  04:52.6   |  08:23.9   |  E5-2673 v4 @ 2.30GHz          |

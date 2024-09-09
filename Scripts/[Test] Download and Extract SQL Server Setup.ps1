@@ -1833,6 +1833,24 @@ function Find-SqlServer-SetupLogs() {
 # (Find-SqlServer-SetupLogs).Length; Find-SqlServer-SetupLogs
 
 
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Get-Builtin-Windows-Group-Name.ps1]
+function Get-Builtin-Windows-Group-Name([string] $groupKind) {
+   # Windows Only
+   $sid="";
+   #users: S-1-5-32-545, administrators: S-1-5-32-544, power users: S-1-5-32-547
+   if     ($groupKind -eq "Users")          { $sid="S-1-5-32-545"; }
+   elseif ($groupKind -eq "Administrators") { $sid="S-1-5-32-544"; }
+   elseif ($groupKind -eq "PowerUsers")     { $sid="S-1-5-32-547"; }
+   $ret=""
+   if ($sid) {
+     if (Has-Cmd "Get-CIMInstance")     { $group=Get-CIMInstance Win32_Group; } 
+     elseif (Has-Cmd "Get-WmiObject")   { $group=Get-WmiObject   Win32_Group; } 
+     $ret = ($group | where { $_.SID -eq "$sid" } | Select -First 1).Name;
+   }
+   return $ret;
+}
+# @("Administrators", "PowerUsers", "Users") | % { "$($_): '$(Get-Builtin-Windows-Group-Name $_)'" }
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Get-SqlServer-Downloads-Folder.ps1]
 function Get-SqlServer-Setup-Folder() {
   return (GetPersistentTempFolder "SQLSERVERS_SETUP_FOLDER" "SQL-Setup");
@@ -1982,6 +2000,9 @@ function Install-SQLServer {
     $argUpdateEnabled = IIF ([bool]"$update" -and $hasUpdateSourceArgument) "/UpdateEnabled=True" ""
     $argUpdateSource = If ("$update" -and $hasUpdateSourceArgument) { "/UpdateSource=`"$($update.UpdateFolder)`"" } else { "" };
 
+    $sqlAdministratorsGroup = Get-Builtin-Windows-Group-Name "Administrators";
+    if (-not $sqlAdministratorsGroup) { $sqlAdministratorsGroup = "Administrators"; }
+    $sqlAdministratorsGroup = "BUILTIN\$($sqlAdministratorsGroup)";
 
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
     $setupArg = "$argQuiet", "$argENU", "$argProgress", "/ACTION=Install",
@@ -1996,7 +2017,7 @@ function Install-SQLServer {
     "/SQLSVCSTARTUPTYPE=AUTOMATIC", 
     "/BROWSERSVCSTARTUPTYPE=AUTOMATIC", 
     "$argADDCURRENTUSERASSQLADMIN", 
-    "/SQLSYSADMINACCOUNTS=`"BUILTIN\ADMINISTRATORS`"", 
+    "/SQLSYSADMINACCOUNTS=`"$($sqlAdministratorsGroup)`"",
     "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
     # Write-Host ">>> `"$($meta.Launcher)`" $setupArg"
     # & "$($meta.Launcher)" $setupArg
@@ -2028,11 +2049,7 @@ function Install-SQLServer {
       if ($err) { return @{ Error = $err }; }
     }
   }
-  
-  # Write-Host ">>> $($meta.Launcher) $setupArg"
-
 }
-
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Is-SqlServer-Setup-Cache-Enabled.ps1]
 function Is-SqlServer-Setup-Cache-Enabled() { $false; }

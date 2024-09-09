@@ -1,4 +1,4 @@
-| Version                           |  Version                                                                      |
+| Argument                          |  Version                                                                      |
 | --------------------------------- |  ---------------------------------------------------------------------------- |
 | 2022 Developer Update             |  16.0.4135.4 RTM CU14 Developer Edition (64-bit)                              |
 | 2022 Developer                    |  16.0.1000.6 RTM Developer Edition (64-bit)                                   |
@@ -32,6 +32,7 @@
 | 2014-x64 Advanced                 |  12.0.6024.0 SP3 Express Edition (64-bit)                                     |
 | 2014-x64 Core                     |  12.0.6024.0 SP3 Express Edition (64-bit)                                     |
 | 2014-x64 LocalDB                  |  12.0.6024.0 SP3 LocalDB Express Edition (64-bit)                             |
+| 2014-x86 Developer                |  12.0.6024.0 SP3 Developer Edition                                            |
 | 2014-x86 Advanced                 |  12.0.6024.0 SP3 Express Edition                                              |
 | 2014-x86 Core                     |  12.0.6024.0 SP3 Express Edition                                              |
 | 2012-x64 Developer                |  11.0.7001.0 SP4 Developer Edition (64-bit)                                   |
