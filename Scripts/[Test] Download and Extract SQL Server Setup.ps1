@@ -417,7 +417,7 @@ function Extract-Archive-by-Default-Full-7z([string] $fromArchive, [string] $toD
   New-Item -Path "$($toDirectory)" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
   $full7zExe = "$(Get-Full7z-Exe-FullPath-for-Windows)"
   try { $fileOnly = [System.IO.Path]::GetFileName($fromArchive); } catch { $fileOnly = $fromArchive; }
-  $execResult = Execute-Process-Smarty "'$fileOnly' Extractor" $full7zExe @($extractCommand, "-y", "-o`"$toDirectory`"");
+  $execResult = Execute-Process-Smarty "'$fileOnly' Extractor" $full7zExe @($extractCommand, "-y", "-o`"$toDirectory`"", "$fromArchive");
   $ret = $true;
   if ($execResult -and $execResult.Error) { $ret = $fasle; }
   return $ret;
@@ -1477,8 +1477,7 @@ function Download-2010-SQLServer-and-Extract {
       $ret["Media"] = $mediaPath;
     } elseif ($urlFormat -eq "Archive") {
       Write-Host "Extracting '$exeArchive' to '$setupPath'"
-      & "$sevenZip" @("x", "-y", "-o`"$setupPath`"", "$exeArchive") | out-null
-      $isExtract2Ok = Extract-Archive-by-Default-Full-7z "$exeArchive" "$setupPath"
+      $isExtract1Ok = Extract-Archive-by-Default-Full-7z "$exeArchive" "$setupPath"
       $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
       $ret["Setup"] = $setupPath;
       $ret["Media"] = $mediaPath;
