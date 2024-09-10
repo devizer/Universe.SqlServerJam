@@ -353,17 +353,19 @@ function Execute-Process-Smarty {
     [string[]] $arguments,
     [string] $workingDirectory = $null,
     [int] $waitTimeout = 3600
+    [switch] $Hidden = [switch] $false;
   )
   $arguments = @($arguments | ? { "$_".Trim() -ne "" })
   Troubleshoot-Info "[$title] `"$launcher`" $arguments";
   $startAt = [System.Diagnostics.Stopwatch]::StartNew()
 
   $ret = @{};
+  $windowStyle = if ($Hidden) { "Hidden" } else { "Normal" };
   try { 
     if ($workingDirectory) { 
-      $app = Start-Process "$launcher" -ArgumentList $arguments -WorkingDirectory $workingDirectory -PassThru;
+      $app = Start-Process "$launcher" -ArgumentList $arguments -WorkingDirectory $workingDirectory -PassThru -WindowStyle $windowStyle;
     } else {
-      $app = Start-Process "$launcher" -ArgumentList $arguments -PassThru;
+      $app = Start-Process "$launcher" -ArgumentList $arguments -PassThru -WindowStyle $windowStyle;
     }
   } catch {
     $err = "$($_.Exception.GetType()): '$($_.Exception.Message)'";
@@ -417,7 +419,7 @@ function Extract-Archive-by-Default-Full-7z([string] $fromArchive, [string] $toD
   New-Item -Path "$($toDirectory)" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
   $full7zExe = "$(Get-Full7z-Exe-FullPath-for-Windows)"
   try { $fileOnly = [System.IO.Path]::GetFileName($fromArchive); } catch { $fileOnly = $fromArchive; }
-  $execResult = Execute-Process-Smarty "'$fileOnly' Extractor" $full7zExe @($extractCommand, "-y", "-o`"$toDirectory`"", "$fromArchive");
+  $execResult = Execute-Process-Smarty "'$fileOnly' Extractor" $full7zExe @($extractCommand, "-y", "-o`"$toDirectory`"", "$fromArchive") -Hidden;
   $ret = $true;
   if ($execResult -and $execResult.Error) { $ret = $fasle; }
   return $ret;
@@ -915,13 +917,6 @@ function Get-Smarty-FileHash([string] $fileName, [string] $algorithm = "MD5") {
   return $null;
 }
 
-
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Smarty-First.ps1]
-function Get-Smarty-First-Obsolete($arg) {
-  if ($arg -eq $null) { return new-object PSObject; }
-  if ($arg -is [array]) { return $arg[0]; }
-  return $arg;
-}
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Smarty-FolderHash.ps1]
 # Get-Smarty-FileHash([string] $fileName, [string] $algorithm = "MD5") {
