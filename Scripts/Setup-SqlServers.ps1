@@ -364,8 +364,8 @@ function Execute-Process-Smarty {
     [string] $launcher,
     [string[]] $arguments,
     [string] $workingDirectory = $null,
-    [int] $waitTimeout = 3600
-    [switch] $Hidden = [switch] $false;
+    [int] $waitTimeout = 3600,
+    [switch] $Hidden = [switch] $false
   )
   $arguments = @($arguments | ? { "$_".Trim() -ne "" })
   Troubleshoot-Info "[$title] `"$launcher`" $arguments";
