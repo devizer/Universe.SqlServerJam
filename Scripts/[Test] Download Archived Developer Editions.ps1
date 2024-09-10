@@ -257,7 +257,7 @@ function Download-File-Managed([string] $url, [string]$outfile) {
     Troubleshoot-Info "Starting download `"" -Highlight "$url" "`" using aria2c as `"" -Highlight "$outfile" "`""
     # "-k", "2M",
     $startAt = [System.Diagnostics.Stopwatch]::StartNew()
-    & aria2c.exe @("--allow-overwrite=true", "--check-certificate=false", "-s", "12", "-x", "12", "-j", "12", "-d", "$($dirName)", "-o", "$([System.IO.Path]::GetFileName($outfile))", "$url");
+    & aria2c.exe @("--allow-overwrite=true", "--check-certificate=false", "-x", "16", "-j", "16", "-d", "$($dirName)", "-o", "$([System.IO.Path]::GetFileName($outfile))", "$url");
     if ($?) { 
       <# Write-Host "aria2 rocks ($([System.IO.Path]::GetFileName($outfile)))"; #> 
       try { $length = (new-object System.IO.FileInfo($outfile)).Length; } catch {}; $milliSeconds = $startAt.ElapsedMilliseconds;
@@ -343,6 +343,84 @@ function Download-Specific-VC-Runtime([string] $arch, [int] $version) {
     }
   }
   return "";
+}
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Execute-Process-Smarty.ps1]
+function Execute-Process-Smarty {
+  Param(
+    [string] $title, 
+    [string] $launcher,
+    [string[]] $arguments,
+    [string] $workingDirectory = $null,
+    [int] $waitTimeout = 3600
+  )
+  $arguments = @($arguments | ? { "$_".Trim() -ne "" })
+  Troubleshoot-Info "[$title] `"$launcher`" $arguments";
+  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+
+  $ret = @{};
+  try { 
+    if ($workingDirectory) { 
+      $app = Start-Process "$launcher" -ArgumentList $arguments -WorkingDirectory $workingDirectory -PassThru;
+    } else {
+      $app = Start-Process "$launcher" -ArgumentList $arguments -PassThru;
+    }
+  } catch {
+    $err = "$($_.Exception.GetType()): '$($_.Exception.Message)'";
+    $ret = @{Error = "$title failed. $err"; };
+  }
+  
+  $exitCode = $null;
+  $okExitCode = $false;
+  if (-not $ret.Error) {
+    if ($app -and $app.Id) {
+      $isExited = $app.WaitForExit(1000*$waitTimeout);
+      if (-not $isExited) { 
+        $ret = @{ Error = "$title timed out." };
+      }
+      if (-not $ret.Error) {
+        sleep 0.01 # background tasks
+        $exitCode = [int] $app.ExitCode;
+        $isLegacy = ([System.Environment]::OSVersion.Version.Major) -eq 5;
+        if ($isExited -and $isLegacy -and "$exitCode" -eq "") { $exitCode = 0; }
+        $okExitCode = $exitCode -eq 0;
+        # Write-Host "Exit Code = [$exitCode], okExitCode = [$okExitCode]"
+        $ret = @{ExitCode = $exitCode};
+        if (-not $okExitCode) {
+          $err = "$title failed."; if ($app.ExitCode) { $err += " Exit code $($app.ExitCode)."; }
+          $ret = @{ Error = $err };
+        }
+      }
+    } else {
+      if (-not "$($ret.Error)") { $ret["Error"] = "$title failed."; }
+    }
+  }
+
+  $isOk = ((-not $ret.Error) -and $okExitCode);
+  $status = IIF $isOk "Successfully completed" $ret.Error;
+  
+  if ($isOk) { 
+    Write-Host "$title $status. It took $($startAt.ElapsedMilliseconds.ToString("n0")) ms";
+  } else {
+    Write-Host "$title $status. It took $($startAt.ElapsedMilliseconds.ToString("n0")) ms" -ForegroundColor DarkRed;
+  }
+  
+  if (!$isOk -and ($app.Id)) {
+    # TODO: Windows Only
+    & taskkill.exe @("/t", "/f", "/pid", "$($app.Id)") | out-null;
+  }
+  return $ret;
+}
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Extract-Archive-by-Default-Full-7z.ps1]
+function Extract-Archive-by-Default-Full-7z([string] $fromArchive, [string] $toDirectory, $extractCommand = "x") {
+  New-Item -Path "$($toDirectory)" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
+  $full7zExe = "$(Get-Full7z-Exe-FullPath-for-Windows)"
+  try { $fileOnly = [System.IO.Path]::GetFileName($fromArchive); } catch { $fileOnly = $fromArchive; }
+  $execResult = Execute-Process-Smarty "'$fileOnly' Extractor" $full7zExe @($extractCommand, "-y", "-o`"$toDirectory`"", "$fromArchive");
+  $ret = $true;
+  if ($execResult -and $execResult.Error) { $ret = $fasle; }
+  return $ret;
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-7z-Exe-FullPath-for-Windows.ps1]
@@ -610,6 +688,7 @@ function ExtractArchiveByDefault7zFull([string] $fromArchive, [string] $toDirect
   $isExtractOk = $?;
   return $isExtractOk;
 }
+
 
 <# 
   https://www.7-zip.org/a/7z2301-arm64.exe
@@ -935,6 +1014,7 @@ function Try-BuildServerType() {
      "CODEBUILD_BUILD_ARN"
      "DRONE",
      "DSARI",
+     "GITHUB_ACTIONS",
      "GITLAB_CI",
      "GO_PIPELINE_LABEL",
      "HUDSON_URL",
@@ -1138,9 +1218,13 @@ $SqlServer2010DownloadLinks = @(
   };
   @{ 
     Version="2014-x86"; #SP3
-    Core    ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x86_ENU.exe" 
-    Advanced="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x86_ENU.exe"
-    LocalDB ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x86/SqlLocalDB.msi"
+    Core     ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPR_x86_ENU.exe" 
+    Advanced ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/SQLEXPRADV_x86_ENU.exe"
+    # Developer="https://archive.org/download/microsoft-sql-server-2014-enterprise-sp-3-32-bit/Microsoft%20SQL%20Server%202014%20Enterprise%20SP3%20%2832Bit%29.zip"
+    # DeveloperFormat="ISO-In-Archive"
+    Developer="https://sourceforge.net/projects/archived-sql-servers/files/sql_server_2014_sp3_developer_edition_x86.7z/download"
+    DeveloperFormat="Archive"
+    LocalDB  ="https://download.microsoft.com/download/3/9/F/39F968FA-DEBB-4960-8F9E-0E7BB3035959/ENU/x86/SqlLocalDB.msi"
     CU=@(
     )
   };
@@ -1382,20 +1466,18 @@ function Download-2010-SQLServer-and-Extract {
         return @{};
       }
     } elseif ($urlFormat -eq "ISO-In-Archive") {
-      $sevenZip = Get-Full7z-Exe-FullPath-for-Windows -Version "1900"
       $isoFolder = Combine-Path $mediaPath "iso"
       Write-Host "Extracting '$exeArchive' to '$isoFolder'"
-      & "$sevenZip" @("x", "-y", "-o`"$isoFolder`"", "$exeArchive") | out-null
+      $isExtract1Ok = Extract-Archive-by-Default-Full-7z "$exeArchive" "$isoFolder"
       $isoFile = Get-ChildItem -Path "$isoFolder" -Filter "*.iso" | Select -First 1
       Write-Host "ISO found: '$($isoFile.FullName)' ($($isoFile.Length.ToString("n0")) bytes). Extracting it to '$setupPath'";
-      & "$sevenZip" @("x", "-y", "-o`"$setupPath`"", "$($isoFile.FullName)") | out-null
+      $isExtract2Ok = Extract-Archive-by-Default-Full-7z "$($isoFile.FullName)" "$setupPath"
       $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
       $ret["Setup"] = $setupPath;
       $ret["Media"] = $mediaPath;
     } elseif ($urlFormat -eq "Archive") {
-      $sevenZip = Get-Full7z-Exe-FullPath-for-Windows -Version "1900"
       Write-Host "Extracting '$exeArchive' to '$setupPath'"
-      & "$sevenZip" @("x", "-y", "-o`"$setupPath`"", "$exeArchive") | out-null
+      $isExtract1Ok = Extract-Archive-by-Default-Full-7z "$exeArchive" "$setupPath"
       $ret["Launcher"] = Combine-Path $setupPath "Setup.exe";
       $ret["Setup"] = $setupPath;
       $ret["Media"] = $mediaPath;
@@ -1692,73 +1774,6 @@ function Enumerate-Plain-SQLServer-Downloads() {
   }
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Execute-Process-Smarty.ps1]
-function Execute-Process-Smarty {
-  Param(
-    [string] $title, 
-    [string] $launcher,
-    [string[]] $arguments,
-    [string] $workingDirectory = $null,
-    [int] $waitTimeout = 3600
-  )
-  $arguments = @($arguments | ? { "$_".Trim() -ne "" })
-  Troubleshoot-Info "[$title] `"$launcher`" $arguments";
-  $startAt = [System.Diagnostics.Stopwatch]::StartNew()
-
-  $ret = @{};
-  try { 
-    if ($workingDirectory) { 
-      $app = Start-Process "$launcher" -ArgumentList $arguments -WorkingDirectory $workingDirectory -PassThru;
-    } else {
-      $app = Start-Process "$launcher" -ArgumentList $arguments -PassThru;
-    }
-  } catch {
-    $err = "$($_.Exception.GetType()): '$($_.Exception.Message)'";
-    $ret = @{Error = "$title failed. $err"; };
-  }
-  
-  $exitCode = $null;
-  $okExitCode = $false;
-  if (-not $ret.Error) {
-    if ($app -and $app.Id) {
-      $isExited = $app.WaitForExit(1000*$waitTimeout);
-      if (-not $isExited) { 
-        $ret = @{ Error = "$title timed out." };
-      }
-      if (-not $ret.Error) {
-        sleep 0.01 # background tasks
-        $exitCode = [int] $app.ExitCode;
-        $isLegacy = ([System.Environment]::OSVersion.Version.Major) -eq 5;
-        if ($isExited -and $isLegacy -and "$exitCode" -eq "") { $exitCode = 0; }
-        $okExitCode = $exitCode -eq 0;
-        # Write-Host "Exit Code = [$exitCode], okExitCode = [$okExitCode]"
-        $ret = @{ExitCode = $exitCode};
-        if (-not $okExitCode) {
-          $err = "$title failed."; if ($app.ExitCode) { $err += " Exit code $($app.ExitCode)."; }
-          $ret = @{ Error = $err };
-        }
-      }
-    } else {
-      if (-not "$($ret.Error)") { $ret["Error"] = "$title failed."; }
-    }
-  }
-
-  $isOk = ((-not $ret.Error) -and $okExitCode);
-  $status = IIF $isOk "Successfully completed" $ret.Error;
-  
-  if ($isOk) { 
-    Write-Host "$title $status. It took $($startAt.ElapsedMilliseconds.ToString("n0")) ms";
-  } else {
-    Write-Host "$title $status. It took $($startAt.ElapsedMilliseconds.ToString("n0")) ms" -ForegroundColor DarkRed;
-  }
-  
-  if (!$isOk -and ($app.Id)) {
-    # TODO: Windows Only
-    & taskkill.exe @("/t", "/f", "/pid", "$($app.Id)") | out-null;
-  }
-  return $ret;
-}
-
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Find-SQLServer-Meta.ps1]
 function Find-SQLServer-Meta([string] $version, [string] $mediaType) {
   $ret = @{ Version = $version; MediaType = $mediaType; }
@@ -1818,6 +1833,24 @@ function Find-SqlServer-SetupLogs() {
 # (Find-SqlServer-SetupLogs).Length; Find-SqlServer-SetupLogs
 
 
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Get-Builtin-Windows-Group-Name.ps1]
+function Get-Builtin-Windows-Group-Name([string] $groupKind) {
+   # Windows Only
+   $sid="";
+   #users: S-1-5-32-545, administrators: S-1-5-32-544, power users: S-1-5-32-547
+   if     ($groupKind -eq "Users")          { $sid="S-1-5-32-545"; }
+   elseif ($groupKind -eq "Administrators") { $sid="S-1-5-32-544"; }
+   elseif ($groupKind -eq "PowerUsers")     { $sid="S-1-5-32-547"; }
+   $ret=""
+   if ($sid) {
+     if (Has-Cmd "Get-CIMInstance")     { $group=Get-CIMInstance Win32_Group; } 
+     elseif (Has-Cmd "Get-WmiObject")   { $group=Get-WmiObject   Win32_Group; } 
+     $ret = ($group | where { $_.SID -eq "$sid" } | Select -First 1).Name;
+   }
+   return $ret;
+}
+# @("Administrators", "PowerUsers", "Users") | % { "$($_): '$(Get-Builtin-Windows-Group-Name $_)'" }
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Get-SqlServer-Downloads-Folder.ps1]
 function Get-SqlServer-Setup-Folder() {
   return (GetPersistentTempFolder "SQLSERVERS_SETUP_FOLDER" "SQL-Setup");
@@ -1860,14 +1893,16 @@ UpdateLauncher C:\Users\VSSADM~1\AppData\Local\Temp\PS1 Repo Downloads\SQL-2022-
 function Install-SQLServer {
   Param(
     [object] $meta,
-    [object] $update, # optional, 
-    [string] $instanceName
+    [object] $update, # optional nullable, 
+    [string] $instanceName,
+    [string[]] $optionsOverride = @()
   )
 
   if (-not $meta.LauncherSize) {
-    Write-Host "[Install-SQLServer] Invalid `$meta argument. Probably download failed";
+    $err="[Install-SQLServer] Invalid `$meta argument. Probably download failed";
+    Write-Host $err;
     $meta | Format-Table-Smarty
-    return;
+    return @{ Error=$err; }
   }
 
   if ($meta.MediaType -eq "LocalDB") {
@@ -1876,27 +1911,44 @@ function Install-SQLServer {
      $setupCommandLine = @("/c", "msiexec.exe", "/i", "`"$($meta.Launcher)`"", "IACCEPTSQLLOCALDBLICENSETERMS=YES", "/qn", "/L*v", "SqlLocalDB-Setup-$($meta.Version).log");
      $setupStatus = Execute-Process-Smarty "SQL LocalDB $($meta.Version) Setup" "cmd.exe" $setupCommandLine -WaitTimeout 1800
      $setupStatus | Format-Table-Smarty | Out-Host
-     return;
+     return $setupStatus;
   }
 
   if ($update) {
     $isUpdateValid = ("$($update.UpdateSize)" -and "$($update.UpdateFolder)" -and "$($update.UpdateLauncher)")
     if (-not $isUpdateValid) {
-    Write-Host "[Install-SQLServer] Invalid `$update argument. Probably download failed";
-    $update | Format-Table-Smarty | Out-Host
-    return;
+      $err="[Install-SQLServer] Invalid `$update argument. Probably download failed";
+      Write-Host $err;
+      $update | Format-Table-Smarty | Out-Host
+      return @{ Error = $err };
     }
   }
+
+  $sqlAdministratorsGroup = Get-Builtin-Windows-Group-Name "Administrators";
+  if (-not $sqlAdministratorsGroup) { $sqlAdministratorsGroup = "Administrators"; }
+  $sqlAdministratorsGroup = "BUILTIN\$($sqlAdministratorsGroup)";
 
   $defaultOptions = @{
     InstallTo = Combine-Path "$(Get-System-Drive)" "SQL";
     Password = "``1qazxsw2";
     Tcp = 1;
     NamedPipe = 1;
-    SysAdmins = "BUILTIN\ADMINISTRATORS";
-    Features = "SQLENGINE,REPLICATION,FullText";
+    SysAdmins = "$sqlAdministratorsGroup";
+    Features = "SQLENGINE,FullText";
+    Collation = ""; # Depends on System Language, todo: SQL_Latin1_General_CP1_CI_AS or SQL_Latin1_General_CP1_CI_AS
+    DbDir = "";
+    DbLogDir = "";
+    TempDbDir = "";
+    TempDbLogDir = ""
+    BackupDir = "";
+    Startup = "Automatic"; # Manual | Disabled
   }
   $options = $defaultOptions.Clone();
+  # Apply $args
+  foreach($a in $optionsOverride) {
+    try { $p="$a".IndexOf("="); $k="$a".SubString(0,$p); $v="$a".SubString($p+1); } catch { $k=""; $v=""; }
+    if ("$k" -ne "") { $options[$k] = $v; Write-Host "   overridden setup option '$k' = `"$v`""; }
+  }
 
   $major = ($meta.Version.Substring(0,4)) -as [int];
   $is2020 = $major -ge 2016;
@@ -1904,7 +1956,7 @@ function Install-SQLServer {
   $title = "SQL Server $($meta.Version) $($meta.MediaType) Setup"
   if ($major -eq 2005) {
     # SQL_Engine,SQL_Data_Files,SQL_Replication,SQL_FullText,SQL_SharedTools
-    $argFeatures = IIf ($meta.MediaType -eq "Advanced") "SQL_Engine,SQL_FullText" "SQL_Engine";
+    $argFeatures = IIf ($meta.MediaType -eq "Core") "SQL_Engine" "SQL_Engine,SQL_FullText";
     # /qb for unattended with basic UI
     
     $setupArg = "/qn", "ADDLOCAL=$argFeatures", "INSTANCENAME=`"$instanceName`"", 
@@ -1914,6 +1966,7 @@ function Install-SQLServer {
 
     $setupStatus = Execute-Process-Smarty "SQL Server $($meta.Version) $($meta.MediaType) Setup" $meta.Launcher $setupArg -WaitTimeout 3600
     $setupStatus | Format-Table-Smarty | Out-Host
+    $err=$setupStatus.Error;
 
     # Exec Patch
     if ($update) {
@@ -1921,9 +1974,10 @@ function Install-SQLServer {
       $updateCommandLine = @("/QUIET", "/Action=Patch", "/InstanceName=$instanceName");
       $upgradeResult = Execute-Process-Smarty "$title" $update.UpdateLauncher $updateCommandLine
       $upgradeResult | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
+      if ($upgradeResult.Error) { $err += " " + $upgradeResult.Error; }
     }
 
-
+    if ($err) { return @{ Error = $err }; }
 
     # Write-Host "Workaround for 2005 logs"; sleep 1; & taskkill.exe @("/t", "/f", "/im", "setup.exe");
   } else {
@@ -1963,29 +2017,31 @@ function Install-SQLServer {
     $argUpdateEnabled = IIF ([bool]"$update" -and $hasUpdateSourceArgument) "/UpdateEnabled=True" ""
     $argUpdateSource = If ("$update" -and $hasUpdateSourceArgument) { "/UpdateSource=`"$($update.UpdateFolder)`"" } else { "" };
 
+    $argSQLCOLLATION = IIF ([bool]$options.Collation) "/SQLCOLLATION=`"$($options.Collation)`"" ""
+    $argSQLSVCSTARTUPTYPE = IIF ([bool]$options.Startup) "/SQLSVCSTARTUPTYPE=`"$($options.Startup)`"" ""
 
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
     $setupArg = "$argQuiet", "$argENU", "$argProgress", "/ACTION=Install",
     "$argIACCEPTSQLSERVERLICENSETERMS", "$argIACCEPTROPENLICENSETERMS", 
     "$argUpdateEnabled", "$argUpdateSource",
     "/FEATURES=`"$argFeatures`"", 
+    "$argSQLCOLLATION",
     "/INSTANCENAME=`"$instanceName`"", 
     "/INSTANCEDIR=`"$($options.InstallTo)`"", 
     "/SECURITYMODE=`"SQL`"", 
     "/SAPWD=`"$($options.Password)`"", 
     "/SQLSVCACCOUNT=`"NT AUTHORITY\SYSTEM`"", "$argAGTSVCACCOUNT",
-    "/SQLSVCSTARTUPTYPE=AUTOMATIC", 
-    "/BROWSERSVCSTARTUPTYPE=AUTOMATIC", 
+    "$argSQLSVCSTARTUPTYPE", 
+    "/BROWSERSVCSTARTUPTYPE=AUTOMATIC",
     "$argADDCURRENTUSERASSQLADMIN", 
-    "/SQLSYSADMINACCOUNTS=`"BUILTIN\ADMINISTRATORS`"", 
+    "/SQLSYSADMINACCOUNTS=`"$($sqlAdministratorsGroup)`"",
     "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
-    # Write-Host ">>> `"$($meta.Launcher)`" $setupArg"
-    # & "$($meta.Launcher)" $setupArg
-    # if (-not $?) {
-    #   Write-Host "Warning! Setup '$($meta.Launcher)' failed" -ForeGroundColor DarkRed
-    # }
+
+    # Perform Setup, plus upgrade if 2012+
     $setupStatus = Execute-Process-Smarty "$title" $meta.Launcher $setupArg -WaitTimeout 3600
     $setupStatus | Format-Table-Smarty | Out-Host
+    
+    $err = $setupStatus.Error;
 
     if ("$update" -and (-not $hasUpdateSourceArgument)) {
       $title = "SQL Server $($meta.Version) Upgrade to $($update.UpdateId)"
@@ -2002,13 +2058,12 @@ function Install-SQLServer {
         $upgradeResult = Execute-Process-Smarty "$title" $update.UpdateLauncher $updateCommandLine
         $upgradeResult | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
       }
+
+      if ($upgradeResult -and $upgradeResult.Error) { $err += " " + $upgradeResult.Error; }
+      if ($err) { return @{ Error = $err }; }
     }
   }
-  
-  # Write-Host ">>> $($meta.Launcher) $setupArg"
-
 }
-
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Is-SqlServer-Setup-Cache-Enabled.ps1]
 function Is-SqlServer-Setup-Cache-Enabled() { $false; }
@@ -2032,10 +2087,12 @@ function Parse-SqlServers-Input { param( [string] $list)
             $mediaType = IIF ($tags.Count -ge 2) $tags[1] (IIF $missingDeveloper "Advanced" "Developer")
             $rawUpdate = IIF ($tags.Count -ge 3) $tags[2] ""
 
-            if ($instanceName -eq $null) {
+            if ($instanceName -eq $null -and $mediaType -ne "LocalDB") {
               $instanceName = $mediaType.Substring(0,3).ToUpper() + "_" + $version.Replace("-", "_");
             }
-            $instanceName = "$($instanceName.ToUpper())"
+            if ($instanceName -ne $null) {
+              $instanceName = "$($instanceName.ToUpper())"
+            }
 
             $normalizedMeta = Find-SQLServer-Meta $version $mediaType
             if (-not $normalizedMeta) {
@@ -2076,6 +2133,59 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
     }
     # return $true;
   }
+}
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Setup-SqlServers.ps1]
+function Setup-SqlServers() {
+Param(
+  [string] $sqlServers,
+  [string[]] $optionsOverride = @()
+)
+
+<#
+TODO: 
+  DataDir,
+  LogDir,
+  BackupDir,
+  TempDir,
+  MaxRam,
+#>
+
+   $errors = @();
+   $cpuName = "$((Get-WmiObject Win32_Processor).Name)".Trim()
+
+   Say "Setting up SQL Server(s) `"$sqlServers`". Cpu is '$cpuName'. $((Get-Memory-Info).Description)"
+   $servers = Parse-SqlServers-Input $sqlServers
+   $servers | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
+   $jsonReport = @();
+   foreach($server in $servers) {
+     $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+     Say "TRY DOWNLOAD SQL SERVER $($server.Version) $($server.MediaType)"
+     $setupMeta = Download-SQLServer-and-Extract $server.Version $server.MediaType;
+     $setupMeta | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
+     $resultGetUpdate = $null;
+     if ($server.UpdateId) {
+       Say "TRY DOWNLOAD UPDATE $($server.UpdateId)"
+       $resultGetUpdate = Download-SqlServer-Update $server.Version $server.MediaType $server.Update;
+       $resultGetUpdate | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
+     }
+     $secondsDownload = $startAt.ElapsedMilliseconds / 1000.0;
+     $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+     $installStatus = Install-SQLServer $setupMeta $resultGetUpdate $server.InstanceName @($optionsOverride);
+     Say "SQL Server '$($server.Definition)' Setup Finished. $((Get-Memory-Info).Description)"
+     $secondsInstall = $startAt.ElapsedMilliseconds / 1000.0;
+     $jsonReport += @{ Definition=$server.Definition; Version=$server.Version; MediaType=$server.MediaType; SecondsDownload = $secondsDownload; SecondsInstall = $secondsInstall; Cpu = $cpuName; }
+     if ($installStatus -and $installStatus.Error) { $errors += "SQL Server '$($server.Definition)' Setup failed. $($installStatus.Error)"; }
+   }
+
+   if ("$($ENV:DEBUG_LOG_FOLDER)")
+   {
+      $reportJsonFullName = "$($ENV:DEBUG_LOG_FOLDER)\SQL Setup Benchmark.json"
+      Create-Directory-for-File $reportJsonFullName
+      $jsonReport | ConvertTo-Json | Out-File $reportJsonFullName -Force
+   }
+
+   return $errors;
 }
 
 

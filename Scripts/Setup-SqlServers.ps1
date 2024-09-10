@@ -1959,7 +1959,7 @@ function Install-SQLServer {
   # Apply $args
   foreach($a in $optionsOverride) {
     try { $p="$a".IndexOf("="); $k="$a".SubString(0,$p); $v="$a".SubString($p+1); } catch { $k=""; $v=""; }
-    if ("$k" -ne "") { $options[$k] = $v; Write-Host "   overridden setup option '$k' = `"$v`""; }
+    if ("$k" -ne "") { $options[$k] = $v; Write-Host "Overridden setup option '$k' = `"$v`""; }
   }
 
   $major = ($meta.Version.Substring(0,4)) -as [int];
@@ -2029,8 +2029,8 @@ function Install-SQLServer {
     $argUpdateEnabled = IIF ([bool]"$update" -and $hasUpdateSourceArgument) "/UpdateEnabled=True" ""
     $argUpdateSource = If ("$update" -and $hasUpdateSourceArgument) { "/UpdateSource=`"$($update.UpdateFolder)`"" } else { "" };
 
-    $argSQLCOLLATION = IIF ([bool]$options.Collation) "/SQLCOLLATION=$($options.Collation)" ""
-    $argSQLSVCSTARTUPTYPE = IIF ([bool]$options.Startup) "/SQLSVCSTARTUPTYPE=$($options.Startup)" ""
+    $argSQLCOLLATION = IIF ([bool]$options.Collation) "/SQLCOLLATION=`"$($options.Collation)`"" ""
+    $argSQLSVCSTARTUPTYPE = IIF ([bool]$options.Startup) "/SQLSVCSTARTUPTYPE=`"$($options.Startup)`"" ""
 
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
     $setupArg = "$argQuiet", "$argENU", "$argProgress", "/ACTION=Install",
