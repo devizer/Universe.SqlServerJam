@@ -2144,7 +2144,8 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Setup-SqlServers.ps1]
 function Setup-SqlServers() {
 Param(
-  [string] $sqlServers
+  [string] $sqlServers,
+  [string[]] $optionsOverride = @()
 )
 
 <#
@@ -2176,7 +2177,7 @@ TODO:
      }
      $secondsDownload = $startAt.ElapsedMilliseconds / 1000.0;
      $startAt = [System.Diagnostics.Stopwatch]::StartNew()
-     $installStatus = Install-SQLServer $setupMeta $resultGetUpdate $server.InstanceName ($args);
+     $installStatus = Install-SQLServer $setupMeta $resultGetUpdate $server.InstanceName @($optionsOverride);
      Say "SQL Server '$($server.Definition)' Setup Finished. $((Get-Memory-Info).Description)"
      $secondsInstall = $startAt.ElapsedMilliseconds / 1000.0;
      $jsonReport += @{ Definition=$server.Definition; Version=$server.Version; MediaType=$server.MediaType; SecondsDownload = $secondsDownload; SecondsInstall = $secondsInstall; Cpu = $cpuName; }
