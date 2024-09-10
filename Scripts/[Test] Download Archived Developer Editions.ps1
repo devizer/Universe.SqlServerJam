@@ -1945,9 +1945,17 @@ function Install-SQLServer {
   }
   $options = $defaultOptions.Clone();
   # Apply $args
+  $extraArguments=@();
   foreach($a in $optionsOverride) {
-    try { $p="$a".IndexOf("="); $k="$a".SubString(0,$p); $v="$a".SubString($p+1); } catch { $k=""; $v=""; }
-    if ("$k" -ne "") { $options[$k] = $v; Write-Host "   overridden setup option '$k' = `"$v`""; }
+    try { $p="$a".IndexOf("="); $k="$a".SubString(0,$p); if (($p+1) -eq "$a".Length) { $v=""; } else { $v="$a".SubString($p+1); }} catch { $k=""; $v=""; }
+    if ("$k" -ne "" -and (-not "$k".StartsWith("/")) ) { 
+      $options[$k] = $v; 
+      Write-Host "Overridden option '$k' = `"$v`""; 
+    } elseif ("$k" -ne "" -and (-not "$k".StartsWith("/")) ) { 
+      $extraArguments += "$($k)=`"$v`""
+      Write-Host "Overridden extra argument '$k' = `"$v`""; 
+    }
+
   }
 
   $major = ($meta.Version.Substring(0,4)) -as [int];
@@ -2036,6 +2044,9 @@ function Install-SQLServer {
     "$argADDCURRENTUSERASSQLADMIN", 
     "/SQLSYSADMINACCOUNTS=`"$($sqlAdministratorsGroup)`"",
     "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
+
+    # TODO: Remove Existing
+    $setupArg += @($extraArguments)
 
     # Perform Setup, plus upgrade if 2012+
     $setupStatus = Execute-Process-Smarty "$title" $meta.Launcher $setupArg -WaitTimeout 3600
