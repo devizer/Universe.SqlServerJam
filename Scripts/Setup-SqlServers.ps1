@@ -1960,6 +1960,7 @@ function Install-SQLServer {
   $extraArguments=@();
   foreach($a in $optionsOverride) {
     try { $p="$a".IndexOf("="); $k="$a".SubString(0,$p); if (($p+1) -eq "$a".Length) { $v=""; } else { $v="$a".SubString($p+1); }} catch { $k=""; $v=""; }
+    $v = "$v" -replace "{InstanceName}", $instanceName;
     if ("$k" -ne "" -and (-not "$k".StartsWith("/")) ) { 
       $options[$k] = $v; 
       Write-Host "Overridden option '$k' = `"$v`""; 
