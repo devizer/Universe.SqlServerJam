@@ -1957,7 +1957,7 @@ function Install-SQLServer {
     if ("$k" -ne "" -and (-not "$k".StartsWith("/")) ) { 
       $options[$k] = $v; 
       Write-Host "Overridden option '$k' = `"$v`""; 
-    } elseif ("$k" -ne "" -and (-not "$k".StartsWith("/")) ) { 
+    } elseif ("$k" -ne "" -and "$k".StartsWith("/") ) { 
       $extraArguments += "$($k)=`"$v`""
       Write-Host "Overridden extra argument '$k' = `"$v`""; 
     }
