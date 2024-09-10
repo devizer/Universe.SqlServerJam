@@ -1958,7 +1958,7 @@ function Install-SQLServer {
   $options = $defaultOptions.Clone();
   # Apply $args
   foreach($a in $optionsOverride) {
-    try { $p="$a".IndexOf("="); $k="$a".SubString(0,$p); $v="$a".SubString($p+1); } catch { $k=""; $v=""; }
+    try { $p="$a".IndexOf("="); $k="$a".SubString(0,$p); if (($p+1) -eq "$a".Length) { $v=""; } else { $v="$a".SubString($p+1); }} catch { $k=""; $v=""; }
     if ("$k" -ne "") { $options[$k] = $v; Write-Host "Overridden setup option '$k' = `"$v`""; }
   }
 
