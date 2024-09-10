@@ -1935,15 +1935,31 @@ function Install-SQLServer {
     }
   }
 
+  $sqlAdministratorsGroup = Get-Builtin-Windows-Group-Name "Administrators";
+  if (-not $sqlAdministratorsGroup) { $sqlAdministratorsGroup = "Administrators"; }
+  $sqlAdministratorsGroup = "BUILTIN\$($sqlAdministratorsGroup)";
+
   $defaultOptions = @{
     InstallTo = Combine-Path "$(Get-System-Drive)" "SQL";
     Password = "``1qazxsw2";
     Tcp = 1;
     NamedPipe = 1;
-    SysAdmins = "BUILTIN\ADMINISTRATORS";
-    Features = "SQLENGINE,REPLICATION,FullText";
+    SysAdmins = "$sqlAdministratorsGroup";
+    Features = "SQLENGINE,FullText";
+    Collation = ""; # Depends on System Language, todo: SQL_Latin1_General_CP1_CI_AS or SQL_Latin1_General_CP1_CI_AS
+    DbDir = "";
+    DbLogDir = "";
+    TempDbDir = "";
+    TempDbLogDir = ""
+    BackupDir = "";
+    Startup = "Automatic"; # Manual | Disabled
   }
   $options = $defaultOptions.Clone();
+  # Apply $args
+  foreach($a in $args) {
+    try { $p="$a".IndexOf("="); $k="$a".SubString(0,$p); $v="$a".SubString(p+1); } catch { $k=""; $v=""; }
+    if ("$k" -ne "") { $options[$k] = $v; }
+  }
 
   $major = ($meta.Version.Substring(0,4)) -as [int];
   $is2020 = $major -ge 2016;
@@ -1951,7 +1967,7 @@ function Install-SQLServer {
   $title = "SQL Server $($meta.Version) $($meta.MediaType) Setup"
   if ($major -eq 2005) {
     # SQL_Engine,SQL_Data_Files,SQL_Replication,SQL_FullText,SQL_SharedTools
-    $argFeatures = IIf ($meta.MediaType -eq "Advanced") "SQL_Engine,SQL_FullText" "SQL_Engine";
+    $argFeatures = IIf ($meta.MediaType -eq "Core") "SQL_Engine" "SQL_Engine,SQL_FullText";
     # /qb for unattended with basic UI
     
     $setupArg = "/qn", "ADDLOCAL=$argFeatures", "INSTANCENAME=`"$instanceName`"", 
@@ -2012,30 +2028,27 @@ function Install-SQLServer {
     $argUpdateEnabled = IIF ([bool]"$update" -and $hasUpdateSourceArgument) "/UpdateEnabled=True" ""
     $argUpdateSource = If ("$update" -and $hasUpdateSourceArgument) { "/UpdateSource=`"$($update.UpdateFolder)`"" } else { "" };
 
-    $sqlAdministratorsGroup = Get-Builtin-Windows-Group-Name "Administrators";
-    if (-not $sqlAdministratorsGroup) { $sqlAdministratorsGroup = "Administrators"; }
-    $sqlAdministratorsGroup = "BUILTIN\$($sqlAdministratorsGroup)";
+    $argSQLCOLLATION = IIF ([bool]$options.Collation) "/SQLCOLLATION=$($options.Collation)" ""
+    $argSQLSVCSTARTUPTYPE = ([bool]$options.Startup) "/SQLSVCSTARTUPTYPE=$($options.Startup)" ""
 
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
     $setupArg = "$argQuiet", "$argENU", "$argProgress", "/ACTION=Install",
     "$argIACCEPTSQLSERVERLICENSETERMS", "$argIACCEPTROPENLICENSETERMS", 
     "$argUpdateEnabled", "$argUpdateSource",
     "/FEATURES=`"$argFeatures`"", 
+    "$argSQLCOLLATION",
     "/INSTANCENAME=`"$instanceName`"", 
     "/INSTANCEDIR=`"$($options.InstallTo)`"", 
     "/SECURITYMODE=`"SQL`"", 
     "/SAPWD=`"$($options.Password)`"", 
     "/SQLSVCACCOUNT=`"NT AUTHORITY\SYSTEM`"", "$argAGTSVCACCOUNT",
-    "/SQLSVCSTARTUPTYPE=AUTOMATIC", 
-    "/BROWSERSVCSTARTUPTYPE=AUTOMATIC", 
+    "$argSQLSVCSTARTUPTYPE", 
+    "/BROWSERSVCSTARTUPTYPE=AUTOMATIC",
     "$argADDCURRENTUSERASSQLADMIN", 
     "/SQLSYSADMINACCOUNTS=`"$($sqlAdministratorsGroup)`"",
     "/TCPENABLED=$($options.Tcp)", "/NPENABLED=$($options.NamedPipe)";
-    # Write-Host ">>> `"$($meta.Launcher)`" $setupArg"
-    # & "$($meta.Launcher)" $setupArg
-    # if (-not $?) {
-    #   Write-Host "Warning! Setup '$($meta.Launcher)' failed" -ForeGroundColor DarkRed
-    # }
+
+    # Perform Setup, plus upgrade if 2012+
     $setupStatus = Execute-Process-Smarty "$title" $meta.Launcher $setupArg -WaitTimeout 3600
     $setupStatus | Format-Table-Smarty | Out-Host
     

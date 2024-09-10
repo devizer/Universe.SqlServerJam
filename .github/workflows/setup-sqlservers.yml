@@ -121,7 +121,7 @@ jobs:
     - name: Setup Sql Server
       env:
         SQL_SERVERS: ${{ matrix.SqlServers }}
-      run: '& powershell -f Scripts\Setup-SqlServers.ps1 -SqlServers "$($ENV:SQL_SERVERS)"'
+      run: '& powershell -f Scripts\Setup-SqlServers.ps1 -SqlServers "$($ENV:SQL_SERVERS)" "Collation=French_CI_AI" "Startup=Manual"'
 
     - name: Show SQL Servers
       env:
