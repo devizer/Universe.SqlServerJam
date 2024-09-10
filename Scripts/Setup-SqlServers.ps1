@@ -1905,8 +1905,9 @@ UpdateLauncher C:\Users\VSSADM~1\AppData\Local\Temp\PS1 Repo Downloads\SQL-2022-
 function Install-SQLServer {
   Param(
     [object] $meta,
-    [object] $update, # optional, 
-    [string] $instanceName
+    [object] $update, # optional nullable, 
+    [string] $instanceName,
+    [string[]] $optionsOverride = @()
   )
 
   if (-not $meta.LauncherSize) {
@@ -1956,9 +1957,9 @@ function Install-SQLServer {
   }
   $options = $defaultOptions.Clone();
   # Apply $args
-  foreach($a in $args) {
-    try { $p="$a".IndexOf("="); $k="$a".SubString(0,$p); $v="$a".SubString(p+1); } catch { $k=""; $v=""; }
-    if ("$k" -ne "") { $options[$k] = $v; }
+  foreach($a in $optionsOverride) {
+    try { $p="$a".IndexOf("="); $k="$a".SubString(0,$p); $v="$a".SubString($p+1); } catch { $k=""; $v=""; }
+    if ("$k" -ne "") { $options[$k] = $v; Write-Host "   overridden setup option '$k' = `"$v`""; }
   }
 
   $major = ($meta.Version.Substring(0,4)) -as [int];
@@ -2029,7 +2030,7 @@ function Install-SQLServer {
     $argUpdateSource = If ("$update" -and $hasUpdateSourceArgument) { "/UpdateSource=`"$($update.UpdateFolder)`"" } else { "" };
 
     $argSQLCOLLATION = IIF ([bool]$options.Collation) "/SQLCOLLATION=$($options.Collation)" ""
-    $argSQLSVCSTARTUPTYPE = ([bool]$options.Startup) "/SQLSVCSTARTUPTYPE=$($options.Startup)" ""
+    $argSQLSVCSTARTUPTYPE = IIF ([bool]$options.Startup) "/SQLSVCSTARTUPTYPE=$($options.Startup)" ""
 
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
     $setupArg = "$argQuiet", "$argENU", "$argProgress", "/ACTION=Install",
