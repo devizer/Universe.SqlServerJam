@@ -2182,7 +2182,7 @@ TODO:
      }
      $secondsDownload = $startAt.ElapsedMilliseconds / 1000.0;
      $startAt = [System.Diagnostics.Stopwatch]::StartNew()
-     $installStatus = Install-SQLServer $setupMeta $resultGetUpdate $server.InstanceName;
+     $installStatus = Install-SQLServer $setupMeta $resultGetUpdate $server.InstanceName ($args);
      Say "SQL Server '$($server.Definition)' Setup Finished. $((Get-Memory-Info).Description)"
      $secondsInstall = $startAt.ElapsedMilliseconds / 1000.0;
      $jsonReport += @{ Definition=$server.Definition; Version=$server.Version; MediaType=$server.MediaType; SecondsDownload = $secondsDownload; SecondsInstall = $secondsInstall; Cpu = $cpuName; }
