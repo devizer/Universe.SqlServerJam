@@ -1973,12 +1973,14 @@ function Install-SQLServer {
   if ($major -eq 2005) {
     # SQL_Engine,SQL_Data_Files,SQL_Replication,SQL_FullText,SQL_SharedTools
     $argFeatures = IIf ($meta.MediaType -eq "Core") "SQL_Engine" "SQL_Engine,SQL_FullText";
+    $argSQLAUTOSTART = IIf ($options.Startup -eq "Automatic") "1" "0"
     # /qb for unattended with basic UI
     
     $setupArg = "/qn", "ADDLOCAL=$argFeatures", "INSTANCENAME=`"$instanceName`"", 
          "DISABLENETWORKPROTOCOLS=0", # 0: All, 1: None, 2: TCP only
          "SECURITYMODE=SQL", "SAPWD=`"$($options.Password)`"", 
-         "INSTALLSQLDIR=`"$($options.InstallTo)`"";
+         "INSTALLSQLDIR=`"$($options.InstallTo)`"",
+         "SQLAUTOSTART=$argSQLAUTOSTART";
 
     $setupStatus = Execute-Process-Smarty "SQL Server $($meta.Version) $($meta.MediaType) Setup" $meta.Launcher $setupArg -WaitTimeout 3600
     $setupStatus | Format-Table-Smarty | Out-Host
