@@ -4,12 +4,7 @@ Param(
 
 <#
 TODO: 
-  DataDir,
-  LogDir,
-  BackupDir,
-  TempDir,
   MaxRam,
-
 #>
 
 # Include Detected: [ ..\Includes\*.ps1 ]
