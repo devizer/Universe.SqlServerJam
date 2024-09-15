@@ -2019,8 +2019,8 @@ function Install-SQLServer {
     # 2008 and R2: The setting 'IACCEPTROPENLICENSETERMS' specified is not recognized.
     $argIACCEPTROPENLICENSETERMS = IIF ($major -le 2014) "" "/IACCEPTROPENLICENSETERMS";
     
-    # 2008 R2 Dev 10.50.6000.34: /AGTSVCACCOUNT="NT AUTHORITY\SYSTEM" required on Windows 2016+
-    $argAGTSVCACCOUNT = IIF ($meta.Version -like "2008R2*" -and $meta.MediaType -eq "Developer") "/AGTSVCACCOUNT=`"NT AUTHORITY\SYSTEM`"" "";
+    # 2008 & 2008 R2 Dev 10.50.6000.34: /AGTSVCACCOUNT="NT AUTHORITY\SYSTEM" required on Windows 2016+
+    $argAGTSVCACCOUNT = IIF (($meta.Version -like "2008*") -and $meta.MediaType -eq "Developer") "/AGTSVCACCOUNT=`"NT AUTHORITY\SYSTEM`"" "";
     
     # 2008-xXX features
     $argFeatures = "$($options.Features)"
