@@ -1774,6 +1774,72 @@ function Enumerate-Plain-SQLServer-Downloads() {
   }
 }
 
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Find-LocalDb-SqlServers.ps1]
+# Super Fast
+function Find-LocalDb-SqlServer() {
+  $parentKey = Get-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions" -EA SilentlyContinue
+  $candidates = @();
+  if ($parentKey) {
+    foreach($subName in $parentKey.GetSubKeyNames()) { $candidates += $subName; }
+  }
+  [Array]::Sort($candidates);
+  $last = $candidates | Select -Last 1;
+  if (-not $last) { return; }
+  if ($last -like "11.*") { $instance="(LocalDB)\v11.0" } else { $instance="(LocalDB)\MSSqlLocalDB" };
+  @{ InstallerVersion = $last; Instance = $instance; }
+}
+
+function Start-LocalDb-SqlServer([int] $timeoutSec = 60) {
+  $localDb = Find-LocalDb-SqlServer;
+  $startAt = [System.Diagnostics.Stopwatch]::StartNew();
+  if ($localDb) { 
+    $conStr = "Data Source=$($localDb.Instance);Integrated Security=True;Pooling=false;Timeout=2";
+    do {
+        try { 
+        $con = New-Object System.Data.SqlClient.SqlConnection($conStr);
+        $con.Open();
+        return $true;
+        } catch {
+        }
+    } while($startAt.ElapsedMilliseconds -le ($timeoutSec * 1000));
+    Write-Host "Warning! can't start SQL Server Local DB v$($localDb.Version) '$($localDb.Instance)' during $($startAt.ElapsedMilliseconds / 1000) seconds" -ForegroundColor DarkRed
+  }
+}
+
+# Find-LocalDb-SqlServers
+# Start-LocalDb-SqlServer -timeout 1
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Find-Local-SqlServers.ps1]
+# Super Fast
+function Find-Local-SqlServers() {
+  $candidates = @(@{RegPath="Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSSQLServer";Service="MSSQLSERVER";Instance="(local)";});
+  $regNamebase = "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server"
+  $namedKey = Get-Item -Path $regNamebase -EA SilentlyContinue
+  if ($namedKey) {
+    foreach($subName in $namedKey.GetSubKeyNames()) { $candidates += @{RegPath="$($regNamebase)\$subName";Service="MSSQL`$$($subName)"; Instance="(local)\$subName";}}
+  }
+  # $candidates | % { [pscustomObject] $_ } | ft -AutoSize | out-Host
+  foreach($candidate in $candidates) { 
+    $currentVersion = Get-ItemProperty -Path "$($candidate.RegPath)\MSSQLServer\CurrentVersion" -Name CurrentVersion -EA SilentlyContinue | % {$_.CurrentVersion}
+    if ($currentVersion) { $candidate["InstallerVersion"] = $currentVersion; }
+
+    $regService = Get-Item -Path "Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\$($candidate.Service)" -EA SilentlyContinue
+    if ($regService) { $candidate["ServiceExists"] = $true; }
+  }
+  # Write-Host "FINAL" -ForegroundColor DarkGreen
+  # $candidates | % { [pscustomObject] $_ } | ft -AutoSize | out-Host
+  $candidates | ? { $_.ServiceExists } | % { $_.Remove("ServiceExists"); $_.Remove("RegPath"); $_; }
+}
+
+# Find-Local-SqlServers | % { [pscustomObject] $_ } | ft -AutoSize | Out-String -Width 1234 | Out-Host
+# Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | ft -AutoSize
+
+# Write-Host "STOP SERVICES" -ForegroundColor DarkGreen
+# Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | % { if ($_.Status -ne "Stopped") { Write-Host "Stopping $($_.Name)"; Stop-Service "$($_.Name)" -Force }}
+
+# Write-Host "START SERVICES" -ForegroundColor DarkGreen
+# Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | % { if ($_.Status -ne "Running") { Write-Host "Starting $($_.Name)"; Start-Service "$($_.Name)" }}
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Find-SQLServer-Meta.ps1]
 function Find-SQLServer-Meta([string] $version, [string] $mediaType) {
   $ret = @{ Version = $version; MediaType = $mediaType; }
@@ -2152,6 +2218,33 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
   }
 }
 
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Query-SqlServer-Version.ps1]
+function Query-SqlServer-Version([string] $title, [string] $connectionString, <# or #>[string] $instance, [int] $timeoutSec = 30) {
+  if (-not $connectionString) { $connectionString = "Server=$($instance);Integrated Security=SSPI; Connection Timeout=2" }
+  $startAt = [System.Diagnostics.Stopwatch]::StartNew();
+
+  do {
+    try { 
+      $basicProps = "Cast(ISNULL(ServerProperty('ProductVersion'), '') as nvarchar) + ' ' + (Case ServerProperty('IsLocalDB') When 1 Then 'LocalDB' Else '' End) + ' ' + Cast(ISNULL(ServerProperty('Edition'), '') as nvarchar) + ' ' + Cast(ISNULL(ServerProperty('ProductLevel'), '') as nvarchar) + ' ' + Cast(ISNULL(ServerProperty('ProductUpdateLevel'), '') as nvarchar)";
+      $sql = "Select $basicProps";
+      $con = New-Object System.Data.SqlClient.SqlConnection($connectionString);
+      $con.Open();
+      $cmd = new-object System.Data.SqlClient.SqlCommand($sql, $con)
+      $rdr = $cmd.ExecuteReader()
+      $__ = $rdr.Read()
+      $ret = "$($rdr.GetString(0))"
+      $ret = $ret.Trim().Replace("  ", " ").Replace("  ", " ").Replace("  ", " ")
+      $con.Close()
+      return $ret;
+    } catch { Write-Host $_.Exception -ForegroundColor DarkGray}
+  } while($startAt.ElapsedMilliseconds -le ($timeoutSec * 1000));
+  Write-Host "Warning! Can't query version of SQL Server '$($title)' during $($startAt.ElapsedMilliseconds / 1000) seconds" -ForegroundColor DarkRed
+
+}
+
+# Query-SqlServer-Version -Title "FAKE" -Instance "(local)\22" -Timeout 2
+# Query-SqlServer-Version -Title "SQL 2005" -Instance "(local)\SQL_2005_SP4_X86" -Timeout 2
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Setup-SqlServers.ps1]
 function Setup-SqlServers() {
 Param(
@@ -2161,11 +2254,8 @@ Param(
 
 <#
 TODO: 
-  DataDir,
-  LogDir,
-  BackupDir,
-  TempDir,
   MaxRam,
+  MinRam
 #>
 
    $errors = @();

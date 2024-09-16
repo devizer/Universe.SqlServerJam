@@ -1,16 +1,4 @@
-Param(
-  [string] $sqlServers
-)
-
-<#
-TODO: 
-  DataDir,
-  LogDir,
-  BackupDir,
-  TempDir,
-  MaxRam,
-
-#>
+$ErrorActionPreference="Stop"
 
 # Include Detected: [ ..\Includes\*.ps1 ]
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\$Full7zLinksMetadata.ps1]
@@ -2326,11 +2314,28 @@ function Try-Get-FileExtension-by-Uri ([string] $url) {
 }
 
 
-$setupErrors = Setup-SqlServers $sqlServers @($args);
-$setupErrors | Out-Host
+Write-Host "SQL Server Local DB?"
+Find-LocalDb-SqlServer | ft
 
-if ($setupErrors) { 
-  $err="$(@($setupErrors).Count) ERROR(S): $setupErrors"
-  Write-Host $err -ForegroundColor DarkRed
-  throw "$err"
-}
+Write-Host "Start SQL Server Local DB?"
+Start-LocalDb-SqlServer -timeout 30
+
+Write-Host "LIST OF LOCAL SQL SERVERS" -ForegroundColor Yellow
+Find-Local-SqlServers | % { [pscustomObject] $_ } | ft -AutoSize | Out-String -Width 1234 | Out-Host
+
+Write-Host "LIST OF CORRESPONDING SERViCES" -ForegroundColor Yellow
+Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | ft -AutoSize
+
+Write-Host "STOP SERVICES" -ForegroundColor DarkGreen
+Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | % { if ($_.Status -ne "Stopped") { Write-Host "Stopping $($_.Name)"; Stop-Service "$($_.Name)" -Force -EA Continue }}
+
+Write-Host "START SERVICES" -ForegroundColor DarkGreen
+Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | % { if ($_.Status -ne "Running") { Write-Host "Starting $($_.Name)"; Start-Service "$($_.Name)" -EA Continue }}
+
+
+Write-Host "QUERY VERSIONS" -ForegroundColor DarkGreen
+$servers = @(Find-Local-SqlServers | % { $_["MediumVersion"] = Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 20; $_ })
+$servers | % { [pscustomObject] $_ } | ft -AutoSize | Out-String -Width 1234 | Out-Host
+
+$localDB = @(Find-LocalDb-SqlServer | % { $_["MediumVersion"] = Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 20; $_ })
+$localDB | % { [pscustomObject] $_ } | ft -AutoSize | Out-String -Width 1234 | Out-Host
