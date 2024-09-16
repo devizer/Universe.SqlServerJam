@@ -2042,7 +2042,7 @@ function Install-SQLServer {
     $argSQLCOLLATION = IIF ([bool]$options.Collation) "/SQLCOLLATION=`"$($options.Collation)`"" ""
     $argSQLSVCSTARTUPTYPE = IIF ([bool]$options.Startup) "/SQLSVCSTARTUPTYPE=`"$($options.Startup)`"" ""
 
-    $argX86 = IIf ($meta.Version -match "2008-" -and $meta.MediaType -eq "Developer") "/X86" "";
+    $argX86 = IIf ($meta.Version -match "2008-x86" -and $meta.MediaType -eq "Developer" -and (Get-CPU-Architecture-Suffix-for-Windows-Implementation) -eq "x64") "/X86" "";
 
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
     $setupArg = "$argQuiet", "$argENU", "$argProgress", "/ACTION=Install",
