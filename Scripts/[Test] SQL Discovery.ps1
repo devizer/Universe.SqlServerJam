@@ -2236,7 +2236,7 @@ function Query-SqlServer-Version([string] $title, [string] $connectionString, <#
       $ret = $ret.Trim().Replace("  ", " ").Replace("  ", " ").Replace("  ", " ")
       $con.Close()
       return $ret;
-    } catch { Write-Host $_.Exception -ForegroundColor DarkGray}
+    } catch { <# Write-Host $_.Exception -ForegroundColor DarkGray #> }
   } while($startAt.ElapsedMilliseconds -le ($timeoutSec * 1000));
   Write-Host "Warning! Can't query version of SQL Server '$($title)' during $($startAt.ElapsedMilliseconds / 1000) seconds" -ForegroundColor DarkRed
 
@@ -2335,10 +2335,10 @@ if (@(Find-Local-SqlServers)) {
 }
 
 Write-Host "QUERY VERSIONS" -ForegroundColor DarkGreen
-$servers = @(Find-Local-SqlServers | % { $_["MediumVersion"] = Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 20; $_ })
+$servers = @(Find-Local-SqlServers | % { $_["MediumVersion"] = Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 60; $_ })
 $servers | % { [pscustomObject] $_ } | ft -AutoSize | Out-String -Width 1234 | Out-Host
 
 
 Write-Host "QUERY LOCALDB VERSION" -ForegroundColor DarkGreen
-$localDB = @(Find-LocalDb-SqlServer | % { $_["MediumVersion"] = Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 20; $_ })
+$localDB = @(Find-LocalDb-SqlServer | % { $_["MediumVersion"] = Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 60; $_ })
 $localDB | % { [pscustomObject] $_ } | ft -AutoSize | Out-String -Width 1234 | Out-Host
