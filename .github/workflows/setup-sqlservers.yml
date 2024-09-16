@@ -126,7 +126,14 @@ jobs:
       env:
         SQL_SERVERS: ${{ matrix.SqlServers }}
       run: |
-        Scripts\Setup-SqlServers.ps1 -SqlServers "$($ENV:SQL_SERVERS)" "Collation=French_CI_AI" "Startup=Manual" "InstallTo=C:\SQL-Customized" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB {InstanceName} Data" "/SQLUSERDBLOGDIR=C:\SQL LOGS {InstanceName}" "/SQLBACKUPDIR=C:\Backups for {InstanceName}"
+        try { 
+          Scripts\Setup-SqlServers.ps1 -SqlServers "$($ENV:SQL_SERVERS)" "Collation=French_CI_AI" "Startup=Manual" "InstallTo=C:\SQL-Customized" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB {InstanceName} Data" "/SQLUSERDBLOGDIR=C:\SQL LOGS {InstanceName}" "/SQLBACKUPDIR=C:\Backups for {InstanceName}"
+        } catch { 
+          $shouldFaul = "$($ENV:SQL_SERVERS)" -match "LocalDB" -and "$($ENV:SQL_SERVERS)" -match "X86";
+          if (-not $shouldFaul) {
+            throw $_.Exception
+          }
+        }
 
     - name: NEW Show SQL Servers
       env:
