@@ -2091,7 +2091,11 @@ function Install-SQLServer {
     
     # 2008-xXX features
     $argFeatures = "$($options.Features)"
-    if ($meta.Version -match "2008-") { $argFeatures = IIf ($meta.MediaType -eq "Core") "SQLENGINE" "SQLENGINE,FULLTEXT"; }
+    if ($meta.Version -match "2008-") { 
+      # For Developer use command line "Features=..."
+      If ($meta.MediaType -eq "Core") { $argFeatures = "SQLENGINE" } 
+      If ($meta.MediaType -eq "Advanced") { $argFeatures = "SQLENGINE,FULLTEXT" } 
+    }
 
     $argENU = IIf ($meta.Version -match "2008-") "" "/ENU"
     $argIACCEPTSQLSERVERLICENSETERMS = IIf ($meta.Version -match "2008-") "" "/IAcceptSQLServerLicenseTerms"
@@ -2103,7 +2107,7 @@ function Install-SQLServer {
     $argSQLCOLLATION = IIF ([bool]$options.Collation) "/SQLCOLLATION=`"$($options.Collation)`"" ""
     $argSQLSVCSTARTUPTYPE = IIF ([bool]$options.Startup) "/SQLSVCSTARTUPTYPE=`"$($options.Startup)`"" ""
 
-    $argX86 = IIf ($meta.Version -match "2008-x86" -and $meta.MediaType -eq "Developer" -and (Get-CPU-Architecture-Suffix-for-Windows-Implementation) -eq "x64") "/X86" "";
+    $argX86 = IIf ($meta.Version -match "2008-x86" -and $meta.MediaType -eq "Developer" -and (Get-CPU-Architecture-Suffix-for-Windows) -eq "x64") "/X86" "";
 
     # AddCurrentUserAsSQLAdmin can be used only by Express SKU or set using ROLE.
     $setupArg = "$argQuiet", "$argENU", "$argProgress", "/ACTION=Install",
@@ -2226,25 +2230,33 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Query-SqlServer-Version.ps1]
 function Query-SqlServer-Version([string] $title, [string] $connectionString, <# or #>[string] $instance, [int] $timeoutSec = 30) {
-  if (-not $connectionString) { $connectionString = "Server=$($instance);Integrated Security=SSPI; Connection Timeout=2" }
+  if (-not $connectionString) { $connectionString = "Server=$($instance);Integrated Security=SSPI;Connection Timeout=2;Pooling=False" }
   $startAt = [System.Diagnostics.Stopwatch]::StartNew();
-
+  $exception = $null;
   do {
     try { 
-      $basicProps = "Cast(ISNULL(ServerProperty('ProductVersion'), '') as nvarchar) + ' ' + (Case ServerProperty('IsLocalDB') When 1 Then 'LocalDB' Else '' End) + ' ' + Cast(ISNULL(ServerProperty('Edition'), '') as nvarchar) + ' ' + Cast(ISNULL(ServerProperty('ProductLevel'), '') as nvarchar) + ' ' + Cast(ISNULL(ServerProperty('ProductUpdateLevel'), '') as nvarchar)";
-      $sql = "Select $basicProps";
+      $sql = @"
+SELECT
+Cast(ISNULL(ServerProperty('ProductVersion'), '') as nvarchar) + ' ' + 
+(Case ServerProperty('IsLocalDB') When 1 Then 'LocalDB' Else '' End) + ' ' + 
+Cast(ISNULL(ServerProperty('Edition'), '') as nvarchar) + ' ' + 
+Cast(ISNULL(ServerProperty('ProductLevel'), '') as nvarchar) + ' ' + 
+Cast(ISNULL(ServerProperty('ProductUpdateLevel'), '') as nvarchar) + 
+(Case ServerProperty('IsFullTextInstalled') When 1 Then ' + Full-text' Else '' End);
+"@;
       $con = New-Object System.Data.SqlClient.SqlConnection($connectionString);
       $con.Open();
       $cmd = new-object System.Data.SqlClient.SqlCommand($sql, $con)
+      $cmd.CommandTimeout = 3;
       $rdr = $cmd.ExecuteReader()
       $__ = $rdr.Read()
       $ret = "$($rdr.GetString(0))"
       $ret = $ret.Trim().Replace("  ", " ").Replace("  ", " ").Replace("  ", " ")
       $con.Close()
       return $ret;
-    } catch { Write-Host $_.Exception -ForegroundColor DarkGray}
+    } catch { $exception = $_.Exception; <# Write-Host $_.Exception -ForegroundColor DarkGray #> }
   } while($startAt.ElapsedMilliseconds -le ($timeoutSec * 1000));
-  Write-Host "Warning! Can't query version of SQL Server '$($title)' during $($startAt.ElapsedMilliseconds / 1000) seconds" -ForegroundColor DarkRed
+  Write-Host "Warning! Can't query version of SQL Server '$($title)' during $($startAt.ElapsedMilliseconds / 1000) seconds$([Environment]::NewLine)$($exception)" -ForegroundColor DarkRed
 
 }
 
