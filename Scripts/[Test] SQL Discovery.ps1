@@ -2323,19 +2323,22 @@ Start-LocalDb-SqlServer -timeout 30
 Write-Host "LIST OF LOCAL SQL SERVERS" -ForegroundColor Yellow
 Find-Local-SqlServers | % { [pscustomObject] $_ } | ft -AutoSize | Out-String -Width 1234 | Out-Host
 
-Write-Host "LIST OF CORRESPONDING SERViCES" -ForegroundColor Yellow
-Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | ft -AutoSize
+if (@(Find-Local-SqlServers)) {
+  Write-Host "LIST OF CORRESPONDING SERViCES" -ForegroundColor Yellow
+  Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | ft -AutoSize
 
-Write-Host "STOP SERVICES" -ForegroundColor DarkGreen
-Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | % { if ($_.Status -ne "Stopped") { Write-Host "Stopping $($_.Name)"; Stop-Service "$($_.Name)" -Force -EA Continue }}
-
-Write-Host "START SERVICES" -ForegroundColor DarkGreen
-Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | % { if ($_.Status -ne "Running") { Write-Host "Starting $($_.Name)"; Start-Service "$($_.Name)" -EA Continue }}
-
+  Write-Host "STOP SERVICES" -ForegroundColor DarkGreen
+  Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | % { if ($_.Status -ne "Stopped") { Write-Host "Stopping $($_.Name)"; Stop-Service "$($_.Name)" -Force -EA Continue }}
+  
+  Write-Host "START SERVICES" -ForegroundColor DarkGreen
+  Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | % { if ($_.Status -ne "Running") { Write-Host "Starting $($_.Name)"; Start-Service "$($_.Name)" -EA Continue }}
+}
 
 Write-Host "QUERY VERSIONS" -ForegroundColor DarkGreen
 $servers = @(Find-Local-SqlServers | % { $_["MediumVersion"] = Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 20; $_ })
 $servers | % { [pscustomObject] $_ } | ft -AutoSize | Out-String -Width 1234 | Out-Host
 
+
+Write-Host "QUERY LOCALDB VERSION" -ForegroundColor DarkGreen
 $localDB = @(Find-LocalDb-SqlServer | % { $_["MediumVersion"] = Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 20; $_ })
 $localDB | % { [pscustomObject] $_ } | ft -AutoSize | Out-String -Width 1234 | Out-Host
