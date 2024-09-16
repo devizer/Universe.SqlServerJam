@@ -2222,7 +2222,7 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
 function Query-SqlServer-Version([string] $title, [string] $connectionString, <# or #>[string] $instance, [int] $timeoutSec = 30) {
   if (-not $connectionString) { $connectionString = "Server=$($instance);Integrated Security=SSPI; Connection Timeout=2" }
   $startAt = [System.Diagnostics.Stopwatch]::StartNew();
-
+  $exception = $null;
   do {
     try { 
       $basicProps = "Cast(ISNULL(ServerProperty('ProductVersion'), '') as nvarchar) + ' ' + (Case ServerProperty('IsLocalDB') When 1 Then 'LocalDB' Else '' End) + ' ' + Cast(ISNULL(ServerProperty('Edition'), '') as nvarchar) + ' ' + Cast(ISNULL(ServerProperty('ProductLevel'), '') as nvarchar) + ' ' + Cast(ISNULL(ServerProperty('ProductUpdateLevel'), '') as nvarchar)";
@@ -2236,9 +2236,9 @@ function Query-SqlServer-Version([string] $title, [string] $connectionString, <#
       $ret = $ret.Trim().Replace("  ", " ").Replace("  ", " ").Replace("  ", " ")
       $con.Close()
       return $ret;
-    } catch { <# Write-Host $_.Exception -ForegroundColor DarkGray #> }
+    } catch { $exception = $_.Exception; <# Write-Host $_.Exception -ForegroundColor DarkGray #> }
   } while($startAt.ElapsedMilliseconds -le ($timeoutSec * 1000));
-  Write-Host "Warning! Can't query version of SQL Server '$($title)' during $($startAt.ElapsedMilliseconds / 1000) seconds" -ForegroundColor DarkRed
+  Write-Host "Warning! Can't query version of SQL Server '$($title)' during $($startAt.ElapsedMilliseconds / 1000) seconds$([Environment]::NewLine)$($exception)" -ForegroundColor DarkRed
 
 }
 
