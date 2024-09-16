@@ -1442,6 +1442,7 @@ function Download-2010-SQLServer-and-Extract {
       $urlFormat=$meta["$($mediaType)Format"]
       if ($urlFormat) {
         $ext = ".$urlFormat".ToLower();
+        $ext = Try-Get-FileExtension-by-Uri $url;
         $exeName = "SQL-$mediaType-$Version-ENU$ext"
         $exeArchive = Combine-Path $mediaPath $exeName
       }
@@ -2214,6 +2215,24 @@ TODO:
    }
 
    return $errors;
+}
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Try-Get-FileName-by-Uri.ps1]
+function Try-Get-FileName-by-Uri ([string] $url) {
+  try { $uri = New-Object System.Uri $url; } catch { return $null; }
+  $path = $uri.AbsolutePath;
+  $parts = $path.Split("/");
+  $ret = $parts | Select -Last 1;
+  if ("$ret" -eq "download") { 
+    $ret = $parts | Select -Last 2 | Select -First 1;
+  }
+  return "$ret";
+}
+
+function Try-Get-FileExtension-by-Uri ([string] $url) {
+  $name = Try-Get-FileName-by-Uri $url;
+  if ($name -eq $null) { return $null; }
+  return ([System.IO.Path]::GetExtension($name));
 }
 
 
