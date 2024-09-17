@@ -192,37 +192,49 @@ jobs:
       '#54 [2008R2-x86 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x86 Core'
-      '#55 [2008-x64 Advanced Update]':
+      '#55 [2008-x64 Developer Update]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2008-x64 Developer Update'
+      '#56 [2008-x64 Developer]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2008-x64 Developer'
+      '#57 [2008-x64 Advanced Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x64 Advanced Update'
-      '#56 [2008-x64 Advanced]':
+      '#58 [2008-x64 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x64 Advanced'
-      '#57 [2008-x64 Core Update]':
+      '#59 [2008-x64 Core Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x64 Core Update'
-      '#58 [2008-x64 Core]':
+      '#60 [2008-x64 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x64 Core'
-      '#59 [2008-x86 Advanced Update]':
+      '#61 [2008-x86 Developer Update]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2008-x86 Developer Update'
+      '#62 [2008-x86 Developer]':
+             IMAGE: 'windows-2019'
+             SQL_SERVERS: '2008-x86 Developer'
+      '#63 [2008-x86 Advanced Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x86 Advanced Update'
-      '#60 [2008-x86 Advanced]':
+      '#64 [2008-x86 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x86 Advanced'
-      '#61 [2008-x86 Core Update]':
+      '#65 [2008-x86 Core Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x86 Core Update'
-      '#62 [2008-x86 Core]':
+      '#66 [2008-x86 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008-x86 Core'
-      '#63 [2005-x86 Advanced Update]':
+      '#67 [2005-x86 Advanced Update]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2005-x86 Advanced Update'
-      '#64 [2005-x86 Advanced]':
+      '#68 [2005-x86 Advanced]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2005-x86 Advanced'
-      '#65 [2005-x86 Core]':
+      '#69 [2005-x86 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2005-x86 Core'
 
