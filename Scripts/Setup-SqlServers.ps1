@@ -2356,6 +2356,8 @@ function Try-Get-FileExtension-by-Uri ([string] $url) {
 }
 
 
+Write-Host "Is-Ansi-Supported() = [$(Is-Ansi-Supported)]"
+
 $setupErrors = Setup-SqlServers $sqlServers @($args);
 $setupErrors | Out-Host
 
