@@ -113,25 +113,26 @@ jobs:
       run: |
         # Release 1511+
         New-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Console" -Name "VirtualTerminalLevel" -Value 1 -PropertyType DWORD -Force -EA SilentlyContinue
-
-    
         & powershell -f Scripts\Uninstall-LocalDB.ps1
 
 
     - name: Show Env
       run: |
-        $esc = [char] 27; Write-Host "$esc[31;1m LETS ROCK $esc[m (normal tail)"
-        & cmd.exe /c "Scripts\Header.cmd (Get-Host).PrivateData"
-        (Get-Host).PrivateData
-        & cmd.exe /c "Scripts\Header.cmd `$PSVersionTable"
-        $PSVersionTable
         $cpuName="$((Get-CIMInstance Win32_Processor).Name)".Trim() # Get-WmiObject 
         Write-Host "CPU: $cpuName, $([System.Environment]::ProcessorCount) Cores"
         Write-Host "OS: $((Get-WmiObject Win32_OperatingSystem | select -Property Caption | Select -First 1).Caption)"
+        function Header() { $esc=[char]27; Write-Host "$esc[41;1m $($args) $esc[m" }
+        
+        Header "(Get-Host).PrivateData"
+        (Get-Host).PrivateData
+        
+        Header "`$PSVersionTable"
+        $PSVersionTable | ft -AutoSize
         get-wmiobject win32_service | where {$_.Name -Like "MSSQL`$*" } | Format-Table -AutoSize | Out-String -Width 1111
         
-        & cmd.exe /c "Scripts\Header.cmd Environment"
+        Header "Environment"
         & cmd.exe /c "set|sort"
+
 
     - name: Setup Sql Server
       env:
@@ -145,6 +146,7 @@ jobs:
             throw $_.Exception
           }
         }
+
 
     - name: NEW Show SQL Servers
       env:
@@ -194,6 +196,8 @@ jobs:
         path: |
           C:\Artifacts
 
+
+          
   Combine:
     runs-on: windows-latest
     needs: Setup
