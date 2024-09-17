@@ -110,7 +110,12 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     - name: Uninstall LocalDB
-      run: '& powershell -f Scripts\Uninstall-LocalDB.ps1'
+      run: |
+        New-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Console" -Name "VirtualTerminalLevel" -Value 1 -PropertyType DWORD -Force
+
+    
+        & powershell -f Scripts\Uninstall-LocalDB.ps1
+
 
     - name: Show Env
       run: |
