@@ -2309,17 +2309,18 @@ TODO:
    $jsonReport = @();
    foreach($server in $servers) {
      $startAt = [System.Diagnostics.Stopwatch]::StartNew()
-     Say "TRY DOWNLOAD SQL SERVER $($server.Version) $($server.MediaType)"
+     Say "Downloading SQL Server '$($server.Version) $($server.MediaType)'"
      $setupMeta = Download-SQLServer-and-Extract $server.Version $server.MediaType;
      $setupMeta | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
      $resultGetUpdate = $null;
      if ($server.UpdateId) {
-       Say "TRY DOWNLOAD UPDATE $($server.UpdateId)"
+       Say "Downloading SQL Server Update $($server.UpdateId) for version '$($server.Version) $($server.MediaType)'"
        $resultGetUpdate = Download-SqlServer-Update $server.Version $server.MediaType $server.Update;
        $resultGetUpdate | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
      }
      $secondsDownload = $startAt.ElapsedMilliseconds / 1000.0;
      $startAt = [System.Diagnostics.Stopwatch]::StartNew()
+     Say "Installing $($server.Version) $($server.MediaType)"
      $installStatus = Install-SQLServer $setupMeta $resultGetUpdate $server.InstanceName @($optionsOverride);
      Say "SQL Server '$($server.Definition)' Setup Finished. $((Get-Memory-Info).Description)"
      $secondsInstall = $startAt.ElapsedMilliseconds / 1000.0;
