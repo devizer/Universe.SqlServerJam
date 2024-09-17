@@ -114,9 +114,10 @@ jobs:
 
     - name: Show Env
       run: |
+        $esc = [char] 27; Write-Host "$esc[31;1m LETS ROCK $esc[%m"
         & cmd.exe /c "Scripts\Colors.cmd (Get-Host).PrivateData"
         (Get-Host).PrivateData
-        & cmd.exe /c "Scripts\Colors.cmd $PSVersionTable"
+        & cmd.exe /c "Scripts\Colors.cmd `$PSVersionTable"
         $PSVersionTable
         $cpuName="$((Get-CIMInstance Win32_Processor).Name)".Trim() # Get-WmiObject 
         Write-Host "CPU: $cpuName, $([System.Environment]::ProcessorCount) Cores"
