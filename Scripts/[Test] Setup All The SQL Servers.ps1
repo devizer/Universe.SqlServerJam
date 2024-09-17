@@ -1127,7 +1127,7 @@ function Say { # param( [string] $message )
     } else {
       $esc = [char] 27; 
       Write-Host "$esc[95;1m$($elapsed) " -NoNewline -ForegroundColor Magenta
-      Write-Host "$esc[93;1m$($args)$($esc)[m" -ForegroundColor Yellow
+      Write-Host "$esc[93;1m$esc[1m$($args)$($esc)[m" -ForegroundColor Yellow
     }
 }
 $Global:_Say_Stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
