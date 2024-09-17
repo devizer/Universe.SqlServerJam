@@ -111,6 +111,8 @@ jobs:
 
     - name: Uninstall LocalDB
       run: |
+        $VirtualTerminalLevel = Get-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Console\VirtualTerminalLevel" -Name CurrentVersion -EA SilentlyContinue | % {$_.VirtualTerminalLevel}
+        Write-Host "VirtualTerminalLevel = [$VirtualTerminalLevel]"
         # Release 1511+
         New-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Console" -Name "VirtualTerminalLevel" -Value 1 -PropertyType DWORD -Force -EA SilentlyContinue
         & powershell -f Scripts\Uninstall-LocalDB.ps1
