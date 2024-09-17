@@ -114,6 +114,7 @@ jobs:
 
     - name: Show Env
       run: |
+        & cmd.exe /c "Scripts\Colors.cmd"
         $PSVersionTable
         $cpuName="$((Get-CIMInstance Win32_Processor).Name)".Trim() # Get-WmiObject 
         Write-Host "CPU: $cpuName, $([System.Environment]::ProcessorCount) Cores"
