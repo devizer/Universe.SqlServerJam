@@ -1143,6 +1143,15 @@ function Is-Ansi-Supported() {
   return $false;
 }
 
+function Get-Windows-Release-Id() {
+  if ((Get-Os-Platform) -ne "Windows") { return $null; }
+  $rawReleaseId = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ReleaseId -EA SilentlyContinue | % {$_.ReleaseId}
+  if ($rawReleaseId) { 
+    $releaseId = [int] $rawReleaseId;
+    return $releaseId;
+  }
+  return $null;
+}
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Smart-Format.ps1]
 function Format-Table-Smarty
 { 
