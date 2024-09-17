@@ -1140,6 +1140,7 @@ $Global:_Say_Stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 
 # https://ss64.com/nt/syntax-ansi.html
 function Is-Ansi-Supported() {
+  return $true;
   if ((Get-Os-Platform) -ne "Windows") { return $true; }
   $rawReleaseId = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ReleaseId -EA SilentlyContinue | % {$_.ReleaseId}
   if ($rawReleaseId) { 
