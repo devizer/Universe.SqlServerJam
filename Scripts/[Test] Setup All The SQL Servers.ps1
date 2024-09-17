@@ -1134,12 +1134,13 @@ $Global:_Say_Stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 
 # https://ss64.com/nt/syntax-ansi.html
 function Is-Ansi-Supported() {
-  return $true;
   if ((Get-Os-Platform) -ne "Windows") { return $true; }
+  $buildServerType = Try-BuildServerType;
+  if ("$buildServerType" -eq "GITHUB_ACTIONS" -or "$buildServerType" -eq "TF_BUILD") { return $true; }
   $rawReleaseId = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ReleaseId -EA SilentlyContinue | % {$_.ReleaseId}
   if ($rawReleaseId) { 
     $releaseId = [int] $rawReleaseId;
-    return ($releaseId -ge 1909);
+    return ($releaseId -ge 1809); # 1909 
   }
   return $false;
 }
@@ -1153,6 +1154,7 @@ function Get-Windows-Release-Id() {
   }
   return $null;
 }
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Smart-Format.ps1]
 function Format-Table-Smarty
 { 
