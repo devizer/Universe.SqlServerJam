@@ -114,17 +114,17 @@ jobs:
 
     - name: Show Env
       run: |
-        $esc = [char] 27; Write-Host "$esc[31;1m LETS ROCK $esc[%m"
-        & cmd.exe /c "Scripts\Colors.cmd (Get-Host).PrivateData"
+        $esc = [char] 27; Write-Host "$esc[31;1m LETS ROCK $esc[m (normal tail)"
+        & cmd.exe /c "Scripts\Header.cmd (Get-Host).PrivateData"
         (Get-Host).PrivateData
-        & cmd.exe /c "Scripts\Colors.cmd `$PSVersionTable"
+        & cmd.exe /c "Scripts\Header.cmd `$PSVersionTable"
         $PSVersionTable
         $cpuName="$((Get-CIMInstance Win32_Processor).Name)".Trim() # Get-WmiObject 
         Write-Host "CPU: $cpuName, $([System.Environment]::ProcessorCount) Cores"
         Write-Host "OS: $((Get-WmiObject Win32_OperatingSystem | select -Property Caption | Select -First 1).Caption)"
         get-wmiobject win32_service | where {$_.Name -Like "MSSQL`$*" } | Format-Table -AutoSize | Out-String -Width 1111
         
-        & cmd.exe /c "Scripts\Colors.cmd Environment"
+        & cmd.exe /c "Scripts\Header.cmd Environment"
         & cmd.exe /c "set|sort"
 
     - name: Setup Sql Server

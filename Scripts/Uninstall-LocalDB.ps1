@@ -1115,10 +1115,28 @@ function Say { # param( [string] $message )
     $milliSeconds=$Global:_Say_Stopwatch.ElapsedMilliseconds
     if ($milliSeconds -ge 3600000) { $format="HH:mm:ss"; } else { $format="mm:ss"; }
     $elapsed="[$((new-object System.DateTime(0)).AddMilliseconds($milliSeconds).ToString($format))]"
-    Write-Host "$($elapsed) " -NoNewline -ForegroundColor Magenta
-    Write-Host "$args" -ForegroundColor Yellow
+    if (-not (Is-Ansi-Supported)) {
+      Write-Host "$($elapsed) " -NoNewline -ForegroundColor Magenta
+      Write-Host "$args" -ForegroundColor Yellow
+    } else {
+      $esc = [char] 27; 
+      Write-Host "$esc[95$($elapsed) " -NoNewline -ForegroundColor Magenta
+      Write-Host "$esc[33$args$esc[m" -ForegroundColor Yellow
+    }
 }
 $Global:_Say_Stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+
+# https://ss64.com/nt/syntax-ansi.html
+function Is-Ansi-Supported() {
+  if ((Get-Os-Platform) -ne "Windows") { return $true; }
+  $rawReleaseId = Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ReleaseId -EA SilentlyContinue | % {$_.ReleaseId}
+  if ($rawReleaseId) { 
+    $releaseId = [int] $rawReleaseId;
+    return ($releaseId -ge 1909);
+  }
+  return $false;
+}
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Smart-Format.ps1]
 function Format-Table-Smarty
 { 
