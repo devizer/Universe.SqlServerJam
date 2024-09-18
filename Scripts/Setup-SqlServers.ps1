@@ -2361,3 +2361,14 @@ function Try-Get-FileExtension-by-Uri ([string] $url) {
 }
 
 
+Write-Host "Is-Ansi-Supported() = [$(Is-Ansi-Supported)]"
+Write-Host "Get-Windows-Release-Id() = [$(Get-Windows-Release-Id)]"
+
+$setupErrors = Setup-SqlServers $sqlServers @($args);
+$setupErrors | Out-Host
+
+if ($setupErrors) { 
+  $err="$(@($setupErrors).Count) ERROR(S): $setupErrors"
+  Write-Host $err -ForegroundColor DarkRed
+  throw "$err"
+}
