@@ -2637,10 +2637,7 @@ function Create-Directory($dirName) {
   }
 }
 
-function Is-Windows() {
-  $platform = [System.Environment]::OSVersion.Platform;
-  return $platform -like "Win*";
-}
+function Is-Windows() { "$([System.Environment]::OSVersion.Platform)" -like "Win*"; }
 
 function Create-Directory-for-File($fileFullName) { 
   $dirName=[System.IO.Path]::GetDirectoryName($fileFullName)
@@ -2660,7 +2657,9 @@ function Find-Writable-Module-Folder() {
   # reorder
   if (Is-Windows) { $preferPath = Combine-Path "$($ENV:ProgramFiles)" "WindowsPowerShell\Modules" } else { $preferPath = "/usr/local/share/powershell/Modules" }
   $preferPaths = @($preferPath, (Combine-Path "$PSHOME" "Modules"))
-  $preferPaths = @();
+  if (Is-Windows) { $preferPaths += Combine-Path $($ENV:SystemRoot) "system32\WindowsPowerShell\v1.0\Modules" }
+  else { $preferPaths += "/usr/local/share/powershell/Modules" }
+  # $preferPaths = @();
   # Write-Host "Prefer Paths: [$preferPaths]"
   foreach($pp in $preferPaths) {
     $exists = $modules | ? { $_ -eq $pp };
@@ -2708,6 +2707,8 @@ function Act() {
    }
 
    $exception=$null;
+   $wp=$WarningPreference;
+   $WarningPreference="SilentlyContinue"
    # Actual Version
    try { Import-Module "$ModuleName" 3>$null; $okActual = $true; } catch { $exception = $_.Exception; }
    if (-not $okActual) {
@@ -2716,6 +2717,7 @@ function Act() {
    if ($okActual -or $okLegacy) {
      Write-Host "Module $ModuleName Successfully imported" -ForeGroundColor Green
    }
+   $WarningPreference=$wp;
 }
 
 Act
