@@ -961,10 +961,10 @@ function Get-Speedy-Software-Product-List() {
       foreach($key in $keys) {
         # Write-Host "$($key.Name): $key"
         $ret += New-Object PSObject -Property @{
-            Name    = "$($key.GetValue('DisplayName'))"
-            Vendor  = "$($key.GetValue('Publisher'))"
-            Version = "$($key.GetValue('DisplayVersion'))"
-            IdentifyingNumber = [System.IO.Path]::GetFileName("$($key.Name)")
+            Name    = "$($key.GetValue('DisplayName'))".Trim()
+            Vendor  = "$($key.GetValue('Publisher'))".Trim()
+            Version = "$($key.GetValue('DisplayVersion'))".Trim()
+            IdentifyingNumber = [System.IO.Path]::GetFileName("$($key.Name)".Trim())
             Origin  = $origin.Origin
         }
       }
