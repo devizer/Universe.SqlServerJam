@@ -2659,15 +2659,19 @@ function Find-Writable-Module-Folder() {
   
   # reorder
   if (Is-Windows) { $preferPath = Combine-Path "$($ENV:ProgramFiles)" "WindowsPowerShell\Modules" } else { $preferPath = "/usr/local/share/powershell/Modules" }
-  $preferPaths = @((Combine-Path "$PSHOME" "Modules"), $preferPath)
+  $preferPaths = @($preferPath, (Combine-Path "$PSHOME" "Modules"))
+  $preferPaths = @();
+  # Write-Host "Prefer Paths: [$preferPaths]"
   foreach($pp in $preferPaths) {
     $exists = $modules | ? { $_ -eq $pp };
     if ($exists) { 
       $m2 = $modules | ? { $_ -ne $pp };
-      $modules = @($m2) + @($pp)
+      $modules = @($pp) + @($m2)
     }
   }
 
+  # $nl = [Environment]::NewLine
+  # Write-Host "Ordered Module Path List $($nl)$($modules -join $nl)"
   foreach($module in $modules) {
     $probeFullName = Combine-Path $module "probe.$([Guid]::NewGuid().ToString("N"))"
     try { 
@@ -2689,7 +2693,7 @@ function Act() {
      if (-not "$installTo") {
        throw "Unable to find appropriate module installation path. Please check permissions and powershell consistency";
      }
-     Write-Host "Installing Module $ModuleName to automatically choosen directory $installTo"
+     Write-Host "Installing Module $ModuleName to directory $installTo"
    }
 
    foreach($moduleFile in $ModuleFiles) {
