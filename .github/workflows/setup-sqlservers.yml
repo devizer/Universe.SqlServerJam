@@ -134,6 +134,10 @@ jobs:
         Header "Environment"
         & cmd.exe /c "set|sort"
 
+        Header "`$PROFILE"
+        echo "Profile is [$PROFILE]"
+        Get-Content $PROFILE -EA SilentlyContinue
+
 
     - name: Setup Sql Server
       env:
