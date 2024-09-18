@@ -2637,6 +2637,11 @@ function Create-Directory($dirName) {
   }
 }
 
+function Is-Windows() {
+  $platform = [System.Environment]::OSVersion.Platform;
+  return $platform -like "Win*";
+}
+
 function Create-Directory-for-File($fileFullName) { 
   $dirName=[System.IO.Path]::GetDirectoryName($fileFullName)
   Create-Directory "$dirName";
@@ -2650,7 +2655,19 @@ function Write-All-Text( [string]$file, [string]$text ) {
 
 function Find-Writable-Module-Folder() {
   $modules="$env:PSModulePath".Split([System.IO.Path]::PathSeparator);
-  $__ = [Array]::Reverse($modules);
+  # $__ = [Array]::Reverse($modules);
+  
+  # reorder
+  if (Is-Windows) { $preferPath = Combine-Path "$($ENV:ProgramFiles)" "WindowsPowerShell\Modules" } else { $preferPath = "/usr/local/share/powershell/Modules" }
+  $preferPaths = @((Combine-Path "$PSHOME" "Modules"), $preferPath)
+  foreach($pp in $preferPaths) {
+    $exists = $modules | ? { $_ -eq $pp };
+    if ($exists) { 
+      $m2 = $modules | ? { $_ -ne $pp };
+      $modules = @($m2) + @($pp)
+    }
+  }
+
   foreach($module in $modules) {
     $probeFullName = Combine-Path $module "probe.$([Guid]::NewGuid().ToString("N"))"
     try { 
