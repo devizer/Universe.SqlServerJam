@@ -27,6 +27,12 @@
 
 #>
 
+<#
+Alternative Installation
+
+iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/SqlServer-Version-Management.ps1'))
+#>
+
 # Include Detected: [ ..\Includes\*.ps1 ]
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\$Full7zLinksMetadata.ps1]
 $Full7zLinksMetadata_onWindows = @(
@@ -586,7 +592,7 @@ function Get-Cpu-Name-Implementation {
   $platform = Get-Os-Platform
   if ($platform -eq "Windows") {
     $proc = Select-WMI-Objects "Win32_Processor" | Select -First 1;
-    return "$($proc.Name)"
+    return "$($proc.Name)".Trim()
   }
 
   if ($platform -eq "MacOS") {
@@ -2376,6 +2382,29 @@ function Try-Get-FileExtension-by-Uri ([string] $url) {
   $name = Try-Get-FileName-by-Uri $url;
   if ($name -eq $null) { return $null; }
   return ([System.IO.Path]::GetExtension($name));
+}
+
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Uninstall-LocalDB-List.ps1]
+function Uninstall-LocalDB-List([string[]] $patterns) {
+  # $patterns
+  # "*"
+  # "2016", "2017"
+  $localDbList = @(Get-Speedy-Software-Product-List | ? { $_.Name -match "LocalDB" -and $_.Vendor -match "Microsoft" })
+  $names = @($localDbList | % { "$($_.Name)".Trim() })
+  Write-Host "Uninstalling Microsoft LocalDB by patterns '$patterns'"
+  Write-Host "Total LocalDB Installed: $($localDbList.Count), $names"
+
+  $total = 0;
+  foreach($localDb in $localDbList) {
+    $isMatch = "$patterns" | ? { if ($_ -eq "*") { return $true }; $localDB.Name -match $_ };
+    if ($isMatch) {
+      Say "UNINSTALL '$($localDB.Name)'"
+      $result = Execute-Process-Smarty "LocalDB Remover for '$($localDB.Name)'" "msiexec.exe" @("/qn", "/x", "$($localDB.IdentifyingNumber)", "/norestart");
+      $result | Format-Table-Smarty | Out-Host
+      $total++;
+    }
+  }
+  Say "DONE. Total LocalDB Uninstalled: $total"
 }
 
 
