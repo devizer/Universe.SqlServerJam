@@ -1,4 +1,31 @@
-$ErrorActionPreference="Stop"
+# Include Detected: [ src\Includes\Synopsis.ps1 ]
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\SqlSetup.PS1Project\src\Includes\Synopsis.ps1]
+<#
+ .Synopsis
+  SQL Server and Local DB Management.
+  The intended use of this project is for Continuous Integration (CI) scenarios, where:
+     - A SQL Server or LocalDB needs to be installed without user interaction.
+     - A SQL Server or LocalDB installation doesn't need to persist across multiple CI runs.
+
+
+ .Description
+  - Supports Windows 7 ... Windows 11, and Windows Server 2008 R2+ ... Windows Server 2025. Windows on ARM64 is also supported.
+
+ .Example
+   $errors = Setup-SqlServers -SqlServers "2022 Developer: MSSQLSERVER"
+
+ .Example
+   $errors = Setup-SqlServers -SqlServers "2022 Developer: DEVELOPER2022, 2019 Developer: DEVELOPER2019"
+
+ .Example
+   # Next example installs 32 or 64 bit Sql Server 2014 depending on Windows Architecture
+   $errors = Setup-SqlServers -SqlServers "2014 Developer: DEVELOPER2014"
+
+ .Example
+   # Next example installs 32 or 64 bit Sql Server 2012 Express depending on Windows Architecture
+   $errors = Setup-SqlServers -SqlServers "2014 Core: SQLEXPRESS"
+
+#>
 
 # Include Detected: [ ..\Includes\*.ps1 ]
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\$Full7zLinksMetadata.ps1]
@@ -2352,8 +2379,4 @@ function Try-Get-FileExtension-by-Uri ([string] $url) {
 }
 
 
-$toFolder = "$($Env:USERPROFILE)\SQL-Server-Logs\$([System.DateTime]::Now.ToString("yyyy-MM-dd-HH-mm-ss"))"
-$a="$($ENV:SYSTEM_ARTIFACTSDIRECTORY)"
-if ($a) { $toFolder = $a; }
-Write-Host "Total Folders: $((Find-SqlServer-SetupLogs).Count)"
-Publish-SQLServer-SetupLogs $toFolder -compression 1
+

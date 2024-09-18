@@ -425,6 +425,14 @@ function Extract-Archive-by-Default-Full-7z([string] $fromArchive, [string] $toD
   return $ret;
 }
 
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Format-Table-Smarty.ps1]
+function Format-Table-Smarty
+{ 
+   $arr = (@($Input) | % { [PSCustomObject]$_} | Format-Table -AutoSize | Out-String -Width 2048).Split(@([char]13, [char]10)) | ? { "$_".Length -gt 0 };
+   if (-not $arr) { return; }
+   [string]::Join([Environment]::NewLine, $arr);
+}
+
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-7z-Exe-FullPath-for-Windows.ps1]
 function Get-Mini7z-Exe-FullPath-for-Windows() {
   $algorithm="SHA512"
@@ -521,8 +529,7 @@ function Get-Aria2c-Exe-FullPath-for-Windows([string] $arch) {
 # x86 (0), MIPS (1), Alpha (2), PowerPC (3), ARM (5), ia64 (6) Itanium-based systems, x64 (9), ARM64 (12)
 function Get-CPU-Architecture-Suffix-for-Windows-Implementation() {
     # on multiple sockets x64
-    if     (Has-Cmd "Get-CIMInstance") { $proc=Get-CIMInstance Win32_Processor; } 
-    elseif (Has-Cmd "Get-WmiObject")   { $proc=Get-WmiObject   Win32_Processor; } 
+    $proc = Select-WMI-Objects "Win32_Processor";
     $a = ($proc | Select -First 1).Architecture
     if ($a -eq 0)  { return "x86" };
     if ($a -eq 1)  { return "mips" };
@@ -533,8 +540,7 @@ function Get-CPU-Architecture-Suffix-for-Windows-Implementation() {
     if ($a -eq 9)  { 
       # Is 32-bit system on 64-bit CPU?
       # OSArchitecture: "ARM 64-bit Processor", "32-bit", "64-bit"
-      if     (Has-Cmd "Get-CIMInstance") { $os=Get-CIMInstance Win32_OperatingSystem; } 
-      elseif (Has-Cmd "Get-WmiObject")   { $os=Get-WmiObject   Win32_OperatingSystem; } 
+      $os = Select-WMI-Objects "Win32_OperatingSystem";
       $osArchitecture = ($os | Select -First 1).OSArchitecture
       if ($osArchitecture -like "*32-bit*") { return "x86"; }
       return "x64" 
@@ -552,8 +558,7 @@ function Get-CPU-Architecture-Suffix-for-Windows() {
 function Get-Cpu-Name-Implementation {
   $platform = Get-Os-Platform
   if ($platform -eq "Windows") {
-    if (Has-Cmd "Get-CIMInstance")     { $proc=Get-CIMInstance Win32_Processor; } 
-    elseif (Has-Cmd "Get-WmiObject")   { $proc=Get-WmiObject   Win32_Processor; } 
+    $proc = Select-WMI-Objects "Win32_Processor" | Select -First 1;
     return "$($proc.Name)"
   }
 
@@ -587,14 +592,6 @@ function Get-Cpu-Name {
 
   if (-not $Global:_Cpu_Name) { $Global:_Cpu_Name = "$(Get-Cpu-Name-Implementation)"; }
   return $Global:_Cpu_Name;
-}
-
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-DirectorySize.ps1]
-function Get-DirectorySize([string] $path) {
-  if ( Test-Path "$path"  -PathType Container) {
-    $subFolderItems = Get-ChildItem "$path" -recurse -force | Where-Object {$_.PSIsContainer -eq $false} | Measure-Object -property Length -sum | Select-Object Sum;
-    return $subFolderItems.sum
-  }
 }
 
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Folder-Size.ps1]
@@ -986,7 +983,12 @@ function Has-Cmd {
   [bool] (Get-Command "$arg" -ErrorAction SilentlyContinue)
 }
 
-
+function Select-WMI-Objects([string] $class) {
+  if (Has-Cmd "Get-CIMInstance")     { $ret = Get-CIMInstance $class; } 
+  elseif (Has-Cmd "Get-WmiObject")   { $ret = Get-WmiObject   $class; } 
+  if (-not $ret) { Write-Host "Warning ! Missing neither Get-CIMInstance nor Get-WmiObject" -ForegroundColor DarkRed; }
+  return $ret;
+}
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\IIf.ps1]
 function IIf([bool] $flag, $trueResult, $falseResult) {
   if ($flag) { return $trueResult; } else { return $falseResult; }
@@ -1149,14 +1151,6 @@ function Get-Windows-Release-Id() {
   return $null;
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Smart-Format.ps1]
-function Format-Table-Smarty
-{ 
-   $arr = (@($Input) | % { [PSCustomObject]$_} | Format-Table -AutoSize | Out-String -Width 2048).Split(@([char]13, [char]10)) | ? { "$_".Length -gt 0 };
-   if (-not $arr) { return; }
-   [string]::Join([Environment]::NewLine, $arr);
-}
-
 # File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Start-Stopwatch.ps1]
 function Start-Stopwatch() {
   $ret = [PSCustomObject] @{
@@ -1210,6 +1204,7 @@ function Troubleshoot-Info() {
   Write-Host ""
 }
 
+<#
 function Troubleshoot-Info-Prev([string] $message) {
   $enableTroubleShoot = To-Boolean "PS1_TROUBLE_SHOOT" "$($ENV:PS1_TROUBLE_SHOOT)"
   if (-not $enableTroubleShoot) { return; }
@@ -1223,6 +1218,7 @@ function Troubleshoot-Info-Prev([string] $message) {
   Write-Host -NoNewLine "] " -ForegroundColor DarkGreen
   Write-Host "$message"
 }
+#>
 
 # Black DarkBlue DarkGreen DarkCyan DarkRed DarkMagenta DarkYellow Gray DarkGray Blue Green Cyan Red Magenta Yellow White
 # Include Detected: [ ..\Includes.SqlServer\*.ps1 ]
@@ -1709,13 +1705,13 @@ function ApplyCommonSqlServerState([Hashtable] $ret) {
     $ret["LauncherSize"] = $size;
   }
   if ($ret.Setup) {
-    $ret["SetupSize"] = Get-DirectorySize $ret.Setup;
+    $ret["SetupSize"] = Get-Folder-Size $ret.Setup;
     if (Is-SqlServer-Setup-Cache-Enabled) { 
       $ret["SetupHash"] = Get-Smarty-FolderHash $ret.Setup "SHA512"
     }
   }
   if ($ret.Media) {
-    $ret["MediaSize"] = Get-DirectorySize $ret.Media;
+    $ret["MediaSize"] = Get-Folder-Size $ret.Media;
     # $ret["MediaHash"] = Get-Smarty-FolderHash $ret.Media "SHA512"
   }
 }
@@ -2300,10 +2296,9 @@ TODO:
   MinRam
 #>
 
+   Say "Setting up SQL Server(s) `"$sqlServers`". Cpu is '$(Get-Cpu-Name)'. $((Get-Memory-Info).Description)"
    $errors = @();
-   $cpuName = "$((Get-WmiObject Win32_Processor).Name)".Trim()
 
-   Say "Setting up SQL Server(s) `"$sqlServers`". Cpu is '$cpuName'. $((Get-Memory-Info).Description)"
    $servers = Parse-SqlServers-Input $sqlServers
    $servers | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
    $jsonReport = @();
