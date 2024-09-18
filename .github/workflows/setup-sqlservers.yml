@@ -149,6 +149,9 @@ jobs:
         echo "Profile is [$PROFILE]"
         Get-Content $PROFILE -EA Continue
 
+        Header "PSModulePath Environment Variable"
+        Write-Host "`$env:PSModulePath"; $modules="$env:PSModulePath".Split([System.IO.Path]::PathSeparator); $modules | % { if (Test-Path $_) { $dirs=@((new-object System.IO.DirectoryInfo($_)).GetDirectories() | % { $_.Name }); $dirsString = $dirs -join ", "; "Module Path [$_] $($dirs.Count) modules: $($dirsString)"; } else {  "MODULE PATH [$_] ***MISSING***";   }}; Write-Host "`$PSHOME: [$PSHOME]"
+
 
     - name: Setup Sql Server
       env:
