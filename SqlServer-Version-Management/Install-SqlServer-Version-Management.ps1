@@ -2650,6 +2650,7 @@ function Write-All-Text( [string]$file, [string]$text ) {
 
 function Find-Writable-Module-Folder() {
   $modules="$env:PSModulePath".Split([System.IO.Path]::PathSeparator);
+  $__ = [Array]::Reverse($modules);
   foreach($module in $modules) {
     $probeFullName = Combine-Path $module "probe.$([Guid]::NewGuid().ToString("N"))"
     try { 
