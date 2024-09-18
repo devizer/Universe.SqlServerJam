@@ -565,7 +565,7 @@ function Get-Cpu-Name-Implementation {
   $platform = Get-Os-Platform
   if ($platform -eq "Windows") {
     $proc = Select-WMI-Objects "Win32_Processor" | Select -First 1;
-    return "$($proc.Name)"
+    return "$($proc.Name)".Trim()
   }
 
   if ($platform -eq "MacOS") {
