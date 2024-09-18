@@ -111,11 +111,10 @@ jobs:
 
     - name: Uninstall LocalDB
       run: |
-        $VirtualTerminalLevel = Get-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Console" -Name VirtualTerminalLevel -EA SilentlyContinue | % {$_.VirtualTerminalLevel}
-        Write-Host "VirtualTerminalLevel = [$VirtualTerminalLevel]"
-        # Release 1511+
-        New-ItemProperty -Path "Registry::HKEY_CURRENT_USER\Console" -Name "VirtualTerminalLevel" -Value 1 -PropertyType DWORD -Force -EA SilentlyContinue
-        & powershell -f Scripts\Uninstall-LocalDB.ps1
+        # & powershell -f Scripts\Uninstall-LocalDB.ps1
+        iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/SqlServer-Version-Management.ps1'))
+        Uninstall-LocalDB-List "*"
+
 
 
     - name: Show Env

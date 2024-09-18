@@ -2351,6 +2351,29 @@ function Try-Get-FileExtension-by-Uri ([string] $url) {
   return ([System.IO.Path]::GetExtension($name));
 }
 
+# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Uninstall-LocalDB-List.ps1]
+function Uninstall-LocalDB-List([string[]] $patterns) {
+  # $patterns
+  # "*"
+  # "2016", "2017"
+  $localDbList = @(Get-Speedy-Software-Product-List | ? { $_.Name -match "LocalDB" -and $_.Vendor -match "Microsoft" })
+  $names = @($localDbList | % { "$($_.Name)".Trim() })
+  Write-Host "Uninstalling Microsoft LocalDB by patterns '$patterns'"
+  Write-Host "Total LocalDB Installed: $($localDbList.Count), $names"
+
+  $total = 0;
+  foreach($localDb in $localDbList) {
+    $isMatch = "$patterns" | ? { if ($_ -eq "*") { return $true }; $localDB.Name -match $_ };
+    if ($isMatch) {
+      Say "UNINSTALL '$($localDB.Name)'"
+      $result = Execute-Process-Smarty "LocalDB Remover for '$($localDB.Name)'" "msiexec.exe" @("/qn", "/x", "$($localDB.IdentifyingNumber)", "/norestart");
+      $result | Format-Table-Smarty | Out-Host
+      $total++;
+    }
+  }
+  Say "DONE. Total LocalDB Uninstalled: $total"
+}
+
 
 Write-Host "Try-BuildServerType: [$(Try-BuildServerType)], Is-BuildServer: $(Is-BuildServer)"
 
