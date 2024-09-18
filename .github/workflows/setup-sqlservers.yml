@@ -136,7 +136,7 @@ jobs:
 
         Header "`$PROFILE"
         echo "Profile is [$PROFILE]"
-        Get-Content $PROFILE -EA SilentlyContinue
+        Get-Content $PROFILE -EA Continue
 
 
     - name: Setup Sql Server
