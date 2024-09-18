@@ -2295,6 +2295,7 @@ Param(
   [string] $sqlServers,
   [string[]] $optionsOverride = @()
 )
+$optionsOverride += @($args)
 
 <#
 TODO: 
