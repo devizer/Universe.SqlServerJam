@@ -127,6 +127,9 @@ jobs:
         iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/SqlServer-Version-Management.ps1'))
         Measure-Action "Install Platform-Info Module" { Install-Module Platform-Info -Force }
 
+    - name: ANSI Colors
+      run: |
+        powershell -f "Scripts\[Test] Ansi Colors.ps1" 
 
     - name: Show Env
       run: |
