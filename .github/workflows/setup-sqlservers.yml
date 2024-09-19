@@ -130,9 +130,8 @@ jobs:
 
     - name: Show Env
       run: |
-        $cpuName="$((Get-CIMInstance Win32_Processor).Name)".Trim() # Get-WmiObject 
-        Write-Host "CPU: $cpuName, $([System.Environment]::ProcessorCount) Cores"
-        Write-Host "OS: $((Get-WmiObject Win32_OperatingSystem | select -Property Caption | Select -First 1).Caption)"
+        Write-Host "CPU: $(Get-CPU-Name), $([System.Environment]::ProcessorCount) Cores"
+        Write-Host "OS: $((Select-WMI-Objects Win32_OperatingSystem | select -Property Caption | Select -First 1).Caption)"
         function Header() { $esc=[char]27; Write-Host "$esc[41;1m $($args) $esc[m" }
         
         Header "(Get-Host).PrivateData"
@@ -140,7 +139,7 @@ jobs:
         
         Header "`$PSVersionTable"
         $PSVersionTable | ft -AutoSize
-        get-wmiobject win32_service | where {$_.Name -Like "MSSQL`$*" } | Format-Table -AutoSize | Out-String -Width 1111
+        Select-WMI-Objects win32_service | where {$_.Name -Like "MSSQL`$*" } | Format-Table -AutoSize | Out-String -Width 1111
         
         Header "Environment"
         & cmd.exe /c "set|sort"
