@@ -132,24 +132,26 @@ jobs:
       run: |
         Write-Host "CPU: $(Get-CPU-Name), $([System.Environment]::ProcessorCount) Cores"
         Write-Host "OS: $((Select-WMI-Objects Win32_OperatingSystem | select -Property Caption | Select -First 1).Caption)"
-        function Header() { $esc=[char]27; Write-Host "$esc[41;1m $($args) $esc[m" }
+        function Header() { $esc=[char]27; Write-Host "$esc[45;1m $($args) $esc[m" }
         
         Header "(Get-Host).PrivateData"
         (Get-Host).PrivateData
         
         Header "`$PSVersionTable"
         $PSVersionTable | ft -AutoSize
+        
+        Header "PRE-INSTALLED SQL SERVERS"
         Select-WMI-Objects win32_service | where {$_.Name -Like "MSSQL`$*" } | Format-Table -AutoSize | Out-String -Width 1111
         
-        Header "Environment"
-        & cmd.exe /c "set|sort"
-
         Header "`$PROFILE"
         echo "Profile is [$PROFILE]"
         Get-Content $PROFILE -EA Continue
 
         Header "PSModulePath Environment Variable"
         Write-Host "`$env:PSModulePath"; $modules="$env:PSModulePath".Split([System.IO.Path]::PathSeparator); $modules | % { if (Test-Path $_) { $dirs=@((new-object System.IO.DirectoryInfo($_)).GetDirectories() | % { $_.Name }); $dirsString = $dirs -join ", "; "Module Path [$_] $($dirs.Count) modules: $($dirsString)"; } else {  "MODULE PATH [$_] ***MISSING***";   }}; Write-Host "`$PSHOME: [$PSHOME]"
+
+        Header "Environment"
+        & cmd.exe /c "set|sort"
 
 
     - name: Setup Sql Server
