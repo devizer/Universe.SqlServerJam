@@ -1308,7 +1308,7 @@ function Show-Text-Matrix() {
   }
 }
 
-Write-Host "ANSI"
+Write-Line -TextMagenta -Underline -Bold "ANSI" -Reset "(bold underline magenta)"
 Show-Text-Matrix
 
 function Is-Ansi-Supported() { $false }
@@ -1316,5 +1316,5 @@ function Is-Ansi-Supported() { $false }
 Write-Host "Classic"
 Show-Text-Matrix
 
-Write-Line "That's All. " -TextMagenta -Underline -Bold "Bye"
-Write-Line -Underline "Bye Bye"
+# Write-Line "That's All. " -TextMagenta -Underline -Bold "Bye"
+# Write-Line -Underline "Bye Bye"
