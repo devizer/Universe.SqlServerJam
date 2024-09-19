@@ -16,7 +16,7 @@ $ANSI_COLORS = @{
   TextDarkRed     = "$($Esc)[31m"
   TextDarkMagenta = "$($Esc)[35m"
   TextDarkYellow  = "$($Esc)[33m"
-  TextGray        = "$($Esc)[90m"
+  TextGray        = "$($Esc)[98m"
   TextDarkGray    = "$($Esc)[90m" #?
   TextBlue        = "$($Esc)[94m"
   TextGreen       = "$($Esc)[92m"
@@ -34,7 +34,7 @@ $ANSI_COLORS = @{
   BackDarkMagenta = "$($Esc)[45m"
   BackDarkYellow  = "$($Esc)[43m"
   BackGray        = "$($Esc)[100m"
-  BackDarkGray    = "$($Esc)[100m" #?
+  BackDarkGray    = "$($Esc)[108m" #?
   BackBlue        = "$($Esc)[104m"
   BackGreen       = "$($Esc)[102m"
   BackCyan        = "$($Esc)[106m"
@@ -53,13 +53,15 @@ Function Write-Line([string[]] $directArgs = @()) {
   $ansi="";
   foreach($arg in $arguments) {
     $isControl = $false;
+    $isReset = $false;
     if ($arg.StartsWith("-")) {
       if ($arg.Length -gt 1) {
         $key = $arg.SubString(1);
         if ($ANSI_COLORS -and $ANSI_COLORS[$key]) {
           $ansiValue = $ANSI_COLORS[$key];
           $ansi += $ansiValue;
-          if ($key -eq "Reset") { $text="Gray"; $back="Black"; }
+          $isReset = ($key -eq "Reset");
+          if ($isReset) { $text="Gray"; $back="Black"; }
           if ($key -like "Text*") { $text = $key.SubString(4) }
           if ($key -like "Back*") { $back = $key.SubString(4) }
           $isControl = $true;
@@ -70,6 +72,7 @@ Function Write-Line([string[]] $directArgs = @()) {
       if (Is-Ansi-Supported) { Write-Host "$($ansi)$($arg)" -NoNewLine -ForegroundColor $text -BackgroundColor $back }
       else { Write-Host "$($arg)" -NoNewLine -ForegroundColor $text -BackgroundColor $back }
     }
+    if ($isReset) { $ansi = ""; }
   }
   Write-Host "";
 }
