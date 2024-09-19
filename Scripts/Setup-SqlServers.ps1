@@ -81,7 +81,7 @@ Function Write-Line([string[]] $directArgs = @()) {
       if (Is-Ansi-Supported) { Write-Host "$($ansi)$($arg)" -NoNewLine -ForegroundColor $text -BackgroundColor $back }
       else { Write-Host "$($arg)" -NoNewLine -ForegroundColor $text -BackgroundColor $back }
     }
-    if ($isReset) { $ansi = ""; }
+    # if ($isReset) { $ansi = ""; } TODO: After Text
   }
   Write-Host "";
 }
