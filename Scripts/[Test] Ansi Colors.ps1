@@ -16,7 +16,7 @@ $ANSI_COLORS = @{
   TextDarkRed     = "$($Esc)[31m"
   TextDarkMagenta = "$($Esc)[35m"
   TextDarkYellow  = "$($Esc)[33m"
-  TextGray        = "$($Esc)[98m"
+  TextGray        = "$($Esc)[98m" #?
   TextDarkGray    = "$($Esc)[90m" #?
   TextBlue        = "$($Esc)[94m"
   TextGreen       = "$($Esc)[92m"
@@ -33,7 +33,7 @@ $ANSI_COLORS = @{
   BackDarkRed     = "$($Esc)[41m"
   BackDarkMagenta = "$($Esc)[45m"
   BackDarkYellow  = "$($Esc)[43m"
-  BackGray        = "$($Esc)[100m"
+  BackGray        = "$($Esc)[100m" #?
   BackDarkGray    = "$($Esc)[108m" #?
   BackBlue        = "$($Esc)[104m"
   BackGreen       = "$($Esc)[102m"
@@ -1299,7 +1299,7 @@ function Troubleshoot-Info-Prev([string] $message) {
 # Black DarkBlue DarkGreen DarkCyan DarkRed DarkMagenta DarkYellow Gray DarkGray Blue Green Cyan Red Magenta Yellow White
 
 function Show-Text-Matrix() {
-  $colors = "Black DarkBlue DarkGreen DarkCyan DarkRed DarkMagenta DarkYellow Gray DarkGray Blue Green Cyan Red Magenta Yellow White".Split(" ");
+  $colors = "Black Blue DarkBlue Green DarkGreen Cyan DarkCyan Red DarkRed Magenta DarkMagenta Yellow DarkYellow DarkGray Gray White".Split(" ");
   foreach($back in $colors) {
     $line = @("{0,11}: " -f $back);
 
