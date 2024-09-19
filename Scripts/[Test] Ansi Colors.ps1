@@ -46,6 +46,7 @@ $ANSI_COLORS = @{
 
 # Write-Line "Hello " -TextRed -Bold "World"
 Function Write-Line([string[]] $directArgs = @()) {
+  $isAnsiSupported = Is-Ansi-Supported;
   $directArgs += @($args);
   $arguments = @($directArgs);
   $text="Gray";
@@ -69,7 +70,7 @@ Function Write-Line([string[]] $directArgs = @()) {
       }
     }
     if (-not $isControl) {
-      if (Is-Ansi-Supported) { Write-Host "$($ansi)$($arg)" -NoNewLine -ForegroundColor $text -BackgroundColor $back }
+      if ($isAnsiSupported) { Write-Host "$($ansi)$($arg)" -NoNewLine -ForegroundColor $text -BackgroundColor $back }
       else { Write-Host "$($arg)" -NoNewLine -ForegroundColor $text -BackgroundColor $back }
     }
     # if ($isReset) { $ansi = ""; } TODO: After Text
