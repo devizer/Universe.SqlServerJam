@@ -1,5 +1,5 @@
-# Include Detected: [ src\Includes\Synopsis.ps1 ]
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\SqlSetup.PS1Project\src\Includes\Synopsis.ps1]
+# Include Directive: [ src\Includes\Synopsis.ps1 ]
+# Include File: [\SqlSetup.PS1Project\src\Includes\Synopsis.ps1]
 <#
  .Synopsis
   SQL Server and Local DB Management.
@@ -33,85 +33,8 @@ Alternative Installation
 iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/SqlServer-Version-Management.ps1'))
 #>
 
-# Include Detected: [ ..\Includes\*.ps1 ]
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\$ANSI_COLORS.ps1]
-$Esc=[char]27;
-$ANSI_COLORS = @{ 
-  Reset     = "$($Esc)[0m"
-  Bold      = "$($Esc)[1m"
-  Underline = "$($Esc)[4m"
-  Inverse   = "$($Esc)[7m"
-  
-  TextBlack       = "$($Esc)[30m"
-  TextDarkBlue    = "$($Esc)[34m"
-  TextDarkGreen   = "$($Esc)[32m"
-  TextDarkCyan    = "$($Esc)[36m"
-  TextDarkRed     = "$($Esc)[31m"
-  TextDarkMagenta = "$($Esc)[35m"
-  TextDarkYellow  = "$($Esc)[33m"
-  TextGray        = "$($Esc)[98m" #?
-  TextDarkGray    = "$($Esc)[90m" #?
-  TextBlue        = "$($Esc)[94m"
-  TextGreen       = "$($Esc)[92m"
-  TextCyan        = "$($Esc)[96m"
-  TextRed         = "$($Esc)[91m"
-  TextMagenta     = "$($Esc)[95m"
-  TextYellow      = "$($Esc)[93m"
-  TextWhite       = "$($Esc)[97m"
-
-  BackBlack       = "$($Esc)[40m"
-  BackDarkBlue    = "$($Esc)[44m"
-  BackDarkGreen   = "$($Esc)[42m"
-  BackDarkCyan    = "$($Esc)[46m"
-  BackDarkRed     = "$($Esc)[41m"
-  BackDarkMagenta = "$($Esc)[45m"
-  BackDarkYellow  = "$($Esc)[43m"
-  BackGray        = "$($Esc)[100m" #?
-  BackDarkGray    = "$($Esc)[108m" #?
-  BackBlue        = "$($Esc)[104m"
-  BackGreen       = "$($Esc)[102m"
-  BackCyan        = "$($Esc)[106m"
-  BackRed         = "$($Esc)[101m"
-  BackMagenta     = "$($Esc)[105m"
-  BackYellow      = "$($Esc)[103m"
-  BackWhite       = "$($Esc)[107m"
-}
-
-# Write-Line "Hello " -TextRed -Bold "World"
-Function Write-Line([string[]] $directArgs = @()) {
-  $isAnsiSupported = Is-Ansi-Supported;
-  $directArgs += @($args);
-  $arguments = @($directArgs);
-  $text="Gray";
-  $back="Black";
-  $ansi="";
-  foreach($arg in $arguments) {
-    $isControl = $false;
-    $isReset = $false;
-    if ($arg.StartsWith("-")) {
-      if ($arg.Length -gt 1) {
-        $key = $arg.SubString(1);
-        if ($ANSI_COLORS -and $ANSI_COLORS[$key]) {
-          $ansiValue = $ANSI_COLORS[$key];
-          $ansi += $ansiValue;
-          $isReset = ($key -eq "Reset");
-          if ($isReset) { $text="Gray"; $back="Black"; }
-          if ($key -like "Text*") { $text = $key.SubString(4) }
-          if ($key -like "Back*") { $back = $key.SubString(4) }
-          $isControl = $true;
-        }
-      }
-    }
-    if (-not $isControl) {
-      if ($isAnsiSupported) { Write-Host "$($ansi)$($arg)" -NoNewLine -ForegroundColor $text -BackgroundColor $back }
-      else { Write-Host "$($arg)" -NoNewLine -ForegroundColor $text -BackgroundColor $back }
-    }
-    # if ($isReset) { $ansi = ""; } TODO: After Text
-  }
-  Write-Host "";
-}
-
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\$Full7zLinksMetadata.ps1]
+# Include Directive: [ ..\Includes\*.ps1 ]
+# Include File: [\Includes\$Full7zLinksMetadata.ps1]
 $Full7zLinksMetadata_onWindows = @(
   @{ Ver = 2301; 
      X64Links = @(
@@ -200,7 +123,7 @@ $Full7zLinksMetadata_onWindows = @(
   https://www.7-zip.org/a/7zr.exe
 #>
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\$VcRuntimeLinksMetadata.ps1]
+# Include File: [\Includes\$VcRuntimeLinksMetadata.ps1]
 $VcRuntimeLinksMetadata = @(
   @{ Ver=14; 
      Args="/install /passive /norestart"; 
@@ -236,7 +159,7 @@ $VcRuntimeLinksMetadata = @(
   }
 );
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Append-All-Text.ps1]
+# Include File: [\Includes\Append-All-Text.ps1]
 function Append-All-Text( [string]$file, [string]$text ) {
   Create-Directory-for-File $file
   $utf8=new-object System.Text.UTF8Encoding($false); 
@@ -249,7 +172,7 @@ function Write-All-Text( [string]$file, [string]$text ) {
   [System.IO.File]::WriteAllText($file, $text, $utf8);
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Bootstrap-Aria2-If-Required.ps1]
+# Include File: [\Includes\Bootstrap-Aria2-If-Required.ps1]
 # on windows 7 api.gitgub.com, etc are not available
 function Bootstrap-Aria2-If-Required(
   [bool] $force = $false,
@@ -276,10 +199,10 @@ function Bootstrap-Aria2-If-Required(
   }
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Combine-Path.ps1]
+# Include File: [\Includes\Combine-Path.ps1]
 function Combine-Path($start) { foreach($a in $args) { $start=[System.IO.Path]::Combine($start, $a); }; $start }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Create-Directory.ps1]
+# Include File: [\Includes\Create-Directory.ps1]
 function Create-Directory($dirName) { 
   if ($dirName) { 
     $err = $null;
@@ -298,7 +221,7 @@ function Create-Directory-for-File($fileFullName) {
   Create-Directory "$dirName";
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Demo-Test-of-Is-Vc-Runtime-Installed.ps1]
+# Include File: [\Includes\Demo-Test-of-Is-Vc-Runtime-Installed.ps1]
 function Demo-Test-of-Is-Vc-Runtime-Installed() {
   foreach($arch in @("X86", "X64", "ARM64")) {
     Write-Host -NoNewline "$("{0,5}" -f $arch)|   "
@@ -311,7 +234,7 @@ function Demo-Test-of-Is-Vc-Runtime-Installed() {
   }
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Demo-Test-of-Platform-Info.ps1]
+# Include File: [\Includes\Demo-Test-of-Platform-Info.ps1]
 function Demo-Test-of-Platform-Info() {
   echo "Memory $((Get-Memory-Info).Description)"
   echo "OS Platform: '$(Get-Os-Platform)'"
@@ -322,7 +245,7 @@ function Demo-Test-of-Platform-Info() {
   Measure-Action "The CPU Name" {echo "CPU: '$(Get-Cpu-Name)'"}
 }; # test
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Download-And-Install-Specific-VC-Runtime.ps1]
+# Include File: [\Includes\Download-And-Install-Specific-VC-Runtime.ps1]
 function Download-And-Install-Specific-VC-Runtime([string] $arch, [int] $version, [bool] $wait = $true) {
   $fullPath = Download-Specific-VC-Runtime $arch $version
   $commandLine=$VcRuntimeLinksMetadata | where { "$($_.Ver)" -eq "$version" } | % { $_.Args }
@@ -337,7 +260,7 @@ function Download-And-Install-Specific-VC-Runtime([string] $arch, [int] $version
   return $isOk
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Download-File-FailFree-and-Cached.ps1]
+# Include File: [\Includes\Download-File-FailFree-and-Cached.ps1]
 function Download-File-FailFree-and-Cached([string] $fullName, [string[]] $urlList, [string] $algorithm="SHA512") {
   
   if ((Is-File-Not-Empty "$fullName") -and (Is-File-Not-Empty "$fullName.$algorithm")) { 
@@ -358,7 +281,7 @@ function Download-File-FailFree-and-Cached([string] $fullName, [string[]] $urlLi
   return $false;
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Download-File-Managed.ps1]
+# Include File: [\Includes\Download-File-Managed.ps1]
 function Download-File-Managed([string] $url, [string]$outfile) {
   $dirName=[System.IO.Path]::GetDirectoryName($outfile)
   Create-Directory "$dirName";
@@ -427,7 +350,7 @@ function Download-File-FailFree([string] $outFile, [string[]] $urlList) {
 }
 
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Download-Specific-VC-Runtime.ps1]
+# Include File: [\Includes\Download-Specific-VC-Runtime.ps1]
 function Download-Specific-VC-Runtime([string] $arch, [int] $version) {
   $algorithm="SHA512"
   $downloadFolder = Combine-Path "$(Get-PS1-Repo-Downloads-Folder)" "VC-Runtime"
@@ -455,7 +378,7 @@ function Download-Specific-VC-Runtime([string] $arch, [int] $version) {
   return "";
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Execute-Process-Smarty.ps1]
+# Include File: [\Includes\Execute-Process-Smarty.ps1]
 function Execute-Process-Smarty {
   Param(
     [string] $title, 
@@ -524,7 +447,7 @@ function Execute-Process-Smarty {
   return $ret;
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Extract-Archive-by-Default-Full-7z.ps1]
+# Include File: [\Includes\Extract-Archive-by-Default-Full-7z.ps1]
 function Extract-Archive-by-Default-Full-7z([string] $fromArchive, [string] $toDirectory, $extractCommand = "x") {
   New-Item -Path "$($toDirectory)" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
   $full7zExe = "$(Get-Full7z-Exe-FullPath-for-Windows)"
@@ -535,7 +458,7 @@ function Extract-Archive-by-Default-Full-7z([string] $fromArchive, [string] $toD
   return $ret;
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Format-Table-Smarty.ps1]
+# Include File: [\Includes\Format-Table-Smarty.ps1]
 function Format-Table-Smarty
 { 
    $arr = (@($Input) | % { [PSCustomObject]$_} | Format-Table -AutoSize | Out-String -Width 2048).Split(@([char]13, [char]10)) | ? { "$_".Length -gt 0 };
@@ -543,7 +466,7 @@ function Format-Table-Smarty
    [string]::Join([Environment]::NewLine, $arr);
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-7z-Exe-FullPath-for-Windows.ps1]
+# Include File: [\Includes\Get-7z-Exe-FullPath-for-Windows.ps1]
 function Get-Mini7z-Exe-FullPath-for-Windows() {
   $algorithm="SHA512"
 
@@ -566,7 +489,7 @@ function Get-Mini7z-Exe-FullPath-for-Windows() {
   return $null
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Aria2c-Exe-FullPath-for-Windows.ps1]
+# Include File: [\Includes\Get-Aria2c-Exe-FullPath-for-Windows.ps1]
 # arch: x86|x64|arm64|Xp
 function Get-Aria2c-Exe-FullPath-for-Windows([string] $arch) {
   $linkXp="https://github.com/q3aql/aria2-static-builds/releases/download/v1.19.2/aria2-1.19.2-win-xp-build1.7z"
@@ -634,7 +557,7 @@ function Get-Aria2c-Exe-FullPath-for-Windows([string] $arch) {
   https://github.com/aria2/aria2/releases/download/release-1.36.0/aria2-1.36.0-win-64bit-build1.zip
 #>
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-CPU-Architecture-Suffix-for-Windows.ps1]
+# Include File: [\Includes\Get-CPU-Architecture-Suffix-for-Windows.ps1]
 
 # x86 (0), MIPS (1), Alpha (2), PowerPC (3), ARM (5), ia64 (6) Itanium-based systems, x64 (9), ARM64 (12)
 function Get-CPU-Architecture-Suffix-for-Windows-Implementation() {
@@ -664,7 +587,7 @@ function Get-CPU-Architecture-Suffix-for-Windows() {
   return $Global:CPUArchitectureSuffixforWindows
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Cpu-Name.ps1]
+# Include File: [\Includes\Get-Cpu-Name.ps1]
 function Get-Cpu-Name-Implementation {
   $platform = Get-Os-Platform
   if ($platform -eq "Windows") {
@@ -704,7 +627,7 @@ function Get-Cpu-Name {
   return $Global:_Cpu_Name;
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Folder-Size.ps1]
+# Include File: [\Includes\Get-Folder-Size.ps1]
 function Get-Folder-Size([string] $folder) {
   if (Test-Path "$folder" -PathType Container) {
      $subFolderItems = Get-ChildItem "$folder" -recurse -force | Where-Object {$_.PSIsContainer -eq $false} | Measure-Object -property Length -sum | Select-Object Sum
@@ -713,7 +636,7 @@ function Get-Folder-Size([string] $folder) {
 }
 
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Full7z-Exe-FullPath-for-Windows.ps1]
+# Include File: [\Includes\Get-Full7z-Exe-FullPath-for-Windows.ps1]
 # arch: x86|x64|arm64
 # version: 1604|2301
 function Get-Full7z-Exe-FullPath-for-Windows([string] $arch, [string] $version = "2301") {
@@ -820,7 +743,7 @@ function ExtractArchiveByDefault7zFull([string] $fromArchive, [string] $toDirect
   https://www.7-zip.org/a/7zr.exe
 #>
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Github-Latest-Release.ps1]
+# Include File: [\Includes\Get-Github-Latest-Release.ps1]
 function Get-Github-Latest-Release([string] $owner, [string] $repo) {
   $queryLatest="https://api.github.com/repos/$owner/$repo/releases/latest" # "tag_name": "v3.227.2",
   $qyeryResultFullName = Combine-Path (Get-PS1-Repo-Downloads-Folder) "Queries" "Github Latest Release" "$(([System.Guid]::NewGuid()).ToString("N")).json"
@@ -839,7 +762,7 @@ function Get-Github-Latest-Release([string] $owner, [string] $repo) {
 }
 
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Github-Releases.ps1]
+# Include File: [\Includes\Get-Github-Releases.ps1]
 function Get-Github-Releases([string] $owner, [string] $repo) {
   $url="https://api.github.com/repos/$owner/$repo/releases?per_page=128"
   # https://api.github.com/repos/microsoft/azure-pipelines-agent/releases?per_page=128 
@@ -885,13 +808,13 @@ function Get-Github-Releases([string] $owner, [string] $repo) {
   return $ret | where { -not ($_.IsDraft) };
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Installed-VC-Runtimes.ps1]
+# Include File: [\Includes\Get-Installed-VC-Runtimes.ps1]
 function Get-Installed-VC-Runtimes() {
   $softwareFilter = { $_.name -like "*Visual C++*" -and $_.vendor -like "*Microsoft*" -and ($_.name -like "*Runtime*" -or $_.name -like "*Redistributable*")}
   return Get-Speedy-Software-Product-List | where $softwareFilter
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Memory-Info.ps1]
+# Include File: [\Includes\Get-Memory-Info.ps1]
 function Get-Memory-Info {
   [OutputType([object])] param()
 
@@ -936,7 +859,7 @@ function Get-Memory-Info {
 
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Nix-Uname-Value.ps1]
+# Include File: [\Includes\Get-Nix-Uname-Value.ps1]
 
 # Linux/Darwin/FreeBSD, Error on Windows
 function Get-Nix-Uname-Value {
@@ -944,7 +867,7 @@ function Get-Nix-Uname-Value {
   return (& uname "$arg" | Out-String-And-TrimEnd)
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Os-Platform.ps1]
+# Include File: [\Includes\Get-Os-Platform.ps1]
 # Returns Linux/Windows/Mac/FreeBSD
 function Get-Os-Platform {
   [OutputType([string])] param()
@@ -965,7 +888,7 @@ function Get-Os-Platform {
   #>
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-PS1-Repo-Downloads-Folder.ps1]
+# Include File: [\Includes\Get-PS1-Repo-Downloads-Folder.ps1]
 function Get-PS1-Repo-Downloads-Folder() {
   return (GetPersistentTempFolder "PS1_REPO_DOWNLOAD_FOLDER" "PS1 Repo Downloads");
 }
@@ -1004,7 +927,7 @@ function GetPersistentTempFolder([string] $envPrefix, [string] $pathSuffix) {
 }
 
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Smarty-FileHash.ps1]
+# Include File: [\Includes\Get-Smarty-FileHash.ps1]
 # $algorithm: MD5|SHA1|SHA256|SHA384|SHA512
 function Get-Smarty-FileHash([string] $fileName, [string] $algorithm = "MD5") {
   $fileExists = (Test-Path $fileName -PathType Leaf)
@@ -1025,7 +948,7 @@ function Get-Smarty-FileHash([string] $fileName, [string] $algorithm = "MD5") {
 }
 
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Smarty-FolderHash.ps1]
+# Include File: [\Includes\Get-Smarty-FolderHash.ps1]
 # Get-Smarty-FileHash([string] $fileName, [string] $algorithm = "MD5") {
 function Get-Smarty-FolderHash([string] $rootFolder, [string] $algorithm = "MD5", [bool] $includeDates = $false) {
   $startAt = [System.Diagnostics.Stopwatch]::StartNew()
@@ -1054,7 +977,7 @@ function Get-Smarty-FolderHash([string] $rootFolder, [string] $algorithm = "MD5"
   return $ret;
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Get-Speedy-Software-Product-List.ps1]
+# Include File: [\Includes\Get-Speedy-Software-Product-List.ps1]
 function Get-Speedy-Software-Product-List() {
   $ret=@();
   $origins=@(
@@ -1086,7 +1009,7 @@ function Get-Speedy-Software-Product-List() {
 # Get-Speedy-Software-Product-List | ft
 # $localDbList = Get-Speedy-Software-Product-List | ? { $_.Name -match "LocalDB" -and $_.Vendor -match "Microsoft" }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Has-Cmd.ps1]
+# Include File: [\Includes\Has-Cmd.ps1]
 function Has-Cmd {
   param([string] $arg)
   if ("$arg" -eq "") { return $false; }
@@ -1099,11 +1022,11 @@ function Select-WMI-Objects([string] $class) {
   if (-not $ret) { Write-Host "Warning ! Missing neither Get-CIMInstance nor Get-WmiObject" -ForegroundColor DarkRed; }
   return $ret;
 }
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\IIf.ps1]
+# Include File: [\Includes\IIf.ps1]
 function IIf([bool] $flag, $trueResult, $falseResult) {
   if ($flag) { return $trueResult; } else { return $falseResult; }
 }
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Is-BuildServer.ps1]
+# Include File: [\Includes\Is-BuildServer.ps1]
 function Is-BuildServer() {
   return "$(Try-BuildServerType)" -ne "";
 }
@@ -1145,13 +1068,13 @@ function Try-BuildServerType() {
 }
 # Write-Host "Try-BuildServerType: [$(Try-BuildServerType)], Is-BuildServer: $(Is-BuildServer)"
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Is-File-Not-Empty.ps1]
+# Include File: [\Includes\Is-File-Not-Empty.ps1]
 function Is-File-Not-Empty([string] $fileName) {
   try { $fi = new-object System.IO.FileInfo($fileName); return $fi.Length -gt 0; } catch {}; return $fasle; 
 }
 
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Is-Intel-Emulation-Available.ps1]
+# Include File: [\Includes\Is-Intel-Emulation-Available.ps1]
 # On non-arm returns $false
 function Is-Intel-Emulation-Available([int] $bitCount <# 32|64 #> = 64) {
   $systemRoot="$($ENV:SystemRoot)"
@@ -1162,7 +1085,7 @@ function Is-Intel-Emulation-Available([int] $bitCount <# 32|64 #> = 64) {
 
 
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Is-Vc-Runtime-Installed.ps1]
+# Include File: [\Includes\Is-Vc-Runtime-Installed.ps1]
 function Is-Vc-Runtime-Installed([int] $major, [string] $arch) {
   $vcList = Get-Installed-VC-Runtimes
   # Does not support x86 v8 (2005) on x86 Windows
@@ -1172,7 +1095,11 @@ function Is-Vc-Runtime-Installed([int] $major, [string] $arch) {
   return "$($found)" -ne ""; # v2+
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Measure-Action.ps1]
+# Include File: [\Includes\Lazy-Aggregator.ps1]
+function Update-Lazy-Aggregator([string] $storageFileName, [string] $keyName, [HashTable] $properties) {
+    # TODO:
+}
+# Include File: [\Includes\Measure-Action.ps1]
 function Measure-Action {
   Param(
     [string] $Title,
@@ -1195,7 +1122,7 @@ function Measure-Action {
   $ErrorActionPreference=$ea
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Out-String-And-TrimEnd.ps1]
+# Include File: [\Includes\Out-String-And-TrimEnd.ps1]
 Function Out-String-And-TrimEnd
 {
   Param ([int] $Skip=0, [int] $Take=2000000000)
@@ -1204,7 +1131,7 @@ Function Out-String-And-TrimEnd
   End { return [string]::join([System.Environment]::NewLine, $list.ToArray()).TrimEnd(@([char]13,[char]10)) }
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Remove-Windows-Service-If-Exists.ps1]
+# Include File: [\Includes\Remove-Windows-Service-If-Exists.ps1]
 function Remove-Windows-Service-If-Exists([string] $serviceName, [string] $humanName) {
   # Delete Existing?
   $serviceStatus = [string](Get-Service -Name $serviceName -EA SilentlyContinue).Status
@@ -1221,7 +1148,7 @@ function Remove-Windows-Service-If-Exists([string] $serviceName, [string] $human
 
 # Remove-Windows-Service-If-Exists "PG$9_26_X86" "Postgres SQL Windows Service"
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Say.ps1]
+# Include File: [\Includes\Say.ps1]
 function Say { # param( [string] $message )
     if ($Global:_Say_Stopwatch -eq $null) { $Global:_Say_Stopwatch = [System.Diagnostics.Stopwatch]::StartNew(); }
     $milliSeconds=$Global:_Say_Stopwatch.ElapsedMilliseconds
@@ -1261,7 +1188,7 @@ function Get-Windows-Release-Id() {
   return $null;
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Start-Stopwatch.ps1]
+# Include File: [\Includes\Start-Stopwatch.ps1]
 function Start-Stopwatch() {
   $ret = [PSCustomObject] @{
     StartAt = [System.Diagnostics.Stopwatch]::StartNew();
@@ -1282,7 +1209,7 @@ function Start-Stopwatch() {
   $x = Start-Stopwatch; Sleep -Milliseconds 123; "[$($x.GetElapsed()) seconds]"
 #>
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\To-Boolean.ps1]
+# Include File: [\Includes\To-Boolean.ps1]
 function To-Boolean() { param([string] $name, [string] $value)
   if (($value -eq "True") -Or ($value -eq "On") -Or ($value -eq "1") -Or ("$value".ToLower().StartsWith("enable"))) { return $true; }
   if (("$value" -eq "") -Or ($value -eq "False") -Or ($value -eq "Off") -Or ($value -eq "0") -Or ("$value".ToLower().StartsWith("disable"))) { return $false; }
@@ -1290,7 +1217,7 @@ function To-Boolean() { param([string] $name, [string] $value)
   return $false;
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes\Troubleshoot-Info.ps1]
+# Include File: [\Includes\Troubleshoot-Info.ps1]
 function Troubleshoot-Info() {
   $enableTroubleShoot = To-Boolean "PS1_TROUBLE_SHOOT" "$($ENV:PS1_TROUBLE_SHOOT)"
   if (-not $enableTroubleShoot) { return; }
@@ -1309,8 +1236,8 @@ function Troubleshoot-Info() {
     $toWrite += "$line"
   }
   # Write-Host -NoNewLine "] " -ForegroundColor DarkCyan
-  $toWrite += "] "
-  $color="";
+  $toWrite += @("] ", "-Reset");
+  $color="Gray";
   $args | % {
     if ($_ -eq "-Highlight") { 
       $color = "Cyan";
@@ -1323,10 +1250,12 @@ function Troubleshoot-Info() {
         # Write-Host -NoNewLine "$_"; 
         $toWrite += $("-Reset", "$_");
       }
-      $color = ""
+      $color = "Gray"
+      $toWrite += "-Reset"
     }
   }
   Write-Line -DirectArgs $toWrite;
+  # $toWrite
 }
 
 <#
@@ -1346,8 +1275,92 @@ function Troubleshoot-Info-Prev([string] $message) {
 #>
 
 # Black DarkBlue DarkGreen DarkCyan DarkRed DarkMagenta DarkYellow Gray DarkGray Blue Green Cyan Red Magenta Yellow White
-# Include Detected: [ ..\Includes.SqlServer\*.ps1 ]
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\$SqlServer2010DownloadLinks.ps1]
+# Include File: [\Includes\Write-Line.ps1]
+function Get-ANSI-Colors() {
+  $isAzurePipeline = (Try-BuildServerType) -eq "TF_BUILD";
+  $Esc=[char]27;
+  $ANSI_COLORS = @{ 
+    Reset     = "$($Esc)[0m"
+    Bold      = "$($Esc)[1m"
+    Underline = "$($Esc)[4m"
+    Inverse   = "$($Esc)[7m"
+    
+    TextBlack       = "$($Esc)[30m"
+    TextDarkBlue    = "$($Esc)[34m"
+    TextDarkGreen   = "$($Esc)[32m"
+    TextDarkCyan    = "$($Esc)[36m"
+    TextDarkRed     = "$($Esc)[31m"
+    TextDarkMagenta = "$($Esc)[35m"
+    TextDarkYellow  = "$($Esc)[33m"
+    # 98 is incorrent on azure pipeline
+    TextGray        = IIF $isAzurePipeline "$($Esc)[90m$($Esc)[98m" "$($Esc)[98m" #?
+    TextDarkGray    = "$($Esc)[90m" #?
+    TextBlue        = "$($Esc)[94m"
+    TextGreen       = "$($Esc)[92m"
+    TextCyan        = "$($Esc)[96m"
+    TextRed         = "$($Esc)[91m"
+    TextMagenta     = "$($Esc)[95m"
+    TextYellow      = "$($Esc)[93m"
+    TextWhite       = "$($Esc)[97m"
+
+    BackBlack       = "$($Esc)[40m"
+    BackDarkBlue    = "$($Esc)[44m"
+    BackDarkGreen   = "$($Esc)[42m"
+    BackDarkCyan    = "$($Esc)[46m"
+    BackDarkRed     = "$($Esc)[41m"
+    BackDarkMagenta = "$($Esc)[45m"
+    BackDarkYellow  = "$($Esc)[43m"
+    BackGray        = "$($Esc)[100m" #?
+    BackDarkGray    = "$($Esc)[108m" #?
+    BackBlue        = "$($Esc)[104m"
+    BackGreen       = "$($Esc)[102m"
+    BackCyan        = "$($Esc)[106m"
+    BackRed         = "$($Esc)[101m"
+    BackMagenta     = "$($Esc)[105m"
+    BackYellow      = "$($Esc)[103m"
+    BackWhite       = "$($Esc)[107m"
+  }
+  $ANSI_COLORS
+}
+
+# Write-Line "Hello " -TextRed -Bold "World"
+Function Write-Line([string[]] $directArgs = @()) {
+  $ansiColors = Get-ANSI-Colors;
+  $isAnsiSupported = Is-Ansi-Supported;
+  $directArgs += @($args);
+  $arguments = @($directArgs);
+  $text="Gray";
+  $back="Black";
+  $ansi="";
+  foreach($arg in $arguments) {
+    $isControl = $false;
+    $isReset = $false;
+    if ($arg.StartsWith("-")) {
+      if ($arg.Length -gt 1) {
+        $key = $arg.SubString(1);
+        if ($ansiColors -and $ansiColors[$key]) {
+          $ansiValue = $ansiColors[$key];
+          $ansi += $ansiValue;
+          $isReset = ($key -eq "Reset");
+          if ($isReset) { $text="Gray"; $back="Black"; }
+          if ($key -like "Text*") { $text = $key.SubString(4) }
+          if ($key -like "Back*") { $back = $key.SubString(4) }
+          $isControl = $true;
+        }
+      }
+    }
+    if (-not $isControl) {
+      if ($isAnsiSupported) { Write-Host "$($ansi)$($arg)" -NoNewLine -ForegroundColor $text -BackgroundColor $back }
+      # if ($isAnsiSupported) { Write-Host "$($ansi)$($arg)" -NoNewLine }
+      else { Write-Host "$($arg)" -NoNewLine -ForegroundColor $text -BackgroundColor $back }
+    }
+    # if ($isReset) { $ansi = ""; } TODO: After Text
+  }
+  Write-Host "";
+}
+
+# Include Directive: [ ..\Includes.SqlServer\*.ps1 ]
+# Include File: [\Includes.SqlServer\$SqlServer2010DownloadLinks.ps1]
 $SqlServer2010DownloadLinks = @(
   @{ 
     Version="2014-x64"; #SP3
@@ -1457,14 +1470,14 @@ was: 9.0.2047 (sp1) https://ia601402.us.archive.org/34/items/Microsoft_SQL_Serve
 now: 9.0.5000 (sp4) https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2011/01/sqlserver2005expressadvancedsp4-kb2463332-x86-enu_b8640fde879a23a2372b27f158d54abb5079033e.exe
 #>
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\$SqlServerAlreadyUpdatedList.ps1]
+# Include File: [\Includes.SqlServer\$SqlServerAlreadyUpdatedList.ps1]
 $SqlServerAlreadyUpdatedList = @(
   @{ Version = "2008R2-x64"; MediaType = "Developer"; },
   @{ Version = "2008R2-x86"; MediaType = "Developer"; },
   @{ Version = "2005-x86";   MediaType = "Core"; }
 );
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\$SqlServerDownloadLinks.ps1]
+# Include File: [\Includes.SqlServer\$SqlServerDownloadLinks.ps1]
 $SqlServerDownloadLinks = @(
    @{
       Version="2022"
@@ -1553,7 +1566,7 @@ $SqlServerDownloadLinks_Via_Manager = @(
 
 # $SqlServerDownloadLinks | ConvertTo-Json -Depth 32
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-2010-SQLServer-and-Extract.ps1]
+# Include File: [\Includes.SqlServer\Download-2010-SQLServer-and-Extract.ps1]
 function Download-2010-SQLServer-and-Extract {
   Param(
     [string] $version,  # (2014|2012|2008R2|2008)-(x86|x64)
@@ -1641,7 +1654,7 @@ function Download-2010-SQLServer-and-Extract {
   return $ret;
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-Fresh-SQLServer-and-Extract.ps1]
+# Include File: [\Includes.SqlServer\Download-Fresh-SQLServer-and-Extract.ps1]
 function Download-Fresh-SQLServer-and-Extract {
   Param(
     [string] $version,  # 2016|2017|2019|2022
@@ -1809,7 +1822,7 @@ function Download-Fresh-SQLServer-and-Extract-Via-Manager {
   return $ret;
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-SQLServer-and-Extract.ps1]
+# Include File: [\Includes.SqlServer\Download-SQLServer-and-Extract.ps1]
 function Download-SQLServer-and-Extract {
   Param(
     [string] $version,  # 2016|2017|2019|2022
@@ -1860,7 +1873,7 @@ function ExtractSqlServerSetup([string] $title, [string] $exeArchive, [string] $
   return ($extractStatus.ExitCode -eq 0);
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Download-SqlServer-Update.ps1]
+# Include File: [\Includes.SqlServer\Download-SqlServer-Update.ps1]
 function Download-SqlServer-Update {
   Param(
     [string] $version,  # 2005...2022
@@ -1897,7 +1910,7 @@ UpdateFolder   C:\SQL-Downloads\SQL-2017-CU31
 UpdateLauncher C:\SQL-Downloads\SQL-2017-CU31\SQLServer2017-KB5016884-x64.exe                                                    
 #>
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Enumerate-SQLServer-Downloads.ps1]
+# Include File: [\Includes.SqlServer\Enumerate-SQLServer-Downloads.ps1]
 function Enumerate-SQLServer-Downloads() {
   $versions = "2005-x86", "2008-x86", "2008-x64", "2008R2-x86", "2008R2-x64", "2012-x86", "2012-x64", "2014-x86", "2014-x64", "2016", "2017", "2019", "2022";
   [array]::Reverse($versions);
@@ -1925,7 +1938,7 @@ function Enumerate-Plain-SQLServer-Downloads() {
   }
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Find-LocalDb-SqlServers.ps1]
+# Include File: [\Includes.SqlServer\Find-LocalDb-SqlServers.ps1]
 # Super Fast
 function Find-LocalDb-SqlServer() {
   $parentKey = Get-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions" -EA SilentlyContinue
@@ -1960,7 +1973,7 @@ function Start-LocalDb-SqlServer([int] $timeoutSec = 60) {
 # Find-LocalDb-SqlServers
 # Start-LocalDb-SqlServer -timeout 1
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Find-Local-SqlServers.ps1]
+# Include File: [\Includes.SqlServer\Find-Local-SqlServers.ps1]
 # Super Fast
 function Find-Local-SqlServers() {
   $candidates = @(@{RegPath="Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSSQLServer";Service="MSSQLSERVER";Instance="(local)";});
@@ -1991,7 +2004,7 @@ function Find-Local-SqlServers() {
 # Write-Host "START SERVICES" -ForegroundColor DarkGreen
 # Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | % { if ($_.Status -ne "Running") { Write-Host "Starting $($_.Name)"; Start-Service "$($_.Name)" }}
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Find-SQLServer-Meta.ps1]
+# Include File: [\Includes.SqlServer\Find-SQLServer-Meta.ps1]
 function Find-SQLServer-Meta([string] $version, [string] $mediaType) {
   $ret = @{ Version = $version; MediaType = $mediaType; }
 
@@ -2021,7 +2034,7 @@ function Find-SQLServer-Meta([string] $version, [string] $mediaType) {
   }
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Find-SqlServer-SetupLogs.ps1]
+# Include File: [\Includes.SqlServer\Find-SqlServer-SetupLogs.ps1]
 function Find-SqlServer-SetupLogs() {
   $sysDrive = "$($ENV:SystemDrive)"
   $folders = @("$sysDrive\Program Files", "$sysDrive\Program Files (x86)", "C:\Program Files", "C:\Program Files (x86)", "$($Env:ProgramFiles)", "${Env:ProgramFiles(x86)}")
@@ -2050,7 +2063,7 @@ function Find-SqlServer-SetupLogs() {
 # (Find-SqlServer-SetupLogs).Length; Find-SqlServer-SetupLogs
 
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Get-Builtin-Windows-Group-Name.ps1]
+# Include File: [\Includes.SqlServer\Get-Builtin-Windows-Group-Name.ps1]
 function Get-Builtin-Windows-Group-Name([string] $groupKind) {
    # Windows Only
    $sid="";
@@ -2068,7 +2081,7 @@ function Get-Builtin-Windows-Group-Name([string] $groupKind) {
 }
 # @("Administrators", "PowerUsers", "Users") | % { "$($_): '$(Get-Builtin-Windows-Group-Name $_)'" }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Get-SqlServer-Downloads-Folder.ps1]
+# Include File: [\Includes.SqlServer\Get-SqlServer-Downloads-Folder.ps1]
 function Get-SqlServer-Setup-Folder() {
   return (GetPersistentTempFolder "SQLSERVERS_SETUP_FOLDER" "SQL-Setup");
 }
@@ -2077,11 +2090,11 @@ function Get-SqlServer-Media-Folder() {
   return (GetPersistentTempFolder "SQLSERVERS_MEDIA_FOLDER" "SQL Media");
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Get-System-Drive.ps1]
+# Include File: [\Includes.SqlServer\Get-System-Drive.ps1]
 function Get-System-Drive() { $ret = "$($Env:SystemDrive)"; $c = "$([System.IO.Path]::DirectorySeparatorChar)"; if (-not ($ret.EndsWith($c))) { $ret += $c; }; return $ret; }
   
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Install-SQLServer.ps1]
+# Include File: [\Includes.SqlServer\Install-SQLServer.ps1]
 <# 
 
 META
@@ -2303,9 +2316,9 @@ function Install-SQLServer {
   }
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Is-SqlServer-Setup-Cache-Enabled.ps1]
+# Include File: [\Includes.SqlServer\Is-SqlServer-Setup-Cache-Enabled.ps1]
 function Is-SqlServer-Setup-Cache-Enabled() { $false; }
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Parse-SqlServers-Input.ps1]
+# Include File: [\Includes.SqlServer\Parse-SqlServers-Input.ps1]
 function Parse-SqlServers-Input { param( [string] $list)
     # Say "Installing SQL Server(s) by tags: $list"
     $rawServerList = "$list".Split(@([char]44, [char]59));
@@ -2356,7 +2369,7 @@ function Parse-SqlServers-Input { param( [string] $list)
 <#
   2014 --> 2014-x64 Developer on x64, 
 #>
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Publish-SQLServer-SetupLogs.ps1]
+# Include File: [\Includes.SqlServer\Publish-SQLServer-SetupLogs.ps1]
 function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
   New-Item -ItemType Directory -Path "$toFolder" -EA SilentlyContinue | out-null
   $folders = Find-SqlServer-SetupLogs
@@ -2373,7 +2386,7 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
   }
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Query-SqlServer-Version.ps1]
+# Include File: [\Includes.SqlServer\Query-SqlServer-Version.ps1]
 function Query-SqlServer-Version([string] $title, [string] $connectionString, <# or #>[string] $instance, [int] $timeoutSec = 30) {
   if (-not $connectionString) { $connectionString = "Server=$($instance);Integrated Security=SSPI;Connection Timeout=2;Pooling=False" }
   $startAt = [System.Diagnostics.Stopwatch]::StartNew();
@@ -2408,7 +2421,7 @@ Cast(ISNULL(ServerProperty('ProductUpdateLevel'), '') as nvarchar) +
 # Query-SqlServer-Version -Title "FAKE" -Instance "(local)\22" -Timeout 2
 # Query-SqlServer-Version -Title "SQL 2005" -Instance "(local)\SQL_2005_SP4_X86" -Timeout 2
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Setup-SqlServers.ps1]
+# Include File: [\Includes.SqlServer\Setup-SqlServers.ps1]
 function Setup-SqlServers() {
 Param(
   [string] $sqlServers,
@@ -2459,7 +2472,7 @@ TODO:
    return $errors;
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Try-Get-FileName-by-Uri.ps1]
+# Include File: [\Includes.SqlServer\Try-Get-FileName-by-Uri.ps1]
 function Try-Get-FileName-by-Uri ([string] $url) {
   try { $uri = New-Object System.Uri $url; } catch { return $null; }
   $path = $uri.AbsolutePath;
@@ -2477,7 +2490,7 @@ function Try-Get-FileExtension-by-Uri ([string] $url) {
   return ([System.IO.Path]::GetExtension($name));
 }
 
-# File: [C:\Cloud\vg\PUTTY\Repo-PS1\Includes.SqlServer\Uninstall-LocalDB-List.ps1]
+# Include File: [\Includes.SqlServer\Uninstall-LocalDB-List.ps1]
 function Uninstall-LocalDB-List([string[]] $patterns) {
   # $patterns
   # "*"

@@ -13,7 +13,7 @@ function UrlEncode([string] $a) {
   $ret = ""; $chars = $a.ToCharArray();
   foreach($c in $chars) { 
     $lower=$c.ToString().ToLower();
-    if (($lower -ge "a" -and $lower -le "z") -or ($lower -ge "a" -and $lower -le "z") -or $lower -eq "." -or $lower -eq "-") { $ret += $c; } else { $ret += "%" + ([int]$c).ToString("X2"); }
+    if (($lower -ge "a" -and $lower -le "z") -or ($lower -ge "0" -and $lower -le "9") -or $lower -eq "." -or $lower -eq "-") { $ret += $c; } else { $ret += "%" + ([int]$c).ToString("X2"); }
   }
   $ret;
 }
