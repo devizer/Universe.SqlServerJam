@@ -436,6 +436,16 @@ function Format-Table-Smarty
 # Include File: [\Includes\Get-7z-Exe-FullPath-for-Windows.ps1]
 function Get-Mini7z-Exe-FullPath-for-Windows() {
   $algorithm="SHA512"
+  $ret = Combine-Path "$(Get-PS1-Repo-Downloads-Folder)" "7z-mini-x86" "7zr.exe";
+  $isOk = Download-File-FailFree-and-Cached $ret @("https://www.7-zip.org/a/7zr.exe", "https://sourceforge.net/projects/p7zz-repack/files/windows/7zr.exe/download")
+  return (IIF $isOk $ret $null);
+}
+
+
+
+
+function Get-Mini7z-Exe-FullPath-for-Windows-Prev() {
+  $algorithm="SHA512"
 
   $ret = Combine-Path "$(Get-PS1-Repo-Downloads-Folder)" "7z-mini-x86" "7zr.exe";
   if ((Is-File-Not-Empty "$ret") -and (Is-File-Not-Empty "$ret.$algorithm")) {
@@ -455,6 +465,8 @@ function Get-Mini7z-Exe-FullPath-for-Windows() {
     
   return $null
 }
+
+
 
 # Include File: [\Includes\Get-Aria2c-Exe-FullPath-for-Windows.ps1]
 # arch: x86|x64|arm64|Xp
