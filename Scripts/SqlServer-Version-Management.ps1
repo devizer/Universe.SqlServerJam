@@ -713,10 +713,10 @@ function ExtractArchiveBy7zMini([string] $fromArchive, [string] $toDirectory) {
 
 function ExtractArchiveByDefault7zFull([string] $fromArchive, [string] $toDirectory, $extractCommand = "x") {
   New-Item -Path "$($toDirectory)" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
-  pushd "$($toDirectory)"
+  # pushd "$($toDirectory)"
   $full7zExe = "$(Get-Full7z-Exe-FullPath-for-Windows)"
-  Troubleshoot-Info "full7zExe: $full7zExe fromArchive $fromArchive"
-  & "$full7zExe" @("$extractCommand", "-y", "$fromArchive")
+  Troubleshoot-Info "`"$fromArchive`" $([char]8594) " -Highlight "`"$($toDirectory)`"" " by `"$full7zExe`""
+  & "$full7zExe" @("$extractCommand", "-y", "-o`"$($toDirectory)`"", "$fromArchive")
   $isExtractOk = $?;
   return $isExtractOk;
 }
@@ -820,11 +820,18 @@ function Get-Memory-Info {
 
   $platform = Get-Os-Platform
   if ($platform -eq "Windows") {
-    if (Has-Cmd "Get-CIMInstance")     { $os=Get-CIMInstance Win32_OperatingSystem; } 
-    elseif (Has-Cmd "Get-WmiObject")   { $os=Get-WmiObject   Win32_OperatingSystem; } 
+    $os = Select-WMI-Objects "Win32_OperatingSystem";
     $mem=($os | Where { $_.FreePhysicalMemory } | Select FreePhysicalMemory,TotalVisibleMemorySize -First 1);
     $total=[int] ($mem.TotalVisibleMemorySize / 1024);
     $free=[int] ($mem.FreePhysicalMemory / 1024);
+    
+    $wmiSwap = @(Select-WMI-Objects "Win32_PageFileUsage")
+    $swapCurrent   = $wmiSwap | Measure-Object -property CurrentUsage -sum      | % { $_.Sum } | Select -First 1
+    $swapPeak      = $wmiSwap | Measure-Object -property PeakUsage -sum         | % { $_.Sum } | Select -First 1
+    $swapAllocated = $wmiSwap | Measure-Object -property AllocatedBaseSize -sum | % { $_.Sum } | Select -First 1
+    if ($swapAllocated) {
+      $customDescription = ". Swap Usage: $(FormatNullableNumeric $swapCurrent) (peak $(FormatNullableNumeric $swapPeak)) of $(FormatNullableNumeric $swapAllocated) Mb"
+    }
   }
 
   if ($platform -eq "MacOS") {
@@ -844,7 +851,7 @@ function Get-Memory-Info {
   }
 
   if ($total) {
-    $info="Total RAM: $($total.ToString("n0")) MB. Free: $($free.ToString("n0")) MB ($([Math]::Round($free * 100 / $total, 1))%)";
+    $info="Total RAM: $($total.ToString("n0")) MB. Free: $($free.ToString("n0")) MB ($([Math]::Round($free * 100 / $total, 1))%)$customDescription";
     return @{
         Total=$total;
         Free=$free;
@@ -857,6 +864,11 @@ function Get-Memory-Info {
      Object with 3 properties: [int] Total, [int] Free, [string] Description
   #>
 
+}
+
+function FormatNullableNumeric($n, $fractionalDigits = 0) {
+  try { $num = [int] $n } catch { $num = 0 }
+  return $num.ToString("n$fractionalDigits");
 }
 
 # Include File: [\Includes\Get-Nix-Uname-Value.ps1]
@@ -1009,6 +1021,10 @@ function Get-Speedy-Software-Product-List() {
 # Get-Speedy-Software-Product-List | ft
 # $localDbList = Get-Speedy-Software-Product-List | ? { $_.Name -match "LocalDB" -and $_.Vendor -match "Microsoft" }
 
+# Include File: [\Includes\Get-System-Drive.ps1]
+function Get-System-Drive() { $ret = "$($Env:SystemDrive)"; $c = "$([System.IO.Path]::DirectorySeparatorChar)"; if (-not ($ret.EndsWith($c))) { $ret += $c; }; return $ret; }
+  
+
 # Include File: [\Includes\Has-Cmd.ps1]
 function Has-Cmd {
   param([string] $arg)
@@ -1023,9 +1039,21 @@ function Select-WMI-Objects([string] $class) {
   return $ret;
 }
 # Include File: [\Includes\IIf.ps1]
-function IIf([bool] $flag, $trueResult, $falseResult) {
-  if ($flag) { return $trueResult; } else { return $falseResult; }
+# function IIf([bool] $flag, $trueResult, $falseResult) {
+#   if ($flag) { return $trueResult; } else { return $falseResult; }
+# }
+
+# https://stackoverflow.com/a/54702474
+Function IIf($If, $Then, $Else) {
+  If ($If) { 
+    If ($Then -is [scriptblock]) { ForEach-Object -InputObject $If -Process $Then } 
+    Else { $Then } 
+  } Else {
+    If ($Else -is [scriptblock]) { ForEach-Object -InputObject $If -Process $Else }
+    Else { $Else }
+  }
 }
+
 # Include File: [\Includes\Is-BuildServer.ps1]
 function Is-BuildServer() {
   return "$(Try-BuildServerType)" -ne "";
@@ -2089,10 +2117,6 @@ function Get-SqlServer-Setup-Folder() {
 function Get-SqlServer-Media-Folder() {
   return (GetPersistentTempFolder "SQLSERVERS_MEDIA_FOLDER" "SQL Media");
 }
-
-# Include File: [\Includes.SqlServer\Get-System-Drive.ps1]
-function Get-System-Drive() { $ret = "$($Env:SystemDrive)"; $c = "$([System.IO.Path]::DirectorySeparatorChar)"; if (-not ($ret.EndsWith($c))) { $ret += $c; }; return $ret; }
-  
 
 # Include File: [\Includes.SqlServer\Install-SQLServer.ps1]
 <# 
