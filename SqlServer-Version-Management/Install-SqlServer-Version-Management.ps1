@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.3';
+$ModuleVersion = '2.1.7';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -13,7 +13,7 @@ $ModuleFiles = @(
 			"",
 			"  # RootModule = 'SqlServer-Version-Management.psm1'",
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
-			"        ModuleVersion = `"2.1.3`"",
+			"  ModuleVersion = `"2.1.7`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -1639,7 +1639,8 @@ $ModuleFiles = @(
 			"         `"https://download.microsoft.com/download/3/8/d/38de7036-2433-4207-8eae-06e247e17b25/SQLServer2022-DEV-x64-ENU.box`",",
 			"         `"https://download.microsoft.com/download/3/8/d/38de7036-2433-4207-8eae-06e247e17b25/SQLServer2022-DEV-x64-ENU.exe`")",
 			"      CU=@(",
-			"        @{ Id=`"CU14`"; Url=`"https://download.microsoft.com/download/9/6/8/96819b0c-c8fb-4b44-91b5-c97015bbda9f/SQLServer2022-KB5038325-x64.exe`"; }",
+			"        # @{ Id=`"CU14`"; Url=`"https://download.microsoft.com/download/9/6/8/96819b0c-c8fb-4b44-91b5-c97015bbda9f/SQLServer2022-KB5038325-x64.exe`"; }",
+			"        @{ Id=`"CU15`"; Url=`"https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/updt/2024/09/sqlserver2022-kb5041321-x64_1b40129fb51df67f28feb2a1ea139044c611b93f.exe`"; }",
 			"      )",
 			"   },",
 			"   @{",
