@@ -120,6 +120,8 @@ jobs:
       run: |
         iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1'))
 
+        $moduleName = "SqlServer-Version-Management"; Write-Host "Existing `"$moduleName`" module version is $(get-Module -ListAvailable | ? { $_.Name -eq "SqlServer-Version-Management" } | % { "$($_.Version)" })"
+
 
     - name: Measure Install-Module
       if: ${{ false }}

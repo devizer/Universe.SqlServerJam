@@ -279,7 +279,7 @@ function Download-File-Managed([string] $url, [string]$outfile) {
       return $true; 
     }
   }
-  elseif (([System.Environment]::OSVersion.Version.Major) -eq 5) {
+  elseif (([System.Environment]::OSVersion.Version.Major) -eq 5 -and (Get-Os-Platform) -eq "Windows" ) {
     Write-Host "Warning! Windows XP and Server 2003 requires aria2c.exe in the PATH for downloading." -ForegroundColor Red; 
   }
   [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
@@ -836,15 +836,26 @@ function Get-Memory-Info {
     $total=[int] (& free -m | awk 'NR==2 {print $2}' | Out-String-And-TrimEnd)
     $used =[int] (& free -m | awk 'NR==2 {print $3 + $5}' | Out-String-And-TrimEnd)
     $free=$total-$used
+
+    $swapAllocated = [int] (& free -m | awk '$1 ~ /^[S|s]wap/ {print $2}' | Out-String-And-TrimEnd)
+    $swapCurrent   = [int] (& free -m | awk '$1 ~ /^[S|s]wap/ {print $3}' | Out-String-And-TrimEnd)
+    if ($swapAllocated) {
+      $customDescription = ". Swap Usage: $(FormatNullableNumeric $swapCurrent) of $(FormatNullableNumeric $swapAllocated) Mb"
+    }
   }
 
   if ($total) {
     $info="Total RAM: $($total.ToString("n0")) MB. Free: $($free.ToString("n0")) MB ($([Math]::Round($free * 100 / $total, 1))%)$customDescription";
-    return @{
+    $ret = @{
         Total=$total;
         Free=$free;
         Description=$info;
     }
+    if ($swapAllocated) {
+      $ret["SwapAllocated"] = $swapAllocated;
+      $ret["SwapCurrent"]   = $swapCurrent;
+    }
+    return $ret;
   }
 
   <#
@@ -904,10 +915,10 @@ function GetPersistentTempFolder([string] $envPrefix, [string] $pathSuffix) {
       }
   }
 
-  If (Get-Os-Platform -eq "Windows") { $ret = "$($ENV:TEMP)" } else { $ret = "$($ENV:TMPDIR)" };
+  If (Get-Os-Platform -eq "Windows") { $ret = "$($ENV:TEMP)" } else { $ret = "$($ENV:TMPDIR)"; if (-not $ret) { $ret = "/tmp" }};
   $is1 = Test-Path -Path $ret -PathType Container -EA SilentlyContinue
   if (-not $is1) {
-    New-Item -Path $ret -ItemType Directory -Force -EA SilentlyContinue | Out-null
+    try { New-Item -Path $ret -ItemType Directory -Force -EA SilentlyContinue | Out-null } catch { }
     $is2 = Test-Path -Path $ret -PathType Container -EA SilentlyContinue
     if (-not $is2) { 
       $ret=""
@@ -1163,6 +1174,14 @@ function Remove-Windows-Service-If-Exists([string] $serviceName, [string] $human
 }
 
 # Remove-Windows-Service-If-Exists "PG$9_26_X86" "Postgres SQL Windows Service"
+
+# Include File: [\Includes\Reverse.ps1]
+function Reverse-Pipe() { $copy=@($input); for($i = $copy.Length - 1; $i -ge 0; $i--) { $copy[$i] } }
+
+# $null | Reverse-Pipe
+# $() | Reverse-Pipe
+# @(42) | Reverse-Pipe
+# @(1,2,3,4,"42") | Reverse-Pipe
 
 # Include File: [\Includes\Say.ps1]
 function Say { # param( [string] $message )
