@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.20';
+$ModuleVersion = '2.1.24';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -13,7 +13,7 @@ $ModuleFiles = @(
 			"",
 			"  # RootModule = 'SqlServer-Version-Management.psm1'",
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
-			"  ModuleVersion = `"2.1.20`"",
+			"  ModuleVersion = `"2.1.24`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -2580,6 +2580,9 @@ $ModuleFiles = @(
 			"# Query-SqlServer-Version -Title `"FAKE`" -Instance `"(local)\22`" -Timeout 2",
 			"# Query-SqlServer-Version -Title `"SQL 2005`" -Instance `"(local)\SQL_2005_SP4_X86`" -Timeout 2",
 			"",
+			"# Include File: [\Includes.SqlServer\Set-SqlServer-Database-Files-Size.ps1]",
+			"# TODO:",
+			"# function Set-SqlServer-Database-Files-Size(... `$dataSize, `$logSize)",
 			"# Include File: [\Includes.SqlServer\Set-SQLServer-Options.ps1]",
 			"function Set-SQLServer-Options([string] `$title, [string] `$connectionString, <# or #>[string] `$instance, [hashtable] `$options, [int] `$timeoutSec = 30) {",
 			"  if (-not `$connectionString) { `$connectionString = `"Server=`$(`$instance);Integrated Security=SSPI;Connection Timeout=10;Pooling=False`" }",
@@ -2599,7 +2602,7 @@ $ModuleFiles = @(
 			"      `$con = New-Object System.Data.SqlClient.SqlConnection(`$connectionString);",
 			"      `$con.Open();",
 			"      ",
-			"      Write-Host `"Connection to SQL Server `$title is Ready`"",
+			"      Write-Host `"Connection to SQL Server `$title is Ready for Configuration`"",
 			"      foreach(`$sqlCommand in `$sqlCommands) {",
 			"        `$cmd = new-object System.Data.SqlClient.SqlCommand(`$sqlCommand, `$con)",
 			"        `$cmd.CommandTimeout = 30;",
