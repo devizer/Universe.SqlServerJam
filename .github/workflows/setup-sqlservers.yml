@@ -174,7 +174,7 @@ jobs:
          }
 
          $servers = Parse-SqlServers-Input "$($ENV:SQL_SERVERS)"
-         $servers | ? { "$_.InstanceName" -ne "" } | % { 
+         $servers | ? { "$($_.InstanceName)" -ne "" } | % { 
            $instance = $_.InstanceName;
            $i = IIf ($instance -eq "MSSQLSERVER") "(local)" "(local)\$($instance)"
            Say "Configure instance `"$instance`" Server=$i";
