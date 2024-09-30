@@ -165,6 +165,11 @@ jobs:
       run: |
          # Scripts\Setup-SqlServers.ps1 -SqlServers "$($ENV:SQL_SERVERS)" "Collation=French_CI_AI" "Startup=Manual" "InstallTo=C:\SQL-Customized" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB {InstanceName} Data" "/SQLUSERDBLOGDIR=C:\SQL LOGS {InstanceName}" "/SQLBACKUPDIR=C:\Backups for {InstanceName}"
          Setup-SqlServers -SqlServers "$($ENV:SQL_SERVERS)" "Collation=French_CI_AI" "Startup=Manual" "InstallTo=C:\SQL-Customized" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB {InstanceName} Data" "/SQLUSERDBLOGDIR=C:\SQL LOGS {InstanceName}" "/SQLBACKUPDIR=C:\Backups for {InstanceName}"
+
+         Write-Line
+         Write-Line -TextDarkGreen "START SERVICES" 
+         Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | % { if ($_.Status -ne "Running") { Write-Host "Starting $($_.Name)"; Start-Service "$($_.Name)" }}
+
          $servers = Parse-SqlServers-Input "$($ENV:SQL_SERVERS)"
          $servers | % { 
            $instance=$_.InstanceName;
