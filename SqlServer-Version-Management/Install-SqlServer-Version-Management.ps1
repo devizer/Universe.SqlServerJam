@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.10';
+$ModuleVersion = '2.1.12';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -13,7 +13,7 @@ $ModuleFiles = @(
 			"",
 			"  # RootModule = 'SqlServer-Version-Management.psm1'",
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
-			"  ModuleVersion = `"2.1.10`"",
+			"  ModuleVersion = `"2.1.12`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -2618,7 +2618,7 @@ $ModuleFiles = @(
 			"  Write-Host `"Warning! Can't apply configuration for SQL Server '`$(`$title)' during `$(`$startAt.ElapsedMilliseconds / 1000) seconds`$([Environment]::NewLine)`$(`$exception)`" -ForegroundColor DarkRed",
 			"}",
 			"",
-			"Set-SQLServer-Options -Title `"MSSQLSERVER`" -Instance `"(local)`" -Options @{ xp_cmdshell = `$true; `"clr enabled`" = `$false; `"server trigger recursion`" = `$true; `"min server memory (MB)`" = 160; `"max server memory (MB)`" = 4096 }",
+			"# Set-SQLServer-Options -Title `"MSSQLSERVER`" -Instance `"(local)`" -Options @{ xp_cmdshell = `$true; `"clr enabled`" = `$false; `"server trigger recursion`" = `$true; `"min server memory (MB)`" = 160; `"max server memory (MB)`" = 4096 }",
 			"",
 			"# Include File: [\Includes.SqlServer\Setup-SqlServers.ps1]",
 			"function Setup-SqlServers() {",

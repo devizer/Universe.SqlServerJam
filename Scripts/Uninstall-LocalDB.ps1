@@ -2493,7 +2493,7 @@ function Set-SQLServer-Options([string] $title, [string] $connectionString, <# o
   Write-Host "Warning! Can't apply configuration for SQL Server '$($title)' during $($startAt.ElapsedMilliseconds / 1000) seconds$([Environment]::NewLine)$($exception)" -ForegroundColor DarkRed
 }
 
-Set-SQLServer-Options -Title "MSSQLSERVER" -Instance "(local)" -Options @{ xp_cmdshell = $true; "clr enabled" = $false; "server trigger recursion" = $true; "min server memory (MB)" = 160; "max server memory (MB)" = 4096 }
+# Set-SQLServer-Options -Title "MSSQLSERVER" -Instance "(local)" -Options @{ xp_cmdshell = $true; "clr enabled" = $false; "server trigger recursion" = $true; "min server memory (MB)" = 160; "max server memory (MB)" = 4096 }
 
 # Include File: [\Includes.SqlServer\Setup-SqlServers.ps1]
 function Setup-SqlServers() {
