@@ -929,6 +929,17 @@ function GetPersistentTempFolder([string] $envPrefix, [string] $pathSuffix) {
 }
 
 
+# Include File: [\Includes\Get-Random-Free-Port.ps1]
+function Get-Random-Free-Port() {
+  $tcpListener = New-Object System.Net.Sockets.TcpListener([System.Net.IPAddress]::Loopback <# ::Any? #>, 0)
+  $tcpListener.Start()
+  $port = ([System.Net.IPEndPoint] $tcpListener.LocalEndpoint).Port;
+  $tcpListener.Stop()
+  return $port;
+}
+
+# Get-Random-Free-Port
+
 # Include File: [\Includes\Get-Smarty-FileHash.ps1]
 # $algorithm: MD5|SHA1|SHA256|SHA384|SHA512
 function Get-Smarty-FileHash([string] $fileName, [string] $algorithm = "MD5") {

@@ -929,6 +929,17 @@ function GetPersistentTempFolder([string] $envPrefix, [string] $pathSuffix) {
 }
 
 
+# Include File: [\Includes\Get-Random-Free-Port.ps1]
+function Get-Random-Free-Port() {
+  $tcpListener = New-Object System.Net.Sockets.TcpListener([System.Net.IPAddress]::Loopback <# ::Any? #>, 0)
+  $tcpListener.Start()
+  $port = ([System.Net.IPEndPoint] $tcpListener.LocalEndpoint).Port;
+  $tcpListener.Stop()
+  return $port;
+}
+
+# Get-Random-Free-Port
+
 # Include File: [\Includes\Get-Smarty-FileHash.ps1]
 # $algorithm: MD5|SHA1|SHA256|SHA384|SHA512
 function Get-Smarty-FileHash([string] $fileName, [string] $algorithm = "MD5") {
@@ -2443,6 +2454,46 @@ Cast(ISNULL(ServerProperty('ProductUpdateLevel'), '') as nvarchar) +
 
 # Query-SqlServer-Version -Title "FAKE" -Instance "(local)\22" -Timeout 2
 # Query-SqlServer-Version -Title "SQL 2005" -Instance "(local)\SQL_2005_SP4_X86" -Timeout 2
+
+# Include File: [\Includes.SqlServer\Set-SQLServer-Options.ps1]
+function Set-SQLServer-Options([string] $title, [string] $connectionString, <# or #>[string] $instance, [hashtable] $options, [int] $timeoutSec = 30) {
+  if (-not $connectionString) { $connectionString = "Server=$($instance);Integrated Security=SSPI;Connection Timeout=10;Pooling=False" }
+  $startAt = [System.Diagnostics.Stopwatch]::StartNew();
+  $exception = $null;
+  $keys = @($options | % { $_.Keys })
+  $sqlCommands = @("exec sp_configure 'show advanced option', 1");
+  foreach($key in $keys) { 
+    $val = $options[$key];
+    if ($val -is [bool]) { if ($val) { $val = 1 } else { $val = 0 } }
+    $sqlCommands += "exec sp_configure '$key', $val"
+  }
+  $sqlCommands += "reconfigure with override;";
+
+  do {
+    try { 
+      $con = New-Object System.Data.SqlClient.SqlConnection($connectionString);
+      $con.Open();
+      
+      Write-Host "Connection to SQL Server $title is Ready"
+      foreach($sqlCommand in $sqlCommands) {
+        $cmd = new-object System.Data.SqlClient.SqlCommand($sqlCommand, $con)
+        $cmd.CommandTimeout = 30;
+        try { 
+          $__ = $cmd.ExecuteNonQuery();
+          Write-Host "    ok: `"$sqlCommand`""
+        } catch {
+          Write-Host "  fail: `"$sqlCommand`". $($_.Exception.Message)"
+        }
+        $cmd.Dispose();
+      }
+      $con.Close()
+      return;
+    } catch { $exception = $_.Exception; <# Write-Host $_.Exception -ForegroundColor DarkGray #> }
+  } while($startAt.ElapsedMilliseconds -le ($timeoutSec * 1000));
+  Write-Host "Warning! Can't apply configuration for SQL Server '$($title)' during $($startAt.ElapsedMilliseconds / 1000) seconds$([Environment]::NewLine)$($exception)" -ForegroundColor DarkRed
+}
+
+Set-SQLServer-Options -Title "MSSQLSERVER" -Instance "(local)" -Options @{ xp_cmdshell = $true; "clr enabled" = $false; "server trigger recursion" = $true; "min server memory (MB)" = 160; "max server memory (MB)" = 4096 }
 
 # Include File: [\Includes.SqlServer\Setup-SqlServers.ps1]
 function Setup-SqlServers() {

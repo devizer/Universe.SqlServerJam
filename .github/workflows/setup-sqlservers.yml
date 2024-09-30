@@ -168,8 +168,8 @@ jobs:
          $servers = Parse-SqlServers-Input "$($ENV:SQL_SERVERS)
          $servers | % { 
            $instance=$_.InstanceName;
-           Say "Configure instance `"$instance`""
-           Set-SQLServer-Options -Title "Instance $instance" -Instance "(local)\$instance" -Options @{ xp_cmdshell = $true; "clr enabled" = $false; "server trigger recursion" = $true; "min server memory (MB)" = 4096; "max server memory (MB)" = 8192 }
+           Say "Configure instance `"$instance`"";
+           Set-SQLServer-Options -Title "Instance $instance" -Instance "(local)\$($instance)" -Options @{ xp_cmdshell = $true; "clr enabled" = $false; "server trigger recursion" = $true; "min server memory (MB)" = 4096; "max server memory (MB)" = 8192 }
          }
 
 
