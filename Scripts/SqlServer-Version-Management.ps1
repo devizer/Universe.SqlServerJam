@@ -2494,7 +2494,7 @@ function Set-SQLServer-Options([string] $title, [string] $connectionString, <# o
   $startAt = [System.Diagnostics.Stopwatch]::StartNew();
   $exception = $null;
   $keys = @($options | % { $_.Keys })
-  $sqlCommands = @("exec sp_configure 'show advanced option', 1");
+  $sqlCommands = @("exec sp_configure 'show advanced option', 1", "reconfigure with override;");
   foreach($key in $keys) { 
     $val = $options[$key];
     if ($val -is [bool]) { if ($val) { $val = 1 } else { $val = 0 } }

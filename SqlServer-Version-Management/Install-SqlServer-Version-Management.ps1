@@ -3,9 +3,8 @@ Param(
   $installTo = "" 
 )
 
-
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.18';
+$ModuleVersion = '2.1.20';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -14,7 +13,7 @@ $ModuleFiles = @(
 			"",
 			"  # RootModule = 'SqlServer-Version-Management.psm1'",
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
-			"  ModuleVersion = `"2.1.18`"",
+			"  ModuleVersion = `"2.1.20`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -2587,7 +2586,7 @@ $ModuleFiles = @(
 			"  `$startAt = [System.Diagnostics.Stopwatch]::StartNew();",
 			"  `$exception = `$null;",
 			"  `$keys = @(`$options | % { `$_.Keys })",
-			"  `$sqlCommands = @(`"exec sp_configure 'show advanced option', 1`");",
+			"  `$sqlCommands = @(`"exec sp_configure 'show advanced option', 1`", `"reconfigure with override;`");",
 			"  foreach(`$key in `$keys) { ",
 			"    `$val = `$options[`$key];",
 			"    if (`$val -is [bool]) { if (`$val) { `$val = 1 } else { `$val = 0 } }",
