@@ -49,6 +49,12 @@ namespace Universe.SqlServerJam
             set => SetAdvancedOption<int>(Names.MaxServerMemory, value);
         }
 
+        public int MinServerMemory
+        {
+            get => ReadAdvancedOption<int>(Names.MinServerMemory).RunValue;
+            set => SetAdvancedOption<int>(Names.MinServerMemory, value);
+        }
+
 
         static class Names
         {
@@ -58,6 +64,7 @@ namespace Universe.SqlServerJam
 
             public const string TwoDigitYearCutoff = "two digit year cutoff"; // 2049
 
+            public const string MinServerMemory = "min server memory (MB)"; // 0+
             public const string MaxServerMemory = "max server memory (MB)"; // 128+
 
             public const string BackupCompressionDefault = "backup compression default"; // bool
@@ -158,7 +165,7 @@ namespace Universe.SqlServerJam
             if (typeof(T) == typeof(bool?)) return ((bool?)(object)arg == true) ? 1 : 0;
 
             if (typeof(T) == typeof(int)) return (int)(object)arg;
-            if (typeof(T) == typeof(bool?)) return ((int?)(object)arg).GetValueOrDefault();
+            if (typeof(T) == typeof(int?)) return ((int?)(object)arg).GetValueOrDefault();
 
             throw new ArgumentException($"Option Type '{typeof(T)}' is not supported");
         }

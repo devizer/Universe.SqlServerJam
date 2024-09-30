@@ -152,9 +152,10 @@ namespace Universe.SqlServerJam.Tests
                     report.AppendLine("Medium Version ...........: " + man.MediumServerVersion);
                     report.AppendLine("Long Version .............: " + man.LongServerVersion);
 
-                    report.AppendLine("Max Server Memory ........: " + man.ServerConfigurationSettings.MaxServerMemory);
-                    report.AppendLine("XpCmdShell ...............: " + man.ServerConfigurationSettings.XpCmdShell);
-                    report.AppendLine("BackupCompressionDefault .: " + man.ServerConfigurationSettings.BackupCompressionDefault);
+                    // report.AppendLine("Min Server Memory ........: " + man.ServerConfigurationSettings.MinServerMemory);
+                    // report.AppendLine("Max Server Memory ........: " + man.ServerConfigurationSettings.MaxServerMemory);
+                    // report.AppendLine("XpCmdShell ...............: " + man.ServerConfigurationSettings.XpCmdShell);
+                    // report.AppendLine("BackupCompressionDefault .: " + man.ServerConfigurationSettings.BackupCompressionDefault);
 
                     report.AppendLine("Host Platform ............: " + man.HostPlatform);
                     report.AppendLine("Security Mode ............: " + man.SecurityMode);
@@ -192,6 +193,7 @@ namespace Universe.SqlServerJam.Tests
                         Expression<Func<ServerConfigurationSettingsManager, object>>[] serverOptions = new Expression<Func<ServerConfigurationSettingsManager, object>>[]
                         {
                             x => x.BackupCompressionDefault,
+                            x => x.MinServerMemory,
                             x => x.MaxServerMemory,
                             x => x.ShowAdvancedOption,
                             x => x.XpCmdShell,
