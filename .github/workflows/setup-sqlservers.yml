@@ -165,6 +165,12 @@ jobs:
       run: |
          # Scripts\Setup-SqlServers.ps1 -SqlServers "$($ENV:SQL_SERVERS)" "Collation=French_CI_AI" "Startup=Manual" "InstallTo=C:\SQL-Customized" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB {InstanceName} Data" "/SQLUSERDBLOGDIR=C:\SQL LOGS {InstanceName}" "/SQLBACKUPDIR=C:\Backups for {InstanceName}"
          Setup-SqlServers -SqlServers "$($ENV:SQL_SERVERS)" "Collation=French_CI_AI" "Startup=Manual" "InstallTo=C:\SQL-Customized" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB {InstanceName} Data" "/SQLUSERDBLOGDIR=C:\SQL LOGS {InstanceName}" "/SQLBACKUPDIR=C:\Backups for {InstanceName}"
+         $servers = Parse-SqlServers-Input "$($ENV:SQL_SERVERS)
+         $servers | % { 
+           $instance=$_.InstanceName;
+           Say "Configure instance `"$instance`""
+           Set-SQLServer-Options -Title "Instance $instance" -Instance "(local)\$instance" -Options @{ xp_cmdshell = $true; "clr enabled" = $false; "server trigger recursion" = $true; "min server memory (MB)" = 4096; "max server memory (MB)" = 8192 }
+         }
 
 
     - name: NEW Show SQL Servers
