@@ -213,7 +213,6 @@ namespace Universe.SqlServerJam.Tests
                         }
 
 
-
                         if (man.IsAzure && Debugger.IsAttached) Debugger.Break();
                         if (!man.IsAzure)
                         {
