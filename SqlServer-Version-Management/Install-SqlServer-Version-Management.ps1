@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.16';
+$ModuleVersion = '2.1.18';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -13,7 +13,7 @@ $ModuleFiles = @(
 			"",
 			"  # RootModule = 'SqlServer-Version-Management.psm1'",
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
-			"  ModuleVersion = `"2.1.16`"",
+			"  ModuleVersion = `"2.1.18`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -2725,6 +2725,7 @@ $ModuleFiles = @(
 			"Export-ModuleMember -Function Find-LocalDb-SqlServer",
 			"Export-ModuleMember -Function Say",
 			"Export-ModuleMember -Function Troubleshoot-Info",
+			"Export-ModuleMember -Function Write-Line",
 			"",
 			"Export-ModuleMember -Function Out-String-And-TrimEnd",
 			"Export-ModuleMember -Function Append-All-Text",
