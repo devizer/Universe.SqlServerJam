@@ -178,7 +178,8 @@ jobs:
            $instance = $_.InstanceName;
            $i = IIf ($instance -eq "MSSQLSERVER") "(local)" "(local)\$($instance)"
            Say "Configure instance `"$instance`" Server=$i";
-           Set-SQLServer-Options -Title "Instance $instance" -Instance "$i" -Options @{ XP_CmdShell = $true; "CLR Enabled" = $false; "Server Trigger Recursion" = $true; "Min Server Memory (MB)" = 4096; "Max Server Memory (MB)" = 8192 }
+           Set-SQLServer-Options -Title "Instance $instance" -Instance "$i" -Options @{ XP_CmdShell = $true; "CLR Enabled" = $false; "Server Trigger Recursion" = $true; "Min Server Memory (MB)" = 4096; "Max Server Memory (MB)" = 16384 }
+           Write-Host "$((Get-Memory-Info).Description)"
          }
 
 
