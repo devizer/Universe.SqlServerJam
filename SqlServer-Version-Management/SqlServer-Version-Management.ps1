@@ -1210,7 +1210,7 @@ function Remove-Windows-Service-If-Exists([string] $serviceName, [string] $human
 
 # Remove-Windows-Service-If-Exists "PG$9_26_X86" "Postgres SQL Windows Service"
 
-# Include File: [\Includes\Reverse.ps1]
+# Include File: [\Includes\Reverse-Pipe.ps1]
 function Reverse-Pipe() { $copy=@($input); for($i = $copy.Length - 1; $i -ge 0; $i--) { $copy[$i] } }
 
 # $null | Reverse-Pipe
@@ -1286,6 +1286,43 @@ function To-Boolean() { param([string] $name, [string] $value)
   Write-Host "Validation Error! Invalid $name parameter '$value'. Boolean parameter accept only True|False|On|Off|Enable|Disable|1|0" -ForegroundColor Red
   return $false;
 }
+
+# Include File: [\Includes\To-Sortable-Version-String.ps1]
+function To-Sortable-Version-String([string] $arg) {
+  $ret = New-Object System.Text.StringBuilder;
+  $numberBuffer = New-Object System.Text.StringBuilder;
+  for($i=0; $i -lt $arg.Length; $i++) {
+    $c = $arg.Substring($i, 1);
+    if ($c -ge "0" -and $c -le "9") {
+      $__ = $numberBuffer.Append($c)
+    }
+    else {
+      if ($numberBuffer.Length -gt 0) { $__ = $ret.Append($numberBuffer.ToString().PadLeft(42,"0")); $numberBuffer.Length = 0; }
+      $__ = $ret.Append($c)
+    }
+  }
+  # same
+  if ($numberBuffer.Length -gt 0) { $__ = $ret.Append($numberBuffer.ToString().PadLeft(42,"0")) }
+  return $ret.ToString();
+}
+
+function Test-Version-Sort() {
+  @("PG-9.6.24", "PG-10.1", "PG-11.3", "PG-11.12", "PG-16.4") | % { To-Sortable-Version-String $_ }
+
+  $objects = @(
+    @{Version = "PG-9.6.24"; InstalledDate = [DateTime] "2020-01-01"}, 
+    @{Version = "PG-10.1";   InstalledDate = [DateTime] "2021-02-02"}, 
+    @{Version = "PG-11.3";   InstalledDate = [DateTime] "2022-03-03"}, 
+    @{Version = "PG-11.12";  InstalledDate = [DateTime] "2023-04-04"}, 
+    @{Version = "PG-16.4";   InstalledDate = [DateTime] "2024-05-05"}
+  );
+  $objects |
+    % { [pscustomobject] $_ } |
+    Sort-Object -Property @{ Expression = { To-Sortable-Version-String $_.Version }; Descending = $true }, @{ Expression = "InstalleDate"; Descending = $false } |
+    Format-Table * -AutoSize
+}
+
+# Test-Version-Sort
 
 # Include File: [\Includes\Troubleshoot-Info.ps1]
 function Troubleshoot-Info() {
@@ -1636,6 +1673,17 @@ $SqlServerDownloadLinks_Via_Manager = @(
 )
 
 # $SqlServerDownloadLinks | ConvertTo-Json -Depth 32
+
+# Include File: [\Includes.SqlServer\Create-LocalDB-Instance.ps1]
+# Using latest SQLLocalDB.exe
+function Create-LocalDB-Instance([string] $instanceName, [string] $optionalVersion) {
+  $pars = @("create", "`"$instanceName`"");
+  if ($optionalVersion) { $pars += $optionalVersion }
+  $title = "Create LocalDB instance `"$instanceName`""
+  if ($optionalVersion) { $title += " version $optionalVersion" }
+  return Invoke-LocalDB-Executable -Title $title -Version "Latest" -Parameters @($pars)
+}
+
 
 # Include File: [\Includes.SqlServer\Download-2010-SQLServer-and-Extract.ps1]
 function Download-2010-SQLServer-and-Extract {
@@ -2009,7 +2057,7 @@ function Enumerate-Plain-SQLServer-Downloads() {
   }
 }
 
-# Include File: [\Includes.SqlServer\Find-LocalDb-SqlServers.ps1]
+# Include File: [\Includes.SqlServer\Find-LocalDb-SqlServer.ps1]
 # Super Fast
 function Find-LocalDb-SqlServer() {
   $parentKey = Get-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions" -EA SilentlyContinue
@@ -2043,6 +2091,63 @@ function Start-LocalDb-SqlServer([int] $timeoutSec = 60) {
 
 # Find-LocalDb-SqlServers
 # Start-LocalDb-SqlServer -timeout 1
+
+
+# Include File: [\Includes.SqlServer\Find-LocalDb-SqlServers.ps1]
+function Find-LocalDb-SqlServers() {
+  $parentKey = Get-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions" -EA SilentlyContinue
+  $candidates = @();
+  if ($parentKey) {
+    # Write-Host $parentKey.PSPath
+    foreach($subName in $parentKey.GetSubKeyNames()) { 
+      $parentInstance = Get-ItemProperty -Path "$($parentKey.PSPath)\$subName" -Name ParentInstance -EA SilentlyContinue | % {$_.ParentInstance}
+      if ($parentInstance) {
+        # Version value
+        $versionKey1 = "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\$parentInstance\Setup"
+        # CurrentVersion value
+        $versionKey2 = "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\$parentInstance\MSSQLServer\CurrentVersion"
+        $version1 = Get-ItemProperty -Path "$versionKey1" -Name Version -EA SilentlyContinue | % {$_.Version}
+        $version2 = Get-ItemProperty -Path "$versionKey2" -Name CurrentVersion -EA SilentlyContinue | % {$_.CurrentVersion}
+        $version = $null;
+        if ($version1) { $version = $version1 } 
+        elseif ($version2) { $version = $version2 } 
+      }
+      $verInternal = $subName.Replace(".", "") # 16.0 --> 160
+      $pathToolsKey = "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\$verInternal\Tools\ClientSetup"
+      $pathTools = Get-ItemProperty -Path "$pathToolsKey" -Name Path -EA SilentlyContinue | % {$_.Path}
+      if ($pathTools) { 
+        $exe = "$pathTools\SQLLocalDB.exe".Replace("\\", "\")
+        $localDbExe = $null;
+        try { if (([System.IO.File]::Exists($exe))) { $localDbExe = $exe } } catch { }
+      }
+
+      $newItem = [pscustomobject] @{ 
+        ShortVersion = $subName; 
+        Version = $version; 
+        ParentInstance = $parentInstance; 
+        Exe = $localDbExe;
+      };
+      $newItem | Add-Member -MemberType ScriptMethod -Name "GetInstances" -Value { ParseNonEmptyTrimmedLines((& "$($this.Exe)" @("i") | Out-String)) }
+      $candidates += $newItem
+    }
+  }
+  return @($candidates | ? { "$($_.ShortVersion)" -and "$($_.Version)" -and "$($_.ParentInstance)" -and "$($_.Exe)" } | Sort-Object -Property ShortVersion -Descending);
+}
+
+
+function Test-Show-LocalDb-SqlServers-with-Instances() {
+  Find-LocalDb-SqlServers | ft -Property ShortVersion, Version, Exe -AutoSize | Out-Host
+  $withInstances = Find-LocalDb-SqlServers | % { $_ | Add-Member -MemberType NoteProperty -Name "Instances" -Value $_.GetInstances(); $_ }
+  $withInstances | ft -Property ShortVersion, Version, Exe, Instances -AutoSize | Out-Host
+
+  $instances = @($withInstances | Select -First 1 | % { $_.Instances })
+  Write-Host "Total $($instances.Count) instance(s): $instances"
+  foreach($instance in $instances) {
+    $ver = Query-SqlServer-Version -Title "LocalDB `"$instance`"" -Instance "(localdb)\$instance" -Timeout 60
+    Write-Line -TextYellow $instance -TextGreen " $ver"
+  }
+}
+
 
 # Include File: [\Includes.SqlServer\Find-Local-SqlServers.ps1]
 # Super Fast
@@ -2383,8 +2488,40 @@ function Install-SQLServer {
   }
 }
 
+# Include File: [\Includes.SqlServer\Invoke-LocalDB-Executable.ps1]
+# Version: Latest | 16 | 15 | 14 | 13 | 12 | 11 (16.0, 15.0, ... also supported)
+function Invoke-LocalDB-Executable([string] $title, [string] $version, [string[]] $parameters) {
+  $localDbList = Find-LocalDb-SqlServers
+  $exe = $localDbList | Select -First 1 | % { $_.Exe }
+  if ($version) { 
+    $exe2 = $localDbList | ? { $_.ShortVersion -like "$version*" } | Select -First 1 | % { $_.Exe }
+    if ($exe2) { $exe = $exe2 }
+  }
+  if ($exe) {
+    $pars = @($parameters);
+    $pars += @($args);
+    Troubleshoot-Info "[$title] `"$exe`" $($pars -join " ")"
+    & "$exe" @($pars) | Out-Host
+    return $?
+  } else {
+    Write-Line -TextDarkRed "SQLLocalDB.Exe Not Found for version `"$version`""
+  }
+  return $false
+}
+
+
 # Include File: [\Includes.SqlServer\Is-SqlServer-Setup-Cache-Enabled.ps1]
 function Is-SqlServer-Setup-Cache-Enabled() { $false; }
+# Include File: [\Includes.SqlServer\ParseNonEmptyTrimmedLines.ps1]
+# return array of strings
+function ParseNonEmptyTrimmedLines([string] $raw) {
+  foreach($line in "$raw".Split([char] 13, [char] 10)) {
+    $l = "$line".Trim()
+    if ($l.Length -gt 0) { $l }
+  }
+}
+# ParseNonEmptyTrimmedLines "`r`n1`r2`n3`r`n`r`n"
+
 # Include File: [\Includes.SqlServer\Parse-SqlServers-Input.ps1]
 function Parse-SqlServers-Input { param( [string] $list)
     # Say "Installing SQL Server(s) by tags: $list"
@@ -2490,7 +2627,50 @@ Cast(ISNULL(ServerProperty('ProductUpdateLevel'), '') as nvarchar) +
 
 # Include File: [\Includes.SqlServer\Set-SqlServer-Database-Files-Size.ps1]
 # TODO:
-# function Set-SqlServer-Database-Files-Size(... $dataSize, $logSize)
+function Set-SqlServer-Database-Files-Size([string] $title, [string] $connectionString, <# or #>[string] $instance, [string] $dbName, [string] $dataSize, [string] $dataGrow, [string] $logSize, [string] $logGrow, $timeout = 30)
+{
+  $sql = @"
+Declare @type tinyint; Declare @name sysname; Declare @sql nvarchar(4000);
+Declare @newSize varchar(1000); Declare @newGrow varchar(1000);
+DECLARE FilesCursor Cursor Static FOR SELECT type, name FROM [$dbName].sys.database_files Where type in (0,1);
+Open FilesCursor 
+While 1=1
+Begin
+  Fetch Next From FilesCursor Into @type, @name;
+  If @@FETCH_STATUS <> 0 Break;
+  If @type = 0 Set @newSize = '$dataSize' Else Set @newGrow = '$dataGrow';
+  If @type = 1 Set @newSize = '$logSize'  Else Set @newGrow = '$logGrow';
+  Set @sql = 'ALTER DATABASE [$dbName] MODIFY FILE ( NAME = N''' + @name + ''', SIZE = ' + @newSize + ', FILEGROWTH = ' + @newGrow + ' );';
+  -- Print @sql;
+  exec (@sql);
+End
+Close FilesCursor;
+Deallocate FilesCursor;
+"@;
+
+}
+
+<#
+USE [master]
+GO
+ALTER DATABASE [tempdb] MODIFY FILE ( NAME = N'tempdev', SIZE = 23552KB , FILEGROWTH = 10%)
+GO
+ALTER DATABASE [tempdb] MODIFY FILE ( NAME = N'templog', SIZE = 9216KB , FILEGROWTH = 131072KB )
+GO
+
+
+USE [master]
+GO
+ALTER DATABASE [tempdb] MODIFY FILE ( NAME = N'temp3', FILEGROWTH = 11%)
+GO
+ALTER DATABASE [tempdb] MODIFY FILE ( NAME = N'temp6', FILEGROWTH = 12%)
+GO
+ALTER DATABASE [tempdb] MODIFY FILE ( NAME = N'temp8', FILEGROWTH = 131072KB )
+GO
+ALTER DATABASE [tempdb] MODIFY FILE ( NAME = N'tempdev', SIZE = 716800KB )
+GO
+#>
+
 # Include File: [\Includes.SqlServer\Set-SQLServer-Options.ps1]
 function Set-SQLServer-Options([string] $title, [string] $connectionString, <# or #>[string] $instance, [hashtable] $options, [int] $timeoutSec = 30) {
   if (-not $connectionString) { $connectionString = "Server=$($instance);Integrated Security=SSPI;Connection Timeout=10;Pooling=False" }

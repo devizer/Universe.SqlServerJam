@@ -1177,7 +1177,7 @@ function Remove-Windows-Service-If-Exists([string] $serviceName, [string] $human
 
 # Remove-Windows-Service-If-Exists "PG$9_26_X86" "Postgres SQL Windows Service"
 
-# Include File: [\Includes\Reverse.ps1]
+# Include File: [\Includes\Reverse-Pipe.ps1]
 function Reverse-Pipe() { $copy=@($input); for($i = $copy.Length - 1; $i -ge 0; $i--) { $copy[$i] } }
 
 # $null | Reverse-Pipe
@@ -1253,6 +1253,43 @@ function To-Boolean() { param([string] $name, [string] $value)
   Write-Host "Validation Error! Invalid $name parameter '$value'. Boolean parameter accept only True|False|On|Off|Enable|Disable|1|0" -ForegroundColor Red
   return $false;
 }
+
+# Include File: [\Includes\To-Sortable-Version-String.ps1]
+function To-Sortable-Version-String([string] $arg) {
+  $ret = New-Object System.Text.StringBuilder;
+  $numberBuffer = New-Object System.Text.StringBuilder;
+  for($i=0; $i -lt $arg.Length; $i++) {
+    $c = $arg.Substring($i, 1);
+    if ($c -ge "0" -and $c -le "9") {
+      $__ = $numberBuffer.Append($c)
+    }
+    else {
+      if ($numberBuffer.Length -gt 0) { $__ = $ret.Append($numberBuffer.ToString().PadLeft(42,"0")); $numberBuffer.Length = 0; }
+      $__ = $ret.Append($c)
+    }
+  }
+  # same
+  if ($numberBuffer.Length -gt 0) { $__ = $ret.Append($numberBuffer.ToString().PadLeft(42,"0")) }
+  return $ret.ToString();
+}
+
+function Test-Version-Sort() {
+  @("PG-9.6.24", "PG-10.1", "PG-11.3", "PG-11.12", "PG-16.4") | % { To-Sortable-Version-String $_ }
+
+  $objects = @(
+    @{Version = "PG-9.6.24"; InstalledDate = [DateTime] "2020-01-01"}, 
+    @{Version = "PG-10.1";   InstalledDate = [DateTime] "2021-02-02"}, 
+    @{Version = "PG-11.3";   InstalledDate = [DateTime] "2022-03-03"}, 
+    @{Version = "PG-11.12";  InstalledDate = [DateTime] "2023-04-04"}, 
+    @{Version = "PG-16.4";   InstalledDate = [DateTime] "2024-05-05"}
+  );
+  $objects |
+    % { [pscustomobject] $_ } |
+    Sort-Object -Property @{ Expression = { To-Sortable-Version-String $_.Version }; Descending = $true }, @{ Expression = "InstalleDate"; Descending = $false } |
+    Format-Table * -AutoSize
+}
+
+# Test-Version-Sort
 
 # Include File: [\Includes\Troubleshoot-Info.ps1]
 function Troubleshoot-Info() {
