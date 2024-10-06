@@ -166,7 +166,7 @@ jobs:
          # Scripts\Setup-SqlServers.ps1 -SqlServers "$($ENV:SQL_SERVERS)" "Collation=French_CI_AI" "Startup=Manual" "InstallTo=C:\SQL-Customized" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB {InstanceName} Data" "/SQLUSERDBLOGDIR=C:\SQL LOGS {InstanceName}" "/SQLBACKUPDIR=C:\Backups for {InstanceName}"
          Setup-SqlServers -SqlServers "${{ matrix.SqlServers }}" "Collation=French_CI_AI" "Startup=Automatic" "InstallTo=C:\SQL-Customized" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB {InstanceName} Data" "/SQLUSERDBLOGDIR=C:\SQL LOGS {InstanceName}" "/SQLBACKUPDIR=C:\Backups for {InstanceName}"
 
-         Write-Line -TextDarkGreen "Starting SQL Server(s)"
+         Write-Line "Starting SQL Server(s)"
          $localSqlServers = @(Find-Local-SqlServers | % {$_.Service})
          if ($localSqlServers) {
            Write-Line -TextDarkGreen "START SERVICES: $localSqlServers" 
