@@ -166,19 +166,26 @@ jobs:
          # Scripts\Setup-SqlServers.ps1 -SqlServers "$($ENV:SQL_SERVERS)" "Collation=French_CI_AI" "Startup=Manual" "InstallTo=C:\SQL-Customized" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB {InstanceName} Data" "/SQLUSERDBLOGDIR=C:\SQL LOGS {InstanceName}" "/SQLBACKUPDIR=C:\Backups for {InstanceName}"
          Setup-SqlServers -SqlServers "${{ matrix.SqlServers }}" "Collation=French_CI_AI" "Startup=Automatic" "InstallTo=C:\SQL-Customized" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB {InstanceName} Data" "/SQLUSERDBLOGDIR=C:\SQL LOGS {InstanceName}" "/SQLBACKUPDIR=C:\Backups for {InstanceName}"
 
-         Write-Line
+         Write-Line -TextDarkGreen "Starting SQL Server(s)"
          $localSqlServers = @(Find-Local-SqlServers | % {$_.Service})
          if ($localSqlServers) {
            Write-Line -TextDarkGreen "START SERVICES: $localSqlServers" 
            Get-Service -Name @($localSqlServers) | % { if ($_.Status -ne "Running") { Write-Host "Starting $($_.Name)"; Start-Service "$($_.Name)" }}
          }
 
+         Write-Line -TextDarkGreen "Starting SQL Server(s)"
          $servers = Parse-SqlServers-Input "${{ matrix.SqlServers }}"
          $servers | ? { "$($_.InstanceName)" -ne "" } | % {
            $instance = $_.InstanceName;
            $i = IIf ($instance -eq "MSSQLSERVER") "(local)" "(local)\$($instance)"
            Say "Configure instance `"$instance`" Server=$i";
-           Set-SQLServer-Options -Title "Instance $instance" -Instance "$i" -Options @{ XP_CmdShell = $true; "CLR Enabled" = $false; "Server Trigger Recursion" = $true; "Min Server Memory (MB)" = 4096; "Max Server Memory (MB)" = 16384 }
+           Set-SQLServer-Options -Title "Instance $instance" -Instance "$i" -Options @{ 
+              "Min Server Memory (MB)" = 4 * 1024; 
+              "Max Server Memory (MB)" = 128 * 1024;
+              XP_CmdShell = $true; 
+              "CLR Enabled" = $true; 
+              "Server Trigger Recursion" = $true; 
+           };
            Write-Host "$((Get-Memory-Info).Description)"
          }
 
