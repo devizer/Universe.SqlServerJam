@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.47';
+$ModuleVersion = '2.1.48';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -13,7 +13,7 @@ $ModuleFiles = @(
 			"",
 			"  # RootModule = 'SqlServer-Version-Management.psm1'",
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
-			"  ModuleVersion = `"2.1.47`"",
+			"  ModuleVersion = `"2.1.48`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -3053,17 +3053,16 @@ function Find-Writable-Module-Folder() {
   foreach($module in $modules) {
     $probeFullName = Combine-Path $module "probe.$([Guid]::NewGuid().ToString("N"))"
     try { 
-      $eap = $ErrorActionPreference
-      $ErrorActionPreference = "SilentlyContinue"
+      # $eap = $ErrorActionPreference
+      # $ErrorActionPreference = "SilentlyContinue"
       # Set-Content -Path $probeFullName -Value "success" -ErrorAction SilentlyContinue
       # if (Test-Path $probeFullName -ErrorAction SilentlyContinue) { return $module; }
       try { $_ = [System.IO.Directory]::CreateDirectory($module); } catch {}
-      [System.IO.File]::WriteAllText($probeFullName, "success");
-      return $module; 
+      try { [System.IO.File]::WriteAllText($probeFullName, "success"); return $module; } catch {}
     }
     finally { 
       try { [System.IO.File]::Delete($probeFullName); } catch { }
-      $ErrorActionPreference = $eap
+      # $ErrorActionPreference = $eap
     }
   }
 }
