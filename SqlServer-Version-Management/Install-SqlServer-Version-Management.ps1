@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.46';
+$ModuleVersion = '2.1.47';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -13,7 +13,7 @@ $ModuleFiles = @(
 			"",
 			"  # RootModule = 'SqlServer-Version-Management.psm1'",
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
-			"  ModuleVersion = `"2.1.46`"",
+			"  ModuleVersion = `"2.1.47`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -3055,8 +3055,8 @@ function Find-Writable-Module-Folder() {
     try { 
       $eap = $ErrorActionPreference
       $ErrorActionPreference = "SilentlyContinue"
-      Set-Content -Path $probeFullName -Value "success"
-      return $module
+      # Set-Content -Path $probeFullName -Value "success" -ErrorAction SilentlyContinue
+      # if (Test-Path $probeFullName -ErrorAction SilentlyContinue) { return $module; }
       try { $_ = [System.IO.Directory]::CreateDirectory($module); } catch {}
       [System.IO.File]::WriteAllText($probeFullName, "success");
       return $module; 
