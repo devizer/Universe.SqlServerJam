@@ -5,7 +5,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using Dapper;
-using Universe.SqlServerJam.GenericSqlInterop;
 
 namespace Universe.SqlServerJam
 {
@@ -43,7 +42,7 @@ namespace Universe.SqlServerJam
 
             // T ret = SqlConnection.ExecuteScalar<T>($"Select SERVERPROPERTY('{propertyName}')");
             // T ret = OneColumnDataReaderWithoutParameters<T>.Instance.ExecuteScalar(SqlConnection, $"Select SERVERPROPERTY('{propertyName}')");
-            T ret = SqlConnection.ExecuteScalar2<T>($"Select SERVERPROPERTY('{propertyName}')");
+            T ret = SqlConnection.ExecuteScalar<T>($"Select SERVERPROPERTY('{propertyName}')");
 
             _ServerProperties[propertyName] = ret;
             return ret;
@@ -267,7 +266,7 @@ namespace Universe.SqlServerJam
                     Console.WriteLine("Warning! CurrentSPID property is invoked for Closed connection");
                 }
 #endif
-                return SqlConnection.ExecuteScalar2<short>("Select @@SPID");
+                return SqlConnection.ExecuteScalar<short>("Select @@SPID");
             }
         }
 
@@ -284,7 +283,7 @@ namespace Universe.SqlServerJam
         {
             Stopwatch sw = Stopwatch.StartNew();
             // SqlConnection.Execute("-- ping", commandTimeout: Math.Max(1, timeout));
-            SqlConnection.Execute2("-- ping", Math.Max(1, timeout));
+            SqlConnection.Execute("-- ping", Math.Max(1, timeout));
             return sw.ElapsedTicks / (double) Stopwatch.Frequency;
         }
 

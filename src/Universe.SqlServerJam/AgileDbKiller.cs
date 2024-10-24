@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Dapper;
-using Universe.SqlServerJam.GenericSqlInterop;
 
 namespace Universe.SqlServerJam
 {
@@ -39,8 +38,8 @@ namespace Universe.SqlServerJam
                                 $"IF SERVERPROPERTY('EngineEdition') <> 5" +
                                 $"   EXEC(N'ALTER DATABASE [{dbName}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;')";
 
-                            con.Execute2(sql);
-                            con.Execute2($"Drop Database [{dbName}]");
+                            con.Execute(sql);
+                            con.Execute($"Drop Database [{dbName}]");
                         }
                         catch
                         {
@@ -59,7 +58,7 @@ namespace Universe.SqlServerJam
         private static void KillConnections(SqlConnection con, string dbName)
         {
             // int mySpid = con.ExecuteScalar<int>("Select @@SPID");
-            int mySpid = con.ExecuteScalar2<short>("Select @@SPID");
+            int mySpid = con.ExecuteScalar<short>("Select @@SPID");
             List<sp_who> query = con.Query<sp_who>("exec sp_who").ToList();
             StringComparison comp = StringComparisonExtensions.IgnoreCase;
             List<int> dbConnectionIdList = query
@@ -72,7 +71,7 @@ namespace Universe.SqlServerJam
             {
                 try
                 {
-                    con.Execute2($"Kill {id}");
+                    con.Execute($"Kill {id}");
                 }
                 catch (Exception ex)
                 {

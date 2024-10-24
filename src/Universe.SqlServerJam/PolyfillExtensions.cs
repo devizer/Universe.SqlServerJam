@@ -64,7 +64,7 @@ namespace Universe.SqlServerJam
 
         public static void Execute(this IDbConnection cnn, string sql, int? commandTimeout)
         {
-            cnn.Execute(sql, commandTimeout.GetValueOrDefault());
+            cnn.Execute(sql, commandTimeout.GetValueOrDefault(), null, commandTimeout.GetValueOrDefault(), CommandType.Text);
         }
 #else
 #endif
