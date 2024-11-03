@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using Dapper;
@@ -19,7 +20,7 @@ namespace Universe.SqlServerJam
 
         public decimal GetPing(int limitCount = 20000, int milliSecondsLimit = 3000)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(ConnectionString))
             {
                 con.Open();
 
@@ -38,7 +39,7 @@ namespace Universe.SqlServerJam
             byte[] random = new byte[blockSizeInKb * 1024];
             new Random().NextBytes(random);
 
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(ConnectionString))
             {
                 con.Open();
 
@@ -56,7 +57,7 @@ namespace Universe.SqlServerJam
             new Random().NextBytes(random);
             var tableName = "##T" + Guid.NewGuid().ToString("N");
 
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(ConnectionString))
             {
                 con.Open();
 
@@ -76,14 +77,15 @@ namespace Universe.SqlServerJam
             return ticks / (decimal) Stopwatch.Frequency * 1000m;
         }
 
-        private static decimal GetPing_Impl(SqlConnection con, int limitCount, long limitTicks)
+        private static decimal GetPing_Impl(DbConnection con, int limitCount, long limitTicks)
         {
             int count = 0;
             var sw = Stopwatch.StartNew();
             long ticks = 0L;
             while (count < limitCount)
             {
-                using (SqlCommand cmd = new SqlCommand("Select Null", con))
+                // using (SqlCommand cmd = new SqlCommand("Select Null", con))
+                using (DbCommand cmd = SqlServerJamConfigurationExtensions.CreateDbCommand("Select Null", con))
                 {
                     cmd.ExecuteNonQuery();
                 }
@@ -97,7 +99,7 @@ namespace Universe.SqlServerJam
             return ret;
         }
 
-        static decimal GetUploadSpeed_Impl(SqlConnection con, byte[] param, int countLimit, long ticksLimit)
+        static decimal GetUploadSpeed_Impl(DbConnection con, byte[] param, int countLimit, long ticksLimit)
         {
             const string sql = "Select DataLength(@arg);";
 
@@ -106,9 +108,17 @@ namespace Universe.SqlServerJam
             long ticks = 0L;
             while (count < countLimit)
             {
-                using (SqlCommand cmd = new SqlCommand(sql, con))
+                // using (SqlCommand cmd = new SqlCommand(sql, con))
+                using (DbCommand cmd = SqlServerJamConfigurationExtensions.CreateDbCommand(sql, con))
                 {
-                    cmd.Parameters.Add("@arg", SqlDbType.Image, param.Length).Value = param;
+                    var p = SqlServerJamConfiguration.SqlProviderFactory.CreateParameter();
+                    p.DbType = DbType.Binary;
+                    p.ParameterName = "@arg";
+                    p.Size = param.Length;
+                    p.Value = param;
+                    cmd.Parameters.Add(p);
+
+                    // cmd.Parameters.Add("@arg", SqlDbType.Image, param.Length).Value = param;
                     cmd.ExecuteNonQuery();
                 }
                 count++;
@@ -121,7 +131,7 @@ namespace Universe.SqlServerJam
             return ret;
         }
 
-        static decimal GetDownloadSpeed_Impl(SqlConnection con, string tableName, int countLimit, long ticksLimit)
+        static decimal GetDownloadSpeed_Impl(DbConnection con, string tableName, int countLimit, long ticksLimit)
         {
             string sql = $"Select Top 1 d From {tableName};";
 
@@ -131,7 +141,8 @@ namespace Universe.SqlServerJam
             int blobLength = -1;
             while (count < countLimit)
             {
-                using (SqlCommand cmd = new SqlCommand(sql, con))
+                // using (SqlCommand cmd = new SqlCommand(sql, con))
+                using(DbCommand cmd = SqlServerJamConfigurationExtensions.CreateDbCommand(sql, con))
                 {
                     var blob = cmd.ExecuteScalar();
                     blobLength = ((byte[]) blob).Length;

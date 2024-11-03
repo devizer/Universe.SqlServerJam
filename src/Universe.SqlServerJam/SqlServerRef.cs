@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -35,7 +36,8 @@ namespace Universe.SqlServerJam
                 if (Kind == SqlServerDiscoverySource.Local || Kind == SqlServerDiscoverySource.LocalDB)
                     return Data;
                 else if (Kind == SqlServerDiscoverySource.WellKnown)
-                    return new SqlConnectionStringBuilder(Data).DataSource;
+                    // return new SqlConnectionStringBuilder(Data).DataSource;
+                    return SqlServerJamConfigurationExtensions.GetDataSource(Data ?? "Data Source=Undefined");
                 else
                     throw new NotSupportedException();
             }
@@ -73,7 +75,7 @@ namespace Universe.SqlServerJam
                     try
                     {
                         string cs = $"Data Source={candidate.Data};Integrated Security=SSPI; Timeout=3";
-                        using (SqlConnection con = new SqlConnection(cs))
+                        using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(cs))
                             con.Manage().Ping(timeout: 3);
 
                         lock (ret) ret.Add(candidate);

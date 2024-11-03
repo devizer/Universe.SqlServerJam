@@ -7,8 +7,8 @@ $lines = $commitsRaw.Split([Environment]::NewLine)
 $commitCount = $lines.Length
 $ver="1.0.$($commitCount)"
 Write-Host "Version: $ver" -ForegroundColor Yellow
-$curdir=$(pwd)
 
+$curdir=$(pwd)
 pushd ..\Universe.SqlServerJam.Tests
 dotnet test
 if (-not $?) { throw 'Test Failed. Pack aborted'; }

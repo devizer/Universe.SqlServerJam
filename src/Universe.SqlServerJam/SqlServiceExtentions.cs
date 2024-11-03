@@ -1,5 +1,6 @@
 ﻿#if !NETSTANDARD1_3
 using System;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
@@ -55,7 +56,8 @@ namespace Universe.SqlServerJam
 
         public static bool IsLocalDbOrLocalServer(string connectionString)
         {
-            var ds = new SqlConnectionStringBuilder(connectionString).DataSource;
+            // var ds = new SqlConnectionStringBuilder(connectionString).DataSource;
+            var ds = SqlServerJamConfigurationExtensions.GetDataSource(connectionString);
             var instance = ds.Split(':').Last();
             var host = instance.Split('\\').First();
             // Discovery always returns either (local) or (localdb) host only.
@@ -94,7 +96,7 @@ namespace Universe.SqlServerJam
                 try
                 {
                     string cs = String.Format("Data Source={0};Integrated Security=True;Pooling=false;Timeout=1", localDb);
-                    using (SqlConnection con = new SqlConnection(cs))
+                    using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(cs))
                     {
                         con.Manage().Ping(timeout: 1);
                         return true;
@@ -159,7 +161,7 @@ namespace Universe.SqlServerJam
                 {
                     try { service.Start();} catch { }
                     string cs = String.Format("Data Source={0};Integrated Security=True;Pooling=false;Timeout=2", sqlServer);
-                    using (SqlConnection con = new SqlConnection(cs))
+                    using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(cs))
                     {
                         con.Manage().Ping(timeout: 2);
                         return true;

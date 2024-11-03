@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -15,13 +16,18 @@ namespace Universe.SqlServerJam
             if (sqlConnectionString == null)
                 throw new ArgumentNullException(nameof(sqlConnectionString));
 
-            SqlConnectionStringBuilder master = new SqlConnectionStringBuilder(sqlConnectionString);
-            string dbName = master.InitialCatalog;
+            var master = SqlServerJamConfiguration.SqlProviderFactory.CreateConnectionStringBuilder();
+
+            // SqlConnectionStringBuilder master = new SqlConnectionStringBuilder(sqlConnectionString);
+            string dbName = master["Initial Catalog"]?.ToString();
+            if (string.IsNullOrEmpty(dbName))
+                throw new ArgumentException("sqlConnectionString argument misses concrete database", nameof(sqlConnectionString));
+
             master.Remove("Initial Catalog");
-            master.Pooling = true;
+            master["Pooling"] = true.ToString();
 
             string connectionString = master.ConnectionString;
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(connectionString))
             {
                 var man = con.Manage();
                 if (man.IsDbExists(dbName))
@@ -55,7 +61,7 @@ namespace Universe.SqlServerJam
 
         // DbContext.Database.EnsureDeleted() behavior wait for few seconds before killing connections
         // It kills connections explicitly
-        private static void KillConnections(SqlConnection con, string dbName)
+        private static void KillConnections(DbConnection con, string dbName)
         {
             // int mySpid = con.ExecuteScalar<int>("Select @@SPID");
             int mySpid = con.ExecuteScalar<short>("Select @@SPID");

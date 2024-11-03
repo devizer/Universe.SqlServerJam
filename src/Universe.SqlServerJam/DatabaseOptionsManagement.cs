@@ -257,7 +257,8 @@ WHERE d.name = @name
 
                 if (ret == DatabaseRecoveryMode.Unknown)
                 {
-                    var server = new SqlConnectionStringBuilder(_Connection.ConnectionString).DataSource;
+                    // var server = new SqlConnectionStringBuilder(_Connection.ConnectionString).DataSource;
+                    var server = SqlServerJamConfigurationExtensions.GetDataSource(_Connection.ConnectionString);
                     Trace.WriteLine($"Unable to parse recovery model '{raw}' of DB [{DatabaseName}] on server {server}");
                 }
 

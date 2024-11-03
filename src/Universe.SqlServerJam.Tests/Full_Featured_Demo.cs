@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -100,7 +101,7 @@ namespace Universe.SqlServerJam.Tests
                 string v = sqlRef.Version == null ? "N/A" : sqlRef.Version.ToString();
                 StringBuilder report = new StringBuilder();
                 report.AppendLine();
-                using (SqlConnection con = new SqlConnection(cs))
+                using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(cs))
                 {
                     SqlBackupDescription backupDescr = con.Manage().GetBackupDescription(TestEnvironment.DbForTestsBak);
                     Console.WriteLine($"SERVER {sqlRef}{Environment.NewLine}{backupDescr}{Environment.NewLine}");
@@ -134,7 +135,7 @@ namespace Universe.SqlServerJam.Tests
                 StringBuilder report = new StringBuilder();
                 report.AppendLine($"SERVER {sqlRef}");
 
-                using (SqlConnection con = new SqlConnection(cs))
+                using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(cs))
                 {
                     // TryAndForget(() => con.Manage().ShortServerVersion?.ToString());
                     var warmUpError = WarmUp(cs, timeoutSeconds: 100);
@@ -265,8 +266,11 @@ namespace Universe.SqlServerJam.Tests
 
         static Exception WarmUp(string connectionString, int timeoutSeconds)
         {
-            var csb = new SqlConnectionStringBuilder(connectionString);
-            csb.ConnectTimeout = 2;
+            // var csb = new SqlConnectionStringBuilder(connectionString);
+            var csb = SqlServerJamConfiguration.SqlProviderFactory.CreateConnectionStringBuilder();
+            csb.ConnectionString = connectionString;
+            // csb.ConnectTimeout = 2;
+            csb["Connect Timeout"] = 2;
             var cs = csb.ConnectionString;
             Stopwatch sw = Stopwatch.StartNew();
             Exception ret = null;
@@ -274,7 +278,8 @@ namespace Universe.SqlServerJam.Tests
             {
                 try
                 {
-                    using (SqlConnection con = new SqlConnection(connectionString))
+                    // using (SqlConnection con = new SqlConnection(connectionString))
+                    using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(connectionString)) 
                     {
                         con.Open();
                         con.Manage().LongServerVersion?.ToString();
@@ -357,8 +362,11 @@ namespace Universe.SqlServerJam.Tests
                     try
                     {
                         // force packet size
-                        var builder = new SqlConnectionStringBuilder(supportedProtocol.ConnectionString);
-                        builder.PacketSize = 32768;
+                        // var builder = new SqlConnectionStringBuilder(supportedProtocol.ConnectionString);
+                        var builder = SqlServerJamConfiguration.SqlProviderFactory.CreateConnectionStringBuilder();
+                        builder.ConnectionString = supportedProtocol.ConnectionString;
+                        // builder.PacketSize = 32768;
+                        builder["Packet Size"] = 32768;
                         var connectionString = builder.ConnectionString;
                         SqlSpeedMeasurement test = new SqlSpeedMeasurement(connectionString);
                         decimal kbPerSec = test.GetUploadSpeed(limitIterations: 100000, blockSizeInKb: blockSize, limitMilliSeconds: TestEnvironment.SqlUploadDuration);
@@ -413,7 +421,8 @@ namespace Universe.SqlServerJam.Tests
 
         static string GetTransportInfo(string connectionString)
         {
-            using (SqlConnection con = new SqlConnection(connectionString))
+            // using (SqlConnection con = new SqlConnection(connectionString))
+            using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(connectionString))
             {
                 var transport = con.Manage().NetTransport;
                 transport += ", " + (con.Manage().IsConnectionEncrypted ? "Encrypted" : "Without Encryption");
