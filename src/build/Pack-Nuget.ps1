@@ -10,7 +10,7 @@ Write-Host "Version: $ver" -ForegroundColor Yellow
 
 $curdir=$(pwd)
 pushd ..\Universe.SqlServerJam.Tests
-dotnet test
+dotnet test -f net6.0
 if (-not $?) { throw 'Test Failed. Pack aborted'; }
 popd
 

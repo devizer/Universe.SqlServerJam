@@ -17,11 +17,15 @@ namespace Universe.SqlServerJam
                 throw new ArgumentNullException(nameof(sqlConnectionString));
 
             var master = SqlServerJamConfiguration.SqlProviderFactory.CreateConnectionStringBuilder();
+            master.ConnectionString = sqlConnectionString;
 
             // SqlConnectionStringBuilder master = new SqlConnectionStringBuilder(sqlConnectionString);
             string dbName = master["Initial Catalog"]?.ToString();
             if (string.IsNullOrEmpty(dbName))
-                throw new ArgumentException("sqlConnectionString argument misses concrete database", nameof(sqlConnectionString));
+            {
+                string keys = string.Join(", ", master.Keys.OfType<object>().Select(x => Convert.ToString(x)).ToArray());
+                throw new ArgumentException($"sqlConnectionString argument misses concrete database. Parameters are: [{keys}]", nameof(sqlConnectionString));
+            }
 
             master.Remove("Initial Catalog");
             master["Pooling"] = true.ToString();
