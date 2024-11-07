@@ -8,14 +8,17 @@ namespace Universe.SqlServerJam
 {
     public class SqlBackupDescription
     {
+        public string BackupPoint { get; }
         public List<SqlBackupHeaderDescription> Header { get; }
         public List<BackupFileDescription> FileList { get; }
 
-        public SqlBackupDescription(List<SqlBackupHeaderDescription> header, List<BackupFileDescription> fileList)
+        public SqlBackupDescription(string backupPoint, List<SqlBackupHeaderDescription> header, List<BackupFileDescription> fileList)
         {
+            BackupPoint = backupPoint;
             Header = header;
             FileList = fileList;
         }
+
 
         public override string ToString()
         {

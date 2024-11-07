@@ -346,7 +346,7 @@ select
         {
             var header = SqlConnection.Query<SqlBackupHeaderDescription>("restore headeronly from disk = @file", new { file = bakFullPath }).ToList();
             var fileList = SqlConnection.Query<BackupFileDescription>("restore filelistonly from disk = @file", new { file = bakFullPath }).ToList();
-            return new SqlBackupDescription(header, fileList);
+            return new SqlBackupDescription(bakFullPath, header, fileList);
         }
 
         public class DatabaseSelector
