@@ -1572,7 +1572,12 @@ $SqlServerDownloadLinks = @(
          "https://download.microsoft.com/download/3/8/d/38de7036-2433-4207-8eae-06e247e17b25/SQLServer2022-DEV-x64-ENU.exe")
       CU=@(
         # @{ Id="CU14"; Url="https://download.microsoft.com/download/9/6/8/96819b0c-c8fb-4b44-91b5-c97015bbda9f/SQLServer2022-KB5038325-x64.exe"; }
-        @{ Id="CU15"; Url="https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/updt/2024/09/sqlserver2022-kb5041321-x64_1b40129fb51df67f28feb2a1ea139044c611b93f.exe"; }
+        @{ Id="CU15"; 
+           Url=@(
+            "https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/sqlserver2022-kb5041321-x64_1b40129fb51df67f28feb2a1ea139044c611b93f.exe",
+            "https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/updt/2024/09/sqlserver2022-kb5041321-x64_1b40129fb51df67f28feb2a1ea139044c611b93f.exe"
+           );
+         }
       )
    },
    @{
@@ -1584,7 +1589,12 @@ $SqlServerDownloadLinks = @(
          "https://download.microsoft.com/download/8/4/c/84c6c430-e0f5-476d-bf43-eaaa222a72e0/SQLServer2019-DEV-x64-ENU.box",
          "https://download.microsoft.com/download/8/4/c/84c6c430-e0f5-476d-bf43-eaaa222a72e0/SQLServer2019-DEV-x64-ENU.exe")
       CU=@(
-        @{ Id="CU30"; Url="https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5049235-x64.exe"; }
+        @{ Id="CU30"; 
+           Url=@(
+            "https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/SQLServer2019-KB5049235-x64.exe",
+            "https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5049235-x64.exe"
+           );
+         }
         # @{ Id="CU28"; Url="https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5039747-x64.exe"; }
       )
    },
@@ -1597,7 +1607,12 @@ $SqlServerDownloadLinks = @(
          "https://download.microsoft.com/download/E/F/2/EF23C21D-7860-4F05-88CE-39AA114B014B/SQLServer2017-DEV-x64-ENU.box",
          "https://download.microsoft.com/download/E/F/2/EF23C21D-7860-4F05-88CE-39AA114B014B/SQLServer2017-DEV-x64-ENU.exe")
       CU=@(
-        @{ Id="CU31"; Url="https://download.microsoft.com/download/C/4/F/C4F908C9-98ED-4E5F-88D5-7D6A5004AEBD/SQLServer2017-KB5016884-x64.exe"; }
+        @{ Id="CU31"; 
+           Url=@(
+             "https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/SQLServer2017-KB5016884-x64.exe",
+             "https://download.microsoft.com/download/C/4/F/C4F908C9-98ED-4E5F-88D5-7D6A5004AEBD/SQLServer2017-KB5016884-x64.exe"
+           );
+         }
       )
    },
    @{
@@ -1609,7 +1624,12 @@ $SqlServerDownloadLinks = @(
         "https://download.microsoft.com/download/f/9/8/f982347c-fee3-4b3e-a8dc-c95383aa3020/sql16_sp3_dlc/en-us/SQLServer2016SP3-FullSlipstream-DEV-x64-ENU.box",
         "https://download.microsoft.com/download/f/9/8/f982347c-fee3-4b3e-a8dc-c95383aa3020/sql16_sp3_dlc/en-us/SQLServer2016SP3-FullSlipstream-DEV-x64-ENU.exe")
       CU=@(
-        @{ Id="1.KB5040946"; Url="https://download.microsoft.com/download/d/a/1/da18aac1-2cd0-4c52-b30d-39c3172cd156/SQLServer2016-KB5040946-x64.exe"; }
+        @{ Id="1.KB5040946"; 
+           Url=@(
+             "https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/SQLServer2016-KB5040946-x64.exe",
+             "https://download.microsoft.com/download/d/a/1/da18aac1-2cd0-4c52-b30d-39c3172cd156/SQLServer2016-KB5040946-x64.exe"
+           );
+         }
       )
    }
 );
@@ -1981,8 +2001,9 @@ function Download-SqlServer-Update {
   $archivePath = Combine-Path "$(Get-SqlServer-Media-Folder)" $key
   $archiveName = [System.IO.Path]::GetFileName($update.Url); # TODO: trim /download at the end
   $archiveFullName = Combine-Path $archivePath $archiveName;
-  Write-Host "Downloading SQL Server update '$($update.Id)' for version $version $mediaType. URL is '$($update.Url)'"
-  $isDownloadOk = Download-File-FailFree-and-Cached $archiveFullName @("$($update.Url)")
+  Write-Host "Downloading SQL Server update '$($update.Id)' for version $version $mediaType. URL (s) is '$($update.Url)'"
+  # $isDownloadOk = Download-File-FailFree-and-Cached $archiveFullName @("$($update.Url)")
+  $isDownloadOk = Download-File-FailFree-and-Cached $archiveFullName @($update.Url)
   if (-not $isDownloadOk) {
     Write-Host "Download SQL Server update '$($update.Id)' for version $version $mediaType failed. URL is '$($update.Url)'" -ForegroundColor DarkRed;
     return $ret;
