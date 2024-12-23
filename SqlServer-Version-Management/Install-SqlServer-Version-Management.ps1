@@ -3138,3 +3138,4 @@ function Act([string] $installTo) {
 }
 
 Act "$installTo"
+
