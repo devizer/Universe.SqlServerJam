@@ -1992,7 +1992,7 @@ function Download-SqlServer-Update {
   $archivePath = Combine-Path "$(Get-SqlServer-Media-Folder)" $key
   $archiveName = [System.IO.Path]::GetFileName($update.Url); # TODO: trim /download at the end
   $archiveFullName = Combine-Path $archivePath $archiveName;
-  Write-Host "Downloading SQL Server update '$($update.Id)' for version $version $mediaType. URL (s) is '$($update.Url)'"
+  Write-Host "Downloading SQL Server update '$($update.Id)' for version $version $mediaType. URL(s) is '$($update.Url)'"
   # $isDownloadOk = Download-File-FailFree-and-Cached $archiveFullName @("$($update.Url)")
   $isDownloadOk = Download-File-FailFree-and-Cached $archiveFullName @($update.Url)
   if (-not $isDownloadOk) {
