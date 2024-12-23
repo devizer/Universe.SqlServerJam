@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.48';
+$ModuleVersion = '2.1.50';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -13,7 +13,7 @@ $ModuleFiles = @(
 			"",
 			"  # RootModule = 'SqlServer-Version-Management.psm1'",
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
-			"  ModuleVersion = `"2.1.48`"",
+			"  ModuleVersion = `"2.1.50`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -1700,7 +1700,8 @@ $ModuleFiles = @(
 			"         `"https://download.microsoft.com/download/8/4/c/84c6c430-e0f5-476d-bf43-eaaa222a72e0/SQLServer2019-DEV-x64-ENU.box`",",
 			"         `"https://download.microsoft.com/download/8/4/c/84c6c430-e0f5-476d-bf43-eaaa222a72e0/SQLServer2019-DEV-x64-ENU.exe`")",
 			"      CU=@(",
-			"        @{ Id=`"CU28`"; Url=`"https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5039747-x64.exe`"; }",
+			"        @{ Id=`"CU30`"; Url=`"https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5049235-x64.exe`"; }",
+			"        # @{ Id=`"CU28`"; Url=`"https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5039747-x64.exe`"; }",
 			"      )",
 			"   },",
 			"   @{",
@@ -2348,7 +2349,7 @@ $ModuleFiles = @(
 			"   return `$ret;",
 			"}",
 			"# @(`"Administrators`", `"PowerUsers`", `"Users`") | % { `"`$(`$_): '`$(Get-Builtin-Windows-Group-Name `$_)'`" }",
-			"",
+			"# Get-WmiObject Win32_Group | ft *",
 			"# Include File: [\Includes.SqlServer\Get-SqlServer-Downloads-Folder.ps1]",
 			"function Get-SqlServer-Setup-Folder() {",
 			"  return (GetPersistentTempFolder `"SQLSERVERS_SETUP_FOLDER`" `"SQL-Setup`");",
