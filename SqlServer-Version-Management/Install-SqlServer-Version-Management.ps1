@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.54';
+$ModuleVersion = '2.1.56';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -13,7 +13,7 @@ $ModuleFiles = @(
 			"",
 			"  # RootModule = 'SqlServer-Version-Management.psm1'",
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
-			"  ModuleVersion = `"2.1.54`"",
+			"  ModuleVersion = `"2.1.56`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -1690,8 +1690,8 @@ $ModuleFiles = @(
 			"        # @{ Id=`"CU14`"; Url=`"https://download.microsoft.com/download/9/6/8/96819b0c-c8fb-4b44-91b5-c97015bbda9f/SQLServer2022-KB5038325-x64.exe`"; }",
 			"        @{ Id=`"CU15`"; ",
 			"           Url=@(",
-			"            `"https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/sqlserver2022-kb5041321-x64_1b40129fb51df67f28feb2a1ea139044c611b93f.exe`",",
-			"            `"https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/updt/2024/09/sqlserver2022-kb5041321-x64_1b40129fb51df67f28feb2a1ea139044c611b93f.exe`"",
+			"            `"https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/updt/2024/09/sqlserver2022-kb5041321-x64_1b40129fb51df67f28feb2a1ea139044c611b93f.exe`",",
+			"            `"https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/sqlserver2022-kb5041321-x64_1b40129fb51df67f28feb2a1ea139044c611b93f.exe`"",
 			"           );",
 			"         }",
 			"      )",
@@ -1707,8 +1707,8 @@ $ModuleFiles = @(
 			"      CU=@(",
 			"        @{ Id=`"CU30`"; ",
 			"           Url=@(",
-			"            `"https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/SQLServer2019-KB5049235-x64.exe`",",
-			"            `"https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5049235-x64.exe`"",
+			"            `"https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5049235-x64.exe`",",
+			"            `"https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/SQLServer2019-KB5049235-x64.exe`"",
 			"           );",
 			"         }",
 			"        # @{ Id=`"CU28`"; Url=`"https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5039747-x64.exe`"; }",
@@ -1725,8 +1725,8 @@ $ModuleFiles = @(
 			"      CU=@(",
 			"        @{ Id=`"CU31`"; ",
 			"           Url=@(",
-			"             `"https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/SQLServer2017-KB5016884-x64.exe`",",
-			"             `"https://download.microsoft.com/download/C/4/F/C4F908C9-98ED-4E5F-88D5-7D6A5004AEBD/SQLServer2017-KB5016884-x64.exe`"",
+			"             `"https://download.microsoft.com/download/C/4/F/C4F908C9-98ED-4E5F-88D5-7D6A5004AEBD/SQLServer2017-KB5016884-x64.exe`",",
+			"             `"https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/SQLServer2017-KB5016884-x64.exe`"",
 			"           );",
 			"         }",
 			"      )",
@@ -1742,8 +1742,8 @@ $ModuleFiles = @(
 			"      CU=@(",
 			"        @{ Id=`"1.KB5040946`"; ",
 			"           Url=@(",
-			"             `"https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/SQLServer2016-KB5040946-x64.exe`",",
-			"             `"https://download.microsoft.com/download/d/a/1/da18aac1-2cd0-4c52-b30d-39c3172cd156/SQLServer2016-KB5040946-x64.exe`"",
+			"             `"https://download.microsoft.com/download/d/a/1/da18aac1-2cd0-4c52-b30d-39c3172cd156/SQLServer2016-KB5040946-x64.exe`",",
+			"             `"https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/SQLServer2016-KB5040946-x64.exe`"",
 			"           );",
 			"         }",
 			"      )",
@@ -3138,4 +3138,3 @@ function Act([string] $installTo) {
 }
 
 Act "$installTo"
-
