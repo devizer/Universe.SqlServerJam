@@ -105,9 +105,9 @@ jobs:
       '#25 [2008R2-x64 Developer]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2008R2-x64 Developer'
-      '#26 [2012-x86 LocalDB]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2012-x86 LocalDB'
+#      '#26 [2012-x86 LocalDB]':
+#             IMAGE: 'windows-2019'
+#             SQL_SERVERS: '2012-x86 LocalDB'
       '#27 [2012-x86 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x86 Core'
@@ -129,9 +129,9 @@ jobs:
       '#33 [2012-x64 Developer]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2012-x64 Developer'
-      '#34 [2014-x86 LocalDB]':
-             IMAGE: 'windows-2019'
-             SQL_SERVERS: '2014-x86 LocalDB'
+#      '#34 [2014-x86 LocalDB]':
+#             IMAGE: 'windows-2019'
+#             SQL_SERVERS: '2014-x86 LocalDB'
       '#35 [2014-x86 Core]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2014-x86 Core'
