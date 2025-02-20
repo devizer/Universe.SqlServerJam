@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.56';
+$ModuleVersion = '2.1.59';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -13,7 +13,7 @@ $ModuleFiles = @(
 			"",
 			"  # RootModule = 'SqlServer-Version-Management.psm1'",
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
-			"  ModuleVersion = `"2.1.56`"",
+			"  ModuleVersion = `"2.1.59`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -1637,7 +1637,9 @@ $ModuleFiles = @(
 			"    Developer=@(`"https://archive.org/download/sql_server_2008_developer_edition_x86_x64/sql_server_2008_rtm_developer_edition_x64.7z`", `"https://sourceforge.net/projects/archived-sql-servers/files/sql_server_2008_rtm_developer_edition_x64.7z/download`") # RTM",
 			"    DeveloperFormat=`"Archive`"",
 			"    CU=@(",
+			"      # x64 is alive",
 			"      @{ Id=`"SP4`"; Url=`"https://download.microsoft.com/download/5/E/7/5E7A89F7-C013-4090-901E-1A0F86B6A94C/ENU/SQLServer2008SP4-KB2979596-x64-ENU.exe`" }",
+			"      # https://web.archive.org/web/20200812071912/https://download.microsoft.com/download/5/E/7/5E7A89F7-C013-4090-901E-1A0F86B6A94C/ENU/SQLServer2008SP4-KB2979596-x64-ENU.exe",
 			"    )",
 			"    ",
 			"  };",
@@ -1648,7 +1650,9 @@ $ModuleFiles = @(
 			"    Developer=@(`"https://archive.org/download/sql_server_2008_developer_edition_x86_x64/sql_server_2008_rtm_developer_edition_x86.7z`", `"https://sourceforge.net/projects/archived-sql-servers/files/sql_server_2008_rtm_developer_edition_x86.7z/download`") # RTM",
 			"    DeveloperFormat=`"Archive`"",
 			"    CU=@(",
-			"      @{ Id=`"SP4`"; Url=`"https://download.microsoft.com/download/5/E/7/5E7A89F7-C013-4090-901E-1A0F86B6A94C/ENU/SQLServer2008SP4-KB2979596-x86-ENU.exe`" }",
+			"      # x68 is removed",
+			"      # @{ Id=`"SP4`"; Url=`"https://download.microsoft.com/download/5/E/7/5E7A89F7-C013-4090-901E-1A0F86B6A94C/ENU/SQLServer2008SP4-KB2979596-x86-ENU.exe`" }",
+			"      @{ Id=`"SP4`"; Url=`"https://web.archive.org/web/20200804042408/https://download.microsoft.com/download/5/E/7/5E7A89F7-C013-4090-901E-1A0F86B6A94C/ENU/SQLServer2008SP4-KB2979596-x86-ENU.exe`" }",
 			"    )",
 			"  };",
 			"  @{ ",
