@@ -1545,7 +1545,9 @@ $SqlServer2010DownloadLinks = @(
   # 2008 SP2
   @{ 
     Version="2008-x64"; 
-    Core    ="https://web.archive.org/web/20160617214727/https://download.microsoft.com/download/0/F/D/0FD88169-F86F-46E1-8B3B-56C44F6E9505/SQLEXPR_x64_ENU.exe"  #SP3
+    # DONE: Updated for the direct publication
+    # Core  ="https://web.archive.org/web/20160617214727/https://download.microsoft.com/download/0/F/D/0FD88169-F86F-46E1-8B3B-56C44F6E9505/SQLEXPR_x64_ENU.exe"  #SP3
+    Core    ="https://archive.org/download/sql-server-express-2008-x86-x64-sp4/SQL-Core-2008-x64-ENU.exe"
     Advanced="https://download.microsoft.com/download/e/9/b/e9bcf5d7-2421-464f-94dc-0c694ba1b5a4/SQLEXPRADV_x64_ENU.exe" #RTM
     Developer=@("https://archive.org/download/sql_server_2008_developer_edition_x86_x64/sql_server_2008_rtm_developer_edition_x64.7z", "https://sourceforge.net/projects/archived-sql-servers/files/sql_server_2008_rtm_developer_edition_x64.7z/download") # RTM
     DeveloperFormat="Archive"
@@ -1558,7 +1560,9 @@ $SqlServer2010DownloadLinks = @(
   };
   @{ 
     Version ="2008-x86"; #SP2
-    Core    ="https://web.archive.org/web/20160617214727/https://download.microsoft.com/download/0/F/D/0FD88169-F86F-46E1-8B3B-56C44F6E9505/SQLEXPR_x86_ENU.exe" #SP3
+    # DONE: Updated for the direct publication
+    # Core  ="https://web.archive.org/web/20160617214727/https://download.microsoft.com/download/0/F/D/0FD88169-F86F-46E1-8B3B-56C44F6E9505/SQLEXPR_x86_ENU.exe" #SP3
+    Core    ="https://archive.org/download/sql-server-express-2008-x86-x64-sp4/SQL-Core-2008-x86-ENU.exe"
     Advanced="https://download.microsoft.com/download/e/9/b/e9bcf5d7-2421-464f-94dc-0c694ba1b5a4/SQLEXPRADV_x86_ENU.exe" #RTM
     Developer=@("https://archive.org/download/sql_server_2008_developer_edition_x86_x64/sql_server_2008_rtm_developer_edition_x86.7z", "https://sourceforge.net/projects/archived-sql-servers/files/sql_server_2008_rtm_developer_edition_x86.7z/download") # RTM
     DeveloperFormat="Archive"
