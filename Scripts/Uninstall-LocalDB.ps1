@@ -1525,9 +1525,12 @@ $SqlServer2010DownloadLinks = @(
     Developer=@("https://archive.org/download/sql_server_2008_developer_edition_x86_x64/sql_server_2008_rtm_developer_edition_x86.7z", "https://sourceforge.net/projects/archived-sql-servers/files/sql_server_2008_rtm_developer_edition_x86.7z/download") # RTM
     DeveloperFormat="Archive"
     CU=@(
-      # x68 is removed
+      # x86 is removed
       # @{ Id="SP4"; Url="https://download.microsoft.com/download/5/E/7/5E7A89F7-C013-4090-901E-1A0F86B6A94C/ENU/SQLServer2008SP4-KB2979596-x86-ENU.exe" }
-      @{ Id="SP4"; Url="https://web.archive.org/web/20200804042408/https://download.microsoft.com/download/5/E/7/5E7A89F7-C013-4090-901E-1A0F86B6A94C/ENU/SQLServer2008SP4-KB2979596-x86-ENU.exe" }
+      # It is not reliable
+      # @{ Id="SP4"; Url="https://web.archive.org/web/20200804042408/https://download.microsoft.com/download/5/E/7/5E7A89F7-C013-4090-901E-1A0F86B6A94C/ENU/SQLServer2008SP4-KB2979596-x86-ENU.exe" }
+      # Explicit web archive publication
+      @{ Id="SP4"; Url="https://archive.org/download/sql-server-express-2008-x86-x64-sp4/SQLServer2008SP4-KB2979596-x86-ENU.exe" }
     )
   };
   @{ 
