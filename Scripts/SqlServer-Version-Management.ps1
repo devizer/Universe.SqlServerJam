@@ -1612,10 +1612,17 @@ $SqlServerDownloadLinks = @(
          "https://download.microsoft.com/download/3/8/d/38de7036-2433-4207-8eae-06e247e17b25/SQLServer2022-DEV-x64-ENU.exe")
       CU=@(
         # @{ Id="CU14"; Url="https://download.microsoft.com/download/9/6/8/96819b0c-c8fb-4b44-91b5-c97015bbda9f/SQLServer2022-KB5038325-x64.exe"; }
-        @{ Id="CU15"; 
+        # @{ Id="CU15"; 
+        #   Url=@(
+        #    "https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/updt/2024/09/sqlserver2022-kb5041321-x64_1b40129fb51df67f28feb2a1ea139044c611b93f.exe",
+        #    "https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/sqlserver2022-kb5041321-x64_1b40129fb51df67f28feb2a1ea139044c611b93f.exe"
+        #   );
+        # }
+        # CU17
+        @{ Id="CU17"; 
            Url=@(
-            "https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/updt/2024/09/sqlserver2022-kb5041321-x64_1b40129fb51df67f28feb2a1ea139044c611b93f.exe",
-            "https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/sqlserver2022-kb5041321-x64_1b40129fb51df67f28feb2a1ea139044c611b93f.exe"
+            "https://download.microsoft.com/download/9/6/8/96819b0c-c8fb-4b44-91b5-c97015bbda9f/SQLServer2022-KB5048038-x64.exe",
+            "https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/SQLServer2022-KB5048038-x64.exe"
            );
          }
       )
@@ -1629,14 +1636,24 @@ $SqlServerDownloadLinks = @(
          "https://download.microsoft.com/download/8/4/c/84c6c430-e0f5-476d-bf43-eaaa222a72e0/SQLServer2019-DEV-x64-ENU.box",
          "https://download.microsoft.com/download/8/4/c/84c6c430-e0f5-476d-bf43-eaaa222a72e0/SQLServer2019-DEV-x64-ENU.exe")
       CU=@(
-        @{ Id="CU30"; 
+        # @{ Id="CU30"; 
+        #   Url=@(
+        #    "https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5049235-x64.exe",
+        #    "https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/SQLServer2019-KB5049235-x64.exe"
+        #   );
+        # }
+        # @{ Id="CU28"; Url="https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5039747-x64.exe"; }
+        # CU31 
+        # https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/updt/2025/02/sqlserver2019-kb5049296-x64_df5a52a752a86ff79331698949a99e8a53c97d97.exe
+        # https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/sqlserver2019-kb5049296-x64_df5a52a752a86ff79331698949a99e8a53c97d97.exe
+        @{ Id="CU31"; 
            Url=@(
-            "https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5049235-x64.exe",
-            "https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/SQLServer2019-KB5049235-x64.exe"
+            "https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/updt/2025/02/sqlserver2019-kb5049296-x64_df5a52a752a86ff79331698949a99e8a53c97d97.exe",
+            "https://archive.org/download/sql_server_2016_2017_2019_2022_comulative_updates/sqlserver2019-kb5049296-x64_df5a52a752a86ff79331698949a99e8a53c97d97.exe"
            );
          }
-        # @{ Id="CU28"; Url="https://download.microsoft.com/download/6/e/7/6e72dddf-dfa4-4889-bc3d-e5d3a0fd11ce/SQLServer2019-KB5039747-x64.exe"; }
       )
+
    },
    @{
       Version="2017"
