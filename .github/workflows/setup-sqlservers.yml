@@ -55,7 +55,7 @@ jobs:
            '2014-x86 Developer', 
            '2014-x86 Advanced',
            '2014-x86 Core',
-           '2014-x86 LocalDB',
+#           '2014-x86 LocalDB',
            '2012-x64 Developer',
            '2012-x64 Advanced',
            '2012-x64 Core',
@@ -63,7 +63,7 @@ jobs:
            '2012-x86 Developer',
            '2012-x86 Advanced',
            '2012-x86 Core',
-           '2012-x86 LocalDB',
+#           '2012-x86 LocalDB',
            '2008R2-x64 Developer',
            '2008R2-x64 Advanced Update',
            '2008R2-x64 Advanced',
@@ -229,6 +229,16 @@ jobs:
        $jsonObject = @($jsonString | ConvertFrom-Json) | Select -First 1
        $jsonObject | Add-Member -MemberType NoteProperty -Name "MediumVersion" -Value $mediumVersion
        $jsonObject | ConvertTo-Json > "$jsonFile"
+
+    - name: Show Query Cache Report
+      run: |
+        git clone https://github.com/devizer/Universe.SqlServerQueryCache C:\Temp\QueryCache
+        cd C:\Temp\QueryCache
+        # git reset --hard
+        # git clean -xfd
+        cd Universe.SqlServerQueryCache.CLI
+        dotnet run -c Release -- -all -av -o "C:\Artifacts\Query Cache Reports\{InstanceName}" 
+
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
