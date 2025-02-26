@@ -232,10 +232,10 @@ jobs:
 
     - name: Show Query Cache Report
       run: |
-        git clone https://github.com/devizer/Universe.SqlServerQueryCache C:\Temp\QueryCache
+        Measure-Action "Git Clone Sql Server Query Cache" { & git clone https://github.com/devizer/Universe.SqlServerQueryCache C:\Temp\QueryCache }
         cd C:\Temp\QueryCache
-        # git reset --hard
-        # git clean -xfd
+        git reset --hard
+        git clean -xfd
         cd Universe.SqlServerQueryCache.CLI
         Measure-Action "Build CLI Release" { & dotnet build -c Release }
         Measure-Action "Produce Query Cache Report" { & dotnet run --no-build --no-launch-profile -c Release -- -all -av -o "C:\Artifacts\Query Cache Reports\{InstanceName}" }
