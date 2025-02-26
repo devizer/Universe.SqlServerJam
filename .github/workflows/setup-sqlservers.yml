@@ -237,7 +237,7 @@ jobs:
         # git reset --hard
         # git clean -xfd
         cd Universe.SqlServerQueryCache.CLI
-        dotnet run -c Release -- -all -av -o "C:\Artifacts\Query Cache Reports\{InstanceName}" 
+        dotnet run --no-launch-profile -c Release -- -all -av -o "C:\Artifacts\Query Cache Reports\{InstanceName}" 
 
 
     - name: Upload artifacts
