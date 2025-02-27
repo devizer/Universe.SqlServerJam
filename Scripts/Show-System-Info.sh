@@ -64,7 +64,7 @@ else
   echo "Warning! Unknown OS"
 fi
 
-(echo ""; echo "VOLUMES"; cat tee ~/volumes-info.txt) >> "$ReportName"
+(echo ""; echo "VOLUMES"; cat ~/volumes-info.txt) >> "$ReportName"
 
 export DISABLE_UNICODE=true
 Say "Disk Benchmark for [$HOME]"
