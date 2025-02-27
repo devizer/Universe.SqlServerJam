@@ -31,5 +31,5 @@ jobs:
       with:
         name: 'System Info ${{ matrix.os }}'
         path: |
-           ${{ env.THEARTIFACTS }}
+           ${{ env.THEARTIFACTS_NATIVE }}
           

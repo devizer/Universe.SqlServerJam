@@ -1,10 +1,17 @@
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
 
-THEARTIFACTS="$HOME/Artifacts"
-echo "THEARTIFACTS = [$THEARTIFACTS]"
+if [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
+  sysDrive="${SystemDrive:0:1}"
+  THEARTIFACTS="/$sysDrive/Artifacts"
+  THEARTIFACTS_NATIVE="$sysDrive:\\Artifacts"
+else
+  THEARTIFACTS="$HOME/Artifacts"
+  THEARTIFACTS_NATIVE="$THEARTIFACTS"
+fi
+echo "THEARTIFACTS = [$THEARTIFACTS] | THEARTIFACTS_NATIVE = [$THEARTIFACTS_NATIVE]"
 echo "THEARTIFACTS=$THEARTIFACTS" >> "$GITHUB_ENV"
-
-mkdir ~/Artifacts
+echo "THEARTIFACTS_NATIVE=$THEARTIFACTS_NATIVE" >> "$GITHUB_ENV"
+mkdir "$THEARTIFACTS"
 
 ls -la /D || true
 ls -la /d || true
