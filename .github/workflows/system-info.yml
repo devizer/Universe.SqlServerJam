@@ -42,7 +42,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         pattern: '**'
-        path: "${{ env.RUNNER_TEMP }}/Combined"
+        path: "${{ runner.temp }}/Combined"
 
     - name: Show Download Structure
       run: 'sudo apt-get update -q; sudo apt-get install tree -y -qq; tree $RUNNER_TEMP'
@@ -51,5 +51,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: 'Combined System Info'
-        path: "${{ env.RUNNER_TEMP }}/Combined"
+        path: "${{ runner.temp }}/Combined"
 
