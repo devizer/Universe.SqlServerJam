@@ -10,6 +10,7 @@ defaults:
 
 jobs:
   Info:
+    name: Gather Benchmarks
     strategy:
       fail-fast: false
       matrix:
@@ -35,6 +36,7 @@ jobs:
            ${{ env.THEARTIFACTS_NATIVE }}
           
   Combine:
+    name: Combine results in a single Artifact
     needs: Info
     runs-on: ubuntu-latest
     steps:
