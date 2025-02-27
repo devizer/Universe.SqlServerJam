@@ -18,12 +18,14 @@ echo "THEARTIFACTS=$THEARTIFACTS" >> "$GITHUB_ENV"
 echo "THEARTIFACTS_NATIVE=$THEARTIFACTS_NATIVE" >> "$GITHUB_ENV"
 mkdir -p "$THEARTIFACTS"
 
+echo '
 ls -la /D || true
 ls -la /d || true
 ls -la /mnt || true
 ls -la /mnt/D/ || true
 ls -la /cygdrive || true
 ls -la /cygdrive/d || true
+' > /dev/null
 
 for suffix in p v m r s; do
   echo "uname -$suffix: $(uname -$suffix)"
@@ -39,13 +41,13 @@ fi
 if [[ -d /usr/local/bin ]]; then export PATH="/usr/local/bin:$PATH"; fi
 bash -c "7z b -mmt=1 -md=22" | tee -a "$ReportName"
 
-# Fix missing fio and nproc
+# Install missing fio and nproc
 if [[ "$(uname -s)" == Linux ]]; then
    Say "Linux Volumes"
-   sudo df -h -T
+   sudo df -h -T | tee ~/volumes-info.txt
 elif [[ "$(uname -s)" == Darwin ]]; then
    Say "MacOS Volumes"
-   sudo df -h
+   sudo df -h | tee ~/volumes-info.txt
    brew install fio
    # install nproc
    echo '#!/usr/bin/env bash
@@ -53,7 +55,7 @@ elif [[ "$(uname -s)" == Darwin ]]; then
    sudo chmod +x /usr/local/bin/nproc
 elif [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
    Say "Windows Volumes"
-   powershell -c "gdr -PSProvider 'FileSystem'"
+   powershell -c "gdr -PSProvider 'FileSystem'" | tee ~/volumes-info.txt
    choco install -y --no-progress fio
    echo '#!/bin/bash
          set -e; if [[ "${1:-}" == "-E" ]]; then shift; fi; eval "$@"' > /usr/bin/sudo
@@ -61,6 +63,8 @@ elif [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
 else
   echo "Warning! Unknown OS"
 fi
+
+(echo ""; echo "VOLUMES"; cat tee ~/volumes-info.txt) >> "$ReportName"
 
 export DISABLE_UNICODE=true
 Say "Disk Benchmark for [$HOME]"
