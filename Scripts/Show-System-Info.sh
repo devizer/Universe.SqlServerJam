@@ -1,7 +1,9 @@
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
 
 if [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
+  echo "Windows 'SystemDrive' var = [${SystemDrive:-}]"
   sysDrive="${SystemDrive:0:1}"
+  sysDrive="${sysDrive:-c}"
   THEARTIFACTS="/$sysDrive/Artifacts"
   THEARTIFACTS_NATIVE="$sysDrive:\\Artifacts"
 else
