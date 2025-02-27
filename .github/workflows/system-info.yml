@@ -45,9 +45,8 @@ jobs:
         path: "${{ runner.temp }}/Combined"
         merge-multiple: true
 
-
     - name: Show Download Structure
-      run: 'sudo apt-get update -q; sudo apt-get install tree -y -qq; tree $RUNNER_TEMP'
+      run: 'sudo apt-get update -qq; sudo apt-get install tree -y -qq; tree $RUNNER_TEMP'
 
     - name: Upload Combined System Info
       uses: actions/upload-artifact@v4
