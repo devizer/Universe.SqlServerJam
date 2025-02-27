@@ -26,7 +26,7 @@ jobs:
     - name: System Info
       run: 'bash -e Scripts/Show-System-Info.sh'
 
-    - name: Upload artifacts [${{ env.THEARTIFACTS }}]
+    - name: Upload artifacts [${{ env.THEARTIFACTS_NATIVE }}]
       uses: actions/upload-artifact@v4
       if: always()
       with:
