@@ -46,14 +46,14 @@ fi
 
 export DISABLE_UNICODE=true
 Say "Disk Benchmark for [$HOME]"
-File-IO-Benchmark 'HOME' "$HOME" 1G $(nproc)T 20 1 | tee fio-benchmark-1.log
+File-IO-Benchmark 'HOME' "$HOME" 2G $(nproc)T 30 1 | tee fio-benchmark-1.log
 
 secondDrive=""
 [[ -d /D ]] && secondDrive="/D"
 [[ -d /mnt ]] && secondDrive="/mnt"
 if [[ -n "$secondDrive" ]]; then
   Say "Disk Benchmark for SECOND Drive [$secondDrive]"
-  sudo -E File-IO-Benchmark 'SECOND-Drive' "$secondDrive" 1G $(nproc)T 20 1 | tee fio-benchmark-2.log
+  sudo -E File-IO-Benchmark 'SECOND-Drive' "$secondDrive" 2G $(nproc)T 30 1 | tee fio-benchmark-2.log
 
   echo "";echo "";
   cat fio-benchmark-1.log | tail -5
