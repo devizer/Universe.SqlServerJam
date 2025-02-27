@@ -1,0 +1,100 @@
+→ 1.1 ErgoFab.DataAccess.IntegrationTests.TestConnectionStrings::CompareMicrosoftAndSystem is starting
+System: 2 specified parameters, 30 total keys
+   Application Name: Core .Net SqlClient Data Provider
+   ApplicationIntent: ReadWrite
+   AttachDbFilename: 
+   Connect Timeout: 15
+   ConnectRetryCount: 1
+   ConnectRetryInterval: 10
+   Current Language: 
+   Data Source: (local)
+   Encrypt: False
+   Enlist: True
+   Failover Partner: 
+   Initial Catalog: DB123
+   Integrated Security: False
+   Load Balance Timeout: 0
+   Max Pool Size: 100
+   Min Pool Size: 0
+   MultipleActiveResultSets: False
+   MultiSubnetFailover: False
+   Packet Size: 8000
+   Password: 
+   Persist Security Info: False
+   PoolBlockingPeriod: Auto
+   Pooling: True
+   Replication: False
+   Transaction Binding: Implicit Unbind
+   TrustServerCertificate: False
+   Type System Version: Latest
+   User ID: 
+   User Instance: False
+   Workstation ID: 
+
+Microsoft: 2 specified parameters, 40 total keys
+   Application Intent: ReadWrite
+   Application Name: Core Microsoft SqlClient Data Provider
+   AttachDbFilename: 
+   Attestation Protocol: NotSpecified
+   Authentication: NotSpecified
+   Column Encryption Setting: Disabled
+   Command Timeout: 30
+   Connect Retry Count: 1
+   Connect Retry Interval: 10
+   Connect Timeout: 15
+   Current Language: 
+   Data Source: (local)
+   Enclave Attestation Url: 
+   Encrypt: True
+   Enlist: True
+   Failover Partner: 
+   Failover Partner SPN: 
+   Host Name In Certificate: 
+   Initial Catalog: DB123
+   Integrated Security: False
+   IP Address Preference: IPv4First
+   Load Balance Timeout: 0
+   Max Pool Size: 100
+   Min Pool Size: 0
+   Multi Subnet Failover: False
+   Multiple Active Result Sets: False
+   Packet Size: 8000
+   Password: 
+   Persist Security Info: False
+   Pool Blocking Period: Auto
+   Pooling: True
+   Replication: False
+   Server Certificate: 
+   Server SPN: 
+   Transaction Binding: Implicit Unbind
+   Trust Server Certificate: False
+   Type System Version: Latest
+   User ID: 
+   User Instance: False
+   Workstation ID: 
+
+COMMON KEYS
+   Application Name
+   AttachDbFilename
+   Connect Timeout
+   Current Language
+   Data Source
+   Encrypt
+   Enlist
+   Failover Partner
+   Initial Catalog
+   Integrated Security
+   Load Balance Timeout
+   Max Pool Size
+   Min Pool Size
+   Packet Size
+   Password
+   Persist Security Info
+   Pooling
+   Replication
+   Transaction Binding
+   Type System Version
+   User ID
+   User Instance
+   Workstation ID
+← 1.1 ErgoFab.DataAccess.IntegrationTests.TestConnectionStrings::CompareMicrosoftAndSystem >PASSED< in 20.69 milliseconds (cpu: 76%, 15.625 = 15.625 [user] + 0.000 [kernel])

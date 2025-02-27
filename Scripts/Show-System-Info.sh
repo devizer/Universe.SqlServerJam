@@ -15,6 +15,7 @@ Say "Benchmark for [$(Get-CpuName)]"
 if [[ "$(uname -s)" == Darwin ]] || [[ "$(uname -s)" == Linux ]]; then
   export INSTALL_DIR=/usr/local/bin LINK_AS_7Z=/usr/local/bin/7z; script="https://master.dl.sourceforge.net/project/p7zz-repack/install-7zz.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 elif [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
+  Say "Installing 7-Zip"
   choco install 7zip --version 21.7.0 --force --allow-downgrade --no-progress
 fi
 if [[ -d /usr/local/bin ]]; then export PATH="/usr/local/bin:$PATH"; fi

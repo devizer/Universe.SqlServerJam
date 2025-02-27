@@ -164,7 +164,13 @@ jobs:
         SQL_SERVERS: ${{ matrix.SqlServers }}
       run: |
          # Scripts\Setup-SqlServers.ps1 -SqlServers "$($ENV:SQL_SERVERS)" "Collation=French_CI_AI" "Startup=Manual" "InstallTo=C:\SQL-Customized" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB {InstanceName} Data" "/SQLUSERDBLOGDIR=C:\SQL LOGS {InstanceName}" "/SQLBACKUPDIR=C:\Backups for {InstanceName}"
-         Setup-SqlServers -SqlServers "${{ matrix.SqlServers }}" "Collation=French_CI_AI" "Startup=Automatic" "InstallTo=C:\SQL-Customized" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB {InstanceName} Data" "/SQLUSERDBLOGDIR=C:\SQL LOGS {InstanceName}" "/SQLBACKUPDIR=C:\Backups for {InstanceName}"
+         $ENV:PS1_TROUBLE_SHOOT = "On"
+         $ENV:SQLSERVERS_MEDIA_FOLDER = "D:\SQL-SETUP\Media"
+         $ENV:SQLSERVERS_SETUP_FOLDER = "C:\SQL-SETUP\Installer"
+         & setx.exe PS1_TROUBLE_SHOOT On
+         & setx.exe SQLSERVERS_MEDIA_FOLDER "$ENV:SQLSERVERS_MEDIA_FOLDER"
+         & setx.exe SQLSERVERS_SETUP_FOLDER "$ENV:SQLSERVERS_SETUP_FOLDER"
+         Setup-SqlServers -SqlServers "${{ matrix.SqlServers }}" "Collation=French_CI_AI" "Startup=Automatic" "InstallTo=D:\SQL" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB {InstanceName} Data" "/SQLUSERDBLOGDIR=D:\SQL LOGS {InstanceName}" "/SQLBACKUPDIR=C:\Backups for {InstanceName}"
 
          Write-Line "Starting SQL Server(s)"
          $localSqlServers = @(Find-Local-SqlServers | % {$_.Service})
