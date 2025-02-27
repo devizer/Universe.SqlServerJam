@@ -37,7 +37,7 @@ elif [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
   choco install 7zip --version 21.7.0 --force --allow-downgrade --no-progress
 fi
 if [[ -d /usr/local/bin ]]; then export PATH="/usr/local/bin:$PATH"; fi
-bash -c "7z b -mmt=1 -md=22" | tee -a "$THEARTIFACTS"/SysInfo.txt
+bash -c "7z b -mmt=1 -md=22" | tee -a "$ReportName"
 
 # Fix missing fio and nproc
 if [[ "$(uname -s)" == Linux ]]; then
@@ -65,7 +65,7 @@ fi
 export DISABLE_UNICODE=true
 Say "Disk Benchmark for [$HOME]"
 File-IO-Benchmark 'HOME' "$HOME" 2G $(nproc)T 8 1 | tee fio-benchmark-1.log
-(echo ""; (cat fio-benchmark-1.log | tail -5)) >> "$THEARTIFACTS"/SysInfo.txt
+(echo ""; (cat fio-benchmark-1.log | tail -5)) >> "$ReportName"
 
 secondDrive=""
 [[ -d /D ]] && secondDrive="/D"
@@ -73,7 +73,7 @@ secondDrive=""
 if [[ -n "$secondDrive" ]]; then
   Say "Disk Benchmark for SECOND Drive [$secondDrive]"
   sudo -E File-IO-Benchmark 'SECOND-Drive' "$secondDrive" 2G $(nproc)T 8 1 | tee fio-benchmark-2.log
-  (echo ""; (cat fio-benchmark-2.log | tail -5)) >> "$THEARTIFACTS"/SysInfo.txt
+  (echo ""; (cat fio-benchmark-2.log | tail -5)) >> "$ReportName"
 
   echo "";echo "";
   cat fio-benchmark-1.log | tail -5

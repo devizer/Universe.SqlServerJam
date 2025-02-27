@@ -43,6 +43,8 @@ jobs:
       with:
         pattern: '**'
         path: "${{ runner.temp }}/Combined"
+        merge-multiple: true
+
 
     - name: Show Download Structure
       run: 'sudo apt-get update -q; sudo apt-get install tree -y -qq; tree $RUNNER_TEMP'
