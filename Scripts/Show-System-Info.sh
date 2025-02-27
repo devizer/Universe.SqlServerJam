@@ -1,5 +1,11 @@
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
 
+THEARTIFACTS="$HOME/Artifacts"
+echo "THEARTIFACTS = [$THEARTIFACTS]"
+echo "THEARTIFACTS=$THEARTIFACTS" >> "$GITHUB_ENV"
+
+mkdir ~/Artifacts
+
 ls -la /D || true
 ls -la /d || true
 ls -la /mnt || true
@@ -19,7 +25,7 @@ elif [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
   choco install 7zip --version 21.7.0 --force --allow-downgrade --no-progress
 fi
 if [[ -d /usr/local/bin ]]; then export PATH="/usr/local/bin:$PATH"; fi
-bash -c "7z b -mmt=1 -md=22"
+bash -c "7z b -mmt=1 -md=22" | tee -a ~/Artifacts/SysInfo.txt
 
 # Fix missing fio and nproc
 if [[ "$(uname -s)" == Linux ]]; then
@@ -53,9 +59,9 @@ secondDrive=""
 [[ -d /mnt ]] && secondDrive="/mnt"
 if [[ -n "$secondDrive" ]]; then
   Say "Disk Benchmark for SECOND Drive [$secondDrive]"
-  sudo -E File-IO-Benchmark 'SECOND-Drive' "$secondDrive" 2G $(nproc)T 30 1 | tee fio-benchmark-2.log
+  sudo -E File-IO-Benchmark 'SECOND-Drive' "$secondDrive" 2G $(nproc)T 30 1 | tee fio-benchmark-2.log | tee -a ~/Artifacts/SysInfo.txt
 
   echo "";echo "";
-  cat fio-benchmark-1.log | tail -5
+  cat fio-benchmark-1.log | tail -5 | tee -a ~/Artifacts/SysInfo.txt
 fi
 
