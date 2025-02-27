@@ -36,7 +36,7 @@ elif [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
   choco install 7zip --version 21.7.0 --force --allow-downgrade --no-progress
 fi
 if [[ -d /usr/local/bin ]]; then export PATH="/usr/local/bin:$PATH"; fi
-bash -c "7z b -mmt=1 -md=22" | tee -a ~/Artifacts/SysInfo.txt
+bash -c "7z b -mmt=1 -md=22" | tee -a "$THEARTIFACTS"/SysInfo.txt
 
 # Fix missing fio and nproc
 if [[ "$(uname -s)" == Linux ]]; then
@@ -70,9 +70,9 @@ secondDrive=""
 [[ -d /mnt ]] && secondDrive="/mnt"
 if [[ -n "$secondDrive" ]]; then
   Say "Disk Benchmark for SECOND Drive [$secondDrive]"
-  sudo -E File-IO-Benchmark 'SECOND-Drive' "$secondDrive" 2G $(nproc)T 30 1 | tee fio-benchmark-2.log | tee -a ~/Artifacts/SysInfo.txt
+  sudo -E File-IO-Benchmark 'SECOND-Drive' "$secondDrive" 2G $(nproc)T 30 1 | tee fio-benchmark-2.log | tee -a "$THEARTIFACTS"/SysInfo.txt
 
   echo "";echo "";
-  cat fio-benchmark-1.log | tail -5 | tee -a ~/Artifacts/SysInfo.txt
+  cat fio-benchmark-1.log | tail -5 | tee -a "$THEARTIFACTS"/SysInfo.txt
 fi
 
