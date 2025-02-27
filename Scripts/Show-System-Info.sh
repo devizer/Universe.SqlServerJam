@@ -58,3 +58,4 @@ if [[ -n "$secondDrive" ]]; then
   echo "";echo "";
   cat fio-benchmark-1.log | tail -5
 fi
+
