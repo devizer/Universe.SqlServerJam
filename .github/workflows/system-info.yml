@@ -2,7 +2,7 @@ name: System Info
 
 on:
   push:
-    branches: [ "master-SKIP" ]
+    branches: [ "master" ]
 
 defaults:
   run:
