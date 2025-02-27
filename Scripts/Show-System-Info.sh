@@ -56,7 +56,7 @@ elif [[ "$(uname -s)" == Darwin ]]; then
 elif [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
    Say "Windows Volumes"
    powershell -c "gdr -PSProvider 'FileSystem'" | tee ~/volumes-info.txt
-   choco install -y --no-progress fio
+   choco install --force --allow-downgrade -y --no-progress fio
    echo '#!/bin/bash
          set -e; if [[ "${1:-}" == "-E" ]]; then shift; fi; eval "$@"' > /usr/bin/sudo
    chmod +x /usr/bin/sudo
