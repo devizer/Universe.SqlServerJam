@@ -34,3 +34,22 @@ jobs:
         path: |
            ${{ env.THEARTIFACTS_NATIVE }}
           
+  Combine:
+    needs: Info
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download All Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: '**'
+        path: "${{ env.RUNNER_TEMP }}/Combined"
+
+    - name: Show Download Structure
+      run: 'sudo apt-get update -q; sudo apt-get install tree -y -qq; tree $RUNNER_TEMP'
+
+    - name: Upload Combined System Info
+      uses: actions/upload-artifact@v4
+      with:
+        name: 'Combined System Info'
+        path: "${{ env.RUNNER_TEMP }}/Combined"
+
