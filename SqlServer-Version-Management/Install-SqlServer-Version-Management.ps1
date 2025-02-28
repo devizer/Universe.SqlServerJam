@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.66';
+$ModuleVersion = '2.1.68';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -13,7 +13,7 @@ $ModuleFiles = @(
 			"",
 			"  # RootModule = 'SqlServer-Version-Management.psm1'",
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
-			"  ModuleVersion = `"2.1.66`"",
+			"  ModuleVersion = `"2.1.68`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -1474,6 +1474,30 @@ $ModuleFiles = @(
 			"#>",
 			"",
 			"# Black DarkBlue DarkGreen DarkCyan DarkRed DarkMagenta DarkYellow Gray DarkGray Blue Green Cyan Red Magenta Yellow White",
+			"# Include File: [\Includes\Try-And-Retry.ps1]",
+			"function Try-And-Retry([string] `$title, [ScriptBlock] `$action, [int] `$retryCount = 3, [int] `$pauseMilliseconds = 1000) {",
+			"  for(`$retry=1; `$retry -le `$retryCount; `$retry++) {",
+			"    `$exitCode = 0;",
+			"    `$err=`$null;",
+			"    try { ",
+			"       `$Global:LASTEXITCODE = 0;",
+			"       `$ret = Invoke-Command -ScriptBlock `$action; ",
+			"       `$exitCode = `$Global:LASTEXITCODE; ",
+			"       `$err = `$null; ",
+			"       if (`$exitCode) { `$err = new-object Exception(`"Command Failed. Exit Code `$exitCode`"); }",
+			"    } catch { `$err=`$_.Exception; }",
+			"    if (`$err -eq `$null) {",
+			"      return `$ret;",
+			"    }",
+			"    if (`$retry -eq `$retryCount) { `$msg = `"The action ```"`$title```" failed `$retry times. `$(`$err.Message)`"; Write-Host `$msg -ForeGroundColor Red; throw new-object Exception(`$msg); return; }",
+			"    Write-Host `"The action ```"`$(`$title)```" failed. Retrying, `$(`$retry+1) of `$retryCount. Error reason is `$(`$err.Message)`" -ForeGroundColor Red",
+			"    [System.Threading.Thread]::Sleep(`$pauseMilliseconds)",
+			"  }",
+			"}",
+			"# Try-And-Retry `"Success 42`" { 42; }",
+			"# Try-And-Retry `"Download httttt://xxxx`" { & curl.exe httttt://xxxx }",
+			"# Try-And-Retry `"Download https://google.com`" { & curl.exe `"-I`" https://google.com }",
+			"",
 			"# Include File: [\Includes\Write-Line.ps1]",
 			"function Get-ANSI-Colors() {",
 			"  `$isAzurePipeline = (Try-BuildServerType) -eq `"TF_BUILD`";",
@@ -3039,6 +3063,7 @@ $ModuleFiles = @(
 			"Export-ModuleMember -Function Try-Get-FileExtension-by-Uri",
 			"Export-ModuleMember -Function Try-Get-FileName-by-Uri",
 			"Export-ModuleMember -Function Write-All-Text",
+			"Export-ModuleMember -Function Try-And-Retry",
 			"",
 			"# Variables are exported for tests only. Should be used directly",
 			"Export-ModuleMember -Variable `"SqlServerDownloadLinks`"",
