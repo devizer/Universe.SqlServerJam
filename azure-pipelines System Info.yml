@@ -13,7 +13,7 @@ jobs:
     vmImage: '$(IMAGE)'
   timeoutInMinutes: 120
   strategy:
-    maxParallel: 4
+    maxParallel: 9
     matrix:
       'Windows 2019':
         IMAGE: 'windows-2019'
