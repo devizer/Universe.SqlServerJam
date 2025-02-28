@@ -34,6 +34,7 @@ jobs:
         export ReportFileName="$THEARTIFACTS/GH Actions Postgres Log ${{ matrix.os }}.txt";
         brew install postgresql
         brew services start postgresql
+        sleep 9
         psql -d postgres -c 'SELECT version();' | tee -a "$ReportFileName"
         psql -d postgres -c "select * from pg_settings where name like '%';" | tee -a "$ReportFileName"
         
