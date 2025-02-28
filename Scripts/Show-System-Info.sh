@@ -1,6 +1,7 @@
 set -eu; set -o pipefail
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
 
+FIO_DURATION=5
 if [[ -n "${SYSTEM_ARTIFACTSDIRECTORY:-}" ]]; then # Azure Dev-Ops
   export GITHUB_ENV=/dev/null
   THEARTIFACTS="${SYSTEM_ARTIFACTSDIRECTORY:-}"
@@ -79,7 +80,7 @@ fi
 
 export DISABLE_UNICODE=true
 Say "Disk Benchmark for [$HOME]"
-File-IO-Benchmark 'HOME' "$HOME" 2G $(nproc)T 22 1 | tee fio-benchmark-1.log
+File-IO-Benchmark 'HOME' "$HOME" 2G $(nproc)T $FIO_DURATION 1 | tee fio-benchmark-1.log
 (echo ""; (cat fio-benchmark-1.log | tail -5)) >> "$ReportName"
 
 secondDrive=""
@@ -87,7 +88,7 @@ secondDrive=""
 [[ -d /mnt ]] && secondDrive="/mnt"
 if [[ -n "$secondDrive" ]]; then
   Say "Disk Benchmark for SECOND Drive [$secondDrive]"
-  sudo -E File-IO-Benchmark 'SECOND-Drive' "$secondDrive" 2G $(nproc)T 22 1 | tee fio-benchmark-2.log
+  sudo -E File-IO-Benchmark 'SECOND-Drive' "$secondDrive" 2G $(nproc)T $FIO_DURATION 1 | tee fio-benchmark-2.log
   (echo ""; (cat fio-benchmark-2.log | tail -5)) >> "$ReportName"
 
   echo "";echo "";

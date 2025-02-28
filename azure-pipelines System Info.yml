@@ -9,6 +9,7 @@ trigger:
 jobs:
 
 - job: Info
+  displayName: Sys Info
   pool:
     vmImage: '$(IMAGE)'
   timeoutInMinutes: 120
@@ -50,3 +51,37 @@ jobs:
       pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
       artifactName: '$(Agent.JobName)'
 
+
+- job: 'Combine'
+  condition: succeededOrFailed()
+  pool:
+    vmImage: 'ubuntu-latest'
+  timeoutInMinutes: 30
+  dependsOn:
+    - Info
+
+  steps: 
+
+  - task: DownloadPipelineArtifact@2
+    condition: succeededOrFailed()
+    displayName: 'Download of all platforms to $(RAW_ARTIFACTS_DIR)'
+    inputs:
+      path: '$(SYSTEM.ARTIFACTSDIRECTORY)/All'
+      patterns: 
+        "**"
+    
+  - bash: |
+       cd $SYSTEM_ARTIFACTSDIRECTORY/All
+       find -name 'Azure*.' | tee ~/reports
+       cat ~/reports | while IFS='' read -r file; do
+         cp -v "$file" $SYSTEM_ARTIFACTSDIRECTORY
+       done
+    condition: succeededOrFailed()
+    displayName: 'Prepare Artifacts'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(SYSTEM.ARTIFACTSDIRECTORY)'
+      artifactName: 'Azure System Info (Combined)'
