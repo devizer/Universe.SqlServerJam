@@ -71,10 +71,11 @@ jobs:
         "**"
     
   - bash: |
+       set -eu; set -o pipefail
        cd $SYSTEM_ARTIFACTSDIRECTORY/All
-       find -name 'Azure*.' | tee ~/reports
+       find . -name 'Azure*.' | tee ~/reports
        cat ~/reports | while IFS='' read -r file; do
-         cp -v "$file" $SYSTEM_ARTIFACTSDIRECTORY
+         cp -v "$file" $SYSTEM_ARTIFACTSDIRECTORY/
        done
     condition: succeededOrFailed()
     displayName: 'Prepare Artifacts'
