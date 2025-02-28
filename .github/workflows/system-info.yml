@@ -32,6 +32,7 @@ jobs:
       run: |
         set -eu;
         brew install postgresql
+        brew services start postgresql
         psql -d postgres -c 'SELECT version();'
         psql -d postgres -c "select * from pg_settings where name like '%';"
         
