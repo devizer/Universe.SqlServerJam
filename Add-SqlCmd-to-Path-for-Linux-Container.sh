@@ -1,3 +1,4 @@
+#!/bin/bash
 # script=https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/Add-SqlCmd-to-Path-for-Linux-Container.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
 SQL_SERVER_CONTAINER_NAME="${SQL_SERVER_CONTAINER_NAME:-}"
 if [[ -z "$SQL_SERVER_CONTAINER_NAME" ]]; then
