@@ -1,7 +1,7 @@
 set -eu; set -o pipefail
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
 
-FIO_DURATION=5
+FIO_DURATION=22 # Seconds
 if [[ -n "${SYSTEM_ARTIFACTSDIRECTORY:-}" ]]; then # Azure Dev-Ops
   export GITHUB_ENV=/dev/null
   THEARTIFACTS="${SYSTEM_ARTIFACTSDIRECTORY:-}"
