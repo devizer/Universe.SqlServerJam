@@ -25,7 +25,7 @@ jobs:
       run: 'printenv | sort'
 
     - name: System Info
-      run: 'export ReportFileName="Sys Info ${{ matrix.os }}.txt"; bash -e Scripts/Show-System-Info.sh'
+      run: 'export ReportFileName="GH Actions Sys Info ${{ matrix.os }}.txt"; bash -e Scripts/Show-System-Info.sh'
 
     - name: Upload artifacts [${{ env.THEARTIFACTS_NATIVE }}]
       uses: actions/upload-artifact@v4
