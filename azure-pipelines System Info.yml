@@ -1,0 +1,52 @@
+variables:
+  Title: System Info
+
+trigger:
+  branches:
+    include:
+    - main-SKIP
+
+jobs:
+
+- job: Info
+  pool:
+    vmImage: '$(IMAGE)'
+  timeoutInMinutes: 120
+  strategy:
+    maxParallel: 4
+    matrix:
+      'Windows 2019':
+        IMAGE: 'windows-2019'
+      'Windows 2022':
+        IMAGE: 'windows-2022'
+      'Ubuntu 24.04':
+        IMAGE: 'ubuntu-24.04'
+      'Ubuntu 22.04':
+        IMAGE: 'ubuntu-22.04'
+      'Ubuntu 20.04':
+        IMAGE: 'ubuntu-20.04'
+      'MacOS 15':
+        IMAGE: 'macos-15'
+      'MacOS 14':
+        IMAGE: 'macos-14'
+      'MacOS 13':
+        IMAGE: 'macos-13'
+
+  steps:
+
+  - bash: 'printenv | sort'
+    displayName: 'Environment'
+
+  - bash: |
+       set -eu; set -o pipefail
+       cd Scripts
+       bash -e Show-System-Info.sh
+    displayName: 'System Info'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    displayName: 'Publish'
+    inputs:
+      pathtoPublish: '$(System.ARTIFACTSDIRECTORY)'
+      artifactName: '$(Agent.JobName)'
+

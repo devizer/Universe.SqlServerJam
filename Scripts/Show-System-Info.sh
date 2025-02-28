@@ -1,21 +1,30 @@
+set -eu; set -o pipefail
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
 
-if [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
-  echo "Windows 'SystemDrive' var = [${SystemDrive:-}]"
-  sysDrive="${SystemDrive:0:1}"
-  sysDrive="${sysDrive:-c}"
-  THEARTIFACTS="/$sysDrive/Artifacts"
-  THEARTIFACTS_NATIVE="$sysDrive:\\Artifacts"
-else
-  THEARTIFACTS="$HOME/Artifacts"
-  THEARTIFACTS_NATIVE="$THEARTIFACTS"
+if [[ -n "${SYSTEM_ARTIFACTSDIRECTORY:-}" ]]; then # Azure Dev-Ops
+  export GITHUB_ENV=/dev/null
+  THEARTIFACTS="${SYSTEM_ARTIFACTSDIRECTORY:-}"
+  ReportName="$THEARTIFACTS/${AGENT_JOBNAME:-}"
+  echo "ReportName          = [$ReportName]"
+  echo "THEARTIFACTS        = [$THEARTIFACTS]"
+else # GitHub Actions
+  if [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
+    echo "Windows 'SystemDrive' var = [${SystemDrive:-}]"
+    sysDrive="${SystemDrive:0:1}"
+    sysDrive="${sysDrive:-c}"
+    THEARTIFACTS="/$sysDrive/Artifacts"
+    THEARTIFACTS_NATIVE="$sysDrive:\\Artifacts"
+  else
+    THEARTIFACTS="$HOME/Artifacts"
+    THEARTIFACTS_NATIVE="$THEARTIFACTS"
+  fi
+  ReportName="$THEARTIFACTS/$ReportFileName"
+  echo "ReportName          = [$ReportName]"
+  echo "THEARTIFACTS        = [$THEARTIFACTS]"
+  echo "THEARTIFACTS_NATIVE = [$THEARTIFACTS_NATIVE]"
+  echo "THEARTIFACTS=$THEARTIFACTS" >> "$GITHUB_ENV"
+  echo "THEARTIFACTS_NATIVE=$THEARTIFACTS_NATIVE" >> "$GITHUB_ENV"
 fi
-ReportName="$THEARTIFACTS/$ReportFileName"
-echo "ReportName          = [$ReportName]"
-echo "THEARTIFACTS        = [$THEARTIFACTS]"
-echo "THEARTIFACTS_NATIVE = [$THEARTIFACTS_NATIVE]"
-echo "THEARTIFACTS=$THEARTIFACTS" >> "$GITHUB_ENV"
-echo "THEARTIFACTS_NATIVE=$THEARTIFACTS_NATIVE" >> "$GITHUB_ENV"
 mkdir -p "$THEARTIFACTS"
 
 echo '
