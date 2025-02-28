@@ -4,13 +4,15 @@ script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-b
 if [[ -n "${SYSTEM_ARTIFACTSDIRECTORY:-}" ]]; then # Azure Dev-Ops
   export GITHUB_ENV=/dev/null
   THEARTIFACTS="${SYSTEM_ARTIFACTSDIRECTORY:-}"
-  ReportName="$THEARTIFACTS/${AGENT_JOBNAME:-}"
+  # THEARTIFACTS="/d/a/1/a"
+  ReportName="$THEARTIFACTS/Azure ${AGENT_JOBNAME:-}.txt"
   echo "ReportName          = [$ReportName]"
   echo "THEARTIFACTS        = [$THEARTIFACTS]"
 else # GitHub Actions
   if [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
-    echo "Windows 'SystemDrive' var = [${SystemDrive:-}]"
-    sysDrive="${SystemDrive:0:1}"
+    echo "Windows 'SystemDrive' var = [${SYSSTEMDRIVE:-}]"
+    sysDrive="${SYSSTEMDRIVE:-}"
+    sysDrive="${sysDrive:0:1}"
     sysDrive="${sysDrive:-c}"
     THEARTIFACTS="/$sysDrive/Artifacts"
     THEARTIFACTS_NATIVE="$sysDrive:\\Artifacts"
