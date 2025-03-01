@@ -26,7 +26,7 @@ exit 7
 chmod +x /tmp/sqlcmd-smart-launcher.sh
 
 docker cp /tmp/sqlcmd-smart-launcher.sh "$SQL_SERVER_CONTAINER_NAME":/usr/local/bin/sqlcmd
-docker exec "$SQL_SERVER_CONTAINER_NAME" sqlcmd -? | head -2 || echo "OOPS. Missing sqlcmd on container '$SQL_SERVER_CONTAINER_NAME'"
+docker exec "$SQL_SERVER_CONTAINER_NAME" sqlcmd -? 2>/dev/null | head -2 || true
 
 
 function get_global_seconds() {
