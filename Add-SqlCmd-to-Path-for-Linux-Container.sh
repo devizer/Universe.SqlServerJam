@@ -7,7 +7,7 @@ if [[ -z "$SQL_SERVER_CONTAINER_NAME" ]]; then
   exit 777
 fi
 
-tmp="{$TMPDIR:-/tmp}"
+tmp="${TMPDIR:-/tmp}"
 echo '#!/bin/bash
 set -eu; set -o pipefail;
 if [[ -x /opt/mssql-tools/bin/sqlcmd ]]; then
@@ -70,11 +70,3 @@ if [[ -n "${SQL_PING_PARAMETERS:-}" ]]; then
     echo "Warning! Unable to connect to SQL Server ($elapsed seconds)"
   fi
 fi
-
-echo '
-TEST:
-docker rm -f sqlserver
-docker run --pull never --name sqlserver --privileged -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=p@assw0rd!" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2022-latest
-export SQL_SERVER_CONTAINER_NAME=sqlserver SQL_PING_PARAMETERS="-C -S localhost -U sa -P \"p@assw0rd!\"" SQL_PING_TIMEOUT=30
-script=https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/Add-SqlCmd-to-Path-for-Linux-Container.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
-'
