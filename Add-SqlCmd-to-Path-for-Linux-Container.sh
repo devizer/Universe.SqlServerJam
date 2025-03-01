@@ -54,18 +54,26 @@ function get_global_seconds() {
 
 if [[ -n "${SQL_PING_PARAMETERS:-}" ]]; then
   SQL_PING_TIMEOUT="${SQL_PING_TIMEOUT:-30}"
+  echo "Waiting for SQL Server at container '$SQL_SERVER_CONTAINER_NAME' up to $SQL_PING_TIMEOUT seconds"
   startAt="$(get_global_seconds)"
   ok='';
-  tmp="$(mktemp | echo "/tmp/$RANDOM")"
-  while true; do
-    query="Select Cast(SERVERPROPERTY('PRODUCTVERSION') as nvarchar(100)) + ' ' + Cast(SERVERPROPERTY('EDITION') as nvarchar(300))"
-    docker exec -t "$SQL_SERVER_CONTAINER_NAME" sqlcmd ${SQL_PING_PARAMETERS:-} -Q "$query" || ok='true';
+  VerFile="$(mktemp || echo "/tmp/$RANDOM")"
+  while [ 1 -eq 1 ]; do
+    query="Set NoCount On; Select Cast(Cast(SERVERPROPERTY('PRODUCTVERSION') as nvarchar(100)) + ' ' + Cast(SERVERPROPERTY('EDITION') as nvarchar(300)) as nvarchar(100));"
+    # docker exec -t "$SQL_SERVER_CONTAINER_NAME" sqlcmd ${SQL_PING_PARAMETERS:-} -Q "$query" || ok='true';
+    docker exec -t "$SQL_SERVER_CONTAINER_NAME" bash -e -c "sqlcmd -h -1 ${SQL_PING_PARAMETERS:-} -Q \"$query\"" > "$VerFile" 2>/dev/null && ok='true';
     now="$(get_global_seconds)"
     elapsed=$((now - startAt))
+    if [[ "$ok" == true ]]; then break; fi
     if [ "$elapsed" -ge "$SQL_PING_TIMEOUT" ]; then break; fi
+    sleep 1
   done
   if [[ -n "$ok" ]]; then
     echo "SQL Server Succesfully connected ($elapsed seconds)"
+    ver="$(cat "$VerFile" | head -1)"
+    ver="$(echo $ver | tr -d '\r' | tr -d '\n' | tr -d '\r')"
+    ver="${ver%%[[:space:]]}"
+    echo "SQL Server Version: '$ver'"
   else
     echo "Warning! Unable to connect to SQL Server ($elapsed seconds)"
   fi
