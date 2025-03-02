@@ -238,7 +238,8 @@ jobs:
 
     - name: Show Query Cache Report
       run: |
-        Measure-Action "Git Clone Sql Server Query Cache" { & git clone https://github.com/devizer/Universe.SqlServerQueryCache C:\Temp\QueryCache }
+        # Measure-Action "Git Clone Sql Server Query Cache" { & git clone https://github.com/devizer/Universe.SqlServerQueryCache C:\Temp\QueryCache }
+        Try-And-Retry "Git Clone Sql Server Query Cache" { & git clone https://github.com/devizer/Universe.SqlServerQueryCache C:\Temp\QueryCache }
         cd C:\Temp\QueryCache
         git reset --hard
         git clean -xfd
