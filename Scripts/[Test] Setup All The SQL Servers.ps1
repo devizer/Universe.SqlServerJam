@@ -2557,6 +2557,30 @@ function Invoke-LocalDB-Executable([string] $title, [string] $version, [string[]
 }
 
 
+# Include File: [\Includes.SqlServer\Invoke-SqlServer-Command.ps1]
+function Invoke-SqlServer-Command([string] $title, [string] $connectionString, <# or #>[string] $instance, [string] $sqlCommand, [int] $timeoutSec = 30) {
+  if (-not $connectionString) { $connectionString = "Server=$($instance);Integrated Security=SSPI;Connection Timeout=10;Pooling=False" }
+  $startAt = [System.Diagnostics.Stopwatch]::StartNew();
+  $exception = $null;
+
+  try { 
+    $con = New-Object System.Data.SqlClient.SqlConnection($connectionString);
+    $con.Open();
+    
+    $cmd = new-object System.Data.SqlClient.SqlCommand($sqlCommand, $con)
+    $cmd.CommandTimeout = $timeoutSec * 1000;
+    $__ = $cmd.ExecuteNonQuery();
+    $cmd.Dispose();
+
+    $con.Close()
+    return;
+  } catch { $exception = $_.Exception; <# Write-Host $_.Exception -ForegroundColor DarkGray #> }
+
+  Write-Host "Warning! Can't invoke SQL Command on SQL Server '$($title)' during $($startAt.ElapsedMilliseconds / 1000) seconds$([Environment]::NewLine)$($exception)" -ForegroundColor DarkRed
+}
+
+# Invoke-SqlServer-Command -Title "MSSQLSERVER" -Instance "(local)" -Options @{ xp_cmdshell = $true; "clr enabled" = $false; "server trigger recursion" = $true; "min server memory (MB)" = 160; "max server memory (MB)" = 4096 }
+
 # Include File: [\Includes.SqlServer\Is-SqlServer-Setup-Cache-Enabled.ps1]
 function Is-SqlServer-Setup-Cache-Enabled() { $false; }
 # Include File: [\Includes.SqlServer\ParseNonEmptyTrimmedLines.ps1]
