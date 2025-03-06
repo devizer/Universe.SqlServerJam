@@ -205,6 +205,8 @@ jobs:
               "CLR Enabled" = $true; 
               "Server Trigger Recursion" = $true; 
            };
+
+           Invoke-SqlServer-Command -Title "Instance $instance" -Instance "$i" -SqlCommand "Create Table Detail(Id int identity, Description nvarchar(max)); Set NoCount On; Declare @i int; Set @i = 0; While @i < 40000 Begin Insert Detail(Description) Values(Cast(@i as char(4000))); Set @i = @i + 1; End; Exec('Drop Table Detail')"
            Write-Host "$((Get-Memory-Info).Description)"
          }
 
