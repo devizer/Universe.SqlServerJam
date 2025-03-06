@@ -60,6 +60,7 @@ if [[ -n "${SQL_PING_PARAMETERS:-}" ]]; then
   VerFile="$(mktemp || echo "/tmp/$RANDOM")"
   while [ 1 -eq 1 ]; do
     query="Set NoCount On; Select Cast(Cast(SERVERPROPERTY('PRODUCTVERSION') as nvarchar(100)) + ' ' + Cast(SERVERPROPERTY('EDITION') as nvarchar(300)) as nvarchar(100));"
+    query="Set NoCount On; Select Replace(Cast(Cast(SERVERPROPERTY('PRODUCTVERSION') as nvarchar(100)) + ' ' + Cast(SERVERPROPERTY('ProductLevel') as nvarchar(100)) + + ' ' + IsNull(Cast(SERVERPROPERTY('ProductUpdateLevel') as nvarchar(100)),'') + ' ' + Cast(SERVERPROPERTY('EDITION') as nvarchar(300)) as nvarchar(200)), '  ', ' ');"
     # docker exec -t "$SQL_SERVER_CONTAINER_NAME" sqlcmd ${SQL_PING_PARAMETERS:-} -Q "$query" || ok='true';
     docker exec -t "$SQL_SERVER_CONTAINER_NAME" bash -e -c "sqlcmd -h -1 ${SQL_PING_PARAMETERS:-} -Q \"$query\"" > "$VerFile" 2>/dev/null && ok='true';
     now="$(get_global_seconds)"
