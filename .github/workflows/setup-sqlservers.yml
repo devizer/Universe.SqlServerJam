@@ -206,6 +206,7 @@ jobs:
               "Server Trigger Recursion" = $true; 
            };
 
+           Say "Invoke a commands set"
            $ins="Set NoCount On; Declare @i int; Set @i = 0; While @i < 10000 Begin Insert Detail(Description) Values('Description'); Set @i = @i + 1; End;";
            $commands=@("Create Table Detail(Id int identity, Description nvarchar(max));", $ins, $ins, $ins, $ins);
            foreach($cmd in $commands) { Write-Host "Invoke: $cmd"; Invoke-SqlServer-Command -Title "Instance $instance" -Instance "$i" -SqlCommand $cmd; }
