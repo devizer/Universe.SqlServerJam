@@ -215,11 +215,6 @@ jobs:
          }
 
 
-    - name: NEW Show SQL Servers
-      env:
-        SQL_SERVERS: ${{ matrix.SqlServers }}
-      run: '& powershell -f "Scripts\[Test] SQL Discovery.ps1"'
-
     - name: Show SQL Servers
       env:
         SQL_SERVERS: ${{ matrix.SqlServers }}
@@ -266,6 +261,13 @@ jobs:
         cd Universe.SqlServerQueryCache.CLI
         Measure-Action "Build CLI Release" { & dotnet build -v:m -c Release -f net6.0 }
         Measure-Action "Produce Query Cache Report" { & dotnet run -f net6.0 --no-build --no-launch-profile -c Release -- -all -av -o "C:\Artifacts\Query Cache Reports\{InstanceName}" }
+
+
+    - name: NEW Show SQL Servers
+      env:
+        SQL_SERVERS: ${{ matrix.SqlServers }}
+      run: '& powershell -f "Scripts\[Test] SQL Discovery.ps1"'
+      # it restarts sql server, so can be invoked after 'Show Query Cache Report' step
 
 
     - name: Upload artifacts
