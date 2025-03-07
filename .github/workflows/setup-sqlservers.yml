@@ -254,6 +254,7 @@ jobs:
       run: |
         # Measure-Action "Git Clone Sql Server Query Cache" { & git clone https://github.com/devizer/Universe.SqlServerQueryCache C:\Temp\QueryCache }
         Try-And-Retry "Git Clone Sql Server Query Cache" { & git clone https://github.com/devizer/Universe.SqlServerQueryCache C:\Temp\QueryCache }
+        Say "Building Sql Server Query Cache CLI"
         cd C:\Temp\QueryCache
         git reset --hard
         git clean -xfd
@@ -261,6 +262,7 @@ jobs:
         cd Universe.SqlServerQueryCache.CLI
         Measure-Action "Build CLI Release" { & dotnet build -v:m -c Release -f net6.0 }
         Measure-Action "Produce Query Cache Report" { & dotnet run -f net6.0 --no-build --no-launch-profile -c Release -- -all -av -o "C:\Artifacts\Query Cache Reports\{InstanceName}" }
+        Say "Done"
 
 
     - name: NEW Show SQL Servers
