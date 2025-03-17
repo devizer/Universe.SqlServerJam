@@ -293,6 +293,17 @@ jobs:
        $jsonObject | Add-Member -MemberType NoteProperty -Name "MediumVersion" -Value $mediumVersion
        $jsonObject | ConvertTo-Json > "$jsonFile"
 
+    - name: TEST SqlStorage of SqlInsights
+      run: |
+        $instance = "$((Find-Local-SqlServers | Select -First 1).Instance)"
+        Say "INSTANCE: [$instance]"
+        $ENV:SQLINSIGHTS_CONNECTION_STRING="TrustServerCertificate=True;Data Source=lpc:$instance;Integrated Security=SSPI;Encrypt=false"
+        Say "CONNECTION STRING: [$($ENV:SQLINSIGHTS_CONNECTION_STRING)]"
+        $ENV:TEST_CONFIGURATION="DISK";
+        $ENV:TEST_CPU_NAME="$(Get-Cpu-Name)"
+        cd C:\Pre-Build\Universe.SqlInsights.SqlServerStorage.Tests
+        dotnet test Universe.SqlInsights.SqlServerStorage.Tests.dll
+
     - name: SHOW Query Cache Report
       run: |
         # Measure-Action "Git Clone Sql Server Query Cache" { & git clone https://github.com/devizer/Universe.SqlServerQueryCache C:\Temp\QueryCache }
@@ -306,17 +317,6 @@ jobs:
         Measure-Action "Build CLI Release" { & dotnet build -v:m -c Release -f net6.0 }
         Measure-Action "Produce Query Cache Report" { & dotnet run -f net6.0 --no-build --no-launch-profile -c Release -- -all -av -o "C:\Artifacts\Query Cache Reports\{InstanceName}" }
         Say "Done"
-
-    - name: TEST SqlStorage of SqlInsights
-      run: |
-        $instance = "$((Find-Local-SqlServers | Select -First 1).Instance)"
-        Say "INSTANCE: [$instance]"
-        $ENV:SQLINSIGHTS_CONNECTION_STRING="TrustServerCertificate=True;Data Source=lpc:$instance;Integrated Security=SSPI;Encrypt=false"
-        Say "CONNECTION STRING: [$($ENV:SQLINSIGHTS_CONNECTION_STRING)]"
-        $ENV:TEST_CONFIGURATION="DISK";
-        $ENV:TEST_CPU_NAME="$(Get-Cpu-Name)"
-        cd C:\Pre-Build\Universe.SqlInsights.SqlServerStorage.Tests
-        dotnet test Universe.SqlInsights.SqlServerStorage.Tests.dll
 
     - name: New SHOW SQL Servers
       env:
