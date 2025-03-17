@@ -40,6 +40,7 @@ jobs:
       if: always()
       with:
         name: 'Binaries'
+        path: bin
         # path: "${{ runner.temp }}/Artifacts/**/**"
           
   
