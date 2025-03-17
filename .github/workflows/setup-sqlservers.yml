@@ -29,7 +29,7 @@ jobs:
         Say "Build fx-dependent [https://github.com/devizer/Universe.SqlInsights].Tests"
         try-and-retry git clone https://github.com/devizer/Universe.SqlInsights ~/Universe.SqlInsights-Sources
         pushd ~/Universe.SqlInsights-Sources/src/Universe.SqlInsights.SqlServerStorage.Tests
-        bindir="${{ runner.temp }}/Artifacts/Universe.SqlInsights.SqlServerStorage.Tests"
+        bindir="${{ github.workspace }}/bin/Universe.SqlInsights.SqlServerStorage.Tests"
         time try-and-retry dotnet publish -c Release -o "$bindir" -f net6.0 -v:m
         popd
         ls -lah "$bindir"
@@ -40,8 +40,8 @@ jobs:
       if: always()
       with:
         name: 'Binaries'
-        path: |
-          "${{ runner.temp }}/Artifacts/**/**"
+        # path: "${{ runner.temp }}/Artifacts/**/**"
+          
   
   Setup:
 
