@@ -43,7 +43,7 @@ jobs:
   Setup:
 
     timeout-minutes: 45
-    need: Pre-Build
+    needs: Pre-Build
     strategy:
       fail-fast: false
       matrix:
