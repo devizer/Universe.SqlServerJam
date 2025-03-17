@@ -309,7 +309,10 @@ jobs:
 
     - name: TEST SqlStorage of SqlInsights
       run: |
-        $ENV:SQLINSIGHTS_CONNECTION_STRING="TrustServerCertificate=True;Data Source=lpc:(local)\DEV_2022;Integrated Security=SSPI;Encrypt=false"
+        $instance = "$((Find-Local-SqlServers | Select -First 1).Instance)"
+        Say "INSTANCE: [$instance]"
+        $ENV:SQLINSIGHTS_CONNECTION_STRING="TrustServerCertificate=True;Data Source=lpc:$instance;Integrated Security=SSPI;Encrypt=false"
+        Say "CONNECTION STRING: [$($ENV:SQLINSIGHTS_CONNECTION_STRING)]"
         $ENV:TEST_CONFIGURATION="DISK";
         $ENV:TEST_CPU_NAME="$(Get-Cpu-Name)"
         cd C:\Pre-Build\Universe.SqlInsights.SqlServerStorage.Tests
