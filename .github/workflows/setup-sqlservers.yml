@@ -27,10 +27,10 @@ jobs:
         Say "CPU: $(Get-CpuName)"
         
         Say "Build fx-dependent [https://github.com/devizer/Universe.SqlInsights].Tests"
-        git clone https://github.com/devizer/Universe.SqlInsights ~/Universe.SqlInsights-Sources
+        try-and-retry git clone https://github.com/devizer/Universe.SqlInsights ~/Universe.SqlInsights-Sources
         pushd ~/Universe.SqlInsights-Sources/src/Universe.SqlInsights.SqlServerStorage.Tests
         bindir="${{ runner.temp }}/Artifacts/Universe.SqlInsights.SqlServerStorage.Tests"
-        time try-and-retry dotnet publish -c Release -o "$bindir" -f net6.0
+        time try-and-retry dotnet publish -c Release -o "$bindir" -f net6.0 -v:q
         popd
         ls -lah "$bindir"
         echo "bindir=[$bindir]"
@@ -41,7 +41,7 @@ jobs:
       with:
         name: 'Binaries'
         path: |
-          "${{ runner.temp }}/Artifacts/**/*"
+          "${{ runner.temp }}/Artifacts/**/**"
   
   Setup:
 
