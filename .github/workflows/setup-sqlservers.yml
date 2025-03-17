@@ -293,7 +293,7 @@ jobs:
        $jsonObject | Add-Member -MemberType NoteProperty -Name "MediumVersion" -Value $mediumVersion
        $jsonObject | ConvertTo-Json > "$jsonFile"
 
-    - name: Show Query Cache Report
+    - name: SHOW Query Cache Report
       run: |
         # Measure-Action "Git Clone Sql Server Query Cache" { & git clone https://github.com/devizer/Universe.SqlServerQueryCache C:\Temp\QueryCache }
         Try-And-Retry "Git Clone Sql Server Query Cache" { & git clone https://github.com/devizer/Universe.SqlServerQueryCache C:\Temp\QueryCache }
@@ -307,8 +307,12 @@ jobs:
         Measure-Action "Produce Query Cache Report" { & dotnet run -f net6.0 --no-build --no-launch-profile -c Release -- -all -av -o "C:\Artifacts\Query Cache Reports\{InstanceName}" }
         Say "Done"
 
+    - name: TEST SqlStorage of SqlInsights
+      run: |
+        cd C:\Pre-Build\Universe.SqlInsights.SqlServerStorage.Tests
+        dotnet test Universe.SqlInsights.SqlServerStorage.Tests.dll
 
-    - name: NEW Show SQL Servers
+    - name: New SHOW SQL Servers
       env:
         SQL_SERVERS: ${{ matrix.SqlServers }}
       run: '& powershell -f "Scripts\[Test] SQL Discovery.ps1"'
