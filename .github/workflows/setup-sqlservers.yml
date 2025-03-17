@@ -41,7 +41,7 @@ jobs:
       with:
         name: 'Binaries'
         path: |
-          "${{ runner.temp }}/Artifacts"
+          "${{ runner.temp }}/Artifacts/**"
   
   Setup:
 
