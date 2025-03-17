@@ -297,6 +297,7 @@ jobs:
       run: |
         $instance = "$((Find-Local-SqlServers | Select -First 1).Instance)"
         Say "INSTANCE: [$instance]"
+        if (-not $instance) { exit 0; }
         $ENV:SQLINSIGHTS_CONNECTION_STRING="TrustServerCertificate=True;Data Source=lpc:$instance;Integrated Security=SSPI;Encrypt=false"
         Say "CONNECTION STRING: [$($ENV:SQLINSIGHTS_CONNECTION_STRING)]"
         $ENV:TEST_CONFIGURATION="DISK";
