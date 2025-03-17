@@ -309,6 +309,9 @@ jobs:
 
     - name: TEST SqlStorage of SqlInsights
       run: |
+        $ENV:SQLINSIGHTS_CONNECTION_STRING="TrustServerCertificate=True;Data Source=lpc:(local)\DEV_2022;Integrated Security=SSPI;Encrypt=false"
+        $ENV:TEST_CONFIGURATION="DISK";
+        $ENV:TEST_CPU_NAME="$(Get-Cpu-Name)"
         cd C:\Pre-Build\Universe.SqlInsights.SqlServerStorage.Tests
         dotnet test Universe.SqlInsights.SqlServerStorage.Tests.dll
 
