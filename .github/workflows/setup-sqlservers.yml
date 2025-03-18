@@ -145,6 +145,7 @@ jobs:
       with:
          path: 'C:\Pre-Build'
          merge-multiple: true # just one artifact
+         name: Binaries
 
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
