@@ -324,7 +324,11 @@ jobs:
 
     - name: SHOW Query Cache Report
       run: |
-        # Measure-Action "Git Clone Sql Server Query Cache" { & git clone https://github.com/devizer/Universe.SqlServerQueryCache C:\Temp\QueryCache }
+        $ENV:SQL_QUERY_CACHE_SUMMARY_1_Cpu_Title="CPU"
+        $ENV:SQL_QUERY_CACHE_SUMMARY_1_Cpu_Kind="String"
+        $ENV:SQL_QUERY_CACHE_SUMMARY_1_Cpu_Value="$(Get-Cpu-Name)"
+        $ENV:SQL_QUERY_CACHE_SUMMARY_1_Cpu_Position=Header
+  
         Try-And-Retry "Git Clone Sql Server Query Cache" { & git clone https://github.com/devizer/Universe.SqlServerQueryCache C:\Temp\QueryCache }
         Say "Building Sql Server Query Cache CLI"
         cd C:\Temp\QueryCache
