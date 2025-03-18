@@ -205,7 +205,7 @@ jobs:
 
 
      
-    - name: Setup Sql Server
+    - name: SETUP Sql Server
       env:
         SQL_SERVERS: ${{ matrix.SqlServers }}
       uses: nick-fields/retry@v3
@@ -226,7 +226,7 @@ jobs:
               & setx.exe PS1_TROUBLE_SHOOT On
               & setx.exe SQLSERVERS_MEDIA_FOLDER "$ENV:SQLSERVERS_MEDIA_FOLDER"
               & setx.exe SQLSERVERS_SETUP_FOLDER "$ENV:SQLSERVERS_SETUP_FOLDER"
-              Setup-SqlServers -SqlServers "${{ matrix.SqlServers }}" "Collation=French_CI_AI" "Startup=Automatic" "InstallTo=D:\SQL" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB {InstanceName} Data" "/SQLUSERDBLOGDIR=D:\SQL LOGS {InstanceName}" "/SQLBACKUPDIR=C:\Backups for {InstanceName}"
+              Setup-SqlServers -SqlServers "${{ matrix.SqlServers }}" "Collation=French_CI_AI" "Startup=Automatic" "InstallTo=D:\SQL" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB-{InstanceName}-Data" "/SQLUSERDBLOGDIR=D:\SQL-LOGS-{InstanceName}" "/SQLBACKUPDIR=C:\Backups-for-{InstanceName}"
 
               Write-Line "Starting SQL Server(s)"
               $localSqlServers = @(Find-Local-SqlServers | % {$_.Service})
@@ -270,7 +270,7 @@ jobs:
               }
 
 
-    - name: Show SQL Servers
+    - name: SHOW SQL Servers
       env:
         SQL_SERVERS: ${{ matrix.SqlServers }}
       run: |
@@ -308,7 +308,7 @@ jobs:
     - name: TEST SqlStorage of SqlInsights
       run: |
         $sqlServers = "${{ matrix.SqlServers }}";
-        if ($sqlServers -eq "2022 Core" -or $sqlServers -eq "2022 Advanced") { 
+        if ($false -and ($sqlServers -eq "2022 Core" -or $sqlServers -eq "2022 Advanced")) { 
           $ENV:TESTS_FOR_MOT_DISABLED="True"
           Say "Disabling MOT Tests (weird behaviour) for [$sqlServers]"
         }
