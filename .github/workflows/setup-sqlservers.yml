@@ -252,8 +252,9 @@ jobs:
                 $instanceFull = "$((Find-Local-SqlServers | Select -First 1).Instance)"
                 if ($instanceFull) {
                   $InstanceKey = $instanceFull.Split([char]'\')[1]
-                  Say "Enable Always On for instance [$instanceFull]: >SQLSERVER:\SQL\Computer\$InstanceKey<"
-                  try { Enable-SqlAlwaysOn -Path SQLSERVER:\SQL\Computer\$InstanceKey; echo ok; }
+                  $instancePath = "SQLSERVER:\SQL\$([Environment]::MachineName)\$InstanceKey"
+                  Say "Enable Always On for instance [$instanceFull]: >$instancePath<"
+                  try { Enable-SqlAlwaysOn -Force -Path $instancePath; echo ok; }
                   catch { echo $_.Exception; }
                 }
 
