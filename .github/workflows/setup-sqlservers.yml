@@ -250,7 +250,8 @@ jobs:
 
                 
                 $instanceFull = "$((Find-Local-SqlServers | Select -First 1).Instance)"
-                if ($instanceFull) {
+                if ($instanceFull -and "$($ENV:SQL_SERVERS)" -match "2022") {
+                  # Problem is specific for 2022 without CU and MOT
                   $InstanceKey = $instanceFull.Split([char]'\')[1]
                   $instancePath = "SQLSERVER:\SQL\$([Environment]::MachineName)\$InstanceKey"
                   Say "Enable Always On for instance [$instanceFull]: >$instancePath<"
