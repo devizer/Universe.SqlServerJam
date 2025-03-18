@@ -241,7 +241,7 @@ jobs:
                 $i = IIf ($instance -eq "MSSQLSERVER") "(local)" "(local)\$($instance)"
                 Say "Configure instance `"$instance`" Server=$i";
                 Set-SQLServer-Options -Title "Instance $instance" -Instance "$i" -Options @{ 
-                   "Min Server Memory (MB)" = 4 * 1024; 
+                   "Min Server Memory (MB)" = 8 * 1024; 
                    "Max Server Memory (MB)" = 128 * 1024;
                    XP_CmdShell = $true; 
                    "CLR Enabled" = $true; 
@@ -250,7 +250,7 @@ jobs:
 
                 
                 $instanceFull = "$((Find-Local-SqlServers | Select -First 1).Instance)"
-                if (-not $instanceFull) {
+                if ($instanceFull) {
                   $InstanceKey = $instanceFull.Split([char]'\')[1]
                   Say "Enable Always On for instance [$instanceFull]: >SQLSERVER:\SQL\Computer\$InstanceKey<"
                   try { Enable-SqlAlwaysOn -Path SQLSERVER:\SQL\Computer\$InstanceKey; echo ok; }
