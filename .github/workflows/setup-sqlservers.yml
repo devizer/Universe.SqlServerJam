@@ -248,6 +248,15 @@ jobs:
                    "Server Trigger Recursion" = $true; 
                 };
 
+                
+                $instanceFull = "$((Find-Local-SqlServers | Select -First 1).Instance)"
+                if (-not $instanceFull) {
+                  $InstanceKey = $instanceFull.Split([char]'\')[1]
+                  Say "Enable Always On for instance [$instanceFull]: >SQLSERVER:\SQL\Computer\$InstanceKey<"
+                  try { Enable-SqlAlwaysOn -Path SQLSERVER:\SQL\Computer\$InstanceKey; echo ok; }
+                  catch { echo $_.Exception; }
+                }
+
                 Say "Invoke a commands set on instance '$i'"
                 # 30000 to fit buffer page into 1.4 Gb of RAM
                 $ins="Use DBTest; Set NoCount On; Declare @i int; Set @i = 0; Declare @desc char(4000); Set @desc = 'A Description'; While @i < 30000 Begin Insert Detail(Description) Values(@desc); Set @i = @i + 1; End;";
