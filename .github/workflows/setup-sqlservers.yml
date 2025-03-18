@@ -309,7 +309,7 @@ jobs:
         if (-not $instance) { exit 0; }
         $ENV:SQLINSIGHTS_CONNECTION_STRING="TrustServerCertificate=True;Data Source=lpc:$instance;Integrated Security=SSPI;Encrypt=false"
         Say "CONNECTION STRING: [$($ENV:SQLINSIGHTS_CONNECTION_STRING)]"
-        $ENV:NUNIT_PIPELINE_KEEP_TEMP_TEST_DATABASES=True
+        $ENV:NUNIT_PIPELINE_KEEP_TEMP_TEST_DATABASES="True"
         $ENV:TEST_CONFIGURATION="DISK";
         $ENV:TEST_CPU_NAME="$(Get-Cpu-Name)"
         cd C:\Pre-Build\Universe.SqlInsights.SqlServerStorage.Tests
