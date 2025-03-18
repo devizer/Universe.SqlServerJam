@@ -308,7 +308,7 @@ jobs:
     - name: TEST SqlStorage of SqlInsights
       run: |
         $sqlServers = "${{ matrix.SqlServers }}";
-        if ($false -and ($sqlServers -eq "2022 Core" -or $sqlServers -eq "2022 Advanced")) { 
+        if (($sqlServers -eq "2022 Core" -or $sqlServers -eq "2022 Advanced")) { 
           $ENV:TESTS_FOR_MOT_DISABLED="True"
           Say "Disabling MOT Tests (weird behaviour) for [$sqlServers]"
         }
