@@ -260,11 +260,10 @@ jobs:
                   catch { echo $_.Exception; }
                 }
 
-                Say "Invoke a commands set on instance '$i'"
-                # 30000 to fit buffer page into 1.4 Gb of RAM
-                $ins="Use DBTest; Set NoCount On; Declare @i int; Set @i = 0; Declare @desc char(4000); Set @desc = 'A Description'; While @i < 30000 Begin Insert Detail(Description) Values(@desc); Set @i = @i + 1; End;";
-                $commands=@("Create Database DBTest;", "Use DBTest; Create Table Detail(Id int identity, Description nvarchar(max), Constraint PK_Detail Primary Key (Id));", $ins, $ins, $ins, $ins);
-                foreach($cmd in $commands) { Write-Host "Invoke: $cmd"; Invoke-SqlServer-Command -Title "Instance $instance" -Instance "$i" -SqlCommand $cmd; }
+                Say "Stress by Stored Procedures"
+                Try-And-Retry "Download SQL Server Stress" { & curl.exe "-kfSL" "-o" "Stress-SQL-Server-by-Stored-Procedure.ps1" "https://raw.githubusercontent.com/devizer/Universe.SqlInsights/main/scripts/Stress-SQL-Server-by-Stored-Procedure.ps1" }
+                $ENV:STRESS_CONNECTION_STRING="Encrypt=False;Data Source=$instanceFull;Integrated Security=SSPI;"
+                .\Stress-SQL-Server-by-Stored-Procedure.ps1
                 
                 Write-Host "$((Get-Memory-Info).Description)"
               }
