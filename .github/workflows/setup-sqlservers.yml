@@ -310,7 +310,7 @@ jobs:
         $sqlServers = "${{ matrix.SqlServers }}";
         if ($sqlServers -eq "2022 Core" -or $sqlServers -eq "2022 Advanced") { 
           $ENV:TESTS_FOR_MOT_DISABLED="True"
-          Say "Disabling MOT Tests (wierd behaviour) for [$sqlServers]"
+          Say "Disabling MOT Tests (weird behaviour) for [$sqlServers]"
         }
         $instance = "$((Find-Local-SqlServers | Select -First 1).Instance)"
         Say "INSTANCE: [$instance]"
