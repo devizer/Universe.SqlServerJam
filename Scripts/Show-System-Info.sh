@@ -47,6 +47,11 @@ Say "LOCALTION"
 echo LOCATION >> "$ReportName"
 curl -kSL https://ipinfo.io/json | jq . | tee -a "$ReportName"
 
+Say "IP WHO"
+echo IP WHO >> "$ReportName"
+curl -kSL https://ipwho.is/ | jq . | tee -a "$ReportName"
+
+
 Say "Benchmark for [$(Get-CpuName)]"
 if [[ "$(uname -s)" == Darwin ]] || [[ "$(uname -s)" == Linux ]]; then
   export INSTALL_DIR=/usr/local/bin LINK_AS_7Z=/usr/local/bin/7z; script="https://master.dl.sourceforge.net/project/p7zz-repack/install-7zz.sh?viasf=1"; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash
