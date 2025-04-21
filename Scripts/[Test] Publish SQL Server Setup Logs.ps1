@@ -1026,6 +1026,54 @@ function Get-Speedy-Software-Product-List() {
 function Get-System-Drive() { $ret = "$($Env:SystemDrive)"; $c = "$([System.IO.Path]::DirectorySeparatorChar)"; if (-not ($ret.EndsWith($c))) { $ret += $c; }; return $ret; }
   
 
+# Include File: [\Includes\Get-Windows-Power-Plans.ps1]
+function Get-Windows-Power-Plans() {
+  if ((Get-Os-Platform) -ne "Windows") { return @(); }
+  $rawOutput = (& powercfg.exe "-l") | Out-String
+  # Write-Host $rawOutput
+  $lines = "$rawOutput".Split([char]13,[char]10) | ? { "$_" -match ":" } | % { @(@("$_".Split(":")) | Select -Skip 1) -join " " } | % { "$_".Trim() }
+  foreach($line in $lines) {
+    $guid = "$line".Split(" ") | % { "$_".Trim() } | ? { "$_".Length -gt 0 } | Select -First 1
+    $pSpace = "$line".IndexOf(" ");
+    if ($pSpace -gt 1) {
+      $name = "$line".SubString($pSpace).Trim()
+      $isActive = "$line".EndsWith("*")
+      if ($isActive) { $name = "$name".TrimEnd("*"); }
+      $name = "$name".Trim().TrimStart("(").TrimEnd(")")
+      [PsCustomObject] @{ "Id" = $guid; Name = $name; IsActive = $isActive };
+    }
+  }
+}
+
+function Get-Windows-Active-Power-Plan() {
+  Get-Windows-Power-Plans | ? { $_.IsActive } | Select -First 1
+}
+
+function Get-Windows-Active-Power-Plan-Name() {
+  (Get-Windows-Active-Power-Plan).Name
+}
+
+function Set-Windows-Power-Plan-by-Name([string] $newPowerPlanName) {
+  $allPlans = @(Get-Windows-Power-Plans)
+  $newPlan = $allPlans | ? { $_.Name -eq $newPowerPlanName } | Select -First 1
+  if ($newPlan) {
+    & powercfg.exe @("/s", "$($newPlan.Id)") | Out-Host
+  } else {
+    Write-Host "Warning! Unable to set power plan '$newPowerPlanName'. Not Found." -ForeGroundColor DarkRed
+  }
+}
+
+# Get-Windows-Active-Power-Plan-Name; 
+# Get-Windows-Active-Power-Plan
+# Get-Windows-Power-Plans | ft *
+
+# Set-Windows-Power-Plan-by-Name "High Performance"
+# Set-Windows-Power-Plan-by-Name "ZXC PPlan"
+# Set-Windows-Power-Plan-by-Name "Balanced"
+
+
+
+
 # Include File: [\Includes\Has-Cmd.ps1]
 function Has-Cmd {
   param([string] $arg)
