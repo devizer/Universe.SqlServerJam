@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.71';
+$ModuleVersion = '2.1.75';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -13,7 +13,9 @@ $ModuleFiles = @(
 			"",
 			"  # RootModule = 'SqlServer-Version-Management.psm1'",
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
-			"  ModuleVersion = `"2.1.71`"",
+			"",
+			"  # Version below is automatically incremented on build",
+			"  ModuleVersion = `"2.1.75`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -21,7 +23,7 @@ $ModuleFiles = @(
 			"",
 			"  CompanyName = ''",
 			"",
-			"  Copyright = '(c) 2010-2024 devizer.'",
+			"  Copyright = '(c) 2010-2025 devizer.'",
 			"",
 			"  Description = @`"",
 			"SQL Server and Local DB Management.   ",
@@ -94,7 +96,7 @@ $ModuleFiles = @(
 			"",
 			"        ",
 			"        Tags = @(",
-			"          `"Windows`", `"SQL Server Developer`", `"SQL Server Advanced`", `"SQL Server Core`", `"SQL Server LocalDB`"",
+			"          `"SQL`", `"Server`", `"SqlServer`", `"CI`", `"Unattended`", `"Setup`", `"Install`", `"RTM`", `"ServicePack`", `"CU`", `"ComulativeUpdate`", `"2022`", `"2019`", `"2017`", `"2016`", `"2014`", `"2012`", `"2008R2`", `"2008`", `"2005`", `"Windows`"",
 			"        )",
 			"",
 			"        LicenseUri = 'https://opensource.org/license/mit/'",
@@ -3132,7 +3134,6 @@ $ModuleFiles = @(
 			"Export-ModuleMember -Function Start-Stopwatch",
 			"Export-ModuleMember -Function To-Boolean",
 			"Export-ModuleMember -Function To-Sortable-Version-String",
-			"Export-ModuleMember -Function Troubleshoot-Info-Prev",
 			"Export-ModuleMember -Function Try-BuildServerType",
 			"Export-ModuleMember -Function Try-Get-FileExtension-by-Uri",
 			"Export-ModuleMember -Function Try-Get-FileName-by-Uri",
