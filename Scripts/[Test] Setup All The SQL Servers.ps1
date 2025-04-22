@@ -2427,7 +2427,7 @@ function Install-SQLServer {
 
   $defaultOptions = @{
     InstallTo = Combine-Path "$(Get-System-Drive)" "SQL";
-    Password = "``1qazxsw2";
+    Password = "Meaga`$trong";
     Tcp = 1;
     NamedPipe = 1;
     SysAdmins = "$sqlAdministratorsGroup";
