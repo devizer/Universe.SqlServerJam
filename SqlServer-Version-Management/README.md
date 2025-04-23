@@ -1,12 +1,16 @@
 ## SqlServer-Version-Management Powershell Module
 SQL Server Setup and Management including Developer, Express, and LocalDB editions.
 The intended use of this project is for Continuous Integration (CI) scenarios, where:
-     1) A SQL Server or LocalDB needs to be installed without user interaction.
-     2) A SQL Server or LocalDB installation doesn't need to persist across multiple CI runs.
+- A SQL Server or LocalDB needs to be installed without user interaction.
+- A SQL Server or LocalDB installation doesn't need to persist across multiple CI runs.
 
-By default it installs SQL Engine and full text search, adds current user to SQL Server Administrators, and turns on TCP/IP and Named Pipe protocols. Default sa password is 'Meaga`$trong'.
+SQL Server Setup defaults:
+- Installs SQL Engine and full text search,
+- Adds current user to SQL Server Administrators, 
+- Turns on TCP/IP and Named Pipe protocols,
+- Default sa password is 'Meaga`$trong'.
 
-## Setup-SqlServers
+## Setup-SqlServers function
 Install SQL Server 2022 Developer Edition with Cumulative Update as default instance (local) with UTF8 Collation:
 ```
 Setup-SqlServers "2022 Developer Updated: MSSQLSERVER" `
