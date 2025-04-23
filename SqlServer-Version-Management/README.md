@@ -7,7 +7,7 @@ The intended use of this project is for Continuous Integration (CI) scenarios, w
 By default it installs SQL Engine and full text search, adds current user to SQL Server Administrators, and turns on TCP/IP and Named Pipe protocols. Default sa password is 'Meaga`$trong'.
 
 ## Setup-SqlServers
-Install SQL Server 2022 Developer Edition with Comulative Update as default instance (local) with UTF8 Collation:
+Install SQL Server 2022 Developer Edition with Cumulative Update as default instance (local) with UTF8 Collation:
 ```
 Setup-SqlServers "2022 Developer Updated: MSSQLSERVER" `
                  "Collation=Latin1_General_100_CI_AS_SC_UTF8"
@@ -76,12 +76,12 @@ Running MSSQLSERVER          SQL Server (MSSQLSERVER)
 
 ```
 
-Wait for SQL Server success health during 30 seconds and show its version
+Wait for SQL Server success healthcheck during 30 seconds and show its version
 ```
 Query-SqlServer-Version -Title "Default MS SQL SERVER" -Instance "(local)" -Timeout 30
 ```
 
-Wait for SQL Server success health during 30 seconds and show its version
+Wait for SQL Server success healthcheck during 30 seconds and show its version on Linux
 ```
-Query-SqlServer-Version -Title "SQL Server" -Instance "(local)" -Timeout 30
+Query-SqlServer-Version -Title "SQL Server" ConnectionString "Data Source=localhost,1433;User ID=sa;Password=passw0rd!;Encrypt=False;" -Timeout 30
 ```
