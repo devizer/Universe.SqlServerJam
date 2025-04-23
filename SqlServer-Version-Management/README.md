@@ -25,10 +25,10 @@ $ENV:SQLSERVERS_MEDIA_FOLDER = "D:\SQL-SETUP\Media"
 $ENV:SQLSERVERS_SETUP_FOLDER = "C:\SQL-SETUP\Installer"
 Setup-SqlServers "2016 Developer: DEVELOPER2016" `
                  "Features=SQLENGINE,FullText" `
-                 "Collation=$collation" `
+                 "Collation=SQL_Latin1_General_CP1_CI_AS" `
                  "Startup=Automatic" `
                  "InstallTo=D:\SQL" `
-                 "Password=Zuper`$trong" 
+                 "Password=Zuper`$tr0ng" 
 ```
 
 List Installed SQL Server Intances
