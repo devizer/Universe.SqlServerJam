@@ -135,6 +135,14 @@ jobs:
       DEBUG_LOG_FOLDER: 'C:\Artifacts'
 
     steps:
+    - name: Bootstrap
+      shell: bash
+      run: |
+         nohup powershell -c "\$PSVersionTable" &
+         wait
+         nohup powershell -c "Install-Module -Name SqlServer-Version-Management -Force" &
+
+    
     - name: Checkout
       uses: actions/checkout@v4
       with:
