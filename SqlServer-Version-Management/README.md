@@ -10,7 +10,7 @@ SQL Server Setup defaults:
 - Turns on TCP/IP and Named Pipe protocols,
 - Default sa password is 'Meaga`$trong'.
 
-## Supported SQL Server version arguemnts:
+## Supported SQL Server version arguments:
 &#x1F31F; _2022 Developer Update_: 16.0.4135.4 RTM CU14 Developer Edition (64-bit)<br/>
 &#x1F31F; _2022 Developer_: 16.0.1000.6 RTM Developer Edition (64-bit)<br/>
 &#x1F31F; _2022 Advanced Update_: 16.0.4135.4 RTM CU14 Express Edition (64-bit)<br/>
