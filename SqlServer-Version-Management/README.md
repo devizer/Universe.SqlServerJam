@@ -55,7 +55,7 @@ Instance               InstallerVersion Service
 (local)\DEV_2019       15.0.2000.5      MSSQL$DEV_2019
 ```
 
-List Installed SQL Server Intances
+List Installed SQL Server Services
 ```
 Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | ft -AutoSize
 
@@ -76,12 +76,14 @@ Running MSSQLSERVER          SQL Server (MSSQLSERVER)
 
 ```
 
-Wait for SQL Server success healthcheck during 30 seconds and show its version
+Wait for SQL Server success healthcheck up to 30 seconds and show its version
 ```
 Query-SqlServer-Version -Title "Default MS SQL SERVER" -Instance "(local)" -Timeout 30
 ```
 
 Wait for SQL Server success healthcheck during 30 seconds and show its version on Linux
 ```
-Query-SqlServer-Version -Title "SQL Server" -ConnectionString "Data Source=localhost,1433;User ID=sa;Password=passw0rd!;Encrypt=False;" -Timeout 30
+Query-SqlServer-Version -Title "SQL Server" `
+      -ConnectionString "Data Source=localhost,1433;User ID=sa;Password=passw0rd!;Encrypt=False;" `
+      -Timeout 30
 ```
