@@ -11,18 +11,18 @@ SQL Server Setup defaults:
 - Default sa password is 'Meaga`$trong'.
 
 ## Setup-SqlServers function
-Install SQL Server 2022 Developer Edition with Cumulative Update as default instance (local) with UTF8 Collation:
+&#x1F31F; Install SQL Server 2022 Developer Edition with Cumulative Update as default instance (local) with UTF8 Collation:
 ```powershell
 Setup-SqlServers "2022 Developer Updated: MSSQLSERVER" `
                  "Collation=Latin1_General_100_CI_AS_SC_UTF8"
 ```
 
-Install SQL Server 2019 Developer Edition RTM as DEVELOPER2019 instance:
+&#x1F31F; Install SQL Server 2019 Developer Edition RTM as DEVELOPER2019 instance:
 ```powershell
 Setup-SqlServers "2019 Developer Updated: DEVELOPER2019"
 ```
 
-Install SQL Server 2016 Developer Edition SP3 as DEVELOPER2016 instance tuned for performance:
+&#x1F31F; Install SQL Server 2016 Developer Edition SP3 as DEVELOPER2016 instance tuned for performance:
 ```powershell
 $ENV:PS1_TROUBLE_SHOOT = "On"
 $ENV:SQLSERVERS_MEDIA_FOLDER = "D:\SQL-SETUP\Media"
@@ -35,7 +35,7 @@ Setup-SqlServers "2016 Developer: DEVELOPER2016" `
                  "Password=Zuper`$tr0ng" 
 ```
 
-List Installed SQL Server Intances
+&#x1F31F; List Installed SQL Server Intances
 ```powershell
 Find-Local-SqlServers | 
      % { [pscustomObject] $_ } | 
@@ -59,7 +59,7 @@ Instance               InstallerVersion Service
 (local)\DEV_2019       15.0.2000.5      MSSQL$DEV_2019
 ```
 
-List Installed SQL Server Services
+&#x1F31F; List Installed SQL Server Services
 ```powershell
 Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | ft -AutoSize
 
@@ -80,19 +80,19 @@ Running MSSQLSERVER          SQL Server (MSSQLSERVER)
 
 ```
 
-Wait for SQL Server success healthcheck up to 30 seconds and show its version
+&#x1F31F; Wait for SQL Server success healthcheck up to 30 seconds and show its version
 ```
 Query-SqlServer-Version -Title "Default MS SQL SERVER" -Instance "(local)" -Timeout 30
 ```
 
-Wait for SQL Server success healthcheck during 30 seconds and show its version on Linux
+&#x1F31F; Wait for SQL Server success healthcheck during 30 seconds and show its version on Linux
 ```powershell
 Query-SqlServer-Version -Title "SQL Server" `
       -ConnectionString "Data Source=localhost,1433;User ID=sa;Password=passw0rd!;Encrypt=False;" `
       -Timeout 30
 ```
 
-Start SQL Server Instances that are currently stopped
+&#x1F31F; Start SQL Server Instances that are currently stopped
 ```powershell
 Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | 
    ? { $_.Status -ne "Running" } | 
@@ -100,7 +100,7 @@ Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) |
 
 ```
 
-Stop SQL Server Instances that are currently running
+&#x1F31F; Stop SQL Server Instances that are currently running
 ```powershell
 Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | 
    ? { $_.Status -ne "Stopped" } | 
