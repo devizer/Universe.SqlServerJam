@@ -28,7 +28,7 @@ Setup-SqlServers "2016 Developer: DEVELOPER2016" `
                  "Collation=$collation" `
                  "Startup=Automatic" `
                  "InstallTo=D:\SQL" `
-                 "Password=`Zuper`$trong" 
+                 "Password=Zuper`$trong" 
 ```
 
 List Installed SQL Server Intances
