@@ -83,5 +83,5 @@ Query-SqlServer-Version -Title "Default MS SQL SERVER" -Instance "(local)" -Time
 
 Wait for SQL Server success healthcheck during 30 seconds and show its version on Linux
 ```
-Query-SqlServer-Version -Title "SQL Server" ConnectionString "Data Source=localhost,1433;User ID=sa;Password=passw0rd!;Encrypt=False;" -Timeout 30
+Query-SqlServer-Version -Title "SQL Server" -ConnectionString "Data Source=localhost,1433;User ID=sa;Password=passw0rd!;Encrypt=False;" -Timeout 30
 ```
