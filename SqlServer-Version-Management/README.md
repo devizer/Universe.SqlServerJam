@@ -12,18 +12,18 @@ SQL Server Setup defaults:
 
 ## Setup-SqlServers function
 Install SQL Server 2022 Developer Edition with Cumulative Update as default instance (local) with UTF8 Collation:
-```
+```powershell
 Setup-SqlServers "2022 Developer Updated: MSSQLSERVER" `
                  "Collation=Latin1_General_100_CI_AS_SC_UTF8"
 ```
 
 Install SQL Server 2019 Developer Edition RTM as DEVELOPER2019 instance:
-```
+```powershell
 Setup-SqlServers "2019 Developer Updated: DEVELOPER2019"
 ```
 
 Install SQL Server 2016 Developer Edition SP3 as DEVELOPER2016 instance tuned for performance:
-```
+```powershell
 $ENV:PS1_TROUBLE_SHOOT = "On"
 $ENV:SQLSERVERS_MEDIA_FOLDER = "D:\SQL-SETUP\Media"
 $ENV:SQLSERVERS_SETUP_FOLDER = "C:\SQL-SETUP\Installer"
@@ -36,7 +36,7 @@ Setup-SqlServers "2016 Developer: DEVELOPER2016" `
 ```
 
 List Installed SQL Server Intances
-```
+```powershell
 Find-Local-SqlServers | 
      % { [pscustomObject] $_ } | 
      Format-Table -AutoSize | 
@@ -60,7 +60,7 @@ Instance               InstallerVersion Service
 ```
 
 List Installed SQL Server Services
-```
+```powershell
 Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | ft -AutoSize
 
 Status  Name                 DisplayName
@@ -86,8 +86,23 @@ Query-SqlServer-Version -Title "Default MS SQL SERVER" -Instance "(local)" -Time
 ```
 
 Wait for SQL Server success healthcheck during 30 seconds and show its version on Linux
-```
+```powershell
 Query-SqlServer-Version -Title "SQL Server" `
       -ConnectionString "Data Source=localhost,1433;User ID=sa;Password=passw0rd!;Encrypt=False;" `
       -Timeout 30
+```
+
+Start SQL Server Instances that are stopped
+```powershell
+Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | 
+   ? { $_.Status -ne "Running" } | 
+   % { Write-Host "Starting $($_.Name)"; Start-Service "$($_.Name)" }
+
+```
+
+Stop SQL Server Instances, that are running
+```powershell
+Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | 
+   ? { $_.Status -ne "Stopped" } | 
+   % { Write-Host "Stopping $($_.Name)"; Stop-Service "$($_.Name)" -Force }
 ```
