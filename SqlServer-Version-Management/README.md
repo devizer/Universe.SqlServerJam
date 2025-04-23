@@ -92,7 +92,7 @@ Query-SqlServer-Version -Title "SQL Server" `
       -Timeout 30
 ```
 
-Start SQL Server Instances that are stopped
+Start SQL Server Instances that are currently stopped
 ```powershell
 Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | 
    ? { $_.Status -ne "Running" } | 
@@ -100,7 +100,7 @@ Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) |
 
 ```
 
-Stop SQL Server Instances, that are running
+Stop SQL Server Instances that are currently running
 ```powershell
 Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | 
    ? { $_.Status -ne "Stopped" } | 
