@@ -140,6 +140,7 @@ jobs:
       run: |
          nohup powershell -c "\$PSVersionTable" &
          wait
+         time powershell -c "Install-Module -Name SqlServer-Version-Management -Force"
          nohup powershell -c "Install-Module -Name SqlServer-Version-Management -Force" &
 
     
