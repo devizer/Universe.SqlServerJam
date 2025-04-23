@@ -138,9 +138,10 @@ jobs:
     - name: Bootstrap
       shell: bash
       run: |
+         set -eu;
          nohup powershell -c "\$PSVersionTable" &
          wait
-         time powershell -c "Install-Module -Name SqlServer-Version-Management -Force"
+         # time powershell -c "Install-Module -Name SqlServer-Version-Management -Force"
          nohup powershell -c "Install-Module -Name SqlServer-Version-Management -Force" &
 
     
