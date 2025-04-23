@@ -11,84 +11,84 @@ SQL Server Setup defaults:
 - Default sa password is 'Meaga`$trong'.
 
 ## Supported SQL Server version arguments:
-&#x1F31F; _2022 Developer Update_: 16.0.4135.4 RTM CU14 Developer Edition (64-bit)<br/>
-&#x1F31F; _2022 Developer_: 16.0.1000.6 RTM Developer Edition (64-bit)<br/>
-&#x1F31F; _2022 Advanced Update_: 16.0.4135.4 RTM CU14 Express Edition (64-bit)<br/>
-&#x1F31F; _2022 Advanced_: 16.0.1000.6 RTM Express Edition (64-bit)<br/>
-&#x1F31F; _2022 Core Update_: 16.0.4135.4 RTM CU14 Express Edition (64-bit)<br/>
-&#x1F31F; _2022 Core_: 16.0.1000.6 RTM Express Edition (64-bit)<br/>
-&#x1F31F; _2022 LocalDB_: 16.0.1000.6 RTM LocalDB Express Edition (64-bit)<br/>
-&#x1F31F; _2019 Developer Update_: 15.0.4385.2 RTM CU28 Developer Edition (64-bit)<br/>
-&#x1F31F; _2019 Developer_: 15.0.2000.5 RTM Developer Edition (64-bit)<br/>
-&#x1F31F; _2019 Advanced Update_: 15.0.4385.2 RTM CU28 Express Edition (64-bit)<br/>
-&#x1F31F; _2019 Advanced_: 15.0.2000.5 RTM Express Edition (64-bit)<br/>
-&#x1F31F; _2019 Core Update_: 15.0.4385.2 RTM CU28 Express Edition (64-bit)<br/>
-&#x1F31F; _2019 Core_: 15.0.2000.5 RTM Express Edition (64-bit)<br/>
-&#x1F31F; _2019 LocalDB_: 15.0.2000.5 RTM LocalDB Express Edition (64-bit)<br/>
-&#x1F31F; _2017 Developer Update_: 14.0.3456.2 RTM CU31 Developer Edition (64-bit)<br/>
-&#x1F31F; _2017 Developer_: 14.0.1000.169 RTM Developer Edition (64-bit)<br/>
-&#x1F31F; _2017 Advanced Update_: 14.0.3456.2 RTM CU31 Express Edition (64-bit)<br/>
-&#x1F31F; _2017 Advanced_: 14.0.1000.169 RTM Express Edition (64-bit)<br/>
-&#x1F31F; _2017 Core Update_: 14.0.3456.2 RTM CU31 Express Edition (64-bit)<br/>
-&#x1F31F; _2017 Core_: 14.0.1000.169 RTM Express Edition (64-bit)<br/>
-&#x1F31F; _2017 LocalDB_: 14.0.1000.169 RTM LocalDB Express Edition (64-bit)<br/>
-&#x1F31F; _2016 Developer Update_: 13.0.6441.1 SP3 Developer Edition (64-bit)<br/>
-&#x1F31F; _2016 Developer_: 13.0.6404.1 SP3 Developer Edition (64-bit)<br/>
-&#x1F31F; _2016 Advanced Update_: 13.0.6441.1 SP3 Express Edition (64-bit)<br/>
-&#x1F31F; _2016 Advanced_: 13.0.6404.1 SP3 Express Edition (64-bit)<br/>
-&#x1F31F; _2016 Core Update_: 13.0.6441.1 SP3 Express Edition (64-bit)<br/>
-&#x1F31F; _2016 Core_: 13.0.6404.1 SP3 Express Edition (64-bit)<br/>
-&#x1F31F; _2016 LocalDB_: 13.0.6300.2 SP3 LocalDB Express Edition (64-bit)<br/>
-&#x1F31F; _2014-x64 Developer_: 12.0.6024.0 SP3 Developer Edition (64-bit)<br/>
-&#x1F31F; _2014-x64 Advanced_: 12.0.6024.0 SP3 Express Edition (64-bit)<br/>
-&#x1F31F; _2014-x64 Core_: 12.0.6024.0 SP3 Express Edition (64-bit)<br/>
-&#x1F31F; _2014-x64 LocalDB_: 12.0.6024.0 SP3 LocalDB Express Edition (64-bit)<br/>
-&#x1F31F; _2014-x86 Developer_: 12.0.6024.0 SP3 Developer Edition<br/>
-&#x1F31F; _2014-x86 Advanced_: 12.0.6024.0 SP3 Express Edition<br/>
-&#x1F31F; _2014-x86 Core_: 12.0.6024.0 SP3 Express Edition<br/>
-&#x1F31F; _2012-x64 Developer_: 11.0.7001.0 SP4 Developer Edition (64-bit)<br/>
-&#x1F31F; _2012-x64 Advanced_: 11.0.7001.0 SP4 Express Edition (64-bit)<br/>
-&#x1F31F; _2012-x64 Core_: 11.0.7001.0 SP4 Express Edition (64-bit)<br/>
-&#x1F31F; _2012-x64 LocalDB_: 11.0.7001.0 SP4 LocalDB Express Edition (64-bit)<br/>
-&#x1F31F; _2012-x86 Developer_: 11.0.7001.0 SP4 Developer Edition<br/>
-&#x1F31F; _2012-x86 Advanced_: 11.0.7001.0 SP4 Express Edition<br/>
-&#x1F31F; _2012-x86 Core_: 11.0.7001.0 SP4 Express Edition<br/>
-&#x1F31F; _2008R2-x64 Developer_: 10.50.6000.34 SP3 Developer Edition (64-bit)<br/>
-&#x1F31F; _2008R2-x64 Advanced Update_: 10.50.6000.34 SP3 Express Edition with Advanced Services (64-bit)<br/>
-&#x1F31F; _2008R2-x64 Advanced_: 10.50.4000.0 SP2 Express Edition with Advanced Services (64-bit)<br/>
-&#x1F31F; _2008R2-x64 Core Update_: 10.50.6000.34 SP3 Express Edition (64-bit)<br/>
-&#x1F31F; _2008R2-x64 Core_: 10.50.4000.0 SP2 Express Edition (64-bit)<br/>
-&#x1F31F; _2008R2-x86 Developer_: 10.50.6000.34 SP3 Developer Edition<br/>
-&#x1F31F; _2008R2-x86 Advanced Update_: 10.50.6000.34 SP3 Express Edition with Advanced Services<br/>
-&#x1F31F; _2008R2-x86 Advanced_: 10.50.4000.0 SP2 Express Edition with Advanced Services<br/>
-&#x1F31F; _2008R2-x86 Core Update_: 10.50.6000.34 SP3 Express Edition<br/>
-&#x1F31F; _2008R2-x86 Core_: 10.50.4000.0 SP2 Express Edition<br/>
-&#x1F31F; _2008-x64 Advanced Update_: 10.0.6000.29 SP4 Express Edition with Advanced Services (64-bit)<br/>
-&#x1F31F; _2008-x64 Advanced_: 10.0.1600.22 RTM Express Edition with Advanced Services (64-bit)<br/>
-&#x1F31F; _2008-x64 Core Update_: 10.0.6000.29 SP4 Express Edition (64-bit)<br/>
-&#x1F31F; _2008-x64 Core_: 10.0.5500.0 SP3 Express Edition (64-bit)<br/>
-&#x1F31F; _2008-x86 Advanced Update_: 10.0.6000.29 SP4 Express Edition with Advanced Services<br/>
-&#x1F31F; _2008-x86 Advanced_: 10.0.1600.22 RTM Express Edition with Advanced Services<br/>
-&#x1F31F; _2008-x86 Core Update_: 10.0.6000.29 SP4 Express Edition<br/>
-&#x1F31F; _2008-x86 Core_: 10.0.5500.0 SP3 Express Edition<br/>
-&#x1F31F; _2005-x86 Advanced Update_: 9.00.5000.00 SP4 Express Edition with Advanced Services<br/>
-&#x1F31F; _2005-x86 Advanced_: 9.00.3042.00 SP2 Express Edition with Advanced Services<br/>
-&#x1F31F; _2005-x86 Core_: 9.00.5000.00 SP4 Express Edition<br/>
+&#x2714;&nbsp;&nbsp; _2022 Developer Update_: 16.0.4135.4 RTM CU14 Developer Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2022 Developer_: 16.0.1000.6 RTM Developer Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2022 Advanced Update_: 16.0.4135.4 RTM CU14 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2022 Advanced_: 16.0.1000.6 RTM Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2022 Core Update_: 16.0.4135.4 RTM CU14 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2022 Core_: 16.0.1000.6 RTM Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2022 LocalDB_: 16.0.1000.6 RTM LocalDB Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2019 Developer Update_: 15.0.4385.2 RTM CU28 Developer Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2019 Developer_: 15.0.2000.5 RTM Developer Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2019 Advanced Update_: 15.0.4385.2 RTM CU28 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2019 Advanced_: 15.0.2000.5 RTM Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2019 Core Update_: 15.0.4385.2 RTM CU28 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2019 Core_: 15.0.2000.5 RTM Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2019 LocalDB_: 15.0.2000.5 RTM LocalDB Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2017 Developer Update_: 14.0.3456.2 RTM CU31 Developer Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2017 Developer_: 14.0.1000.169 RTM Developer Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2017 Advanced Update_: 14.0.3456.2 RTM CU31 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2017 Advanced_: 14.0.1000.169 RTM Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2017 Core Update_: 14.0.3456.2 RTM CU31 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2017 Core_: 14.0.1000.169 RTM Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2017 LocalDB_: 14.0.1000.169 RTM LocalDB Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2016 Developer Update_: 13.0.6441.1 SP3 Developer Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2016 Developer_: 13.0.6404.1 SP3 Developer Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2016 Advanced Update_: 13.0.6441.1 SP3 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2016 Advanced_: 13.0.6404.1 SP3 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2016 Core Update_: 13.0.6441.1 SP3 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2016 Core_: 13.0.6404.1 SP3 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2016 LocalDB_: 13.0.6300.2 SP3 LocalDB Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2014-x64 Developer_: 12.0.6024.0 SP3 Developer Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2014-x64 Advanced_: 12.0.6024.0 SP3 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2014-x64 Core_: 12.0.6024.0 SP3 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2014-x64 LocalDB_: 12.0.6024.0 SP3 LocalDB Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2014-x86 Developer_: 12.0.6024.0 SP3 Developer Edition<br/>
+&#x2714;&nbsp;&nbsp; _2014-x86 Advanced_: 12.0.6024.0 SP3 Express Edition<br/>
+&#x2714;&nbsp;&nbsp; _2014-x86 Core_: 12.0.6024.0 SP3 Express Edition<br/>
+&#x2714;&nbsp;&nbsp; _2012-x64 Developer_: 11.0.7001.0 SP4 Developer Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2012-x64 Advanced_: 11.0.7001.0 SP4 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2012-x64 Core_: 11.0.7001.0 SP4 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2012-x64 LocalDB_: 11.0.7001.0 SP4 LocalDB Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2012-x86 Developer_: 11.0.7001.0 SP4 Developer Edition<br/>
+&#x2714;&nbsp;&nbsp; _2012-x86 Advanced_: 11.0.7001.0 SP4 Express Edition<br/>
+&#x2714;&nbsp;&nbsp; _2012-x86 Core_: 11.0.7001.0 SP4 Express Edition<br/>
+&#x2714;&nbsp;&nbsp; _2008R2-x64 Developer_: 10.50.6000.34 SP3 Developer Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2008R2-x64 Advanced Update_: 10.50.6000.34 SP3 Express Edition with Advanced Services (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2008R2-x64 Advanced_: 10.50.4000.0 SP2 Express Edition with Advanced Services (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2008R2-x64 Core Update_: 10.50.6000.34 SP3 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2008R2-x64 Core_: 10.50.4000.0 SP2 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2008R2-x86 Developer_: 10.50.6000.34 SP3 Developer Edition<br/>
+&#x2714;&nbsp;&nbsp; _2008R2-x86 Advanced Update_: 10.50.6000.34 SP3 Express Edition with Advanced Services<br/>
+&#x2714;&nbsp;&nbsp; _2008R2-x86 Advanced_: 10.50.4000.0 SP2 Express Edition with Advanced Services<br/>
+&#x2714;&nbsp;&nbsp; _2008R2-x86 Core Update_: 10.50.6000.34 SP3 Express Edition<br/>
+&#x2714;&nbsp;&nbsp; _2008R2-x86 Core_: 10.50.4000.0 SP2 Express Edition<br/>
+&#x2714;&nbsp;&nbsp; _2008-x64 Advanced Update_: 10.0.6000.29 SP4 Express Edition with Advanced Services (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2008-x64 Advanced_: 10.0.1600.22 RTM Express Edition with Advanced Services (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2008-x64 Core Update_: 10.0.6000.29 SP4 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2008-x64 Core_: 10.0.5500.0 SP3 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2008-x86 Advanced Update_: 10.0.6000.29 SP4 Express Edition with Advanced Services<br/>
+&#x2714;&nbsp;&nbsp; _2008-x86 Advanced_: 10.0.1600.22 RTM Express Edition with Advanced Services<br/>
+&#x2714;&nbsp;&nbsp; _2008-x86 Core Update_: 10.0.6000.29 SP4 Express Edition<br/>
+&#x2714;&nbsp;&nbsp; _2008-x86 Core_: 10.0.5500.0 SP3 Express Edition<br/>
+&#x2714;&nbsp;&nbsp; _2005-x86 Advanced Update_: 9.00.5000.00 SP4 Express Edition with Advanced Services<br/>
+&#x2714;&nbsp;&nbsp; _2005-x86 Advanced_: 9.00.3042.00 SP2 Express Edition with Advanced Services<br/>
+&#x2714;&nbsp;&nbsp; _2005-x86 Core_: 9.00.5000.00 SP4 Express Edition<br/>
 
 
 ## Setup-SqlServers function
-&#xA7; Install SQL Server 2022 Developer Edition with Cumulative Update as default instance (local) with UTF8 Collation:
+&#x1F31F; Install SQL Server 2022 Developer Edition with Cumulative Update as default instance (local) with UTF8 Collation:
 ```powershell
 Setup-SqlServers "2022 Developer Updated: MSSQLSERVER" `
                  "Collation=Latin1_General_100_CI_AS_SC_UTF8"
 ```
 
-&#xA7; Install SQL Server 2019 Developer Edition RTM as DEVELOPER2019 instance:
+&#x1F31F; Install SQL Server 2019 Developer Edition RTM as DEVELOPER2019 instance:
 ```powershell
 Setup-SqlServers "2019 Developer Updated: DEVELOPER2019"
 ```
 
-&#xA7; Install SQL Server 2016 Developer Edition SP3 as DEVELOPER2016 instance tuned for performance:
+&#x1F31F; Install SQL Server 2016 Developer Edition SP3 as DEVELOPER2016 instance tuned for performance:
 ```powershell
 $ENV:PS1_TROUBLE_SHOOT = "On"
 $ENV:SQLSERVERS_MEDIA_FOLDER = "D:\SQL-SETUP\Media"
@@ -101,7 +101,7 @@ Setup-SqlServers "2016 Developer: DEVELOPER2016" `
                  "Password=Zuper`$tr0ng" 
 ```
 
-&#xA7; List Installed SQL Server Intances
+&#x1F31F; List Installed SQL Server Intances
 ```powershell
 Find-Local-SqlServers | 
      % { [pscustomObject] $_ } | 
@@ -125,7 +125,7 @@ Instance               InstallerVersion Service
 (local)\DEV_2019       15.0.2000.5      MSSQL$DEV_2019
 ```
 
-&#xA7; List Installed SQL Server Services
+&#x1F31F; List Installed SQL Server Services
 ```powershell
 Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | ft -AutoSize
 
@@ -146,19 +146,19 @@ Running MSSQLSERVER          SQL Server (MSSQLSERVER)
 
 ```
 
-&#xA7; Wait for SQL Server success healthcheck up to 30 seconds and show its version
+&#x1F31F; Wait for SQL Server success healthcheck up to 30 seconds and show its version
 ```
 Query-SqlServer-Version -Title "Default MS SQL SERVER" -Instance "(local)" -Timeout 30
 ```
 
-&#xA7; Wait for SQL Server success healthcheck during 30 seconds and show its version on Linux
+&#x1F31F; Wait for SQL Server success healthcheck during 30 seconds and show its version on Linux
 ```powershell
 Query-SqlServer-Version -Title "SQL Server" `
       -ConnectionString "Data Source=localhost,1433;User ID=sa;Password=passw0rd!;Encrypt=False;" `
       -Timeout 30
 ```
 
-&#xA7; Start SQL Server Instances that are currently stopped
+&#x1F31F; Start SQL Server Instances that are currently stopped
 ```powershell
 Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | 
    ? { $_.Status -ne "Running" } | 
@@ -166,7 +166,7 @@ Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) |
 
 ```
 
-&#xA7; Stop SQL Server Instances that are currently running
+&#x1F31F; Stop SQL Server Instances that are currently running
 ```powershell
 Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | 
    ? { $_.Status -ne "Stopped" } | 
