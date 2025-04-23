@@ -2467,7 +2467,7 @@ function Install-SQLServer {
     Collation = ""; # Depends on System Language, todo: SQL_Latin1_General_CP1_CI_AS or SQL_Latin1_General_CP1_CI_AS
     DbDir = "";         #
     DbLogDir = "";      #
-    TempDbDir = "";     # Using /Slahs optional overrides
+    TempDbDir = "";     # Using /Slash optional overrides
     TempDbLogDir = ""   #
     BackupDir = "";     #
     Startup = "Automatic"; # Manual | Disabled
@@ -2864,17 +2864,38 @@ function Set-SQLServer-Options([string] $title, [string] $connectionString, <# o
 
 # Include File: [\Includes.SqlServer\Setup-SqlServers.ps1]
 function Setup-SqlServers() {
+<#
+.SYNOPSIS
+SQL Server Setup and Management including Developer, Express, and LocalDB editions.
+The intended use of this project is for Continuous Integration (CI) scenarios, where:
+     1) A SQL Server or LocalDB needs to be installed without user interaction.
+     2) A SQL Server or LocalDB installation doesn't need to persist across multiple CI runs.
+
+By default it installs SQL Engine and full text search, 
+adds current user to SQL Server Administrators, 
+and turns on TCP/IP and Named Pipe protocols. Default sa password is 'Meaga$trong'.
+
+
+.OUTPUTS
+Returns array of errors, if occured on installation
+
+.EXAMPLE
+Setup-SqlServers "2022 Developer Updated: MSSQLSERVER, 2019 Advanced: ADV2019, 2017 Core Updated: CORE2017, 2016 Developer: DEV2016"
+Command above installs
+  SQL Server 2022 Developer Edition as default instance,
+  SQL Server 2019 Express Edition RTM with Advanced Services as ADV2019 instance,
+  SQL Server 2017 Express Edition 2017 as CORE2017 instance,
+  and SQL Server 2016 Developer Edition as DEV2016 instance
+
+Options:
+
+#>
 Param(
   [string] $sqlServers,
   [string[]] $optionsOverride = @()
 )
-$optionsOverride += @($args)
 
-<#
-TODO: 
-  MaxRam,
-  MinRam
-#>
+   $optionsOverride += @($args)
 
    Say "Setting up SQL Server(s) `"$sqlServers`". Cpu is '$(Get-Cpu-Name)'. $((Get-Memory-Info).Description)"
    $errors = @();
