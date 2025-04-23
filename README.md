@@ -1,4 +1,4 @@
-# Universe.SqlServerJam &nbsp;&nbsp;&nbsp;[![Setup SQL Servers](https://github.com/devizer/Universe.SqlServerJam/actions/workflows/setup-sqlservers.yml/badge.svg)](https://github.com/devizer/Universe.SqlServerJam/actions/workflows/setup-sqlservers.yml)
+# Universe.SqlServerJam &nbsp;&nbsp;&nbsp;[![Test SQL Servers Matrix](https://github.com/devizer/Universe.SqlServerJam/actions/workflows/setup-sqlservers.yml/badge.svg)](https://github.com/devizer/Universe.SqlServerJam/actions/workflows/setup-sqlservers.yml)
 Operations during unit testing: start, stop services, check server edition, forced database delete, checking databases size, recovery mode, auto shrinking, etc. Discovering local sql server instances by the same way as SSMS
 
 ## IDbConnection.Manage() Extensions

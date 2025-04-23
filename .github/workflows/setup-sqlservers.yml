@@ -1,4 +1,4 @@
-name: Setup SQL Servers
+name: Test SQL Servers Matrix
 
 on:
   workflow_dispatch:
