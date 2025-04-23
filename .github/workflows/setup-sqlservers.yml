@@ -44,7 +44,7 @@ jobs:
         # path: "${{ runner.temp }}/Artifacts/**/**"
           
   
-  Setup:
+  Test:
 
     timeout-minutes: 45
     needs: Pre-Build
@@ -369,7 +369,7 @@ jobs:
           
   Combine:
     runs-on: windows-latest
-    needs: Setup
+    needs: Test
     if: always()
     timeout-minutes: 15
     steps:
