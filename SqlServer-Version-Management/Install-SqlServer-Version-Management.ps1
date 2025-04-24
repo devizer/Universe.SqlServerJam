@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.78';
+$ModuleVersion = '2.1.83';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -15,7 +15,7 @@ $ModuleFiles = @(
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
 			"",
 			"  # Version below is automatically incremented on build",
-			"  ModuleVersion = `"2.1.78`"",
+			"  ModuleVersion = `"2.1.83`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -30,10 +30,10 @@ $ModuleFiles = @(
 			"",
 			"SQL Server Setup and Management including Developer, Express, and LocalDB editions.",
 			"The intended use of this project is for Continuous Integration (CI) scenarios, where:",
-			"     1) A SQL Server or LocalDB needs to be installed without user interaction.",
-			"     2) A SQL Server or LocalDB installation doesn't need to persist across multiple CI runs.",
+			"     1) SQL Server or LocalDB needs to be installed without user interaction.",
+			"     2) SQL Server or LocalDB installation doesn't need to persist across multiple CI runs.",
 			"",
-			"By default it installs SQL Engine and full text search, adds current user to SQL Server Administrators, and turns on TCP/IP and Named Pipe protocols. Default sa password is 'Meaga```$trong'.",
+			"By default it installs SQL Engine and full text search, adds built-in Administrators to SQL Server Administrators, and turns on TCP/IP and Named Pipe protocols. Default sa password is 'Meaga```$tr0ng'.",
 			"`"@",
 			"",
 			"  PowerShellVersion = '2.0'",
@@ -2552,7 +2552,7 @@ $ModuleFiles = @(
 			"",
 			"  `$defaultOptions = @{",
 			"    InstallTo = Combine-Path `"`$(Get-System-Drive)`" `"SQL`";",
-			"    Password = `"Meaga```$trong`";",
+			"    Password = `"Meaga```$tr0ng`";",
 			"    Tcp = 1;",
 			"    NamedPipe = 1;",
 			"    SysAdmins = `"`$sqlAdministratorsGroup`";",
@@ -2769,7 +2769,7 @@ $ModuleFiles = @(
 			"# Include File: [\Includes.SqlServer\Parse-SqlServers-Input.ps1]",
 			"function Parse-SqlServers-Input { param( [string] `$list)",
 			"    # Say `"Installing SQL Server(s) by tags: `$list`"",
-			"    `$rawServerList = `"`$list`".Split(@([char]44, [char]59));",
+			"    `$rawServerList = `"`$list`".Replace(`"``r`",`" `").Replace(`"``n`",`" `").Split(@([char]44, [char]59));",
 			"    foreach(`$sqlDef in `$rawServerList) {",
 			"        `$arr = `$sqlDef.Split(@([char]58));",
 			"        `$sqlKey = `"`$(`$arr[0])`".Trim();",

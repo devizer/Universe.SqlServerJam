@@ -2,11 +2,14 @@
 # Include File: [\SqlSetup.PS1Project\src\Includes\Synopsis.ps1]
 <#
  .Synopsis
-  SQL Server and Local DB Management.
-  The intended use of this project is for Continuous Integration (CI) scenarios, where:
-     - A SQL Server or LocalDB needs to be installed without user interaction.
-     - A SQL Server or LocalDB installation doesn't need to persist across multiple CI runs.
+SQL Server Setup and Management including Developer, Express, and LocalDB editions.
+The intended use of this project is for Continuous Integration (CI) scenarios, where:
+     1) SQL Server or LocalDB needs to be installed without user interaction.
+     2) SQL Server or LocalDB installation doesn't need to persist across multiple CI runs.
 
+By default it installs SQL Engine and full text search, adds built-in Administrators to SQL Server Administrators, and turns on TCP/IP and Named Pipe protocols. Default sa password is 'Meaga`$tr0ng'.
+
+Guide: https://github.com/devizer/Universe.SqlServerJam/tree/master/SqlServer-Version-Management
 
  .Description
   - Supports Windows 7 ... Windows 11, and Windows Server 2008 R2+ ... Windows Server 2025. Windows on ARM64 is also supported.
@@ -2459,7 +2462,7 @@ function Install-SQLServer {
 
   $defaultOptions = @{
     InstallTo = Combine-Path "$(Get-System-Drive)" "SQL";
-    Password = "Meaga`$trong";
+    Password = "Meaga`$tr0ng";
     Tcp = 1;
     NamedPipe = 1;
     SysAdmins = "$sqlAdministratorsGroup";
@@ -2676,7 +2679,7 @@ function ParseNonEmptyTrimmedLines([string] $raw) {
 # Include File: [\Includes.SqlServer\Parse-SqlServers-Input.ps1]
 function Parse-SqlServers-Input { param( [string] $list)
     # Say "Installing SQL Server(s) by tags: $list"
-    $rawServerList = "$list".Split(@([char]44, [char]59));
+    $rawServerList = "$list".Replace("`r"," ").Replace("`n"," ").Split(@([char]44, [char]59));
     foreach($sqlDef in $rawServerList) {
         $arr = $sqlDef.Split(@([char]58));
         $sqlKey = "$($arr[0])".Trim();

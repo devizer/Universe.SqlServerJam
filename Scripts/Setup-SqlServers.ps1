@@ -2430,7 +2430,7 @@ function Install-SQLServer {
 
   $defaultOptions = @{
     InstallTo = Combine-Path "$(Get-System-Drive)" "SQL";
-    Password = "Meaga`$trong";
+    Password = "Meaga`$tr0ng";
     Tcp = 1;
     NamedPipe = 1;
     SysAdmins = "$sqlAdministratorsGroup";
@@ -2647,7 +2647,7 @@ function ParseNonEmptyTrimmedLines([string] $raw) {
 # Include File: [\Includes.SqlServer\Parse-SqlServers-Input.ps1]
 function Parse-SqlServers-Input { param( [string] $list)
     # Say "Installing SQL Server(s) by tags: $list"
-    $rawServerList = "$list".Split(@([char]44, [char]59));
+    $rawServerList = "$list".Replace("`r"," ").Replace("`n"," ").Split(@([char]44, [char]59));
     foreach($sqlDef in $rawServerList) {
         $arr = $sqlDef.Split(@([char]58));
         $sqlKey = "$($arr[0])".Trim();
