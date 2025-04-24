@@ -159,12 +159,12 @@ Running MSSQLSERVER          SQL Server (MSSQLSERVER)
 
 ```
 
-&#x1F31F; Wait up to 30 seconds for the SQL Server health check to pass, then display its version
+&#x1F31F; Wait up to 30 seconds for the SQL Server health check to pass, and return its version
 ```powershell
 Query-SqlServer-Version -Title "Default MS SQL SERVER" -Instance "(local)" -Timeout 30
 ```
 
-&#x1F31F; Wait up to 30 seconds for the SQL Server health check to pass, then display its version (on Linux)
+&#x1F31F; Wait up to 30 seconds for the SQL Server health check to pass, and return its version (on Linux)
 ```powershell
 Query-SqlServer-Version -Title "SQL Server" `
       -ConnectionString "Data Source=localhost,1433;User ID=sa;Password=passw0rd!;Encrypt=False;" `
