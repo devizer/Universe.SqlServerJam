@@ -98,7 +98,7 @@ Setup-SqlServers $sqlServers `
 
 &#x1F31F; Install SQL Server 2019 Developer Edition RTM as DEVELOPER2019 instance:
 ```powershell
-Setup-SqlServers "2019 Developer Updated: DEVELOPER2019"
+Setup-SqlServers "2019 Developer: DEVELOPER2019"
 ```
 
 &#x1F31F; Install SQL Server 2016 Developer Edition SP3 as DEVELOPER2016 instance tuned for performance:
