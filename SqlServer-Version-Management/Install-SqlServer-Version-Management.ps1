@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.83';
+$ModuleVersion = '2.1.84';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -15,7 +15,7 @@ $ModuleFiles = @(
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
 			"",
 			"  # Version below is automatically incremented on build",
-			"  ModuleVersion = `"2.1.83`"",
+			"  ModuleVersion = `"2.1.84`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -106,7 +106,8 @@ $ModuleFiles = @(
 			"        LicenseUri = 'https://opensource.org/license/mit/'",
 			"",
 			"",
-			"        # ProjectUri = 'https://github.com/devizer'",
+			"        # Does not tested on powershell below 5.1",
+			"        ProjectUri = 'https://github.com/devizer/Universe.SqlServerJam/tree/master/SqlServer-Version-Management'",
 			"",
 			"        # IconUri = ''",
 			"",
