@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.84';
+$ModuleVersion = '2.1.85';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -15,7 +15,7 @@ $ModuleFiles = @(
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
 			"",
 			"  # Version below is automatically incremented on build",
-			"  ModuleVersion = `"2.1.84`"",
+			"  ModuleVersion = `"2.1.85`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -2820,7 +2820,8 @@ $ModuleFiles = @(
 			"#>",
 			"# Include File: [\Includes.SqlServer\Publish-SQLServer-SetupLogs.ps1]",
 			"function Publish-SQLServer-SetupLogs([string] `$toFolder, `$compression=9) {",
-			"  New-Item -ItemType Directory -Path `"`$toFolder`" -EA SilentlyContinue | out-null",
+			"  if ((Get-Os-Platform) -ne `"Windows`") { Write-Host `"Publish-SQLServer-SetupLogs() function is Windows only. Skipping.`"; return; }",
+			"  if (`"`$toFolder`" -ne `"`") { New-Item -ItemType Directory -Path `"`$toFolder`" -EA SilentlyContinue | out-null; }",
 			"  `$folders = Find-SqlServer-SetupLogs",
 			"  `$sevenZip = Get-Full7z-Exe-FullPath-for-Windows -Version `"1900`"",
 			"  foreach(`$logsFolder in `$folders) {",

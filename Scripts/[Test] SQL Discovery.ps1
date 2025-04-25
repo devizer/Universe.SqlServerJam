@@ -2688,7 +2688,8 @@ function Parse-SqlServers-Input { param( [string] $list)
 #>
 # Include File: [\Includes.SqlServer\Publish-SQLServer-SetupLogs.ps1]
 function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
-  New-Item -ItemType Directory -Path "$toFolder" -EA SilentlyContinue | out-null
+  if ((Get-Os-Platform) -ne "Windows") { Write-Host "Publish-SQLServer-SetupLogs() function is Windows only. Skipping."; return; }
+  if ("$toFolder" -ne "") { New-Item -ItemType Directory -Path "$toFolder" -EA SilentlyContinue | out-null; }
   $folders = Find-SqlServer-SetupLogs
   $sevenZip = Get-Full7z-Exe-FullPath-for-Windows -Version "1900"
   foreach($logsFolder in $folders) {
