@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.85';
+$ModuleVersion = '2.1.86';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -15,7 +15,7 @@ $ModuleFiles = @(
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
 			"",
 			"  # Version below is automatically incremented on build",
-			"  ModuleVersion = `"2.1.85`"",
+			"  ModuleVersion = `"2.1.86`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -2521,6 +2521,19 @@ $ModuleFiles = @(
 			"    [string[]] `$optionsOverride = @()",
 			"  )",
 			"",
+			"  # check if sql server server already installed",
+			"  if (`$meta.MediaType -ne `"LocalDB`") {",
+			"    `$localSqlServers = @(Find-Local-SqlServers)",
+			"    `$localSqlServer = `$localSqlServers | ? {",
+			"      if (`$instanceName -eq `"MSSQLSERVER`" -and `$_.Instance -eq `"(local)`") { return `$true; }",
+			"      if (`"(local)\`$(`$instanceName)`" -eq `$_.Instance) { return `$true; }",
+			"    } | Select -First 1;",
+			"    if (`$localSqlServer) {",
+			"      Write-Host `"SQL Server `$(`$instanceName) already installed. Its Installer version is `$(`$localSqlServer.InstallerVersion). Skipping.`";",
+			"      return;",
+			"    }",
+			"  }",
+			"",
 			"  if (-not `$meta.LauncherSize) {",
 			"    `$err=`"[Install-SQLServer] Invalid ```$meta argument. Probably download failed`";",
 			"    Write-Host `$err;",
@@ -2996,7 +3009,7 @@ $ModuleFiles = @(
 			"   `$errors = @();",
 			"",
 			"   `$servers = Parse-SqlServers-Input `$sqlServers",
-			"   `$servers | Format-Table -AutoSize | Out-String -Width 256 | Out-Host",
+			"   `$servers | % { [pscustomobject] `$_ } | Format-Table -AutoSize | Out-String -Width 256 | Out-Host",
 			"   `$jsonReport = @();",
 			"   foreach(`$server in `$servers) {",
 			"     `$startAt = [System.Diagnostics.Stopwatch]::StartNew()",

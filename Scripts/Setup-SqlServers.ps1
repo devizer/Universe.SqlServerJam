@@ -2398,6 +2398,19 @@ function Install-SQLServer {
     [string[]] $optionsOverride = @()
   )
 
+  # check if sql server server already installed
+  if ($meta.MediaType -ne "LocalDB") {
+    $localSqlServers = @(Find-Local-SqlServers)
+    $localSqlServer = $localSqlServers | ? {
+      if ($instanceName -eq "MSSQLSERVER" -and $_.Instance -eq "(local)") { return $true; }
+      if ("(local)\$($instanceName)" -eq $_.Instance) { return $true; }
+    } | Select -First 1;
+    if ($localSqlServer) {
+      Write-Host "SQL Server $($instanceName) already installed. Its Installer version is $($localSqlServer.InstallerVersion). Skipping.";
+      return;
+    }
+  }
+
   if (-not $meta.LauncherSize) {
     $err="[Install-SQLServer] Invalid `$meta argument. Probably download failed";
     Write-Host $err;
@@ -2873,7 +2886,7 @@ Param(
    $errors = @();
 
    $servers = Parse-SqlServers-Input $sqlServers
-   $servers | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
+   $servers | % { [pscustomobject] $_ } | Format-Table -AutoSize | Out-String -Width 256 | Out-Host
    $jsonReport = @();
    foreach($server in $servers) {
      $startAt = [System.Diagnostics.Stopwatch]::StartNew()
