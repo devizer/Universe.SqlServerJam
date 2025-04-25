@@ -236,7 +236,9 @@ jobs:
               & setx.exe PS1_TROUBLE_SHOOT On
               & setx.exe SQLSERVERS_MEDIA_FOLDER "$ENV:SQLSERVERS_MEDIA_FOLDER"
               & setx.exe SQLSERVERS_SETUP_FOLDER "$ENV:SQLSERVERS_SETUP_FOLDER"
-              foreach($t in @("FIRST", "SECOND") {
+              $tryList = @("FIRST", "SECOND")
+              if ("${{ matrix.SqlServers }}" -match "LocalDB") { $tryList = @("FIRST and Single"); }
+              foreach($t in $tryList) {
                 Say "SETUP $t"
                 Setup-SqlServers -SqlServers "${{ matrix.SqlServers }}" "Collation=French_CI_AI" "Startup=Automatic" "InstallTo=D:\SQL" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB-{InstanceName}-Data" "/SQLUSERDBLOGDIR=D:\SQL-LOGS-{InstanceName}" "/SQLBACKUPDIR=C:\Backups-for-{InstanceName}"
               }
