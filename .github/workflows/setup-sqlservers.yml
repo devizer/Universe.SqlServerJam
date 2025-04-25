@@ -271,7 +271,7 @@ jobs:
                   $InstanceKey = $instanceFull.Split([char]'\')[1]
                   $instancePath = "SQLSERVER:\SQL\$([Environment]::MachineName)\$InstanceKey"
                   Say "Enable Always On for instance [$instanceFull]: >$instancePath<"
-                  try { Enable-SqlAlwaysOn -Force -Path $instancePath; echo ok; }
+                  try { Enable-SqlAlwaysOn -Force -Path $instancePath -EA SilentlyContinue; echo ok; }
                   catch { echo $_.Exception; }
                 }
 
