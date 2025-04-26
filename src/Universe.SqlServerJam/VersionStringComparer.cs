@@ -5,13 +5,18 @@ using System.Threading;
 
 namespace Universe
 {
-    public class VersionString
+    public class VersionString : IComparable<VersionString>
     {
         public readonly string Value;
         internal List<Section> Sections => _Sections.Value;
 
         private Lazy<List<Section>> _Sections;
         private static readonly List<Section> EmptySections = new List<Section>();
+
+        public int CompareTo(VersionString other)
+        {
+            return VersionStringComparer.CompareVersionStrings(StringComparer.OrdinalIgnoreCase, this, other);
+        }
 
         public VersionString(string value)
         {
@@ -90,6 +95,12 @@ namespace Universe
 
         int IComparer<VersionString>.Compare(VersionString x, VersionString y)
         {
+            return CompareVersionStrings(StringComparer, x, y);
+        }
+
+        public static int CompareVersionStrings(IComparer<string> stringComparer, VersionString x, VersionString y)
+        {
+            if (stringComparer == null) throw new ArgumentNullException(nameof(stringComparer));
             if (x == null && y == null) return 0;
             if (x == null) { return -1; }
             if (y == null) { return 1; }
@@ -101,13 +112,14 @@ namespace Universe
             for (int i = 0; i < count; i++)
             {
                 // if (xSections[i].Type == VersionString.SectionType.Numeric && ySections[i].Type != VersionString.SectionType.Text) return -1;
-                int valueCompare = StringComparer.Compare(xSections[i].Value, ySections[i].Value);
+                int valueCompare = stringComparer.Compare(xSections[i].Value, ySections[i].Value);
                 if (xSections[i].Type == ySections[i].Type && valueCompare == 0) continue;
                 return valueCompare;
             }
 
             // n=count sections of both strings are equal
             return xSize.CompareTo(ySize);
+
         }
 
         int IComparer<string>.Compare(string x, string y)
