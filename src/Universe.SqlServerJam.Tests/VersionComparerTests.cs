@@ -53,20 +53,19 @@ namespace Universe.SqlServerJam.Tests
         public void TestAllVersionString(string id)
         {
             var originalRows = Rows;
-            string expected = null;
+            Row[] expected = null;
             int index = 0;
             foreach (var permutation in SimplePermutations.GetAll(originalRows.Length))
             {
                 var rows = permutation.Select(x => originalRows[x]);
-                var sorted = rows.OrderBy(x => x.VersionSortable);
-                var actual = DumpSorted(sorted);
+                Row[] actual = rows.OrderBy(x => x.VersionSortable).ToArray();
                 expected = expected ?? actual;
-                Assert.AreEqual(expected, actual);
+                CollectionAssert.AreEqual(expected.Select(x => x.VersionRaw), actual.Select(x => x.VersionRaw));
                 if (index >= MaxTestPermutations) break;
                 index++;
             }
 
-            Console.WriteLine(expected);
+            Console.WriteLine(DumpSorted(expected));
         }
 
         private string DumpSorted(IEnumerable<Row> sorted)
@@ -75,12 +74,6 @@ namespace Universe.SqlServerJam.Tests
             var ret = $"Sorted:{Environment.NewLine}{string.Join(Environment.NewLine, asTextList.ToArray())}";
             // Console.WriteLine(ret);
             return ret;
-        }
-
-        class Row
-        {
-            public string VersionRaw { get; set; }
-            public VersionString VersionSortable => new VersionString(VersionRaw);
         }
 
         [Test]
@@ -99,6 +92,32 @@ namespace Universe.SqlServerJam.Tests
                 Console.WriteLine(string.Join(",", permutation.Select(x => x.ToString()).ToArray()));
             }
         }
+
+        // SLOW
+        class Row_Slow
+        {
+            public string VersionRaw { get; set; }
+            public VersionString VersionSortable => new VersionString(VersionRaw);
+        }
+
+        // FAST
+        class Row
+        {
+            private string _VersionRaw;
+            private VersionString _VersionSortable;
+            public VersionString VersionSortable => _VersionSortable;
+
+            public string VersionRaw
+            {
+                get => _VersionRaw;
+                set { 
+                    _VersionRaw = value;
+                    _VersionSortable = new VersionString(value);
+                }
+            }
+        }
+
+
 
     }
 }

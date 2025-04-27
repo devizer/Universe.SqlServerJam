@@ -8,6 +8,7 @@ namespace Universe
     public class VersionString : IComparable<VersionString>
     {
         public readonly string Value;
+        public readonly IComparer<string> StringComparer;
         internal List<Section> Sections => _Sections.Value;
 
         private Lazy<List<Section>> _Sections;
@@ -15,13 +16,18 @@ namespace Universe
 
         public int CompareTo(VersionString other)
         {
-            return VersionStringComparer.CompareVersionStrings(StringComparer.OrdinalIgnoreCase, this, other);
+            return VersionStringComparer.CompareVersionStrings(StringComparer, this, other);
         }
 
-        public VersionString(string value)
+        public VersionString(string value) : this(value, System.StringComparer.OrdinalIgnoreCase)
+        {
+        }
+
+        public VersionString(string value, IComparer<string> comparer)
         {
             Value = value;
             _Sections = new Lazy<List<Section>>(GetSections, LazyThreadSafetyMode.None);
+            StringComparer = comparer;
         }
 
         internal enum SectionType : byte
@@ -111,15 +117,24 @@ namespace Universe
             int count = Math.Min(xSize, ySize);
             for (int i = 0; i < count; i++)
             {
+                VersionString.SectionType xType = xSections[i].Type;
+                var yType = ySections[i].Type;
+                if (xType != yType)
+                {
+                    // Optimized (part 1 of 2)
+                    return xType == VersionString.SectionType.Numeric? -1 : 1;
+                }
                 // if (xSections[i].Type == VersionString.SectionType.Numeric && ySections[i].Type != VersionString.SectionType.Text) return -1;
                 int valueCompare = stringComparer.Compare(xSections[i].Value, ySections[i].Value);
-                if (xSections[i].Type == ySections[i].Type && valueCompare == 0) continue;
-                return valueCompare;
+                // Two Commented Lines: non optimized
+                // if (xType == yType && valueCompare == 0) continue;
+                // return valueCompare;
+                // Optimized (part 2 of 2)
+                if (valueCompare != 0) return valueCompare;
             }
 
             // n=count sections of both strings are equal
             return xSize.CompareTo(ySize);
-
         }
 
         int IComparer<string>.Compare(string x, string y)

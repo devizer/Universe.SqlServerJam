@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace Universe.SqlServerJam.Tests
 {
@@ -53,7 +50,8 @@ namespace Universe.SqlServerJam.Tests
             int j = n - 1;
             while (array[j] <= array[i]) j--;
 
-            Swap(array, i, j);
+            // Swap(array, i, j);
+            Swap(ref array[i], ref array[j]);
             Reverse(array, i + 1, n - 1);
 
             return true;
@@ -62,11 +60,11 @@ namespace Universe.SqlServerJam.Tests
 #if NET46_OR_GREATER || NETCOREAPP3_1_OR_GREATER
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-        static void Swap(int[] array, int i, int j)
+        static void Swap(ref int i, ref int j)
         {
-            int temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
+            int temp = i;
+            i = j; 
+            j = temp;
         }
 
 #if NET46_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -76,7 +74,8 @@ namespace Universe.SqlServerJam.Tests
         {
             while (start < end)
             {
-                Swap(array, start, end);
+                // Swap(array, start, end);
+                Swap(ref array[start], ref array[end]);
                 start++;
                 end--;
             }
