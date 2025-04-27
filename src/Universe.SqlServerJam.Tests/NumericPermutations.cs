@@ -52,7 +52,7 @@ namespace Universe.SqlServerJam.Tests
 
             // Swap(array, i, j);
             Swap(ref array[i], ref array[j]);
-            Reverse(array, i + 1, n - 1);
+            Reverse(ref array, i + 1, n - 1);
 
             return true;
         }
@@ -70,7 +70,7 @@ namespace Universe.SqlServerJam.Tests
 #if NET46_OR_GREATER || NETCOREAPP3_1_OR_GREATER
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-        static void Reverse(int[] array, int start, int end)
+        static void Reverse(ref int[] array, int start, int end)
         {
             while (start < end)
             {
