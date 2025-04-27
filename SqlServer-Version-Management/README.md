@@ -6,7 +6,7 @@ The intended use of this project is for Continuous Integration (CI) scenarios, w
 
 SQL Server Setup defaults:
 - Features are SQL Engine and full text search,
-- Built-in Administrators (or localized name) as SQL Server Administrators, 
+- Built-in Administrators (or localized name) are SQL Server Administrators for SSPI,
 - TCP/IP and Named Pipe protocols are on,
 - sa password is 'Meaga$tr0ng'.
 
@@ -15,7 +15,7 @@ SQL Server Setup defaults:
 &#x2714;&nbsp;&nbsp; _2022 Developer_ 🡒 16.0.1000.6 RTM Developer Edition (64-bit)<br/>
 &#x2714;&nbsp;&nbsp; _2022 Advanced Update_ 🡒 16.0.4135.4 RTM CU14 Express Edition (64-bit)<br/>
 &#x2714;&nbsp;&nbsp; _2022 Advanced_ 🡒 16.0.1000.6 RTM Express Edition (64-bit)<br/>
-&#x2714;&nbsp;&nbsp; _2022 Core Update_🡒 🡒 16.0.4135.4 RTM CU14 Express Edition (64-bit)<br/>
+&#x2714;&nbsp;&nbsp; _2022 Core Update_ 🡒 16.0.4135.4 RTM CU14 Express Edition (64-bit)<br/>
 &#x2714;&nbsp;&nbsp; _2022 Core_ 🡒 16.0.1000.6 RTM Express Edition (64-bit)<br/>
 &#x2714;&nbsp;&nbsp; _2022 LocalDB_ 🡒 16.0.1000.6 RTM LocalDB Express Edition (64-bit)<br/>
 &#x2714;&nbsp;&nbsp; _2019 Developer Update_ 🡒 15.0.4385.2 RTM CU28 Developer Edition (64-bit)<br/>
