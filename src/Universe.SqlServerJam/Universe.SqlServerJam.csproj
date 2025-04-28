@@ -27,7 +27,7 @@
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
         <PackageIcon>Main.Icon.png</PackageIcon>
-        <PackageIconUrl>https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/Images/Main.Icon.png</PackageIconUrl>
+        <PackageIconUrl>https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/Images/Main.Icon-v2.png</PackageIconUrl>
     </PropertyGroup>
 
 
