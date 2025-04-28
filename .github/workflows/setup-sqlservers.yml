@@ -144,7 +144,8 @@ jobs:
          # time powershell -c "Install-Module -Name SqlServer-Version-Management -Force"
          nohup powershell -c "Install-Module -Name SqlServer-Version-Management -Force" &
          nohup cmd.exe /c "start https://devizer.github.io" &
-         find /c -name chrome.exe
+         ls -la "/c/Program Files/Google/Chrome/Application/chrome.exe"
+         find "/c/Program Files" -name chrome.exe
 
     
     - name: Checkout
