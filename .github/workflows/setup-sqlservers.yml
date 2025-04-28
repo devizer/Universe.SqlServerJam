@@ -144,8 +144,11 @@ jobs:
          # time powershell -c "Install-Module -Name SqlServer-Version-Management -Force"
          nohup powershell -c "Install-Module -Name SqlServer-Version-Management -Force" &
          # nohup cmd.exe /c "start https://devizer.github.io" &
-         nohup "/c/Program Files/Google/Chrome/Application/chrome.exe" https://devizer.github.io &
          ls -la "/c/Program Files/Google/Chrome/Application/chrome.exe"
+         nohup "/c/Program Files/Google/Chrome/Application/chrome.exe" --headless --disable-gpu https://devizer.github.io &
+         echo FIRST; jobs
+         sleep 3
+         echo SECOND; jobs
          # find "/c/Program Files" -name chrome.exe
 
     
