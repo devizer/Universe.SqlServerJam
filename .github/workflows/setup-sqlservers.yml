@@ -135,6 +135,9 @@ jobs:
       DEBUG_LOG_FOLDER: 'C:\Artifacts'
 
     steps:
+    - name: Total Modules
+      run: 'Write-Host "Total Modules: $(get-module -ListAvailable).Count"'
+
     - name: Bootstrap
       shell: bash
       run: |
