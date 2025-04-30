@@ -136,7 +136,7 @@ jobs:
 
     steps:
     - name: Total Modules
-      run: 'Write-Host "Total Modules: $(get-module -ListAvailable).Count"'
+      run: 'Write-Host "Total Modules: $((get-module -ListAvailable).Count)"'
 
     - name: Bootstrap
       shell: bash
