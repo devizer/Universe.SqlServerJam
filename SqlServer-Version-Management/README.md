@@ -137,7 +137,7 @@ Instance               InstallerVersion Service
 (local)\DEV_2019       15.0.2000.5      MSSQL$DEV_2019
 ```
 
-&#x1F31F; List Installed SQL Server Services, and wait up to 30 seconds for each SQL Server health check to pass, and populate Version column
+&#x1F31F; List Installed SQL Server Services, wait up to 30 seconds for each SQL Server health check to pass, and populate Version column
 ```powershell
 Find-Local-SqlServers | 
      Populate-Local-SqlServer-Version -Timeout 30 |
