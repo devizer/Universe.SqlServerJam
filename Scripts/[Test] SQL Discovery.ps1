@@ -1273,6 +1273,54 @@ function Get-Windows-Release-Id() {
   return $null;
 }
 
+# Include File: [\Includes\Set-Property-Smarty.ps1]
+function Set-Property-Smarty(
+  [object] $object,    <# either [Hashtable] or [PSCustomObject] #>
+  [string] $property,  <# name of the property #>
+  [object] $value
+)
+{
+  $GLOBAL:Set_Property_Smarty_Counter = $GLOBAL:Set_Property_Smarty_Counter + 1
+  if ($object -eq $null) { $object = [PSCustomObject]@{}; } # OR THROW ERROR
+  if ($GLOBAL:DEBUG_Set_Property_Smarty) { Write-Host "[DEBUG $($GLOBAL:Set_Property_Smarty_Counter)] Argument `$object is $($object.GetType())"; $object | Get-Member | % {[PSCustomObject]$_} | format-table -Property "Name", "MemberType", "Definition" | out-host; }
+  if ($object -is [pscustomobject]) {
+    if ($GLOBAL:DEBUG_Set_Property_Smarty) { Write-Host "[DEBUG $($GLOBAL:Set_Property_Smarty_Counter)] arg is [PSCustomObject]"; }
+    $hasProperty = ($null -ne ($object | Get-Member | ? { $_.Name -eq "$property" } | Select -First 1))
+    if ($hasProperty) {
+      $object."$property" = $value;
+    } else {
+      $memberType = If ($value -is [ScriptBlock]) { "ScriptMethod"; } else { "NoteProperty"; }
+      $__ = Add-Member -InputObject $object -MemberType $memberType -Name "$property" -Value $value
+    }
+  }
+  elseif ($object -is [hashtable]) {
+    if ($GLOBAL:DEBUG_Set_Property_Smarty) { Write-Host "[DEBUG $($GLOBAL:Set_Property_Smarty_Counter)] arg is [HashTable]"; }
+    $object[$property] = $value;
+  }
+  else {
+    Write-Host "Set-Property-Smarty accept only [HashTable] or [PSCustomObject] first argument `$object" -ForeGroundColor Red
+  }
+  if ($GLOBAL:DEBUG_Set_Property_Smarty) { Write-Host "[DEBUG $($GLOBAL:Set_Property_Smarty_Counter)] UPDATED `$object is $($object.GetType())"; $object | Get-Member | % {[PSCustomObject]$_} | format-table -Property "Name", "MemberType", "Definition" | out-host; }
+}
+
+function Test-Set-Property-Smarty() {
+  # $GLOBAL:DEBUG_Set_Property_Smarty = $true
+
+  Write-Host "TEST HASHTABLE" -ForegroundColor Magenta
+  $ht = @{X=1;T="Yes"}; Set-Property-Smarty $ht "P" "Added"; $ht
+
+  Write-Host ""; Write-Host "TEST PSCustomObject" -ForegroundColor Magenta
+  $ps = [PSCustomObject]@{X=1;T="Yes"}; 
+  Set-Property-Smarty $ps "M2" {"M2() is invoked "}; 
+  Set-Property-Smarty $ps "P2" "Added"; 
+  Set-Property-Smarty $ps "P3" "V3"; 
+  $ps | Get-Member | % {[PSCustomObject]$_} | format-table -Property "Name", "MemberType", "Definition" | out-host; 
+  Write-Host $ps
+  Write-Host $ps.M2()
+}
+
+# Test-Set-Property-Smarty
+
 # Include File: [\Includes\Start-Stopwatch.ps1]
 function Start-Stopwatch() {
   $ret = [PSCustomObject] @{
@@ -2257,17 +2305,63 @@ function Find-Local-SqlServers() {
   }
   # Write-Host "FINAL" -ForegroundColor DarkGreen
   # $candidates | % { [pscustomObject] $_ } | ft -AutoSize | out-Host
-  $candidates | ? { $_.ServiceExists } | % { $_.Remove("ServiceExists"); $_.Remove("RegPath"); $_; }
+  $candidates | 
+     ? { $_.ServiceExists } | 
+     % { $_.Remove("ServiceExists"); $_.Remove("RegPath"); $_; } |
+     % { [PSCustomObject] $_ }
 }
 
-# Find-Local-SqlServers | % { [pscustomObject] $_ } | ft -AutoSize | Out-String -Width 1234 | Out-Host
-# Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | ft -AutoSize
+# pipe only
+function Populate-Local-SqlServer-Version() {
+  foreach($sqlServer in $input) {
+    $mediumVersion = Query-SqlServer-Version -Title "$($sqlServer.Instance) v$($sqlServer.InstallerVersion)" -Instance "$($sqlServer.Instance)" -Timeout 60;
+    $__ = Set-Property-Smarty $sqlServer "Version" $mediumVersion
+    $sqlServer
+  }
+}
 
-# Write-Host "STOP SERVICES" -ForegroundColor DarkGreen
-# Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | % { if ($_.Status -ne "Stopped") { Write-Host "Stopping $($_.Name)"; Stop-Service "$($_.Name)" -Force }}
+function Test-Find-Local-SqlServers() {
+  
+  Write-Host "Find-Local-SqlServers as is" -ForeGroundColor Magenta
+  Find-Local-SqlServers | 
+    ft -AutoSize | 
+    Out-String -Width 1234 | 
+    Out-Host
 
-# Write-Host "START SERVICES" -ForegroundColor DarkGreen
-# Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | % { if ($_.Status -ne "Running") { Write-Host "Starting $($_.Name)"; Start-Service "$($_.Name)" }}
+  # Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | ft -AutoSize
+  Write-Host "Find-Local-SqlServers --> Windows Services" -ForeGroundColor Magenta
+  Find-Local-SqlServers | 
+    % { Get-Service -Name $_.Service } | 
+    ft -AutoSize | 
+    Out-String -Width 1234 | 
+    Out-Host
+
+  Write-Host "STOP SERVICES" -ForeGroundColor Magenta
+  # Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | % { if ($_.Status -ne "Stopped") { Write-Host "Stopping $($_.Name)"; Stop-Service "$($_.Name)" -Force }}
+  Find-Local-SqlServers | 
+    % { $_.Service } | 
+    % { Get-Service -Name $_ } | 
+    ? { $_.Status -ne "Stopped" } |
+    % { Write-Host "Stopping $($_.Name)"; Stop-Service "$($_.Name)" -Force }
+
+  Write-Host "START SERVICES" -ForeGroundColor Magenta
+  # Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | % { if ($_.Status -ne "Running") { Write-Host "Starting $($_.Name)"; Start-Service "$($_.Name)" }}
+  Find-Local-SqlServers | 
+    % { $_.Service } | 
+    % { Get-Service -Name $_ } | 
+    ? { $_.Status -ne "Running" } |
+    % { Write-Host "Starting $($_.Name)"; Start-Service "$($_.Name)" }
+
+  Write-Host "Find-Local-SqlServers | Populate-Local-SqlServer-Version" -ForeGroundColor Magenta
+  Find-Local-SqlServers | 
+    Populate-Local-SqlServer-Version |
+    ft -AutoSize | 
+    Out-String -Width 1234 | 
+    Out-Host
+
+}
+
+# Test-Find-Local-SqlServers
 
 # Include File: [\Includes.SqlServer\Find-SQLServer-Meta.ps1]
 function Find-SQLServer-Meta([string] $version, [string] $mediaType) {
@@ -2719,7 +2813,7 @@ function Publish-SQLServer-SetupLogs([string] $toFolder, $compression=9) {
 
 # Include File: [\Includes.SqlServer\Query-SqlServer-Version.ps1]
 function Query-SqlServer-Version([string] $title, [string] $connectionString, <# or #>[string] $instance, [int] $timeoutSec = 30) {
-  if (-not $connectionString) { $connectionString = "Server=$($instance);Integrated Security=SSPI;Connection Timeout=2;Pooling=False" }
+  if (-not $connectionString) { $connectionString = "Server=$($instance);Integrated Security=SSPI;Connection Timeout=3;Pooling=False" }
   $startAt = [System.Diagnostics.Stopwatch]::StartNew();
   $exception = $null;
   do {

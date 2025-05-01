@@ -11,7 +11,7 @@ namespace Universe
         public readonly IComparer<string> StringComparer;
         internal List<Section> Sections => _Sections.Value;
 
-        private Lazy<List<Section>> _Sections;
+        private readonly Lazy<List<Section>> _Sections;
         private static readonly List<Section> EmptySections = new List<Section>();
 
         public int CompareTo(VersionString other)

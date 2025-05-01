@@ -1273,6 +1273,54 @@ function Get-Windows-Release-Id() {
   return $null;
 }
 
+# Include File: [\Includes\Set-Property-Smarty.ps1]
+function Set-Property-Smarty(
+  [object] $object,    <# either [Hashtable] or [PSCustomObject] #>
+  [string] $property,  <# name of the property #>
+  [object] $value
+)
+{
+  $GLOBAL:Set_Property_Smarty_Counter = $GLOBAL:Set_Property_Smarty_Counter + 1
+  if ($object -eq $null) { $object = [PSCustomObject]@{}; } # OR THROW ERROR
+  if ($GLOBAL:DEBUG_Set_Property_Smarty) { Write-Host "[DEBUG $($GLOBAL:Set_Property_Smarty_Counter)] Argument `$object is $($object.GetType())"; $object | Get-Member | % {[PSCustomObject]$_} | format-table -Property "Name", "MemberType", "Definition" | out-host; }
+  if ($object -is [pscustomobject]) {
+    if ($GLOBAL:DEBUG_Set_Property_Smarty) { Write-Host "[DEBUG $($GLOBAL:Set_Property_Smarty_Counter)] arg is [PSCustomObject]"; }
+    $hasProperty = ($null -ne ($object | Get-Member | ? { $_.Name -eq "$property" } | Select -First 1))
+    if ($hasProperty) {
+      $object."$property" = $value;
+    } else {
+      $memberType = If ($value -is [ScriptBlock]) { "ScriptMethod"; } else { "NoteProperty"; }
+      $__ = Add-Member -InputObject $object -MemberType $memberType -Name "$property" -Value $value
+    }
+  }
+  elseif ($object -is [hashtable]) {
+    if ($GLOBAL:DEBUG_Set_Property_Smarty) { Write-Host "[DEBUG $($GLOBAL:Set_Property_Smarty_Counter)] arg is [HashTable]"; }
+    $object[$property] = $value;
+  }
+  else {
+    Write-Host "Set-Property-Smarty accept only [HashTable] or [PSCustomObject] first argument `$object" -ForeGroundColor Red
+  }
+  if ($GLOBAL:DEBUG_Set_Property_Smarty) { Write-Host "[DEBUG $($GLOBAL:Set_Property_Smarty_Counter)] UPDATED `$object is $($object.GetType())"; $object | Get-Member | % {[PSCustomObject]$_} | format-table -Property "Name", "MemberType", "Definition" | out-host; }
+}
+
+function Test-Set-Property-Smarty() {
+  # $GLOBAL:DEBUG_Set_Property_Smarty = $true
+
+  Write-Host "TEST HASHTABLE" -ForegroundColor Magenta
+  $ht = @{X=1;T="Yes"}; Set-Property-Smarty $ht "P" "Added"; $ht
+
+  Write-Host ""; Write-Host "TEST PSCustomObject" -ForegroundColor Magenta
+  $ps = [PSCustomObject]@{X=1;T="Yes"}; 
+  Set-Property-Smarty $ps "M2" {"M2() is invoked "}; 
+  Set-Property-Smarty $ps "P2" "Added"; 
+  Set-Property-Smarty $ps "P3" "V3"; 
+  $ps | Get-Member | % {[PSCustomObject]$_} | format-table -Property "Name", "MemberType", "Definition" | out-host; 
+  Write-Host $ps
+  Write-Host $ps.M2()
+}
+
+# Test-Set-Property-Smarty
+
 # Include File: [\Includes\Start-Stopwatch.ps1]
 function Start-Stopwatch() {
   $ret = [PSCustomObject] @{

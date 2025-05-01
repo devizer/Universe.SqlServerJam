@@ -117,7 +117,6 @@ Setup-SqlServers "2016 Developer: DEVELOPER2016" `
 &#x1F31F; List Installed SQL Server Intances
 ```powershell
 Find-Local-SqlServers | 
-     % { [pscustomObject] $_ } | 
      Format-Table -AutoSize | 
      Out-String -Width 1234 | 
      Out-Host
@@ -136,6 +135,30 @@ Instance               InstallerVersion Service
 (local)\DEV_2016       13.0.6441.1      MSSQL$DEV_2016
 (local)\DEV_2017       14.0.1000.169    MSSQL$DEV_2017
 (local)\DEV_2019       15.0.2000.5      MSSQL$DEV_2019
+```
+
+&#x1F31F; List Installed SQL Server Services, and wait up to 30 seconds for each SQL Server health check to pass, and populate Version column
+```powershell
+Find-Local-SqlServers | 
+     Populate-Local-SqlServer-Version -Timeout 30 |
+     ft -AutoSize | 
+     Out-String -Width 1234 | 
+     Out-Host
+
+Instance               InstallerVersion Service              Version
+--------               ---------------- -------              -------                                     
+(local)                16.0.1000.6      MSSQLSERVER          16.0.4145.4 Developer Edition (64-bit) RTM CU15
+(local)\ADV_2005_X86   9.00.5000.00     MSSQL$ADV_2005_X86   9.00.5000.00 Express Edition with Advanced SP4
+(local)\ADV_2008R2_X64 10.50.6000.34    MSSQL$ADV_2008R2_X64 10.50.6000.34 Express Edition with Advanced SP3
+(local)\ADV_2008_X86   10.0.1600.22     MSSQL$ADV_2008_X86   10.0.6000.29 Express Edition with Advanced SP4
+(local)\DEV2022UTF8    16.0.1000.6      MSSQL$DEV2022UTF8    16.0.4145.4 Developer Edition (64-bit) RTM CU15
+(local)\DEV_2008R2_X64 10.50.6000.34    MSSQL$DEV_2008R2_X64 10.50.6000.34 Developer Edition (64-bit) SP3
+(local)\DEV_2008_X64   10.0.6000.29     MSSQL$DEV_2008_X64   10.0.6000.29 Developer Edition (64-bit) SP4
+(local)\DEV_2012_X64   11.0.7001.0      MSSQL$DEV_2012_X64   11.0.7001.0 Developer Edition (64-bit) SP4
+(local)\DEV_2014_X64   12.0.6024.0      MSSQL$DEV_2014_X64   12.0.6024.0 Developer Edition (64-bit) SP3
+(local)\DEV_2016       13.0.6441.1      MSSQL$DEV_2016       13.0.6441.1 Developer Edition (64-bit) SP3
+(local)\DEV_2017       14.0.1000.169    MSSQL$DEV_2017       14.0.3456.2 Developer Edition (64-bit) RTM CU31
+(local)\DEV_2019       15.0.2000.5      MSSQL$DEV_2019       15.0.4385.2 Developer Edition (64-bit) RTM CU28
 ```
 
 &#x1F31F; List Installed SQL Server Services
