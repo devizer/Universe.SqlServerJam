@@ -2353,9 +2353,9 @@ function Find-Local-SqlServers() {
 }
 
 # pipe only
-function Populate-Local-SqlServer-Version() {
+function Populate-Local-SqlServer-Version($timeout = 60) {
   foreach($sqlServer in $input) {
-    $mediumVersion = Query-SqlServer-Version -Title "$($sqlServer.Instance) v$($sqlServer.InstallerVersion)" -Instance "$($sqlServer.Instance)" -Timeout 60;
+    $mediumVersion = Query-SqlServer-Version -Title "$($sqlServer.Instance) v$($sqlServer.InstallerVersion)" -Instance "$($sqlServer.Instance)" -Timeout $timeout;
     $__ = Set-Property-Smarty $sqlServer "Version" $mediumVersion
     $sqlServer
   }

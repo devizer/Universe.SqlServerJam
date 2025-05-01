@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.87';
+$ModuleVersion = '2.1.88';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -15,7 +15,7 @@ $ModuleFiles = @(
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
 			"",
 			"  # Version below is automatically incremented on build",
-			"  ModuleVersion = `"2.1.87`"",
+			"  ModuleVersion = `"2.1.88`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -2444,9 +2444,9 @@ $ModuleFiles = @(
 			"}",
 			"",
 			"# pipe only",
-			"function Populate-Local-SqlServer-Version() {",
+			"function Populate-Local-SqlServer-Version(`$timeout = 60) {",
 			"  foreach(`$sqlServer in `$input) {",
-			"    `$mediumVersion = Query-SqlServer-Version -Title `"`$(`$sqlServer.Instance) v`$(`$sqlServer.InstallerVersion)`" -Instance `"`$(`$sqlServer.Instance)`" -Timeout 60;",
+			"    `$mediumVersion = Query-SqlServer-Version -Title `"`$(`$sqlServer.Instance) v`$(`$sqlServer.InstallerVersion)`" -Instance `"`$(`$sqlServer.Instance)`" -Timeout `$timeout;",
 			"    `$__ = Set-Property-Smarty `$sqlServer `"Version`" `$mediumVersion",
 			"    `$sqlServer",
 			"  }",
