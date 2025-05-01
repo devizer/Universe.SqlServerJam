@@ -3067,10 +3067,11 @@ if (@(Find-Local-SqlServers)) {
 }
 
 Write-Host "QUERY VERSIONS" -ForegroundColor DarkGreen
-$servers = @(Find-Local-SqlServers | % { $_["MediumVersion"] = Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 60; $_ })
+$servers = @(Find-Local-SqlServers | % { Set-Property-Smarty $_ "MediumVersion" (Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 60); $_ })
 $servers | % { [pscustomObject] $_ } | ft -AutoSize | Out-String -Width 1234 | Out-Host
 
 
 Write-Host "QUERY LOCALDB VERSION" -ForegroundColor DarkGreen
+# $localDB = @(Find-LocalDb-SqlServer | % { Set-Property-Smarty $_ "MediumVersion" (Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 60); $_ })
 $localDB = @(Find-LocalDb-SqlServer | % { $_["MediumVersion"] = Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 60; $_ })
 $localDB | % { [pscustomObject] $_ } | ft -AutoSize | Out-String -Width 1234 | Out-Host
