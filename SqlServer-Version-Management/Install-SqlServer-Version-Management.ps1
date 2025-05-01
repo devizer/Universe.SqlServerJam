@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.90';
+$ModuleVersion = '2.1.91';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -15,7 +15,7 @@ $ModuleFiles = @(
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
 			"",
 			"  # Version below is automatically incremented on build",
-			"  ModuleVersion = `"2.1.90`"",
+			"  ModuleVersion = `"2.1.91`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -3194,6 +3194,8 @@ $ModuleFiles = @(
 			"Export-ModuleMember -Function Troubleshoot-Info",
 			"Export-ModuleMember -Function Write-Line",
 			"Export-ModuleMember -Function Set-SqlServer-Database-Files-Size",
+			"Export-ModuleMember -Function Set-Property-Smarty",
+			"",
 			"",
 			"# This works with all the versions and all instances",
 			"Export-ModuleMember -Function Find-LocalDb-SqlServers",
