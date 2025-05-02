@@ -1830,9 +1830,42 @@ function Create-LocalDB-Instance([string] $instanceName, [string] $optionalVersi
 }
 
 function Delete-LocalDB-Instance([string] $instanceName) {
+  if ("$instanceName" -like "(LocalDB)\*" -and "$instanceName".Length -gt 10) { $instanceName = "$instanceName".SubString(10) }
+  # STOP instance by kill
+  $pars = @("stop", "`"$instanceName`"", "-k");
+  $title = "Stop (by kill) LocalDB Instance `"$instanceName`""
+  $__ = Invoke-LocalDB-Executable -Title $title -Version "Latest" -Parameters @($pars)
+  # Delete instance
   $pars = @("delete", "`"$instanceName`"");
   $title = "Delete LocalDB Instance `"$instanceName`""
   return Invoke-LocalDB-Executable -Title $title -Version "Latest" -Parameters @($pars)
+}
+
+function Test-Create-Delete-LocalDB-Instance() {
+  Write-Host "DELETING Custom Instances" -ForegroundColor Magenta
+  $__ = Find-LocalDb-SqlServers |
+       % { "$($_.Instance)" } |
+       ? { "$_" -match "LocalDB-" } |
+       % { Write-Host "Deleting $_" -ForegroundColor Yellow; Delete-LocalDB-Instance "$_" }
+
+  Find-LocalDb-SqlServers | Populate-Local-SqlServer-Version |
+     ft -AutoSize |
+     Out-String -Width 1234 |
+     Out-Host
+
+  Write-Host "CREATING Custom Instances" -ForegroundColor Magenta
+  foreach($localDb in Find-LocalDb-Versions) {
+    $instance = "LocalDB-v$($localDb.ShortVersion)"
+    Write-Host "Creating Instance $instance version $($localDb.ShortVersion)"
+    $isCreated = Create-LocalDB-Instance `
+      -InstanceName $instance `
+      -OptionalVersion $localDb.ShortVersion
+  }
+
+  Find-LocalDb-SqlServers | Populate-Local-SqlServer-Version |
+     ft -AutoSize |
+     Out-String -Width 1234 |
+     Out-Host
 }
 
 # Include File: [\Includes.SqlServer\Download-2010-SQLServer-and-Extract.ps1]

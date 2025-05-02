@@ -262,7 +262,6 @@ Instance                Version
 (LocalDB)\LocalDB-v15.0 15.0.4382.1 LocalDB Express Edition (64-bit) RTM CU27
 (LocalDB)\LocalDB-v16.0 16.0.1000.6 LocalDB Express Edition (64-bit) RTM
 (LocalDB)\MSSQLLocalDB  15.0.4382.1 LocalDB Express Edition (64-bit) RTM CU27
-(LocalDB)\My-v13.0      13.0.6300.2 LocalDB Express Edition (64-bit) SP3
 (LocalDB)\v11.0         11.0.7001.0 LocalDB Express Edition (64-bit) SP4
 ```
 <br/>

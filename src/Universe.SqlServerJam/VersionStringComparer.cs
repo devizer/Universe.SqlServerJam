@@ -82,7 +82,7 @@ namespace Universe
         }
     }
 
-    // v1 equals v001
+    // v1:patch7 equals v001:patch007
     public class VersionStringComparer : IComparer<string>, IComparer<VersionString>
     {
         public static readonly VersionStringComparer Instance = new VersionStringComparer();
