@@ -228,7 +228,8 @@ Find-LocalDb-Versions |
      ft -Property ShortVersion, InstallerVersion -AutoSize |
      Out-String -Width 1234 |
      Out-Host
-
+```
+```
 ShortVersion InstallerVersion
 ------------ ----------------
 16.0         16.0.1000.6
@@ -245,7 +246,8 @@ Find-LocalDb-SqlServers | Populate-Local-SqlServer-Version |
      ft -AutoSize |
      Out-String -Width 1234 |
      Out-Host
-
+```
+```
 Instance                Version
 --------                -------
 (LocalDB)\LocalDB-v11.0 11.0.7001.0 LocalDB Express Edition (64-bit) SP4
