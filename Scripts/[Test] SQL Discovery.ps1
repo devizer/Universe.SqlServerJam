@@ -3113,7 +3113,7 @@ $localDB = @(Find-LocalDb-SqlServer | % { $_["MediumVersion"] = Query-SqlServer-
 $localDB | % { [pscustomObject] $_ } | ft -AutoSize | Out-String -Width 1234 | Out-Host
 
 Write-Host "QUERY ALL LOCALDB VERSIONs" -ForegroundColor DarkGreen
-$localDBs = @(Find-LocalDb-Versions | % { Set-Property-Smarty $_ "MediumVersion" (Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 60); $_ })
+$localDBs = @(Find-LocalDb-SqlServers | % { Set-Property-Smarty $_ "MediumVersion" (Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 60); $_ })
 $localDBs | ft -AutoSize | Out-String -Width 1234 | Out-Host
 
 
