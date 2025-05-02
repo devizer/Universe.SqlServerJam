@@ -82,6 +82,7 @@ SQL Server Setup defaults:
 Setup-SqlServers "2022 Developer Updated: MSSQLSERVER" `
                  "Collation=Latin1_General_100_CI_AS_SC_UTF8"
 ```
+<br/>
 
 &#x1F31F; Install four SQL Server Instances on system drive, and put data and log folders on second ssd:
 ```powershell
@@ -95,11 +96,13 @@ Setup-SqlServers $sqlServers `
                  "/SQLUSERDBDIR=D:\SQL\{InstanceName}-DATA" `
                  "/SQLUSERDBLOGDIR=D:\SQL\{InstanceName}-LOGS"
 ```
+<br/>
 
 &#x1F31F; Install SQL Server 2019 Developer Edition RTM as DEVELOPER2019 instance:
 ```powershell
 Setup-SqlServers "2019 Developer: DEVELOPER2019"
 ```
+<br/>
 
 &#x1F31F; Install SQL Server 2016 Developer Edition SP3 as DEVELOPER2016 instance tuned for performance:
 ```powershell
@@ -113,6 +116,7 @@ Setup-SqlServers "2016 Developer: DEVELOPER2016" `
                  "InstallTo=D:\SQL" `
                  "Password=Zuper`$tr0ng" 
 ```
+<br/>
 
 &#x1F31F; List Installed SQL Server Intances
 ```powershell
@@ -120,7 +124,8 @@ Find-Local-SqlServers |
      Format-Table -AutoSize | 
      Out-String -Width 1234 | 
      Out-Host
-
+```
+```
 Instance               InstallerVersion Service
 --------               ---------------- -------
 (local)                16.0.1000.6      MSSQLSERVER
@@ -136,6 +141,7 @@ Instance               InstallerVersion Service
 (local)\DEV_2017       14.0.1000.169    MSSQL$DEV_2017
 (local)\DEV_2019       15.0.2000.5      MSSQL$DEV_2019
 ```
+<br/>
 
 &#x1F31F; List Installed SQL Server Services, wait up to 30 seconds for each SQL Server health check to pass, and populate Version column
 ```powershell
@@ -144,7 +150,8 @@ Find-Local-SqlServers |
      ft -AutoSize | 
      Out-String -Width 1234 | 
      Out-Host
-
+```
+```
 Instance               InstallerVersion Service              Version
 --------               ---------------- -------              -------                                     
 (local)                16.0.1000.6      MSSQLSERVER          16.0.4145.4 Developer Edition (64-bit) RTM CU15
@@ -160,11 +167,13 @@ Instance               InstallerVersion Service              Version
 (local)\DEV_2017       14.0.1000.169    MSSQL$DEV_2017       14.0.3456.2 Developer Edition (64-bit) RTM CU31
 (local)\DEV_2019       15.0.2000.5      MSSQL$DEV_2019       15.0.4385.2 Developer Edition (64-bit) RTM CU28
 ```
+<br/>
 
 &#x1F31F; List Installed SQL Server Services
 ```powershell
 Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | ft -AutoSize
-
+```
+```
 Status  Name                 DisplayName
 ------  ----                 -----------
 Running MSSQL$ADV_2005_X86   SQL Server (ADV_2005_X86)
@@ -181,11 +190,13 @@ Running MSSQL$DEV2022UTF8    SQL Server (DEV2022UTF8)
 Running MSSQLSERVER          SQL Server (MSSQLSERVER)
 
 ```
+<br/>
 
 &#x1F31F; Wait up to 30 seconds for the SQL Server health check to pass, and return its version
 ```powershell
 Query-SqlServer-Version -Title "Default MS SQL SERVER" -Instance "(local)" -Timeout 30
 ```
+<br/>
 
 &#x1F31F; Wait up to 30 seconds for the SQL Server health check to pass, and return its version (on Linux)
 ```powershell
@@ -193,6 +204,7 @@ Query-SqlServer-Version -Title "SQL Server" `
       -ConnectionString "Data Source=localhost,1433;User ID=sa;Password=passw0rd!;Encrypt=False;" `
       -Timeout 30
 ```
+<br/>
 
 &#x1F31F; Start SQL Server Instances that are currently stopped
 ```powershell
@@ -201,6 +213,7 @@ Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) |
    % { Write-Host "Starting $($_.Name)"; Start-Service "$($_.Name)" }
 
 ```
+<br/>
 
 &#x1F31F; Stop SQL Server Instances that are currently running
 ```powershell
@@ -208,6 +221,7 @@ Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) |
    ? { $_.Status -ne "Stopped" } | 
    % { Write-Host "Stopping $($_.Name)"; Stop-Service "$($_.Name)" -Force }
 ```
+<br/>
 
 ## SQL Server LocalDB functions
 &#x1F31F; Install all the versions of SQL Server LocalDB:
@@ -277,4 +291,17 @@ foreach($localDb in Find-LocalDb-Versions) {
     -InstanceName $instance `
     -OptionalVersion $localDb.ShortVersion
 }
+```
+<br/>
+
+
+&#x1F31F; Uninstall any pre-installed LocalDB version:
+```powershell
+Uninstall-LocalDB-List "*"
+```
+<br/>
+
+&#x1F31F; Uninstall LocalDB 2012 and 2014 if they are installed:
+```powershell
+Uninstall-LocalDB-List "2012", "2014"
 ```
