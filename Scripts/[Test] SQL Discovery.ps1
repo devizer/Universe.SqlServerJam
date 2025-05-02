@@ -1307,7 +1307,7 @@ function Test-Set-Property-Smarty() {
   # $GLOBAL:DEBUG_Set_Property_Smarty = $true
 
   Write-Host "TEST HASHTABLE" -ForegroundColor Magenta
-  $ht = @{X=1;T="Yes"}; Set-Property-Smarty $ht "P" "Added"; $ht
+  $ht = @{X=1;T="Yes"}; Set-Property-Smarty $ht "P" "Added"; $ht | ft | out-host
 
   Write-Host ""; Write-Host "TEST PSCustomObject" -ForegroundColor Magenta
   $ps = [PSCustomObject]@{X=1;T="Yes"}; 
@@ -2231,7 +2231,7 @@ function Start-LocalDb-SqlServer([int] $timeoutSec = 60) {
 
 
 # Include File: [\Includes.SqlServer\Find-LocalDb-SqlServers.ps1]
-function Find-LocalDb-SqlServers() {
+function Find-LocalDb-Versions([switch] $PopulateInstances) {
   $parentKey = Get-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server Local DB\Installed Versions" -EA SilentlyContinue
   $candidates = @();
   if ($parentKey) {
@@ -2260,31 +2260,67 @@ function Find-LocalDb-SqlServers() {
 
       $newItem = [pscustomobject] @{ 
         ShortVersion = $subName; 
-        Version = $version; 
+        InstallerVersion = $version; 
         ParentInstance = $parentInstance; 
         Exe = $localDbExe;
       };
-      $newItem | Add-Member -MemberType ScriptMethod -Name "GetInstances" -Value { ParseNonEmptyTrimmedLines((& "$($this.Exe)" @("i") | Out-String)) }
+      # $newItem | Add-Member -MemberType ScriptMethod -Name "GetInstances" -Value { ParseNonEmptyTrimmedLines((& "$($this.Exe)" @("i") | Out-String)) }
       $candidates += $newItem
     }
   }
-  return @($candidates | ? { "$($_.ShortVersion)" -and "$($_.Version)" -and "$($_.ParentInstance)" -and "$($_.Exe)" } | Sort-Object -Property ShortVersion -Descending);
+  $ret = @($candidates | ? { "$($_.ShortVersion)" -and "$($_.InstallerVersion)" -and "$($_.ParentInstance)" -and "$($_.Exe)" } | Sort-Object -Property ShortVersion -Descending);
+  foreach($localDb in $ret) {
+    if ($populateInstances) {
+      # $instances = @($localDb.GetInstances());
+      $instances = ParseNonEmptyTrimmedLines((& "$($localDb.Exe)" @("i") | Out-String))
+      $localDb | Add-Member -MemberType NoteProperty -Name "Instances" -Value $instances;
+    }
+  }
+  $ret
 }
 
-
-function Test-Show-LocalDb-SqlServers-with-Instances() {
-  Find-LocalDb-SqlServers | ft -Property ShortVersion, Version, Exe -AutoSize | Out-Host
-  $withInstances = Find-LocalDb-SqlServers | % { $_ | Add-Member -MemberType NoteProperty -Name "Instances" -Value $_.GetInstances(); $_ }
-  $withInstances | ft -Property ShortVersion, Version, Exe, Instances -AutoSize | Out-Host
-
-  $instances = @($withInstances | Select -First 1 | % { $_.Instances })
-  Write-Host "Total $($instances.Count) instance(s): $instances"
+function Find-LocalDb-SqlServers() {
+  $instances = @(Find-LocalDb-Versions -PopulateInstances | Select -First 1 | % { $_.Instances })
+  $instances = @($instances | ? { "$_".Length -gt 0 })
   foreach($instance in $instances) {
-    $ver = Query-SqlServer-Version -Title "LocalDB `"$instance`"" -Instance "(localdb)\$instance" -Timeout 60
-    Write-Line -TextYellow $instance -TextGreen " $ver"
+    [pscustomobject] @{ Instance = "(LocalDB)\$($instance)"}
   }
 }
 
+function Test-Show-LocalDb-Versions-with-Instances() {
+  Write-Host "LOCALDB VERSIONS" -ForeGroundColor Magenta
+  Find-LocalDb-Versions |
+    ft -Property ShortVersion, InstallerVersion, Exe -AutoSize |
+    Out-String -Width 1234 |
+    Out-Host
+
+  for($i=1; $i -le 2; $i++) {
+    Write-Host "LOCALDB VERSIONS+INSTANCES MATRIX #$($i)" -ForeGroundColor Magenta
+    Find-LocalDb-Versions -PopulateInstances |
+      ft -Property ShortVersion, InstallerVersion, Instances, Exe -AutoSize |
+      Out-String -Width 1234 |
+      Out-Host
+  }
+
+  # Find-LocalDb-SqlServers -PopulateInstances | ft -Property ShortVersion, Version, Exe, Instances -AutoSize | Out-Host
+  # $withInstances = Find-LocalDb-SqlServers | % { $_ | Add-Member -MemberType NoteProperty -Name "Instances" -Value $_.GetInstances(); $_ }
+  # $withInstances | ft -Property ShortVersion, Version, Exe, Instances -AutoSize | Out-Host
+
+  Write-Host "LOCALDB INSTANCES" -ForeGroundColor Magenta
+  Find-LocalDb-SqlServers | ft -AutoSize | Out-String -Width 1234 | Out-Host
+  
+  Write-Host "LOCALDB INSTANCES with MediumVersion" -ForeGroundColor Magenta
+  Find-LocalDb-SqlServers | Populate-Local-SqlServer-Version | ft -AutoSize | Out-String -Width 1234 | Out-Host
+  
+  $instances = @(Find-LocalDb-SqlServers)
+  Write-Host "Total $($instances.Count) instance(s): $instances"
+  foreach($instance in $instances) {
+    $ver = Query-SqlServer-Version -Title "LocalDB `"$instance`"" -Instance "$($instance.Instance)" -Timeout 60
+    Write-Line -TextYellow $instance.Instance -TextGreen " $ver"
+  }
+}
+
+# Test-Show-LocalDb-Versions-with-Instances
 
 # Include File: [\Includes.SqlServer\Find-Local-SqlServers.ps1]
 # Super Fast
@@ -2361,7 +2397,7 @@ function Test-Find-Local-SqlServers() {
 
 }
 
-# Test-Find-Local-SqlServers
+Test-Find-Local-SqlServers
 
 # Include File: [\Includes.SqlServer\Find-SQLServer-Meta.ps1]
 function Find-SQLServer-Meta([string] $version, [string] $mediaType) {
@@ -2687,7 +2723,7 @@ function Install-SQLServer {
 # Include File: [\Includes.SqlServer\Invoke-LocalDB-Executable.ps1]
 # Version: Latest | 16 | 15 | 14 | 13 | 12 | 11 (16.0, 15.0, ... also supported)
 function Invoke-LocalDB-Executable([string] $title, [string] $version, [string[]] $parameters) {
-  $localDbList = Find-LocalDb-SqlServers
+  $localDbList = Find-LocalDb-Versions
   $exe = $localDbList | Select -First 1 | % { $_.Exe }
   if ($version) { 
     $exe2 = $localDbList | ? { $_.ShortVersion -like "$version*" } | Select -First 1 | % { $_.Exe }
@@ -3071,7 +3107,13 @@ $servers = @(Find-Local-SqlServers | % { Set-Property-Smarty $_ "MediumVersion" 
 $servers | % { [pscustomObject] $_ } | ft -AutoSize | Out-String -Width 1234 | Out-Host
 
 
-Write-Host "QUERY LOCALDB VERSION" -ForegroundColor DarkGreen
-$localDB = @(Find-LocalDb-SqlServer | % { Set-Property-Smarty $_ "MediumVersion" (Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 60); $_ })
-# $localDB = @(Find-LocalDb-SqlServer | % { $_["MediumVersion"] = Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 60; $_ })
+Write-Host "QUERY DEFAULT LOCALDB VERSION" -ForegroundColor DarkGreen
+# $localDB = @(Find-LocalDb-SqlServers | % { Set-Property-Smarty $_ "MediumVersion" (Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 60); $_ })
+$localDB = @(Find-LocalDb-SqlServer | % { $_["MediumVersion"] = Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 60; $_ })
 $localDB | % { [pscustomObject] $_ } | ft -AutoSize | Out-String -Width 1234 | Out-Host
+
+Write-Host "QUERY ALL LOCALDB VERSIONs" -ForegroundColor DarkGreen
+$localDBs = @(Find-LocalDb-Versions | % { Set-Property-Smarty $_ "MediumVersion" (Query-SqlServer-Version -Title "$($_.Instance) v$($_.InstallerVersion)" -Instance "$($_.Instance)" -Timeout 60); $_ })
+$localDBs | ft -AutoSize | Out-String -Width 1234 | Out-Host
+
+

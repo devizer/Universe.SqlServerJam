@@ -1307,7 +1307,7 @@ function Test-Set-Property-Smarty() {
   # $GLOBAL:DEBUG_Set_Property_Smarty = $true
 
   Write-Host "TEST HASHTABLE" -ForegroundColor Magenta
-  $ht = @{X=1;T="Yes"}; Set-Property-Smarty $ht "P" "Added"; $ht
+  $ht = @{X=1;T="Yes"}; Set-Property-Smarty $ht "P" "Added"; $ht | ft | out-host
 
   Write-Host ""; Write-Host "TEST PSCustomObject" -ForegroundColor Magenta
   $ps = [PSCustomObject]@{X=1;T="Yes"}; 
