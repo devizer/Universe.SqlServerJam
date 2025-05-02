@@ -208,3 +208,64 @@ Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) |
    ? { $_.Status -ne "Stopped" } | 
    % { Write-Host "Stopping $($_.Name)"; Stop-Service "$($_.Name)" -Force }
 ```
+
+## SQL Server LocalDB functions
+&#x1F31F; Install all the versions of SQL Server LocalDB:
+```powershell
+Setup-SqlServers "
+  2022 LocalDB,
+  2019 LocalDB,
+  2017 LocalDB,
+  2016 LocalDB,
+  2014 LocalDB,
+  2012 LocalDB
+"
+```
+
+&#x1F31F; List Installed SQL Server LocalDB Versions:
+```powershell
+Find-LocalDb-Versions |
+     ft -Property ShortVersion, InstallerVersion -AutoSize |
+     Out-String -Width 1234 |
+     Out-Host
+
+ShortVersion InstallerVersion
+------------ ----------------
+16.0         16.0.1000.6
+15.0         15.0.4382.1
+14.0         14.0.1000.169
+13.0         13.3.6300.2
+12.0         12.3.6024.0
+11.0         11.4.7001.0
+```
+
+&#x1F31F; List SQL Server LocalDB Instances and their version:
+```powershell
+Find-LocalDb-SqlServers | Populate-Local-SqlServer-Version |
+     ft -AutoSize |
+     Out-String -Width 1234 |
+     Out-Host
+
+Instance                Version
+--------                -------
+(LocalDB)\LocalDB-v11.0 11.0.7001.0 LocalDB Express Edition (64-bit) SP4
+(LocalDB)\LocalDB-v12.0 12.0.6024.0 LocalDB Express Edition (64-bit) SP3
+(LocalDB)\LocalDB-v13.0 13.0.6300.2 LocalDB Express Edition (64-bit) SP3
+(LocalDB)\LocalDB-v14.0 14.0.1000.169 LocalDB Express Edition (64-bit) RTM
+(LocalDB)\LocalDB-v15.0 15.0.4382.1 LocalDB Express Edition (64-bit) RTM CU27
+(LocalDB)\LocalDB-v16.0 16.0.1000.6 LocalDB Express Edition (64-bit) RTM
+(LocalDB)\MSSQLLocalDB  15.0.4382.1 LocalDB Express Edition (64-bit) RTM CU27
+(LocalDB)\My-v13.0      13.0.6300.2 LocalDB Express Edition (64-bit) SP3
+(LocalDB)\v11.0         11.0.7001.0 LocalDB Express Edition (64-bit) SP4
+```
+
+&#x1F31F; Create SQL Server LocalDB Instance per version using pattern ```LocalDB-v{Version}```:
+```powershell
+foreach($localDb in Find-LocalDb-Versions) {
+  $instance = "LocalDB-v$($localDb.ShortVersion)"
+  Write-Host "Creating Instance $instance version $($localDb.ShortVersion)"
+  $isCreated = Create-LocalDB-Instance `
+    -InstanceName $instance `
+    -OptionalVersion $localDb.ShortVersion
+}
+```
