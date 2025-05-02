@@ -3117,3 +3117,4 @@ $localDBs = @(Find-LocalDb-Versions | % { Set-Property-Smarty $_ "MediumVersion"
 $localDBs | ft -AutoSize | Out-String -Width 1234 | Out-Host
 
 
+Test-Show-LocalDb-Versions-with-Instances
