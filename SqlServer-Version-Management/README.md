@@ -222,6 +222,8 @@ Setup-SqlServers "
 "
 ```
 
+
+
 &#x1F31F; List Installed SQL Server LocalDB Versions:
 ```powershell
 Find-LocalDb-Versions |
@@ -239,6 +241,8 @@ ShortVersion InstallerVersion
 12.0         12.3.6024.0
 11.0         11.4.7001.0
 ```
+
+
 
 &#x1F31F; List SQL Server LocalDB Instances and their version:
 ```powershell
@@ -260,6 +264,8 @@ Instance                Version
 (LocalDB)\My-v13.0      13.0.6300.2 LocalDB Express Edition (64-bit) SP3
 (LocalDB)\v11.0         11.0.7001.0 LocalDB Express Edition (64-bit) SP4
 ```
+
+
 
 &#x1F31F; Create SQL Server LocalDB Instance per version using pattern ```LocalDB-v{Version}```:
 ```powershell
