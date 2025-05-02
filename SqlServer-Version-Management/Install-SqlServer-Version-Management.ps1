@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.94';
+$ModuleVersion = '2.1.95';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -15,7 +15,7 @@ $ModuleFiles = @(
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
 			"",
 			"  # Version below is automatically incremented on build",
-			"  ModuleVersion = `"2.1.94`"",
+			"  ModuleVersion = `"2.1.95`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -2529,7 +2529,7 @@ $ModuleFiles = @(
 			"",
 			"}",
 			"",
-			"Test-Find-Local-SqlServers",
+			"# Test-Find-Local-SqlServers",
 			"",
 			"# Include File: [\Includes.SqlServer\Find-SQLServer-Meta.ps1]",
 			"function Find-SQLServer-Meta([string] `$version, [string] `$mediaType) {",

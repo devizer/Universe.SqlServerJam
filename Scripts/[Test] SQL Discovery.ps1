@@ -2397,7 +2397,7 @@ function Test-Find-Local-SqlServers() {
 
 }
 
-Test-Find-Local-SqlServers
+# Test-Find-Local-SqlServers
 
 # Include File: [\Includes.SqlServer\Find-SQLServer-Meta.ps1]
 function Find-SQLServer-Meta([string] $version, [string] $mediaType) {
