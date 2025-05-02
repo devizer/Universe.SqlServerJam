@@ -368,7 +368,7 @@ jobs:
     - name: New SHOW SQL Servers
       env:
         SQL_SERVERS: ${{ matrix.SqlServers }}
-      run: '& powershell -f "Scripts\[Test] SQL Discovery.ps1; Test-Create-Delete-LocalDB-Instance"'
+      run: '& powershell -f "Scripts\[Test] SQL Discovery.ps1"; Test-Create-Delete-LocalDB-Instance'
       # it restarts sql server, so can be invoked after 'Show Query Cache Report' step
 
 
