@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.95';
+$ModuleVersion = '2.1.97';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -15,7 +15,7 @@ $ModuleFiles = @(
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
 			"",
 			"  # Version below is automatically incremented on build",
-			"  ModuleVersion = `"2.1.95`"",
+			"  ModuleVersion = `"2.1.97`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -1952,6 +1952,11 @@ $ModuleFiles = @(
 			"  return Invoke-LocalDB-Executable -Title `$title -Version `"Latest`" -Parameters @(`$pars)",
 			"}",
 			"",
+			"function Delete-LocalDB-Instance([string] `$instanceName) {",
+			"  `$pars = @(`"delete`", `"```"`$instanceName```"`");",
+			"  `$title = `"Delete LocalDB Instance ```"`$instanceName```"`"",
+			"  return Invoke-LocalDB-Executable -Title `$title -Version `"Latest`" -Parameters @(`$pars)",
+			"}",
 			"",
 			"# Include File: [\Includes.SqlServer\Download-2010-SQLServer-and-Extract.ps1]",
 			"function Download-2010-SQLServer-and-Extract {",
@@ -2412,7 +2417,11 @@ $ModuleFiles = @(
 			"}",
 			"",
 			"function Find-LocalDb-SqlServers() {",
-			"  `$instances = @(Find-LocalDb-Versions -PopulateInstances | Select -First 1 | % { `$_.Instances })",
+			"  `$versions = @(Find-LocalDb-Versions -PopulateInstances);",
+			"  `$instances = @()",
+			"  foreach(`$version in `$versions) { foreach(`$i in `$version.Instances) { `$instances += `$i; } }",
+			"  `$instances = @(`$instances | Sort-Object | Get-Unique)",
+			"  # `$instances = @(Find-LocalDb-Versions -PopulateInstances | Select -First 1 | % { `$_.Instances })",
 			"  `$instances = @(`$instances | ? { `"`$_`".Length -gt 0 })",
 			"  foreach(`$instance in `$instances) {",
 			"    [pscustomobject] @{ Instance = `"(LocalDB)\`$(`$instance)`"}",
@@ -3234,10 +3243,11 @@ $ModuleFiles = @(
 			"",
 			"",
 			"# This works with all the versions and all instances",
+			"Export-ModuleMember -Function Find-LocalDb-Versions",
 			"Export-ModuleMember -Function Find-LocalDb-SqlServers",
 			"Export-ModuleMember -Function Create-LocalDB-Instance",
+			"Export-ModuleMember -Function Delete-LocalDB-Instance",
 			"Export-ModuleMember -Function Invoke-LocalDB-Executable",
-			"Export-ModuleMember -Function Find-LocalDb-Versions",
 			"Export-ModuleMember -Function Test-Show-LocalDb-Versions-with-Instances",
 			"",
 			"",
