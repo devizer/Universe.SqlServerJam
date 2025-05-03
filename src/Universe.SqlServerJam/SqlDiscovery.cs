@@ -13,7 +13,10 @@ namespace Universe.SqlServerJam
         {
             List<SqlServerRef> ret = new List<SqlServerRef>();
             ret.AddRange(GetServerList());
-            ret.AddRange(GetLocalDbList());
+
+            var localDbInstances = SqlLocalDbDiscovery.GetInstances();
+            ret.AddRange(localDbInstances);
+            // ret.AddRange(GetLatestLocalDb());
             ret.AddRange(GetWellKnownServers());
 
             return ret;
@@ -45,7 +48,7 @@ namespace Universe.SqlServerJam
         }
 
         // Always returns latest version only
-        public static List<SqlServerRef> GetLocalDbList()
+        public static List<SqlServerRef> GetLatestLocalDb()
         {
             List<SqlServerRef> ret = new List<SqlServerRef>();
             if (!TinyCrossInfo.IsWindows) return ret;
@@ -102,8 +105,9 @@ namespace Universe.SqlServerJam
             if (!TinyCrossInfo.IsWindows) return ret;
             using (RegistryKey lm = Registry.LocalMachine)
             {
+                if (lm == null) return ret;
                 // default instance
-                using (RegistryKey k0 = lm.OpenSubKey(@"SOFTWARE\Microsoft\MSSQLServer"))
+                using (RegistryKey k0 = lm.OpenSubKey(@"SOFTWARE\Microsoft\MSSQLServer", false))
                     if (k0 != null)
                         TryKey(k0, ret, string.Empty);
 
@@ -168,7 +172,4 @@ namespace Universe.SqlServerJam
             return strs.JoinIntoString(Environment.NewLine); 
         }
     }
-
-
-
 }
