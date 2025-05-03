@@ -9,6 +9,8 @@ using System.Text;
 namespace Universe.SqlServerJam
 {
     // DONE: Exception of Exec and timeouts
+    // INFO: for predefined instance MSSQLLocalDB version and info are not available if it is not created
+    // "The automatic instance "MSSQLLocalDB" is not created."
     public static class SqlLocalDbDiscovery
     {
         private static int ExecInfoTimeout = 60*1000;
@@ -189,12 +191,17 @@ namespace Universe.SqlServerJam
 
         static LocalDBInstance GetLocalDbInstanceInfo(string exe, string instanceName)
         {
+            DebugLog(() => $"Starting GetLocalDbInstanceInfo('{exe}', '{instanceName}')");
             var nonEmptyLines = ParseNonEmptyLines(TinyHiddenExec(exe, $"i \"{instanceName}\"", ExecInfoTimeout))
                 .Where(x => x.IndexOf(":") > 1)
                 .ToArray();
 
-            string GetValue(string raw)
+            DebugLog(() => $"GetLocalDbInstanceInfo() Intermediate Raw Info: {Environment.NewLine}{string.Join(Environment.NewLine, nonEmptyLines)}");
+
+            string GetValueByIndex(int keyIndex)
             {
+                if (keyIndex >= nonEmptyLines.Length) return null;
+                var raw = nonEmptyLines[keyIndex];
                 int p = raw.IndexOf(":");
                 if (p < 0) return null;
                 if (p == raw.Length - 1) return "";
@@ -202,10 +209,10 @@ namespace Universe.SqlServerJam
             }
             if (nonEmptyLines.Length >= 5)
             {
-                var version = GetValue(nonEmptyLines[1]);
-                var sharedName = GetValue(nonEmptyLines[2]);
-                var owner = GetValue(nonEmptyLines[3]);
-                var pipeName = GetValue(nonEmptyLines[nonEmptyLines.Length - 1]);
+                var version = GetValueByIndex(1);
+                var sharedName = GetValueByIndex(2);
+                var owner = GetValueByIndex(3);
+                var pipeName = GetValueByIndex(nonEmptyLines.Length - 1);
                 if (version != null)
                     return new LocalDBInstance()
                     {
@@ -218,6 +225,7 @@ namespace Universe.SqlServerJam
 
             }
 
+            DebugLog(() => $"GetLocalDbInstanceInfo() Instance info not found. Return null");
             return null;
         }
 
