@@ -26,6 +26,7 @@ namespace Universe.SqlServerJam.Tests
         // During Exam test we will populate sql server version
         private Lazy<List<SqlServerRef>> _SqlServers = new Lazy<List<SqlServerRef>>(() =>
         {
+            SqlLocalDbDiscovery.EnableDebugLog = true;
             return SqlDiscovery.GetLocalDbAndServerList();
         });
 
@@ -431,6 +432,13 @@ namespace Universe.SqlServerJam.Tests
                 return transport;
             }
         }
+
+        [Test]
+        public void Z_Log()
+        {
+            Console.WriteLine(SqlLocalDbDiscovery.Log);
+        }
+
 
 
     }

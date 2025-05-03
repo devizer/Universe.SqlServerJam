@@ -13,6 +13,18 @@ namespace Universe.SqlServerJam
     {
         private static int ExecInfoTimeout = 60*1000;
 
+        public static volatile bool EnableDebugLog = false;
+        static StringBuilder DebuggerLog = new StringBuilder();
+        private static readonly object SyncLog = new object();
+
+        public static string Log
+        {
+            get
+            {
+                lock (SyncLog) return DebuggerLog.ToString();
+            }
+        }
+
         public class LocalDbVersion
         {
             public string ShortVersion { get; set; }
@@ -34,15 +46,17 @@ namespace Universe.SqlServerJam
         {
             List<SqlServerRef> ret = new List<SqlServerRef>();
             Dictionary<string,object> added = new Dictionary<string,object>();
-            foreach (var localDbVersion in GetVersionList())
+            var localDbVersions = GetVersionList();
+            foreach (var localDbVersion in localDbVersions)
             {
                 IEnumerable<string> instanceNames;
                 try
                 {
                     instanceNames = ParseInstances(localDbVersion.Exe);
                 }
-                catch
+                catch(Exception ex)
                 {
+                    DebugLog(() => $"Unable to fetch Instance List by [{localDbVersion.Exe}]{Environment.NewLine}{ex}");
                     continue;
                 }
 
@@ -62,7 +76,7 @@ namespace Universe.SqlServerJam
                     }
                     catch (Exception ex)
                     {
-                        Debug.WriteLine($"Unable to get LocalDB Instance Version '{instanceName}' info{Environment.NewLine}{ex}");
+                        DebugLog(() => $"Unable to get LocalDB Instance Version '{instanceName}' info{Environment.NewLine}{ex}");
                     }
 
                     ret.Add(sqlServerRef);
@@ -207,7 +221,8 @@ namespace Universe.SqlServerJam
             return null;
         }
 
-        static string TinyHiddenExec(string exe, string args, int timeout)
+        // public for tests only
+        public static string TinyHiddenExec(string exe, string args, int timeout)
         {
             if (timeout == 0) timeout = 10*60*1000;
             ProcessStartInfo si = new ProcessStartInfo(exe, args)
@@ -228,8 +243,15 @@ namespace Universe.SqlServerJam
 
                 var output = p.StandardOutput.ReadToEnd();
                 output.TrimEnd('\r', '\n');
+
+                DebugLog(() => $"Successful Invocation result for [{exe} {args}]{Environment.NewLine}{output}");
                 return output;
             }
+        }
+
+        static void DebugLog(Func<string> message)
+        {
+            if (true || EnableDebugLog) lock (SyncLog) DebuggerLog.AppendLine().AppendLine(message()).AppendLine();
         }
     }
 }

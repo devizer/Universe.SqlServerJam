@@ -9,6 +9,11 @@ namespace Universe.SqlServerJam.Tests
     [TestFixture]
     public class TestLocalDbDiscovery
     {
+        public TestLocalDbDiscovery()
+        {
+            SqlLocalDbDiscovery.EnableDebugLog = true;
+        }
+
         [Test]
         [TestCase("First")]
         [TestCase("Next")]
@@ -31,6 +36,12 @@ namespace Universe.SqlServerJam.Tests
             {
                 Console.WriteLine($"{v.Kind} {v.Version}:  {v.Data}");
             }
+        }
+
+        [Test]
+        public void Z_Log()
+        {
+            Console.WriteLine(SqlLocalDbDiscovery.Log);
         }
 
     }
