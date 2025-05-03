@@ -8,8 +8,11 @@ using System.Text;
 
 namespace Universe.SqlServerJam
 {
+    // DONE: Exception of Exec and timeouts
     public static class SqlLocalDbDiscovery
     {
+        private static int ExecInfoTimeout = 60*1000;
+
         public class LocalDbVersion
         {
             public string ShortVersion { get; set; }
@@ -33,7 +36,17 @@ namespace Universe.SqlServerJam
             Dictionary<string,object> added = new Dictionary<string,object>();
             foreach (var localDbVersion in GetVersionList())
             {
-                foreach (var instanceName in ParseInstances(localDbVersion.Exe))
+                IEnumerable<string> instanceNames;
+                try
+                {
+                    instanceNames = ParseInstances(localDbVersion.Exe);
+                }
+                catch
+                {
+                    continue;
+                }
+
+                foreach (var instanceName in instanceNames)
                 {
                     if (added.ContainsKey(instanceName)) continue;
                     var sqlServerRef = new SqlServerRef()
@@ -41,9 +54,16 @@ namespace Universe.SqlServerJam
                         Kind = SqlServerDiscoverySource.LocalDB,
                         Data = $"(LocalDB)\\{instanceName}",
                     };
-                    
-                    var localDbInfo = GetLocalDbInstanceInfo(localDbVersion.Exe, instanceName);
-                    sqlServerRef.Version = TryParseVersion(localDbInfo.Version);
+
+                    try
+                    {
+                        var localDbInfo = GetLocalDbInstanceInfo(localDbVersion.Exe, instanceName);
+                        sqlServerRef.Version = TryParseVersion(localDbInfo.Version);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Unable to get LocalDB Instance Version '{instanceName}' info{Environment.NewLine}{ex}");
+                    }
 
                     ret.Add(sqlServerRef);
                     added[instanceName] = null;
@@ -93,13 +113,15 @@ namespace Universe.SqlServerJam
                     }
                 }
             }
+
+            ret.Reverse();
             return ret;
         }
 
         static string ReadRegValue(RegistryKey lm, string lmPath, string keyName)
         {
-            var arr = lmPath.Split('\\');
 #if NETSTANDARD2_0_OR_GREATER && false
+            var arr = lmPath.Split('\\');
             for (int i = 0; i < arr.Length; i++)
             {
                 string p = "";
@@ -120,7 +142,7 @@ namespace Universe.SqlServerJam
 
         static IEnumerable<string> ParseInstances(string exe)
         {
-            return ParseNonEmptyLines(TinyHiddenExec(exe, "i", 0));
+            return ParseNonEmptyLines(TinyHiddenExec(exe, "i", ExecInfoTimeout));
         }
 
         static IEnumerable<string> ParseNonEmptyLines(string lines)
@@ -153,7 +175,7 @@ namespace Universe.SqlServerJam
 
         static LocalDBInstance GetLocalDbInstanceInfo(string exe, string instanceName)
         {
-            var nonEmptyLines = ParseNonEmptyLines(TinyHiddenExec(exe, $"i \"{instanceName}\"", 0))
+            var nonEmptyLines = ParseNonEmptyLines(TinyHiddenExec(exe, $"i \"{instanceName}\"", ExecInfoTimeout))
                 .Where(x => x.IndexOf(":") > 1)
                 .ToArray();
 
