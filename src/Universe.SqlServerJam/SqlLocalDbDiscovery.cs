@@ -74,7 +74,7 @@ namespace Universe.SqlServerJam
                     try
                     {
                         var localDbInfo = GetLocalDbInstanceInfo(localDbVersion.Exe, instanceName);
-                        sqlServerRef.Version = TryParseVersion(localDbInfo.Version);
+                        sqlServerRef.Version = TryParseVersion(localDbInfo?.Version);
                     }
                     catch (Exception ex)
                     {
@@ -171,10 +171,11 @@ namespace Universe.SqlServerJam
             }
         }
 
-        static Version TryParseVersion(string v)
+        static Version TryParseVersion(string rawVersion)
         {
+            if (rawVersion == null) return null;
             StringBuilder cleanVersion = new StringBuilder();
-            foreach (var c in v)
+            foreach (var c in rawVersion)
             {
                 if (c == '.' || (c >= '0' && c <= '9')) cleanVersion.Append(c);
             }
