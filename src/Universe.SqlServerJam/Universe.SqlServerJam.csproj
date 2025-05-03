@@ -44,7 +44,15 @@
         <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
         <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
         <PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
-        <!--<PackageReference Include="System.Threading.Tasks.Parallel" />-->
+
+		<!-- Registry for SqlDiscovery -->
+        <PackageReference Include="Microsoft.Win32.Registry" Version="4.3.0" />
+        <!-- Process for LocalDB SqlDiscovery 
+        <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
+		-->
+        
+
+		<!--<PackageReference Include="System.Threading.Tasks.Parallel" />-->
     </ItemGroup>
 
     <ItemGroup>
