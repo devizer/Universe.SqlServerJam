@@ -16,7 +16,9 @@ namespace Universe.SqlServerJam
 
             var localDbInstances = SqlLocalDbDiscovery.GetInstances();
             ret.AddRange(localDbInstances);
-            // ret.AddRange(GetLatestLocalDb());
+#if NET35
+            ret.AddRange(GetLatestLocalDb());
+#endif
             ret.AddRange(GetWellKnownServers());
 
             return ret;
