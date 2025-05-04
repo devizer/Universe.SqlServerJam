@@ -208,17 +208,20 @@ Query-SqlServer-Version -Title "SQL Server" `
 
 &#x1F31F; Start SQL Server Instances that are currently stopped
 ```powershell
-Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | 
-   ? { $_.Status -ne "Running" } | 
+Find-Local-SqlServers | 
+   % { $_.Service } | 
+   % { Get-Service -Name $_ } | 
+   ? { $_.Status -ne "Running" } |
    % { Write-Host "Starting $($_.Name)"; Start-Service "$($_.Name)" }
-
 ```
 <br/>
 
 &#x1F31F; Stop SQL Server Instances that are currently running
 ```powershell
-Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | 
-   ? { $_.Status -ne "Stopped" } | 
+Find-Local-SqlServers | 
+   % { $_.Service } | 
+   % { Get-Service -Name $_ } | 
+   ? { $_.Status -ne "Stopped" } |
    % { Write-Host "Stopping $($_.Name)"; Stop-Service "$($_.Name)" -Force }
 ```
 <br/>
