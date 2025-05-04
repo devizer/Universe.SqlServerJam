@@ -17,6 +17,8 @@ namespace Universe.SqlServerJam
             var localDbInstances = SqlLocalDbDiscovery.GetInstances();
             ret.AddRange(localDbInstances);
 #if NET35
+            // net 3.5 is not able to access "SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL11E.LOCALDB", 12, 13, ...
+            // e.g. localDbInstances is empty collection
             ret.AddRange(GetLatestLocalDb());
 #endif
             ret.AddRange(GetWellKnownServers());

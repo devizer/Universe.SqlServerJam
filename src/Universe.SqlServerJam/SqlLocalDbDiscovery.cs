@@ -89,7 +89,7 @@ namespace Universe.SqlServerJam
             return ret;
         }
 
-        // net 3.5 does not see "SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL11E.LOCALDB", 12, 13, ...
+        // net 3.5 is not able to access "SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL11E.LOCALDB", 12, 13, ...
         public static List<SqlLocalDbDiscovery.LocalDbVersion> GetVersionList()
         {
             List<SqlLocalDbDiscovery.LocalDbVersion> ret = new List<SqlLocalDbDiscovery.LocalDbVersion>();
