@@ -251,10 +251,10 @@ Find-LocalDb-Versions |
 ```
 ShortVersion InstallerVersion
 ------------ ----------------
-16.0         16.0.1000.6
-15.0         15.0.4382.1
-14.0         14.0.1000.169
-13.0         13.3.6300.2
+16.0         16.0.4175.1
+15.0         15.0.4420.2
+14.0         14.0.3456.2
+13.0         13.3.6441.1
 12.0         12.3.6024.0
 11.0         11.4.7001.0
 ```
@@ -275,10 +275,10 @@ Instance                Version
 (LocalDB)\LocalDB-v11.0 11.0.7001.0 LocalDB Express Edition (64-bit) SP4
 (LocalDB)\LocalDB-v12.0 12.0.6024.0 LocalDB Express Edition (64-bit) SP3
 (LocalDB)\LocalDB-v13.0 13.0.6300.2 LocalDB Express Edition (64-bit) SP3
-(LocalDB)\LocalDB-v14.0 14.0.1000.169 LocalDB Express Edition (64-bit) RTM
-(LocalDB)\LocalDB-v15.0 15.0.4382.1 LocalDB Express Edition (64-bit) RTM CU27
-(LocalDB)\LocalDB-v16.0 16.0.1000.6 LocalDB Express Edition (64-bit) RTM
-(LocalDB)\MSSQLLocalDB  15.0.4382.1 LocalDB Express Edition (64-bit) RTM CU27
+(LocalDB)\LocalDB-v14.0 14.0.3456.2 LocalDB Express Edition (64-bit) RTM CU31
+(LocalDB)\LocalDB-v15.0 15.0.4420.2 LocalDB Express Edition (64-bit) RTM CU31
+(LocalDB)\LocalDB-v16.0 16.0.4175.1 LocalDB Express Edition (64-bit) RTM CU17
+(LocalDB)\MSSQLLocalDB  16.0.4175.1 LocalDB Express Edition (64-bit) RTM CU17
 (LocalDB)\v11.0         11.0.7001.0 LocalDB Express Edition (64-bit) SP4
 ```
 <br/>

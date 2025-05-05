@@ -3123,6 +3123,43 @@ function Uninstall-LocalDB-List([string[]] $patterns) {
   Say "DONE. Total LocalDB Uninstalled: $total"
 }
 
+# Include File: [\Includes.SqlServer\Update-SqlServer-LocalDB-and-Shared-Tools.ps1]
+# Supported 2016, 2017, 2019, 2022
+function Update-SqlServer-LocalDB-and-Shared-Tools([string[]] $versions) {
+
+  foreach($version in $versions) {
+    $update=$null;
+    $metaWithUpdate = Find-SQLServer-Meta $version "Core"
+    if (($metaWithUpdate) -and ($metaWithUpdate["CU"])) {
+      $update=$metaWithUpdate["CU"]
+      $update=@($update) | Select -First 1
+    }
+
+    if ($update) {
+      Write-Host "Installing Update $($update.Id) for shared tools and LocalDB $($version)" -ForegroundColor DarkGreen
+      # $update | ConvertTo-Json -Depth 32 | Out-Host
+    } else {
+      Write-Host "Update for shared tools and LocalDB $($version) not found"
+      continue;
+    }
+
+    $updateGot = Download-SqlServer-Update $version "Shared Tools" $update
+    if ($updateGot -and $updateGot.UpdateLauncher) {
+      $updateGot | ft -AutoSize | Out-Host
+      $title = "Update Shared Tools and LocalDB version $($version)"
+      $setupArg = @("/q", "/IAcceptSQLServerLicenseTerms", "/Action=Patch");
+      $setupStatus = Execute-Process-Smarty "$title" $updateGot.UpdateLauncher $setupArg -WaitTimeout 3600
+      $setupStatus | Format-Table-Smarty | Out-Host
+      if ($setupStatus -and $upgradeResult.Error) { 
+        Write-Host "$title incomplete" -ForegroundColor DarkRed
+        # Write-Host ""
+      }
+    }
+  }
+}
+
+# Update-SqlServer-LocalDB-and-Shared-Tools "2022", "2019", "2017", "2016", "2014", "2012"
+
 
 $toFolder = "$($Env:USERPROFILE)\SQL-Server-Logs\$([System.DateTime]::Now.ToString("yyyy-MM-dd-HH-mm-ss"))"
 $a="$($ENV:SYSTEM_ARTIFACTSDIRECTORY)"
