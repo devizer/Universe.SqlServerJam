@@ -147,7 +147,7 @@ Instance               InstallerVersion Service
 ```powershell
 Find-Local-SqlServers | 
      Populate-Local-SqlServer-Version -Timeout 30 |
-     ft -AutoSize | 
+     Format-Table -AutoSize | 
      Out-String -Width 1234 | 
      Out-Host
 ```
@@ -171,7 +171,11 @@ Instance               InstallerVersion Service              Version
 
 &#x1F31F; List Installed SQL Server Services
 ```powershell
-Get-Service -Name (Find-Local-SqlServers | % {$_.Service}) | ft -AutoSize
+Find-Local-SqlServers | 
+   % { $_.Service } | 
+   % { Get-Service -Name $_ } | 
+   ft -AutoSize |
+   Out-Host
 ```
 ```
 Status  Name                 DisplayName
