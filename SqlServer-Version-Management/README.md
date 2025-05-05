@@ -84,7 +84,7 @@ Setup-SqlServers "2022 Developer Updated: MSSQLSERVER" `
 ```
 <br/>
 
-&#x1F31F; Install four SQL Server Instances on system drive, and put data and log folders on second ssd:
+&#x1F31F; Install four SQL Server Instances and their ```tempdb``` on system drive, and place the data and log folders on the secondary SSD:
 ```powershell
 $sqlServers=@"
 2022 Developer Updated: DEVELOPER2022,
