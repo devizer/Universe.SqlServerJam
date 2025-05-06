@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.99';
+$ModuleVersion = '2.1.103';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -15,7 +15,7 @@ $ModuleFiles = @(
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
 			"",
 			"  # Version below is automatically incremented on build",
-			"  ModuleVersion = `"2.1.99`"",
+			"  ModuleVersion = `"2.1.103`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -2633,8 +2633,9 @@ $ModuleFiles = @(
 			"",
 			"",
 			"# Include File: [\Includes.SqlServer\Get-Builtin-Windows-Group-Name.ps1]",
+			"# Windows Only",
 			"function Get-Builtin-Windows-Group-Name([string] `$groupKind) {",
-			"   # Windows Only",
+			"   if ((Get-Os-Platform) -ne `"Windows`") { return }",
 			"   `$sid=`"`";",
 			"   #users: S-1-5-32-545, administrators: S-1-5-32-544, power users: S-1-5-32-547",
 			"   if     (`$groupKind -eq `"Users`")          { `$sid=`"S-1-5-32-545`"; }",
@@ -2642,8 +2643,7 @@ $ModuleFiles = @(
 			"   elseif (`$groupKind -eq `"PowerUsers`")     { `$sid=`"S-1-5-32-547`"; }",
 			"   `$ret=`"`"",
 			"   if (`$sid) {",
-			"     if (Has-Cmd `"Get-CIMInstance`")     { `$group=Get-CIMInstance Win32_Group; } ",
-			"     elseif (Has-Cmd `"Get-WmiObject`")   { `$group=Get-WmiObject   Win32_Group; } ",
+			"     `$group = Select-WMI-Objects `"Win32_Group`";",
 			"     `$ret = (`$group | where { `$_.SID -eq `"`$sid`" } | Select -First 1).Name;",
 			"   }",
 			"   return `$ret;",
@@ -2896,6 +2896,7 @@ $ModuleFiles = @(
 			"",
 			"# Include File: [\Includes.SqlServer\Invoke-LocalDB-Executable.ps1]",
 			"# Version: Latest | 16 | 15 | 14 | 13 | 12 | 11 (16.0, 15.0, ... also supported)",
+			"# If Version is `"Latest`" or `$version is not installed then Latest cli is used",
 			"function Invoke-LocalDB-Executable([string] `$title, [string] `$version, [string[]] `$parameters) {",
 			"  `$localDbList = Find-LocalDb-Versions",
 			"  `$exe = `$localDbList | Select -First 1 | % { `$_.Exe }",
@@ -2910,7 +2911,7 @@ $ModuleFiles = @(
 			"    & `"`$exe`" @(`$pars) | Out-Host",
 			"    return `$?",
 			"  } else {",
-			"    Write-Line -TextDarkRed `"SQLLocalDB.Exe Not Found for version ```"`$version```"`"",
+			"    Write-Line -TextDarkRed `"SQLLocalDB.Exe Not Found for version ```"`$version```" or any version is missing`"",
 			"  }",
 			"  return `$false",
 			"}",
@@ -3177,7 +3178,11 @@ $ModuleFiles = @(
 			"",
 			"   `$optionsOverride += @(`$args)",
 			"",
-			"   Say `"Setting up SQL Server(s) ```"`$sqlServers```". Cpu is '`$(Get-Cpu-Name)'. `$((Get-Memory-Info).Description)`"",
+			"   # Normilize input parameter `$sqlServers",
+			"   `$sqlServers = `"`$sqlServers`".Replace(`"``r`",`" `").Replace(`"``n`",`" `").Trim();",
+			"   while(`$sqlServers.IndexOf(`"  `") -ge 0) { `$sqlServers = `$sqlServers.Replace(`"  `",`" `") }",
+			"   # lets rock",
+			"   Say `"Setting up SQL Server(s) ```"`$sqlServers```".`$([Environment]::NewLine)Cpu is '`$(Get-Cpu-Name)'. `$((Get-Memory-Info).Description)`"",
 			"   `$errors = @();",
 			"",
 			"   `$servers = Parse-SqlServers-Input `$sqlServers",
