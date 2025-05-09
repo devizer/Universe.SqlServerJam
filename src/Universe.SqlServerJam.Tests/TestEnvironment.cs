@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Security;
@@ -9,8 +10,19 @@ using System.Threading;
 
 namespace Universe.SqlServerJam.Tests
 {
-    class TestEnvironment
+    static class TestEnvironment
     {
+        private static Lazy<List<SqlServerRef>> _SqlServers = new Lazy<List<SqlServerRef>>(() =>
+        {
+            SqlLocalDbDiscovery.EnableDebugLog = true;
+            return SqlDiscovery.GetLocalDbAndServerList();
+        });
+        // The root feature is SQL Discovery.
+        // We will cache sql server list.
+        // During Exam test we will populate sql server version
+        public static List<SqlServerRef> SqlServers => _SqlServers.Value;
+
+
         public static int SqlPingDuration => GetVar("Ping");
         public static int SqlUploadDuration => GetVar("Upload");
         public static int SqlDownloadDuration => GetVar("Download");

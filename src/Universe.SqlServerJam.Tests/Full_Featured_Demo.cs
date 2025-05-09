@@ -21,17 +21,8 @@ namespace Universe.SqlServerJam.Tests
 
         Stopwatch _StartAt = Stopwatch.StartNew();
 
-        // The root feature is SQL Discovery.
-        // We will cache sql server list.
-        // During Exam test we will populate sql server version
-        private Lazy<List<SqlServerRef>> _SqlServers = new Lazy<List<SqlServerRef>>(() =>
-        {
-            SqlLocalDbDiscovery.EnableDebugLog = true;
-            return SqlDiscovery.GetLocalDbAndServerList();
-        });
 
-
-        private List<SqlServerRef> SqlServers => _SqlServers.Value;
+        private List<SqlServerRef> SqlServers => TestEnvironment.SqlServers;
 
         [Test]
         public void Test_Debug()
@@ -60,7 +51,7 @@ namespace Universe.SqlServerJam.Tests
                 Console.WriteLine("State of corresponding services");
                 foreach (var sqlRef in localOrdered)
                 {
-                    var serviceStatus = SqlServiceExtentions.CheckServiceStatus(sqlRef.DataSource);
+                    var serviceStatus = SqlServiceExtentions.CheckLocalServiceStatus(sqlRef.DataSource);
                     if (serviceStatus.State != SqlServiceStatus.ServiceStatus.Running)
                         stopped.Add(sqlRef);
 
@@ -69,7 +60,7 @@ namespace Universe.SqlServerJam.Tests
             }
 
 
-            // LocalDB is awsays assumed to be stopped.
+            // LocalDB is always assumed to be stopped.
             var localDB = ordered.FirstOrDefault(x => SqlServiceExtentions.IsLocalDB(x.DataSource));
             if (localDB != null)
                 stopped.Add(localDB);

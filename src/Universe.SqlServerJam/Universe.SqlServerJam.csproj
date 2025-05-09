@@ -2,7 +2,7 @@
 
     <!-- do not refer to Microsoft SqlClient -->
   <PropertyGroup>
-    <TargetFrameworks>net35;netstandard2.0;netstandard1.3;net40;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net461;net35;netstandard1.4;net40</TargetFrameworks>
   </PropertyGroup>
 
     <PropertyGroup>
@@ -40,7 +40,7 @@
         <PackageReference Include="Microsoft.Windows.Compatibility" Version="2.0.1" />
     </ItemGroup>
 
-    <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
+    <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' ">
         <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
         <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
         <PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
@@ -49,9 +49,9 @@
         <PackageReference Include="Microsoft.Win32.Registry" Version="4.3.0" />
         <!-- Process for LocalDB SqlDiscovery -->
         <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
-		
-        
-
+		<!-- Check Local Windows Service Status -->
+        <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.3.0" />
+        <PackageReference Include="System.IO.FileSystem.DriveInfo" Version="4.3.1" />
 		<!--<PackageReference Include="System.Threading.Tasks.Parallel" />-->
     </ItemGroup>
 
@@ -65,11 +65,16 @@
         <Reference Include="System.ServiceProcess" />
     </ItemGroup>
 
-    <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'netstandard1.3' Or '$(TargetFramework)' == 'netcoreapp1.0' Or '$(TargetFramework)' == 'netcoreapp1.1' Or '$(TargetFramework)' == 'net461' ">
+    <ItemGroup Condition=" 
+			   '$(TargetFramework)' == 'netstandard2.0' 
+			   Or '$(TargetFramework)' == 'netstandard1.4' 
+			   Or '$(TargetFramework)' == 'netcoreapp1.0'
+			   Or '$(TargetFramework)' == 'netcoreapp1.1' 
+			   Or '$(TargetFramework)' == 'net461' ">
         <PackageReference Include="Dapper" Version="1.60.6" />
     </ItemGroup>
 
-    <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' And '$(TargetFramework)' != 'netstandard1.3' And '$(TargetFramework)' != 'net20' And '$(TargetFramework)' != 'net30' And '$(TargetFramework)' != 'netnetcoreapp1.1' And '$(TargetFramework)' != 'netnetcoreapp1.0' and '$(TargetFramework)' != 'net461'">
+    <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' And '$(TargetFramework)' != 'netstandard1.4' And '$(TargetFramework)' != 'net20' And '$(TargetFramework)' != 'net30' And '$(TargetFramework)' != 'netnetcoreapp1.1' And '$(TargetFramework)' != 'netnetcoreapp1.0' and '$(TargetFramework)' != 'net461'">
         <PackageReference Include="Dapper" Version="1.42.0" />
     </ItemGroup>
 

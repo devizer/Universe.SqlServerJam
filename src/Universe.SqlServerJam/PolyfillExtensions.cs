@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 using Dapper;
 
@@ -9,7 +10,7 @@ namespace Universe.SqlServerJam
 
     public static class StringComparisonExtensions
     {
-#if NETSTANDARD1_3
+#if NETSTANDARD1_4
         public static readonly StringComparison IgnoreCase = StringComparison.OrdinalIgnoreCase;
 #else
         public static readonly StringComparison IgnoreCase = StringComparison.InvariantCultureIgnoreCase;
@@ -72,7 +73,25 @@ namespace Universe.SqlServerJam
 
 }
 
-#if NETSTANDARD1_3
+namespace System
+{
+    public static class EnvironmentExtensions
+    {
+        public static string MachineName
+        {
+            get
+            {
+#if NETSTANDARD1_4
+                return Environment.GetEnvironmentVariable("COMPUTERNAME") ?? Environment.GetEnvironmentVariable("HOSTNAME");
+#else
+                return Environment.MachineName;
+#endif
+            }
+        }
+    }
+}
+
+#if NETSTANDARD1_4
 namespace System.ComponentModel
 {
     public class DescriptionAttribute : Attribute
@@ -92,10 +111,20 @@ namespace System.Threading.Tasks
             IEnumerable<TSource> source,
             Action<TSource> body)
         {
+            var waiters = source
+                .Select(item => Task.Run(() => body(item)))
+                .Select(task => task.ConfigureAwait(false).GetAwaiter())
+                .ToList();
+
+            // Used for ProbeTransports only. Exceptions except OOM are not possible
+            waiters.ForEach(x => x.GetResult());
+
+            /*
             foreach (var item in source)
             {
-                Task.Run(() => body(item)).GetAwaiter().GetResult();
+                Task.Run(() => body(item)).ConfigureAwait(false).GetAwaiter().GetResult();
             }
+        */
         }
     }
 }

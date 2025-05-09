@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using Dapper;
 
 namespace Universe.SqlServerJam
@@ -347,6 +348,40 @@ select
             var header = SqlConnection.Query<SqlBackupHeaderDescription>("restore headeronly from disk = @file", new { file = bakFullPath }).ToList();
             var fileList = SqlConnection.Query<BackupFileDescription>("restore filelistonly from disk = @file", new { file = bakFullPath }).ToList();
             return new SqlBackupDescription(bakFullPath, header, fileList);
+        }
+
+
+        // 1. fn_helpcollations() is Slow
+        // 2. null or empty namesOrPatters return all
+        // 3. if element contains '%' it is pattern, otherwise exact name
+        public HashSet<string> FindCollations(IEnumerable<string> namesOrPatters)
+        {
+            StringBuilder sql = new StringBuilder("Select Name From fn_helpcollations()");
+            DynamicParameters pars = new DynamicParameters();
+            int count = 0;
+            foreach (var nameOrPattern in namesOrPatters ?? new string[0])
+            {
+                if (count == 0) sql.Append(" Where");
+                if (count >= 1) sql.Append(" Or");
+                bool isPattern = nameOrPattern.IndexOf("%") >= 0;
+                pars.Add($"v{count}", nameOrPattern, DbType.String, ParameterDirection.Input, 4000);
+                sql.Append($" Name {(isPattern ? "Like" : "=")} @v{count}");
+                count++;
+            }
+
+            // Console.WriteLine($"[Debug Collations]{Environment.NewLine}{sql}");
+            var query = this.SqlConnection.Query<string>(sql.ToString(), pars).ToList();
+            var ret = new HashSet<string>();
+            foreach (var name in query) ret.Add(name);
+            return ret;
+        }
+
+        // 1. fn_helpcollations() is Slow
+        // 2. null or empty namesOrPatters return all
+        // 3. if element contains '%' it is pattern, otherwise exact name
+        public HashSet<string> FindCollations(params string[] namesOrPatters)
+        {
+            return FindCollations((IEnumerable<string>)namesOrPatters);
         }
 
         public class DatabaseSelector

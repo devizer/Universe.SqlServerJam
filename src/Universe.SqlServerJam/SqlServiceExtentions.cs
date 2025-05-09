@@ -1,5 +1,6 @@
-﻿#if !NETSTANDARD1_3
+﻿#if !NETSTANDARD1_4 || true
 using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -12,12 +13,13 @@ namespace Universe.SqlServerJam
 {
     public static class SqlServiceExtentions
     {
-        public static SqlServiceStatus CheckServiceStatus(string sqlServer)
+
+        public static SqlServiceStatus CheckLocalServiceStatus(string dataSource)
         {
             SqlServiceStatus ret = null;
             try
             {
-                ServiceController service = new ServiceController(GetServiceName(sqlServer));
+                ServiceController service = new ServiceController(GetServiceName(dataSource));
                 var status = (SqlServiceStatus.ServiceStatus) (int) service.Status;
                 ret = new SqlServiceStatus(status);
             }
@@ -29,18 +31,21 @@ namespace Universe.SqlServerJam
             return ret;
         }
 
-        public static bool IsLocalService(string sqlServerInstance)
+        public static bool IsLocalService(string dataSource)
         {
-            var instance = sqlServerInstance.Split(':').Last();
-            var host = instance.Split('\\').First();
+            var instanceWithoutProtocol = dataSource.Split(':').Last();
+            var hostWithPort = instanceWithoutProtocol.Split('\\').First();
+            var host = hostWithPort.Split(',').First();
+
             return
-                host.Equals(".", StringComparison.InvariantCultureIgnoreCase)
-                || host.Equals("(local)", StringComparison.InvariantCultureIgnoreCase)
-                || host.Equals("::1", StringComparison.InvariantCultureIgnoreCase)
-                || host.Equals("127.0.0.1", StringComparison.InvariantCultureIgnoreCase);
+                host.Equals(".", StringComparisonExtensions.IgnoreCase)
+                || host.Equals("(local)", StringComparisonExtensions.IgnoreCase)
+                || host.Equals("::1", StringComparisonExtensions.IgnoreCase)
+                || host.Equals("127.0.0.1", StringComparisonExtensions.IgnoreCase)
+                || host.Equals(EnvironmentExtensions.MachineName, StringComparisonExtensions.IgnoreCase);
 
             // Before (rough)
-            return sqlServerInstance.StartsWith("(local)", StringComparison.InvariantCultureIgnoreCase);
+            return dataSource.StartsWith("(local)", StringComparisonExtensions.IgnoreCase);
         }
 
         public static bool IsLocalDB(string sqlServerInstance)
@@ -48,10 +53,10 @@ namespace Universe.SqlServerJam
             var instance = sqlServerInstance.Split(':').Last();
             var host = instance.Split('\\').First();
             return
-                host.Equals("(LocalDb)", StringComparison.InvariantCultureIgnoreCase);
+                host.Equals("(LocalDb)", StringComparisonExtensions.IgnoreCase);
 
             // Before (rough)
-            // return sqlServerInstance.StartsWith("(localdb)", StringComparison.InvariantCultureIgnoreCase);
+            // return dataSource.StartsWith("(localdb)", StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static bool IsLocalDbOrLocalServer(string connectionString)
@@ -115,6 +120,7 @@ namespace Universe.SqlServerJam
 
         }
 
+        // Incorrect
         static void StartLocalDB_Impl(string instanceName, int timeout)
         {
             string[] vers = new[] {"160", "150", "140", "130", "120"};
@@ -134,7 +140,10 @@ namespace Universe.SqlServerJam
 
             ProcessStartInfo si = new ProcessStartInfo(exePath, "start " + instanceName);
             si.UseShellExecute = false;
+#if !NETSTANDARD1_4
             si.WindowStyle = ProcessWindowStyle.Hidden;
+#endif
+            si.CreateNoWindow = true;
             using (Process p = Process.Start(si))
             {
                 p.WaitForExit(Math.Min(Math.Max(1, timeout), 60000));

@@ -1,4 +1,3 @@
-#if !NETSTANDARD1_3
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,11 +29,11 @@ namespace Universe.SqlServerJam
                 }
 
                 bool isRamDrive =
-                    "RamDisk".Equals(label, StringComparison.InvariantCultureIgnoreCase)
-                    || "RamDrive".Equals(label, StringComparison.InvariantCultureIgnoreCase)
+                    "RamDisk".Equals(label, StringComparisonExtensions.IgnoreCase)
+                    || "RamDrive".Equals(label, StringComparisonExtensions.IgnoreCase)
                     || i.DriveType == DriveType.Ram;
 
-                if (isRamDrive && free.Value >= minAvailMegabytes*1024*1024)
+                if (isRamDrive && free.GetValueOrDefault() >= minAvailMegabytes*1024*1024)
                     ret.Add(i);
             }
 
@@ -44,4 +43,3 @@ namespace Universe.SqlServerJam
         }
     }
 }
-#endif
