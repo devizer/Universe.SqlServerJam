@@ -46,7 +46,7 @@ namespace Universe.SqlServerJam
             // return cnn.ExecuteScalar2<T>(sql);
         }
 
-        public static T ExecuteScalar<T>(this IDbConnection cnn, string sql, object parameters)
+        public static T ExecuteScalar<T>(this IDbConnection cnn, string sql, object parameters, int? commandTimeout = null)
         {
             return cnn.ExecuteScalar<T>(sql, parameters, null, null, CommandType.Text);
         }

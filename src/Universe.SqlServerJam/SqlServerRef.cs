@@ -11,8 +11,15 @@ namespace Universe.SqlServerJam
     public class SqlServerRef
     {
         public SqlServerDiscoverySource Kind { get; set; }
+        public Version InstallerVersion { get; set; }
+        // Select Result
         public Version Version { get; set; }
+        public bool IsAlive => Version != null;
         public string Data { get; set; }
+
+        // Not for LocalDB. LocalDB is Automatic
+        public LocalServiceStartup ServiceStartup { get; set; }
+        public bool IsNotDisabled => ServiceStartup != LocalServiceStartup.Disabled;
 
         public string ConnectionString
         {
@@ -45,7 +52,7 @@ namespace Universe.SqlServerJam
 
         public override string ToString()
         {
-            return $"'{DataSource}'" + (Version != null ? (" Ver " + Version) : "");
+            return $"'{DataSource}'" + (InstallerVersion != null ? (" Ver " + InstallerVersion) : "") + (ServiceStartup != LocalServiceStartup.Unknown ? $", {ServiceStartup}" : "");
         }
 
         public List<SqlServerRef> ProbeTransports(int timeoutMilliseconds = 30000)
@@ -63,7 +70,7 @@ namespace Universe.SqlServerJam
             {
                 Kind = SqlServerDiscoverySource.Local,
                 Data = protocol + ":" + this.Data,
-                Version = this.Version,
+                InstallerVersion = this.InstallerVersion,
             }));
 
             Parallel.ForEach(candidates, candidate =>

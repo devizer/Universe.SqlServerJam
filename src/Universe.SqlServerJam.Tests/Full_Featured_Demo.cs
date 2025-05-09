@@ -42,55 +42,27 @@ namespace Universe.SqlServerJam.Tests
         {
             var list = SqlServers.OrderByVersionDesc().ToList();
             Console.WriteLine($"Check services status {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}{Environment.NewLine}");
-
-            IEnumerable<SqlServerRef> ordered = list.OrderByVersionDesc().ToList();
-            List<SqlServerRef> stopped = new List<SqlServerRef>();
-            var localOrdered = ordered.Where(x => SqlServiceExtentions.IsLocalService(x.DataSource)).ToList();
-            if (localOrdered.Any())
+            Stopwatch startAt = Stopwatch.StartNew();
+            Parallel.ForEach(list, sql =>
             {
-                Console.WriteLine("State of corresponding services");
-                foreach (var sqlRef in localOrdered)
-                {
-                    var serviceStatus = SqlServiceExtentions.CheckLocalServiceStatus(sqlRef.DataSource);
-                    if (serviceStatus.State != SqlServiceStatus.ServiceStatus.Running)
-                        stopped.Add(sqlRef);
+                bool isStarted = sql.StartLocalIfStopped();
+                if (isStarted) Console.WriteLine($"{startAt.Elapsed.TotalSeconds,7:n2} Service Started: {sql}");
 
-                    Console.WriteLine(" {0} ({1}): {2}", sqlRef.DataSource, sqlRef.Version, serviceStatus);
-                }
-            }
-
-
-            // LocalDB is always assumed to be stopped.
-            var localDB = ordered.FirstOrDefault(x => SqlServiceExtentions.IsLocalDB(x.DataSource));
-            if (localDB != null)
-                stopped.Add(localDB);
-
-            if (stopped.Any())
-            {
-                Console.WriteLine("");
-                Console.WriteLine("Start stopped sql services");
-                {
-                    foreach (var sqlRef in stopped)
-                    {
-                        Stopwatch sw = Stopwatch.StartNew();
-                        bool ok = SqlServiceExtentions.StartService(sqlRef.DataSource, TimeSpan.FromSeconds(30));
-                        string action = SqlServiceExtentions.IsLocalDB(sqlRef.DataSource) ? "Checking" : "Starting";
-                        Console.WriteLine(" {3} {0}: {1} ({2:0.00} secs)",
-                            sqlRef.DataSource, ok ? "OK" : "Fail", sw.ElapsedMilliseconds / 1000d, action);
-                    }
-                }
-            }
+                var version = sql.WarmUp(TimeSpan.FromSeconds(30));
+                bool isOk = version != null;
+                Console.WriteLine($"{startAt.Elapsed.TotalSeconds,7:n2} {(isOk ? "Completed" : "In-completed")} start and warmup: {sql}");
+            });
         }
 
         [Test]
         public void _7_Exam_Backup_Meta()
         {
             if (CrossInfo.ThePlatform != CrossInfo.Platform.Windows) return;
-            var list = SqlServers.OrderByVersionDesc().ToList();
+            var list = SqlServers.OrderByVersionDesc().Where(x => x.IsNotDisabled).ToList();
             foreach (var sqlRef in list)
             {
                 string cs = sqlRef.ConnectionString;
-                string v = sqlRef.Version == null ? "N/A" : sqlRef.Version.ToString();
+                string v = sqlRef.InstallerVersion == null ? "N/A" : sqlRef.InstallerVersion.ToString();
                 StringBuilder report = new StringBuilder();
                 report.AppendLine();
                 using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(cs))
@@ -109,8 +81,10 @@ namespace Universe.SqlServerJam.Tests
         [Test]
         public void _3_Exam_Servers()
         {
-            var list = SqlServers.OrderByVersionDesc().ToList();
-            Console.WriteLine($"Exam {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
+            var listAll = SqlServers.OrderByVersionDesc().Where(x => x.IsNotDisabled).ToList();
+            Console.WriteLine($"Exam {listAll.Count} sql servers:{Environment.NewLine}{listAll.AsBullets()}");
+            var list = listAll.Where(x => x.IsNotDisabled).ToList();
+
             Console.WriteLine("");
 
             int alive = 0, sysadmin = 0;
@@ -123,7 +97,7 @@ namespace Universe.SqlServerJam.Tests
                 var sqlRef = list[i];
                 // if (Debugger.IsAttached && sqlRef.DataSource.IndexOf("Ubuntu-16.04-LTS", StringComparison.InvariantCultureIgnoreCase) >= 0) Debugger.Break();
                 string cs = sqlRef.ConnectionString;
-                string v = sqlRef.Version == null ? "N/A" : sqlRef.Version.ToString();
+                string v = sqlRef.InstallerVersion == null ? "N/A" : sqlRef.InstallerVersion.ToString();
                 StringBuilder report = new StringBuilder();
                 report.AppendLine($"SERVER {sqlRef}");
 
@@ -134,7 +108,7 @@ namespace Universe.SqlServerJam.Tests
                     if (warmUpError != null) Console.WriteLine($"WARNING! Warm up error {warmUpError.GetLegacyExceptionDigest()}{Environment.NewLine}{warmUpError}");
                     var man = con.Manage();
                     var ver = man.ShortServerVersion;
-                    if (sqlRef.Version == null) sqlRef.Version = ver;
+                    if (sqlRef.InstallerVersion == null) sqlRef.InstallerVersion = ver;
                     alive++;
                     report.AppendLine("Version (4 bytes) ........: " + ver);
                     report.AppendLine("ProductVersion (string) ..: " + man.ProductVersion);
@@ -305,7 +279,7 @@ namespace Universe.SqlServerJam.Tests
         [Test]
         public void _4_Meashure_Ping()
         {
-            var list = SqlServers.OrderByVersionDesc().ToList();
+            var list = SqlServers.OrderByVersionDesc().Where(x => x.IsNotDisabled).ToList();
             Console.WriteLine($"Ping {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
 
             Console.WriteLine("");
@@ -338,7 +312,7 @@ namespace Universe.SqlServerJam.Tests
         [Test]
         public void _5_Meashure_Upload_Speed()
         {
-            var list = SqlServers.OrderByVersionDesc().ToList();
+            var list = SqlServers.OrderByVersionDesc().Where(x => x.IsNotDisabled).ToList();
             Console.WriteLine(list.AsBullets());
             Console.WriteLine($"Upload speed test of {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
 
@@ -380,13 +354,14 @@ namespace Universe.SqlServerJam.Tests
         [Test]
         public void _6_Meashure_Download_Speed()
         {
-            var list = SqlServers.OrderByVersionDesc().ToList();
-            Console.WriteLine($"Download speed test of {list.Count} sql servers:{Environment.NewLine}{list.AsBullets()}");
+            var listAll = SqlServers.OrderByVersionDesc().ToList();
+            Console.WriteLine($"Download speed test of {listAll.Count} sql servers:{Environment.NewLine}{listAll.AsBullets()}");
+            var list = listAll.Where(x => x.IsNotDisabled).ToList();
 
             Console.WriteLine("");
             Console.WriteLine("Download speed Report (KB per second)");
             StringBuilder errors = new StringBuilder();
-            foreach (var sqlRef in list)
+            foreach (var sqlRef in listAll)
             {
                 var blockSize = SqlServiceExtentions.IsLocalDbOrLocalServer(sqlRef.ConnectionString) ? 4096 : 1024;
                 var supportedProtocols = sqlRef.ProbeTransports(timeoutMilliseconds: TRANSPORT_PROBE_DURATION);

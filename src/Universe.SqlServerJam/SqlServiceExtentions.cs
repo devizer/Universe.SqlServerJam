@@ -1,4 +1,5 @@
 ﻿#if !NETSTANDARD1_4 || true
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -19,9 +20,11 @@ namespace Universe.SqlServerJam
             SqlServiceStatus ret = null;
             try
             {
-                ServiceController service = new ServiceController(GetServiceName(dataSource));
-                var status = (SqlServiceStatus.ServiceStatus) (int) service.Status;
-                ret = new SqlServiceStatus(status);
+                using (ServiceController service = new ServiceController(GetServiceName(dataSource)))
+                {
+                    var status = (SqlServiceStatus.ServiceStatus)(int)service.Status;
+                    ret = new SqlServiceStatus(status);
+                }
             }
             catch (Exception e)
             {
@@ -150,42 +153,82 @@ namespace Universe.SqlServerJam
             }
         }
 
-        public static bool StartService(string sqlServer, TimeSpan timeout = default(TimeSpan))
+        public static LocalServiceStartup GetLocalServiceStartup(string dataSource)
         {
-            if (IsLocalDB(sqlServer))
-                return StartLocalDB(sqlServer, timeout);
+            if (!TinyCrossInfo.IsWindows) return LocalServiceStartup.Unknown;
+            if (!IsLocalService(dataSource)) return LocalServiceStartup.Unknown;
 
-            ServiceController service = new ServiceController(GetServiceName(sqlServer));
-            if (service.Status == ServiceControllerStatus.Running)
-                return true;
+            string serviceName = GetServiceName(dataSource);
+            string registryPath = $@"SYSTEM\CurrentControlSet\Services\{serviceName}";
 
-
-            if (timeout.Ticks == 0)
-                timeout = TimeSpan.FromSeconds(30);
-
-            Stopwatch sw = Stopwatch.StartNew();
-            while (true)
+            try
             {
-                try
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(registryPath, false))
                 {
-                    try { service.Start();} catch { }
-                    string cs = String.Format("Data Source={0};Integrated Security=True;Pooling=false;Timeout=2", sqlServer);
-                    using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(cs))
+                    if (key != null)
                     {
-                        con.Manage().Ping(timeout: 2);
-                        return true;
+                        int start = Convert.ToInt32(key.GetValue("Start", -1));
+                        int delayedAutoStart = Convert.ToInt32(key.GetValue("DelayedAutoStart", 0));
+
+                        if (start == 2 && delayedAutoStart == 1)
+                            return LocalServiceStartup.AutomaticDelayed;
+                        else if (start == 2)
+                            return LocalServiceStartup.Automatic;
+                        else if (start == 3)
+                            return LocalServiceStartup.Manual;
+                        else if (start == 4)
+                            return LocalServiceStartup.Disabled;
                     }
                 }
-                catch
-                {
-                }
-
-                Thread.Sleep(100);
-                if (sw.Elapsed > timeout)
-                    return false;
+            }
+            catch
+            {
             }
 
+            return LocalServiceStartup.Unknown;
         }
+
+        // Remove Warn Up
+        public static bool StartService(string dataSource)
+        {
+            if (IsLocalDB(dataSource))
+                return StartLocalDB(dataSource, TimeSpan.FromSeconds(30));
+
+            if (!IsLocalService(dataSource)) return false;
+            var serviceStatus = CheckLocalServiceStatus(dataSource);
+            // ServiceController service = new ServiceController(GetServiceName(dataSource));
+            // if (service.Status == ServiceControllerStatus.Running)
+            if (serviceStatus?.State == SqlServiceStatus.ServiceStatus.Running)
+                return true;
+
+            var startup = GetLocalServiceStartup(dataSource);
+            if (startup == LocalServiceStartup.Disabled) return false;
+
+            try
+            {
+                var serviceName = GetServiceName(dataSource);
+                // Console.WriteLine($"[DEBUG] Starting Service {serviceName}");
+                ServiceController service = new ServiceController(serviceName);
+                // service.Status
+
+                service.Start();
+                return true;
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return false;
+        }
+    }
+
+    public enum LocalServiceStartup
+    {
+        Unknown,
+        AutomaticDelayed = 22,
+        Automatic = 2,
+        Manual = 3,
+        Disabled = 4
     }
 
     public class SqlServiceStatus

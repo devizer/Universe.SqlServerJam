@@ -71,7 +71,10 @@ namespace Universe.SqlServerJam.Tests
 
         static List<SqlServerRef> GetAliveServers()
         {
-            return TestEnvironment.SqlServers.OrderByVersionDesc().ToList();
+            return TestEnvironment.SqlServers
+                .OrderByVersionDesc()
+                .Where(x => x.ServiceStartup != LocalServiceStartup.Disabled)
+                .ToList();
         }
 
     }

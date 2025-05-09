@@ -25,7 +25,7 @@ namespace Universe.SqlServerJam
 
             SqlConnection = sqlConnection;
 
-            _ShortServerVersion = new Lazy<Version>(GetShortServerVersion);
+            _ShortServerVersion = new Lazy<Version>(() => GetShortServerVersion(null));
             _MediumServerVersion = new Lazy<string>(GetMediumServerVersion);
             _LongServerVersion = new Lazy<string>(GetLongServerVersion);
             _HostPlatform = new Lazy<string>(GetHostPlatform);
@@ -213,9 +213,9 @@ namespace Universe.SqlServerJam
         }
 
 
-        Version GetShortServerVersion()
+        public Version GetShortServerVersion(int? timeout)
         {
-            int ver32Bit = SqlConnection.ExecuteScalar<int>("Select @@MICROSOFTVERSION");
+            int ver32Bit = SqlConnection.ExecuteScalar<int>("Select @@MICROSOFTVERSION", null, commandTimeout: 4);
             // int ver32Bit = OneColumnDataReaderWithoutParameters<int>.Instance.ExecuteScalar(SqlConnection, "Select @@MICROSOFTVERSION");
             int v1 = ver32Bit >> 24;
             int v2 = ver32Bit >> 16 & 0xFF;

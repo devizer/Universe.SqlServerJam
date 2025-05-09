@@ -74,7 +74,7 @@ namespace Universe.SqlServerJam
                     try
                     {
                         var localDbInfo = GetLocalDbInstanceInfo(localDbVersion.Exe, instanceName);
-                        sqlServerRef.Version = TryParseVersion(localDbInfo?.Version);
+                        sqlServerRef.InstallerVersion = TryParseVersion(localDbInfo?.Version);
                     }
                     catch (Exception ex)
                     {

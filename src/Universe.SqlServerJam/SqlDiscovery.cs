@@ -78,7 +78,7 @@ namespace Universe.SqlServerJam
                                     {
                                         Kind = SqlServerDiscoverySource.LocalDB,
                                         Data = instance,
-                                        Version = version,
+                                        InstallerVersion = version,
                                     });
                                 }
                                 catch
@@ -124,6 +124,10 @@ namespace Universe.SqlServerJam
                                     TryKey(candidate, ret, subKeyName);
             }
 
+            foreach (var sqlServerRef in ret)
+            {
+                sqlServerRef.ServiceStartup = SqlServiceExtentions.GetLocalServiceStartup(sqlServerRef.DataSource);
+            }
             return ret;
         }
 
@@ -153,7 +157,7 @@ namespace Universe.SqlServerJam
                     {
                         Kind = SqlServerDiscoverySource.Local,
                         Data = name,
-                        Version = ver,
+                        InstallerVersion = ver,
                     });
                 }
                 catch

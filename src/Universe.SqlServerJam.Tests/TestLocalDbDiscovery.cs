@@ -34,7 +34,7 @@ namespace Universe.SqlServerJam.Tests
             var instances = SqlLocalDbDiscovery.GetInstances();
             foreach (var v in instances)
             {
-                Console.WriteLine($"{v.Kind} {v.Version}:  {v.Data}");
+                Console.WriteLine($"{v.Kind} {v.InstallerVersion}:  {v.Data}");
             }
         }
 
