@@ -26,6 +26,7 @@ namespace Universe.SqlServerJam
             return ret;
         }
 
+
         public static string GetDataSource(string connectionString)
         {
             if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));
@@ -34,6 +35,20 @@ namespace Universe.SqlServerJam
             b.ConnectionString = connectionString;
             return b["Data Source"]?.ToString();
         }
+
+        public static string ResetConnectionTimeout(string connectionString, int? timeout)
+        {
+            if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));
+            var b = SqlServerJamConfiguration.SqlProviderFactory.CreateConnectionStringBuilder();
+            b.ConnectionString = connectionString;
+            if (timeout == null)
+                b["Timeout"] = null;
+            else
+                b["Timeout"] = timeout.Value;
+
+            return b.ConnectionString;
+        }
+
 
         public static DbCommand CreateDbCommand(string sqlCommandText, DbConnection con)
         {

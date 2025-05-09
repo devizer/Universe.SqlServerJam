@@ -58,12 +58,13 @@ namespace Universe.SqlServerJam
         public List<SqlServerRef> ProbeTransports(int timeoutMilliseconds = 30000)
         {
             List<SqlServerRef> ret = new List<SqlServerRef>();
-            if (this.Kind != SqlServerDiscoverySource.Local || this.Data.IndexOf(":") >= 0)
+            if (this.Kind != SqlServerDiscoverySource.Local || this.Data.IndexOf(":") >= 0 || this.Data.IndexOf(",") >= 0 || !this.IsNotDisabled)
             {
                 ret.Add(this);
                 return ret;
             }
 
+            // Only Local Services except of LocalDB
             string[] protocols = new[] {"lpc", "tcp", "np"};
             List<SqlServerRef> candidates = new List<SqlServerRef>();
             candidates.AddRange(protocols.Select(protocol => new SqlServerRef()
@@ -71,6 +72,7 @@ namespace Universe.SqlServerJam
                 Kind = SqlServerDiscoverySource.Local,
                 Data = protocol + ":" + this.Data,
                 InstallerVersion = this.InstallerVersion,
+                ServiceStartup = this.ServiceStartup,
             }));
 
             Parallel.ForEach(candidates, candidate =>
@@ -81,7 +83,9 @@ namespace Universe.SqlServerJam
                 {
                     try
                     {
-                        string cs = $"Data Source={candidate.Data};Integrated Security=SSPI; Timeout=3";
+
+                        // string cs = $"Data Source={candidate.Data};Integrated Security=SSPI; Timeout=3";
+                        var cs = SqlServerJamConfigurationExtensions.ResetConnectionTimeout(candidate.ConnectionString, 3);
                         using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(cs))
                             con.Manage().Ping(timeout: 3);
 

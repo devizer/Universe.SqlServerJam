@@ -333,6 +333,7 @@ namespace Universe.SqlServerJam.Tests
                         builder.ConnectionString = supportedProtocol.ConnectionString;
                         // builder.PacketSize = 32768;
                         builder["Packet Size"] = 32768;
+                        builder["Pooling"] = true;
                         var connectionString = builder.ConnectionString;
                         SqlSpeedMeasurement test = new SqlSpeedMeasurement(connectionString);
                         decimal kbPerSec = test.GetUploadSpeed(limitIterations: 100000, blockSizeInKb: blockSize, limitMilliSeconds: TestEnvironment.SqlUploadDuration);
@@ -369,7 +370,13 @@ namespace Universe.SqlServerJam.Tests
                 {
                     try
                     {
-                        SqlSpeedMeasurement test = new SqlSpeedMeasurement(supportedProtocol.ConnectionString);
+                        var builder = SqlServerJamConfiguration.SqlProviderFactory.CreateConnectionStringBuilder();
+                        builder.ConnectionString = supportedProtocol.ConnectionString;
+                        // builder.PacketSize = 32768;
+                        builder["Packet Size"] = 32768;
+                        builder["Pooling"] = true;
+                        var connectionString = builder.ConnectionString;
+                        SqlSpeedMeasurement test = new SqlSpeedMeasurement(connectionString);
                         decimal kbPerSec = test.GetDownloadSpeed(limitIterations: 100000, blockSizeInKb: blockSize, limitMilliSeconds: TestEnvironment.SqlDownloadDuration);
                         var transport = GetTransportInfo(supportedProtocol.ConnectionString);
                         Console.WriteLine($"{(kbPerSec.ToString("f1")).PadLeft(9)} : {sqlRef.DataSource} ({transport})");
