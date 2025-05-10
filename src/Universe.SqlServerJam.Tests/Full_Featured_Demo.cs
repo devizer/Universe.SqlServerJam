@@ -202,10 +202,15 @@ namespace Universe.SqlServerJam.Tests
                         errorServers.Add(sqlRef.DataSource);
                     }
 
-                    Assert.IsNotNull(man.ShortServerVersion, "@@MICROSOFTVERSION");
-                    Assert.GreaterOrEqual(man.ShortServerVersion.Major, 8);
-                    Assert.IsTrue(!string.IsNullOrEmpty(man.LongServerVersion), "@@VERSION");
-                    Assert.IsTrue(man.CurrentSPID != 0, "@@SPID");
+                    Assert.That(man.ShortServerVersion, Is.Not.Null, "ShortServerVersion is null");
+                    // Assert.IsNotNull(man.ShortServerVersion, "@@MICROSOFTVERSION");
+                    Assert.That(man.ShortServerVersion.Major, Is.GreaterThanOrEqualTo(8), "Major ShortServerVersion is below 9");
+                    // Assert.GreaterOrEqual(man.ShortServerVersion.Major, 8);
+                    Assert.That(man.LongServerVersion, Is.Not.Null.And.Not.Empty, "LongServerVersion is null or empty");
+                    // Assert.IsTrue(!string.IsNullOrEmpty(man.LongServerVersion), "@@VERSION");
+
+                    Assert.That(man.CurrentSPID, Is.Not.Zero, "@@SPID is incorrect");
+                    // Assert.IsTrue(man.CurrentSPID != 0, "@@SPID");
                     // TODO: Add more asserts
                 }
 

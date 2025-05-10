@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+// using NUnit.Framework.Legacy;
 using Universe.NUnitTests;
 
 namespace Universe.SqlServerJam.Tests
@@ -42,7 +43,8 @@ namespace Universe.SqlServerJam.Tests
                 var sorted = rows.OrderBy(x => x.VersionRaw, VersionStringComparer.Instance);
                 var actual = DumpSorted(sorted);
                 expected = expected ?? actual;
-                Assert.AreEqual(expected, actual);
+                // Assert.AreEqual(expected, actual);
+                Assert.That(actual, Is.EqualTo(expected));
                 if (index >= MaxTestPermutations) break;
                 index++;
             }
@@ -61,7 +63,8 @@ namespace Universe.SqlServerJam.Tests
                 var rows = permutation.Select(x => originalRows[x]);
                 Row[] actual = rows.OrderBy(x => x.VersionSortable).ToArray();
                 expected = expected ?? actual;
-                CollectionAssert.AreEqual(expected.Select(x => x.VersionRaw), actual.Select(x => x.VersionRaw));
+                // CollectionAssert.AreEqual(expected.Select(x => x.VersionRaw), actual.Select(x => x.VersionRaw));
+                Assert.That(actual.Select(x => x.VersionRaw), Is.EqualTo(expected.Select(x => x.VersionRaw)));
                 if (index >= MaxTestPermutations) break;
                 index++;
             }

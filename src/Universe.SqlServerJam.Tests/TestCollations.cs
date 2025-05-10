@@ -18,7 +18,8 @@ namespace Universe.SqlServerJam.Tests
             SqlConnection con = new SqlConnection(testCase.ConnectionString);
             var allCollations = con.Manage().FindCollations();
             Console.WriteLine($"Found Collations Count = {allCollations.Count}");
-            Assert.GreaterOrEqual(allCollations.Count, 42);
+            // Assert.GreaterOrEqual(allCollations.Count, 42);
+            Assert.That(allCollations.Count, Is.GreaterThanOrEqualTo(42));
         }
 
         [Test]
@@ -30,7 +31,8 @@ namespace Universe.SqlServerJam.Tests
             Console.WriteLine($"Found Collations Count = {allCollations.Count}");
             Console.WriteLine(string.Join(Environment.NewLine, allCollations.ToArray()));
 
-            Assert.GreaterOrEqual(allCollations.Count, 1);
+            // Assert.GreaterOrEqual(allCollations.Count, 1);
+            Assert.That(allCollations.Count, Is.GreaterThanOrEqualTo(1));
         }
 
         [Test]
@@ -44,9 +46,11 @@ namespace Universe.SqlServerJam.Tests
 
             var major = con.Manage().ShortServerVersion.Major;
             if (major >= 15)
-                Assert.GreaterOrEqual(allCollations.Count, 1);
-            else 
-                Assert.AreEqual(0, allCollations.Count);
+                // Assert.GreaterOrEqual(allCollations.Count, 1);
+                Assert.That(allCollations.Count, Is.GreaterThanOrEqualTo(1));
+            else
+                // Assert.AreEqual(0, allCollations.Count);
+                Assert.That(allCollations.Count, Is.Zero);
         }
 
         // 
@@ -65,7 +69,9 @@ namespace Universe.SqlServerJam.Tests
                 var allCollations = con.Manage().FindCollations(arg);
                 Console.WriteLine($"Found Collations Count = {allCollations.Count}");
                 Console.WriteLine(string.Join(Environment.NewLine, allCollations.ToArray()));
-                Assert.AreEqual(1, allCollations.Count);
+                // Assert.AreEqual(1, allCollations.Count);
+                Assert.That(allCollations.Count, Is.EqualTo(1));
+
             }
         }
 
