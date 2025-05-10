@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Universe.NUnitTests;
@@ -92,6 +93,7 @@ namespace Universe.SqlServerJam.Tests
             StringBuilder timingReport = new StringBuilder();
             ConcurrentBag<string> errorServers = new ConcurrentBag<string>();
             ParallelOptions opts = new ParallelOptions() {MaxDegreeOfParallelism = Math.Max(list.Count,2)};
+            int completeCount = 0;
             Parallel.For(0, list.Count, opts, (i) =>
             {
                 var sqlRef = list[i];
@@ -99,7 +101,7 @@ namespace Universe.SqlServerJam.Tests
                 string cs = sqlRef.ConnectionString;
                 string v = sqlRef.InstallerVersion == null ? "N/A" : sqlRef.InstallerVersion.ToString();
                 StringBuilder report = new StringBuilder();
-                report.AppendLine($"SERVER {sqlRef}");
+                report.AppendLine($"«{{SERVER_INDEX}} of {list.Count}» SERVER {sqlRef}");
 
                 using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(cs))
                 {
@@ -108,8 +110,9 @@ namespace Universe.SqlServerJam.Tests
                     if (warmUpError != null) Console.WriteLine($"WARNING! Warm up error {warmUpError.GetLegacyExceptionDigest()}{Environment.NewLine}{warmUpError}");
                     var man = con.Manage();
                     var ver = man.ShortServerVersion;
-                    if (sqlRef.InstallerVersion == null) sqlRef.InstallerVersion = ver;
-                    alive++;
+                    if (sqlRef.Version == null) sqlRef.Version = ver;
+                    // alive++;
+                    Interlocked.Increment(ref alive);
                     report.AppendLine("Version (4 bytes) ........: " + ver);
                     report.AppendLine("ProductVersion (string) ..: " + man.ProductVersion);
                     report.AppendLine("Product Level ............: " + man.ProductLevel);
@@ -221,7 +224,10 @@ namespace Universe.SqlServerJam.Tests
                         .AppendFormat($" {sqlRef} examined in {(startAt.ElapsedMilliseconds / 1000m):0.00} secs")
                         .AppendLine();
 
-                Console.WriteLine(report);
+
+                var completeIndex = Interlocked.Increment(ref completeCount);
+                var reportString = report.ToString().Replace("{SERVER_INDEX}", completeIndex.ToString("0"));
+                Console.WriteLine(reportString);
 
             });
 
