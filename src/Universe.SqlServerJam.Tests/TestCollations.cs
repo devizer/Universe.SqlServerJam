@@ -4,11 +4,12 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using Universe.NUnitTests;
 
 namespace Universe.SqlServerJam.Tests
 {
     [TestFixture]
-    public class TestCollations
+    public class TestCollations : NUnitTestsBase
     {
         [Test]
         [TestCaseSource(nameof(GetAliveServers))]

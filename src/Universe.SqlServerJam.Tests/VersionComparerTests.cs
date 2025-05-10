@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using Universe.NUnitTests;
 
 namespace Universe.SqlServerJam.Tests
 {
-    public class VersionComparerTests
+    public class VersionComparerTests : NUnitTestsBase
     {
         private static readonly int MaxTestPermutations = 100000;
         string[] Versions => "PG$11.22, PG$11.1, PG$10.1, PG$9.6, PG$9.3, PG$10.3, PG$11.1:7, PG$11.2, PG$11.2:9, PG$11, PG$11.14".Split(',').Select(x => x.Trim()).Where(x => x.Length > 0).ToArray();
