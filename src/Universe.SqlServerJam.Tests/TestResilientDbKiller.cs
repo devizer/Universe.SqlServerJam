@@ -15,7 +15,15 @@ namespace Universe.SqlServerJam.Tests
         [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetAliveServers))]
         public void KillNewDB(SqlServerRef testCase)
         {
-            string newDbName = $"To_Test_TestResilientDbKiller_{Guid.NewGuid().ToString()}";
+            var man0 = new SqlConnection(testCase.ConnectionString).Manage();
+            var shortVersion = man0.ShortServerVersion;
+            if (man0.IsLocalDB && shortVersion.Major == 14 && shortVersion.Minor == 0 && shortVersion.Build <= 1000)
+            {
+                Console.WriteLine($"SKIP {man0.MediumServerVersion} because of Create Database Bug");
+                return;
+            }
+
+            string newDbName = $"Test of TestResilientDbKiller {Guid.NewGuid().ToString()}";
             foreach (bool? pooling in new List<bool?>() { null, true, false })
             {
                 Console.WriteLine($"TEST WITH POOLING = [{pooling}]");
