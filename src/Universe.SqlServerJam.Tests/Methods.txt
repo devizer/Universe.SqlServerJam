@@ -1,0 +1,259 @@
+#1.1 {Show} @ ShowAPI starting...
+Type: EnvironmentExtensions
+--------------------------------------------------------------------------------
+  Property: String MachineName
+
+Type: AgileDbKiller
+--------------------------------------------------------------------------------
+  Constructor: void AgileDbKiller()
+  Method: Void Kill(String sqlConnectionString, Boolean throwOnError, Int32 retryCount)
+
+
+Type: DatabaseOptionsManagement
+--------------------------------------------------------------------------------
+  Constructor: void DatabaseOptionsManagement(SqlServerManagement serverManagement, String databaseName)
+  Method: Void SetState(TargetDatabaseState newState)
+  Method: Void Shrink(ShrinkOptions options, Nullable<Int32> commandTimeout)
+  Method: String GetDigest(Int32 intent)
+  Method: Void WriteDigest(StringBuilder ret, Int32 intent)
+
+  Property: Boolean IsBrokerEnabled
+  Property: Boolean IsReadOnly
+  Property: Boolean IsAutoShrink
+  Property: String StateDescription
+  Property: Boolean IsOnline
+  Property: Boolean IsIncrementalAutoStatisticCreationSupported
+  Property: AutoCreateStatisticMode AutoCreateStatistic
+  Property: AutoUpdateStatisticMode AutoUpdateStatistic
+  Property: String DefaultCollationName
+  Property: DatabaseComparisonStyle ComparisonStyle
+  Property: Boolean IsClone
+  Property: String AzureServiceObjective
+  Property: String AzureEdition
+  Property: String AzureElasticPool
+  Property: Nullable<Int64> Size
+  Property: DatabaseRecoveryMode RecoveryMode
+  Property: Boolean AreTriggersRecursive
+  Property: Boolean IsFullTextEnabled
+  Property: String OwnerName
+  Property: Boolean HasMemoryOptimizedTableFileGroup
+
+
+Type: ExperimentalDbExtentions
+--------------------------------------------------------------------------------
+  Method: RdbmsInfo GetRdbmsFamily(IDbConnection connection)
+
+
+Type: RamDriveInfo
+--------------------------------------------------------------------------------
+  Method: DriveInfo[] FindRamDrives(Int64 minAvailMegabytes)
+
+Type: RdbmsFamily
+--------------------------------------------------------------------------------
+  Field: Int32 value__
+  Field: RdbmsFamily Unknown
+  Field: RdbmsFamily MSSQLServer
+  Field: RdbmsFamily SQLite
+  Field: RdbmsFamily MySQL
+  Field: RdbmsFamily Postgre
+  Field: RdbmsFamily Oracle
+
+Type: RdbmsInfo
+--------------------------------------------------------------------------------
+  Constructor: void RdbmsInfo()
+  Method: String ToString()
+  Property: RdbmsFamily Family
+  Property: String Version
+
+
+Type: ServerConfigurationSettingsManager
+--------------------------------------------------------------------------------
+  Constructor: void ServerConfigurationSettingsManager(SqlServerManagement serverManagement)
+  Method: ServerConfigurationSettingsManager.Option<T> ReadAdvancedOption<T>(String name)
+  Method: Void SetAdvancedOption<T>(String name, T value)
+  Method: ServerConfigurationSettingsManager.Option<T> ReadOption<T>(String name)
+  Method: Void SetOption<T>(String name, T value)
+  Property: Boolean ClrEnabled
+  Property: Boolean ServerTriggerRecursion
+  Property: Boolean ShowAdvancedOption
+  Property: FileStreamAccessLevels FileStreamAccessLevel
+  Property: Boolean BackupCompressionDefault
+  Property: Boolean XpCmdShell
+  Property: Int32 MaxServerMemory
+  Property: Int32 MinServerMemory
+
+
+
+Type: SqlConnectionExtensions
+--------------------------------------------------------------------------------
+  Method: SqlServerManagement Manage(IDbConnection connection)
+
+
+Type: SqlDiscovery
+--------------------------------------------------------------------------------
+  Method: List<SqlServerRef> GetLocalDbAndServerList()
+  Method: List<SqlServerRef> GetWellKnownServers(String envPrefix)
+  Method: List<SqlServerRef> GetLatestLocalDb()
+  Method: List<SqlServerRef> GetServerList()
+
+Type: SqlLocalDbDiscovery
+--------------------------------------------------------------------------------
+  Method: List<SqlServerRef> GetInstances()
+  Method: List<SqlLocalDbDiscovery.LocalDbVersion> GetVersionList()
+
+Type: SqlLocalDbDiscovery.LocalDBInstance
+--------------------------------------------------------------------------------
+  Constructor: void LocalDBInstance()
+  Property: String Name
+  Property: String Version
+  Property: String SharedName
+  Property: String Owner
+  Property: String PipeName
+
+Type: SqlLocalDbDiscovery.LocalDbVersion
+--------------------------------------------------------------------------------
+  Constructor: void LocalDbVersion()
+  Property: String ShortVersion
+  Property: String InstallerVersion
+  Property: String ParentInstance
+  Property: String Exe
+
+Type: SqlServerDiscoverySource
+--------------------------------------------------------------------------------
+  Field: Int32 value__
+  Field: SqlServerDiscoverySource Local
+  Field: SqlServerDiscoverySource LocalDB
+  Field: SqlServerDiscoverySource WellKnown
+
+Type: SqlServerJamConfiguration
+--------------------------------------------------------------------------------
+  Constructor: void SqlServerJamConfiguration()
+  Property: DbProviderFactory SqlProviderFactory
+
+Type: SqlServerJamConfigurationExtensions
+--------------------------------------------------------------------------------
+  Method: DbConnection CreateConnection(DbProviderFactory factory, String connectionString)
+  Method: DbConnection CreateConnection(String connectionString)
+  Method: String GetDataSource(String connectionString)
+  Method: String ResetConnectionTimeout(String connectionString, Nullable<Int32> timeout)
+  Method: DbCommand CreateDbCommand(String sqlCommandText, DbConnection con)
+
+Type: SqlServerManagement
+--------------------------------------------------------------------------------
+  Constructor: void SqlServerManagement(IDbConnection sqlConnection)
+  Method: T GetServerProperty<T>(String propertyName)
+  Method: Boolean IsDbExists(String dbName)
+  Method: Version GetShortServerVersion(Nullable<Int32> timeout)
+  Method: Double Ping(Int32 timeout)
+  Method: SqlBackupDescription GetBackupDescription(String bakFullPath)
+  Method: HashSet<String> FindCollations(IEnumerable<String> namesOrPatters)
+  Method: HashSet<String> FindCollations(String[] namesOrPatters)
+  Property: IDbConnection SqlConnection
+  Property: SqlServerManagement.DatabaseSelector Databases
+  Property: String ServerEdition
+  Property: EngineEdition EngineEdition
+  Property: SecurityMode SecurityMode
+  Property: String HostPlatform
+  Property: Boolean IsWindows
+  Property: Boolean IsLinux
+  Property: Version ShortServerVersion
+  Property: String MediumServerVersion
+  Property: String LongServerVersion
+  Property: Boolean IsLocalDB
+  Property: FixedServerRoles FixedServerRoles
+  Property: Boolean IsFullTextSearchInstalled
+  Property: Boolean IsConnectionEncrypted
+  Property: String NetTransport
+  Property: Boolean IsCompressedBackupSupported
+  Property: Boolean IsFileStreamSupported
+  Property: Boolean IsMemoryOptimizedTableSupported
+  Property: Dictionary<String, Int32> DatabaseSizes
+  Property: Boolean IsAzure
+  Property: String ProductVersion
+  Property: String ServerCollation
+  Property: Int32 CurrentSPID
+  Property: String CurrentDatabaseName
+  Property: DatabaseOptionsManagement CurrentDatabase
+  Property: String ProductUpdateLevel
+  Property: String ProductLevel
+  Property: SqlDefaultPaths DefaultPaths
+  Property: ServerConfigurationSettingsManager ServerConfigurationSettings
+
+Type: SqlServerRef
+--------------------------------------------------------------------------------
+  Constructor: void SqlServerRef()
+  Method: String ToString()
+  Method: List<SqlServerRef> ProbeTransports(Int32 timeoutMilliseconds)
+  Property: SqlServerDiscoverySource Kind
+  Property: Version InstallerVersion
+  Property: Version Version
+  Property: Boolean IsAlive
+  Property: String Data
+  Property: LocalServiceStartup ServiceStartup
+  Property: Boolean IsNotDisabled
+  Property: String ConnectionString
+  Property: String DataSource
+
+Type: SqlServerReferenceExtensions
+--------------------------------------------------------------------------------
+  Method: String AsBullets(IEnumerable<SqlServerRef> list)
+  Method: IEnumerable<SqlServerRef> OrderByVersionDesc(IEnumerable<SqlServerRef> list)
+  Method: Version WarmUp(SqlServerRef sqlServerRef, TimeSpan timeout)
+  Method: Boolean StartLocalIfStopped(SqlServerRef sqlServerRef)
+
+Type: SqlServiceExtentions
+--------------------------------------------------------------------------------
+  Method: SqlServiceStatus CheckLocalServiceStatus(String dataSource)
+  Method: Boolean IsLocalService(String dataSource)
+  Method: Boolean IsLocalDB(String sqlServerInstance)
+  Method: Boolean IsLocalDbOrLocalServer(String connectionString)
+  Method: String GetServiceName(String sqlServer)
+  Method: Boolean StartLocalDB(String localDb, TimeSpan timeout)
+  Method: LocalServiceStartup GetLocalServiceStartup(String dataSource)
+  Method: Boolean StartService(String dataSource)
+
+
+Type: SqlServiceStatus.ServiceStatus RENAME TO SERVICESTATE
+--------------------------------------------------------------------------------
+  Field: Int32 value__
+  Field: SqlServiceStatus.ServiceStatus Unknown
+  Field: SqlServiceStatus.ServiceStatus Stopped
+  Field: SqlServiceStatus.ServiceStatus Start_Pending
+  Field: SqlServiceStatus.ServiceStatus Stop_Pending
+  Field: SqlServiceStatus.ServiceStatus Running
+  Field: SqlServiceStatus.ServiceStatus Continue_Pending
+  Field: SqlServiceStatus.ServiceStatus Pause_Pending
+  Field: SqlServiceStatus.ServiceStatus Paused
+
+Type: SqlSpeedMeasurement
+--------------------------------------------------------------------------------
+  Constructor: void SqlSpeedMeasurement(String connectionString)
+  Method: Decimal GetPing(Int32 limitCount, Int32 milliSecondsLimit)
+  Method: Decimal GetUploadSpeed(Int32 limitIterations, Int32 blockSizeInKb, Int32 limitMilliSeconds)
+  Method: Decimal GetDownloadSpeed(Int32 limitIterations, Int32 blockSizeInKb, Int32 limitMilliSeconds)
+
+Type: TargetDatabaseState
+--------------------------------------------------------------------------------
+  Field: Int32 value__
+  Field: TargetDatabaseState Online
+  Field: TargetDatabaseState Offline
+  Field: TargetDatabaseState Emergency
+
+Type: VersionString
+--------------------------------------------------------------------------------
+  Constructor: void VersionString(String value)
+  Constructor: void VersionString(String value, IComparer<String> comparer)
+  Method: Int32 CompareTo(VersionString other)
+  Field: String Value
+  Field: IComparer<String> StringComparer
+
+Type: VersionStringComparer
+--------------------------------------------------------------------------------
+  Constructor: void VersionStringComparer()
+  Constructor: void VersionStringComparer(IComparer<String> stringComparer)
+  Method: Int32 CompareVersionStrings(IComparer<String> stringComparer, VersionString x, VersionString y)
+  Field: VersionStringComparer Instance
+
+
+#1.1 {Show} >PASSED< in 00:00:00.0287250 (cpu: 54%, 15.625 = 0.000 [user] + 15.625 [kernel] milliseconds)
+

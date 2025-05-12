@@ -60,7 +60,7 @@ namespace Universe.SqlServerJam
             {
                 SqlServiceStatus serviceStatus = SqlServiceExtentions.CheckLocalServiceStatus(sqlServerRef.DataSource);
                 // Console.WriteLine($"[DEBUG] «{sqlServerRef}» Current Service status is '{serviceStatus?.State}'");
-                if (serviceStatus?.State != SqlServiceStatus.ServiceStatus.Running)
+                if (serviceStatus?.State != SqlServiceStatus.ServiceState.Running)
                 {
                     bool isStarted = SqlServiceExtentions.StartService(sqlServerRef.DataSource);
                     // Console.WriteLine($"[DEBUG] «{sqlServerRef}» Is Started: {isStarted}");

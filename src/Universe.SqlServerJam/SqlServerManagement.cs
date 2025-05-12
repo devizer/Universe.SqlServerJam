@@ -49,7 +49,7 @@ namespace Universe.SqlServerJam
             return ret;
         }
 
-        public string ServerEdition => GetServerProperty<string>("Edition");
+        public string EngineEditionName => GetServerProperty<string>("Edition");
 
         public EngineEdition EngineEdition => (EngineEdition) GetServerProperty<int>("EngineEdition");
 
@@ -183,10 +183,10 @@ namespace Universe.SqlServerJam
         {
             get
             {
-                if ("SQL Azure".Equals(ServerEdition, StringComparisonExtensions.IgnoreCase))
+                if ("SQL Azure".Equals(EngineEditionName, StringComparisonExtensions.IgnoreCase))
                     return true;
 
-                if (ServerEdition?.ToUpper() == "AZURE") return true;
+                if (EngineEditionName?.ToUpper() == "AZURE") return true;
 
                 var so = GetDatabaseProperty<string>("ServiceObjective");
                 return !string.IsNullOrEmpty(so);
@@ -234,7 +234,7 @@ namespace Universe.SqlServerJam
                 this.ProductUpdateLevel,
                 this.IsLocalDB ? "LocalDB" : "",
                 this.IsAzure ? "Azure" : "",
-                this.ServerEdition,
+                this.EngineEditionName,
             };
 
 

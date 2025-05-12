@@ -9,7 +9,7 @@ using Dapper;
 
 namespace Universe.SqlServerJam
 {
-    public class AgileDbKiller
+    public class ResilientDbKiller
     {
         public static void Kill(string sqlConnectionString, bool throwOnError = false, int retryCount = 1)
         {
@@ -28,7 +28,8 @@ namespace Universe.SqlServerJam
             }
 
             master.Remove("Initial Catalog");
-            master["Pooling"] = true.ToString();
+            // master["Pooling"] = true.ToString();
+            master["Pooling"] = true;
 
             string connectionString = master.ConnectionString;
             using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(connectionString))
@@ -48,8 +49,10 @@ namespace Universe.SqlServerJam
                                 $"IF SERVERPROPERTY('EngineEdition') <> 5" +
                                 $"   EXEC(N'ALTER DATABASE [{dbName}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;')";
 
-                            con.Execute(sql);
+                            // Single User Mode is needless
+                            // con.Execute(sql);
                             con.Execute($"Drop Database [{dbName}]");
+                            return;
                         }
                         catch
                         {

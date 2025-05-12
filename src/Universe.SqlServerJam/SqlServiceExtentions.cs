@@ -22,7 +22,7 @@ namespace Universe.SqlServerJam
             {
                 using (ServiceController service = new ServiceController(GetServiceName(dataSource)))
                 {
-                    var status = (SqlServiceStatus.ServiceStatus)(int)service.Status;
+                    var status = (SqlServiceStatus.ServiceState)(int)service.Status;
                     ret = new SqlServiceStatus(status);
                 }
             }
@@ -198,7 +198,7 @@ namespace Universe.SqlServerJam
             var serviceStatus = CheckLocalServiceStatus(dataSource);
             // ServiceController service = new ServiceController(GetServiceName(dataSource));
             // if (service.Status == ServiceControllerStatus.Running)
-            if (serviceStatus?.State == SqlServiceStatus.ServiceStatus.Running)
+            if (serviceStatus?.State == SqlServiceStatus.ServiceState.Running)
                 return true;
 
             var startup = GetLocalServiceStartup(dataSource);
@@ -233,13 +233,13 @@ namespace Universe.SqlServerJam
 
     public class SqlServiceStatus
     {
-        public ServiceStatus State { get; set; }
+        public ServiceState State { get; set; }
         public Exception StatusError { get; set; }
         public string AsString { get; set; }
 
         public SqlServiceStatus()
         {
-            State = ServiceStatus.Unknown;
+            State = ServiceState.Unknown;
             StatusError = null;
             AsString = State.ToString();
         }
@@ -247,11 +247,11 @@ namespace Universe.SqlServerJam
         public SqlServiceStatus(Exception ex)
         {
             StatusError = ex;
-            State = ServiceStatus.Unknown;
+            State = ServiceState.Unknown;
             AsString = ex.GetLegacyExceptionDigest();
         }
 
-        public SqlServiceStatus(ServiceStatus state)
+        public SqlServiceStatus(ServiceState state)
         {
             State = state;
             AsString = State.ToString().Replace("_", " ");
@@ -262,7 +262,7 @@ namespace Universe.SqlServerJam
             return AsString;
         }
 
-        public enum ServiceStatus
+        public enum ServiceState
         {
             Unknown = 0,
             Stopped = 1,

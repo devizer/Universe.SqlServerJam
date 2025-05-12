@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Security;
 using System.Threading;
 #if NET40
@@ -15,12 +16,24 @@ namespace Universe.SqlServerJam.Tests
         private static Lazy<List<SqlServerRef>> _SqlServers = new Lazy<List<SqlServerRef>>(() =>
         {
             SqlLocalDbDiscovery.EnableDebugLog = true;
-            return SqlDiscovery.GetLocalDbAndServerList();
+            var sqlServers = SqlDiscovery.GetLocalDbAndServerList();
+            // For ReadME. Tests has explicit Start Test Step
+            // sqlServers.ForEach(sqlServer => sqlServer.StartLocalIfStopped());
+            return sqlServers;
         });
         // The root feature is SQL Discovery.
         // We will cache sql server list.
         // During Exam test we will populate sql server version
         public static List<SqlServerRef> SqlServers => _SqlServers.Value;
+
+        public static List<SqlServerRef> GetAliveServers()
+        {
+            return TestEnvironment.SqlServers
+                .OrderByVersionDesc()
+                .Where(x => x.ServiceStartup != LocalServiceStartup.Disabled)
+                .ToList();
+        }
+
 
 
         public static int SqlPingDuration => GetVar("Ping");

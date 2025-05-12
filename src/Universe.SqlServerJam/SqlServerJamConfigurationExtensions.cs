@@ -49,6 +49,33 @@ namespace Universe.SqlServerJam
             return b.ConnectionString;
         }
 
+        public static string ResetConnectionPooling(string connectionString, bool? pooling)
+        {
+            if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));
+            var b = SqlServerJamConfiguration.SqlProviderFactory.CreateConnectionStringBuilder();
+            b.ConnectionString = connectionString;
+            if (pooling == null)
+                b["Pooling"] = null;
+            else
+                b["Pooling"] = pooling.Value;
+
+            return b.ConnectionString;
+        }
+
+
+        public static string ResetConnectionDatabase(string connectionString, string dataSource)
+        {
+            if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));
+            var b = SqlServerJamConfiguration.SqlProviderFactory.CreateConnectionStringBuilder();
+            b.ConnectionString = connectionString;
+            if (dataSource == null)
+                b["Initial Catalog"] = null;
+            else
+                b["Initial Catalog"] = dataSource;
+
+            return b.ConnectionString;
+        }
+
 
         public static DbCommand CreateDbCommand(string sqlCommandText, DbConnection con)
         {

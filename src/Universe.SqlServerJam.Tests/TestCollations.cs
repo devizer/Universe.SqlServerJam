@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -12,7 +11,7 @@ namespace Universe.SqlServerJam.Tests
     public class TestCollations : NUnitTestsBase
     {
         [Test]
-        [TestCaseSource(nameof(GetAliveServers))]
+        [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetAliveServers))]
         public void Has_Tons_of_Collations(SqlServerRef testCase)
         {
             SqlConnection con = new SqlConnection(testCase.ConnectionString);
@@ -23,7 +22,7 @@ namespace Universe.SqlServerJam.Tests
         }
 
         [Test]
-        [TestCaseSource(nameof(GetAliveServers))]
+        [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetAliveServers))]
         public void Has_Latin1_Collations(SqlServerRef testCase)
         {
             SqlConnection con = new SqlConnection(testCase.ConnectionString);
@@ -36,26 +35,27 @@ namespace Universe.SqlServerJam.Tests
         }
 
         [Test]
-        [TestCaseSource(nameof(GetAliveServers))]
+        [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetAliveServers))]
         public void May_Have_Latin1_UTF8_Collations(SqlServerRef testCase)
         {
             SqlConnection con = new SqlConnection(testCase.ConnectionString);
-            var allCollations = con.Manage().FindCollations("%Latin1%UTF%");
-            Console.WriteLine($"Found Collations Count = {allCollations.Count}");
-            Console.WriteLine(string.Join(Environment.NewLine, allCollations.ToArray()));
+            var foundUtfCollations = con.Manage().FindCollations("%Latin1%UTF%");
+            Console.WriteLine($"Found Collations Count = {foundUtfCollations.Count}");
+            Console.WriteLine(string.Join(Environment.NewLine, foundUtfCollations.ToArray()));
 
             var major = con.Manage().ShortServerVersion.Major;
+            // SQL Server 2019 and above?
             if (major >= 15)
-                // Assert.GreaterOrEqual(allCollations.Count, 1);
-                Assert.That(allCollations.Count, Is.GreaterThanOrEqualTo(1));
+                // SQL Server 2019 and 2022 does have UTF8 collation
+                Assert.That(foundUtfCollations.Count, Is.GreaterThanOrEqualTo(1));
             else
-                // Assert.AreEqual(0, allCollations.Count);
-                Assert.That(allCollations.Count, Is.Zero);
+                // Does not have UTF8 collation
+                Assert.That(foundUtfCollations.Count, Is.Zero);
         }
 
         // 
         [Test]
-        [TestCaseSource(nameof(GetAliveServers))]
+        [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetAliveServers))]
         public void Hash_Latin1_General_CI_AS_Collations(SqlServerRef testCase)
         {
             SqlConnection con = new SqlConnection(testCase.ConnectionString);
@@ -71,18 +71,10 @@ namespace Universe.SqlServerJam.Tests
                 Console.WriteLine(string.Join(Environment.NewLine, allCollations.ToArray()));
                 // Assert.AreEqual(1, allCollations.Count);
                 Assert.That(allCollations.Count, Is.EqualTo(1));
-
             }
         }
 
 
-        static List<SqlServerRef> GetAliveServers()
-        {
-            return TestEnvironment.SqlServers
-                .OrderByVersionDesc()
-                .Where(x => x.ServiceStartup != LocalServiceStartup.Disabled)
-                .ToList();
-        }
 
     }
 }
