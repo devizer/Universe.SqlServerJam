@@ -26,7 +26,7 @@ namespace Universe.SqlServerJam.Tests
         // During Exam test we will populate sql server version
         public static List<SqlServerRef> SqlServers => _SqlServers.Value;
 
-        public static List<SqlServerRef> GetAliveServers()
+        public static List<SqlServerRef> GetEnabledServers()
         {
             return TestEnvironment.SqlServers
                 .OrderByVersionDesc()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using Dapper;
@@ -12,10 +13,11 @@ namespace Universe.SqlServerJam.Tests
     public class TestResilientDbKiller : NUnitTestsBase
     {
         [Test]
-        [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetAliveServers))]
+        [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetEnabledServers))]
         public void KillNewDB(SqlServerRef testCase)
         {
             if (!testCase.CanSimplyCreateDatabase()) return;
+
 
             string newDbName = $"Test of TestResilientDbKiller {Guid.NewGuid().ToString()}";
             foreach (bool? pooling in new List<bool?>() { null, true, false })

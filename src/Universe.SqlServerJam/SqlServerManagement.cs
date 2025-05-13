@@ -149,7 +149,9 @@ namespace Universe.SqlServerJam
             public string DATABASE_NAME { get; set; }
             public int DATABASE_SIZE { get; set; }
         }
-        
+
+
+        [Obsolete("Deprecated. Too Slow")]
         public Dictionary<string, int> DatabaseSizes
         {
             get
@@ -412,6 +414,6 @@ Else
             return SqlConnection.ExecuteScalar<string>(SqlGetHostPlatform);
         }
 
-        public ServerConfigurationSettingsManager ServerConfigurationSettings => new ServerConfigurationSettingsManager(this);
+        public ServerConfigurationSettingsManager Configuration => new ServerConfigurationSettingsManager(this);
     }
 }

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Universe.SqlServerJam
 {
@@ -20,6 +23,18 @@ namespace Universe.SqlServerJam
                 .OrderByDescending(x => x.InstallerVersion == null ? new Version(0, 0, 0) : x.InstallerVersion)
                 .ThenByDescending(x => x.Kind == SqlServerDiscoverySource.LocalDB ? 0 : 1)
                 .ThenByDescending(x => x.Data);
+        }
+
+        public static IEnumerable<SqlServerRef> ParallelWarmUp(this IEnumerable<SqlServerRef> sqlServerRefList, TimeSpan timeout = default(TimeSpan))
+        {
+            ConcurrentBag<SqlServerRef> ret = new ConcurrentBag<SqlServerRef>();
+            Parallel.ForEach(sqlServerRefList.ToList(), sqlServerRef =>
+            {
+                var version = sqlServerRef.WarmUp(timeout);
+                // Console.WriteLine($"[DEBUG] {Interlocked.Increment(ref count)} ParallelWarmUp: processed [{sqlServerRef}]");
+                ret.Add(sqlServerRef);
+            });
+            return ret.ToArray();
         }
 
         public static Version WarmUp(this SqlServerRef sqlServerRef, TimeSpan timeout = default(TimeSpan))
@@ -51,6 +66,15 @@ namespace Universe.SqlServerJam
             } while(startAt.Elapsed < timeout);
 
             return null;
+        }
+
+        public static IEnumerable<SqlServerRef> StartLocalIfStopped(this IEnumerable<SqlServerRef> sqlServerRefList)
+        {
+            foreach (var sqlServerRef in sqlServerRefList.ToArray())
+            {
+                sqlServerRef.StartLocalIfStopped();
+                yield return sqlServerRef;
+            }
         }
 
         // Return true if action taken

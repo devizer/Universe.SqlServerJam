@@ -122,10 +122,10 @@ namespace Universe.SqlServerJam.Tests
                     report.AppendLine("Medium Version ...........: " + man.MediumServerVersion);
                     report.AppendLine("Long Version .............: " + man.LongServerVersion);
 
-                    // report.AppendLine("Min Server Memory ........: " + man.ServerConfigurationSettings.MinServerMemory);
-                    // report.AppendLine("Max Server Memory ........: " + man.ServerConfigurationSettings.MaxServerMemory);
-                    // report.AppendLine("XpCmdShell ...............: " + man.ServerConfigurationSettings.XpCmdShell);
-                    // report.AppendLine("BackupCompressionDefault .: " + man.ServerConfigurationSettings.BackupCompressionDefault);
+                    // report.AppendLine("Min Server Memory ........: " + man.Configuration.MinServerMemory);
+                    // report.AppendLine("Max Server Memory ........: " + man.Configuration.MaxServerMemory);
+                    // report.AppendLine("XpCmdShell ...............: " + man.Configuration.XpCmdShell);
+                    // report.AppendLine("BackupCompressionDefault .: " + man.Configuration.BackupCompressionDefault);
 
                     report.AppendLine("Host Platform ............: " + man.HostPlatform);
                     report.AppendLine("Security Mode ............: " + man.SecurityMode);
@@ -177,7 +177,7 @@ namespace Universe.SqlServerJam.Tests
                         {
                             string title = ExpressionExtensions.GetTitle1(serverOption) + " ";
                             title = title.PadRight(52, '.');
-                            object value = serverOption.Compile().Invoke(man.ServerConfigurationSettings);
+                            object value = serverOption.Compile().Invoke(man.Configuration);
                             if (value is int) value = string.Format("{0:n0}", value);
                             report.AppendLine($"   * {title}: " + value);
                         }

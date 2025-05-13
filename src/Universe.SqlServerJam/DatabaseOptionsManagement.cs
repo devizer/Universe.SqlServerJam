@@ -118,9 +118,12 @@ namespace Universe.SqlServerJam
             }
             set
             {
-                string option =
-                    (value == AutoCreateStatisticMode.Off ? "OFF" : "ON")
-                    + (IsIncrementalAutoStatisticCreationSupported
+                
+                string option = (value == AutoCreateStatisticMode.Off ? "OFF" : "ON");
+                bool is2014orAbove = _ServerManagement.ShortServerVersion.Major >= 12;
+                // Only off does not work on 2014+
+                option +=
+                    (IsIncrementalAutoStatisticCreationSupported && value != AutoCreateStatisticMode.Off
                         ? $" (INCREMENTAL = {(value == AutoCreateStatisticMode.Incremental ? "ON" : "OFF")})"
                         : string.Empty);
 
@@ -128,6 +131,7 @@ namespace Universe.SqlServerJam
                     DatabaseName,
                     option);
 
+                // Console.WriteLine($"[DEBUG] AutoCreateStatistic={value}{Environment.NewLine}{sql}{Environment.NewLine}");
                 _Connection.Execute(sql);
             }
         }

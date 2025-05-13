@@ -11,23 +11,15 @@ namespace Universe.SqlServerJam
 {
     public class ResilientDbKiller
     {
-        public static void Kill(string sqlConnectionString, bool throwOnError = false, int retryCount = 1)
+        public static void Kill(string masterConnectionString, string dbName, bool throwOnError = false, int retryCount = 2)
         {
-            if (sqlConnectionString == null)
-                throw new ArgumentNullException(nameof(sqlConnectionString));
+            if (masterConnectionString == null)
+                throw new ArgumentNullException(nameof(masterConnectionString));
 
             var master = SqlServerJamConfiguration.SqlProviderFactory.CreateConnectionStringBuilder();
-            master.ConnectionString = sqlConnectionString;
+            master.ConnectionString = masterConnectionString;
 
-            // SqlConnectionStringBuilder master = new SqlConnectionStringBuilder(sqlConnectionString);
-            string dbName = master["Initial Catalog"]?.ToString();
-            if (string.IsNullOrEmpty(dbName))
-            {
-                string keys = string.Join(", ", master.Keys.OfType<object>().Select(x => Convert.ToString(x)).ToArray());
-                throw new ArgumentException($"sqlConnectionString argument misses concrete database. Parameters are: [{keys}]", nameof(sqlConnectionString));
-            }
-
-            master.Remove("Initial Catalog");
+            // master.Remove("Initial Catalog");
             // master["Pooling"] = true.ToString();
             master["Pooling"] = true;
 
@@ -64,6 +56,29 @@ namespace Universe.SqlServerJam
                     }
                 }
             }
+
+        }
+        public static void Kill(string sqlConnectionString, bool throwOnError = false, int retryCount = 2)
+        {
+            if (sqlConnectionString == null)
+                throw new ArgumentNullException(nameof(sqlConnectionString));
+
+            var master = SqlServerJamConfiguration.SqlProviderFactory.CreateConnectionStringBuilder();
+            master.ConnectionString = sqlConnectionString;
+
+            // SqlConnectionStringBuilder master = new SqlConnectionStringBuilder(sqlConnectionString);
+            string dbName = master["Initial Catalog"]?.ToString();
+            if (string.IsNullOrEmpty(dbName))
+            {
+                string keys = string.Join(", ", master.Keys.OfType<object>().Select(x => Convert.ToString(x)).ToArray());
+                throw new ArgumentException($"sqlConnectionString argument misses concrete database. Parameters are: [{keys}]", nameof(sqlConnectionString));
+            }
+
+            master.Remove("Initial Catalog");
+            // master["Pooling"] = true.ToString();
+            master["Pooling"] = true;
+
+            Kill(master.ConnectionString, dbName);
         }
 
         // DbContext.Database.EnsureDeleted() behavior wait for few seconds before killing connections

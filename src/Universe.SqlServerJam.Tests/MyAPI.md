@@ -37,9 +37,8 @@ Type| SqlServerManagement
 | bool | IsMemoryOptimizedTableSupported | read-only | Depends on edition, version and update level
 | bool | IsConnectionEncrypted | read-only | 
 | string | NetTransport | read-only | "TCP", "Shared Memory", "Named Pipe" |
-| IDictionary<string, int> | DatabaseSizes | read-only | slow, not recommended
 | int | CurrentSPID | read-only | @@SPID, has no sense if IDbConnection is closed
-| string | CurrentDatabaseName | read-only | 
+| string | CurrentDatabaseName | read-only | DB_NAME()
 | ServerConfigurationSettingsManager | ServerConfigurationSettings | read-only | sp_configure
 | DatabaseOptionsManagement | CurrentDatabase | read-only | this.Databases[this.CurrentDatabaseName]
 

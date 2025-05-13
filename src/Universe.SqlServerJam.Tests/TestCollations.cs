@@ -11,7 +11,7 @@ namespace Universe.SqlServerJam.Tests
     public class TestCollations : NUnitTestsBase
     {
         [Test]
-        [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetAliveServers))]
+        [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetEnabledServers))]
         public void Has_Tons_of_Collations(SqlServerRef testCase)
         {
             SqlConnection con = new SqlConnection(testCase.ConnectionString);
@@ -22,7 +22,7 @@ namespace Universe.SqlServerJam.Tests
         }
 
         [Test]
-        [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetAliveServers))]
+        [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetEnabledServers))]
         public void Has_Latin1_Collations(SqlServerRef testCase)
         {
             SqlConnection con = new SqlConnection(testCase.ConnectionString);
@@ -35,7 +35,7 @@ namespace Universe.SqlServerJam.Tests
         }
 
         [Test]
-        [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetAliveServers))]
+        [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetEnabledServers))]
         public void May_Have_Latin1_UTF8_Collations(SqlServerRef testCase)
         {
             SqlConnection con = new SqlConnection(testCase.ConnectionString);
@@ -55,7 +55,7 @@ namespace Universe.SqlServerJam.Tests
 
         // 
         [Test]
-        [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetAliveServers))]
+        [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetEnabledServers))]
         public void Hash_Latin1_General_CI_AS_Collations(SqlServerRef testCase)
         {
             SqlConnection con = new SqlConnection(testCase.ConnectionString);

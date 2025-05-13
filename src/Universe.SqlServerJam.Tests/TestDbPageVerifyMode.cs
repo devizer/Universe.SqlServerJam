@@ -13,7 +13,7 @@ namespace Universe.SqlServerJam.Tests
     public class TestPageVerifyMode : NUnitTestsBase
     {
         [Test]
-        [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetAliveServers))]
+        [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetEnabledServers))]
         public void TestAllVerifyModes(SqlServerRef testCase)
         {
             if (!testCase.CanSimplyCreateDatabase()) return;
