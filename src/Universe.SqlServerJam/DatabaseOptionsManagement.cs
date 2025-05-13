@@ -157,7 +157,7 @@ namespace Universe.SqlServerJam
                     DatabaseName,
                     option);
 
-                Console.WriteLine($"[DEBUG] AutoUpdateStatistic={value}{Environment.NewLine}{sql}{Environment.NewLine}");
+                // Console.WriteLine($"[DEBUG] AutoUpdateStatistic={value}{Environment.NewLine}{sql}{Environment.NewLine}");
                 _Connection.Execute(sql);
 
             }
