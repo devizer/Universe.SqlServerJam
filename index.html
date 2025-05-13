@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Sql Server Jam Nuget Package</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Theme Styles -->
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --code-bg: #f6f8fa;
+      --button-bg: #e1e4e8;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117;
+        --text: #c9d1d9;
+        --code-bg: #161b22;
+        --button-bg: #30363d;
+      }
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, sans-serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+
+    pre {
+      background: var(--code-bg);
+      padding: 1em;
+      overflow-x: auto;
+      border-radius: 6px;
+      position: relative;
+    }
+
+    h1, h2, h3 {
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.3em;
+    }
+
+    a {
+      color: #1e88e5;
+    }
+
+    /* Copy Button */
+    .copy-btn {
+      position: absolute;
+      top: 0.5em;
+      right: 0.5em;
+      background: var(--button-bg);
+      border: none;
+      padding: 0.4em;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9em;
+      opacity: 0.7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .copy-btn:hover {
+      opacity: 1;
+    }
+    .copy-btn svg {
+      width: 1em;
+      height: 1em;
+      fill: var(--text);
+    }
+  </style>
+
+  <!-- Highlight.js GitHub Theme -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <style>
+     .hljs { background: #f6f8fa }
+     body { max-width: 1200px }
+     @media (prefers-color-scheme: dark) {
+       .hljs { background: #161b22 }
+     }
+  </style>
+  <!-- link rel="stylesheet" href="tables.css" -->
+  <style>
+  /* Modern TABLES */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  font-size: 0.95em;
+  border: 1px solid #d0d7de;
+}
+
+thead {
+  background-color: #f6f8fa;
+}
+
+@media (prefers-color-scheme: dark) {
+  thead {
+    background-color: #161b22;
+  }
+}
+
+th, td {
+  border: 1px solid #d0d7de;
+  padding: 0.75em 1em;
+  text-align: left;
+}
+
+th {
+  font-weight: 600;
+}
+
+tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+@media (prefers-color-scheme: dark) {
+  tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  table, th, td {
+    border-color: #30363d;
+  }
+}
+  </style>
+</head>
+<body>
+<h2 id="idbconnection-extensions">IDbConnection Extensions</h2>
+<p>The intention is tinung SQL Servers on functional tests for maximum
+performance. As well as providing accurate description and connection
+properties for locally installed sql servers and localdb instances.</p>
+<p>The entry proint is extension method
+<code>Manage(this IDbConnection connection)</code>. The example below
+creates test database on each local SQL Server, each instance of LocalDB
+instance, and AWS SQL Server propgated via
+<code>SQLSERVER_WELLKNOWN_My_AWS_1</code> environment variable.</p>
+<p>The intention is to tune SQL Servers for functional tests to achieve
+maximum performance, while also providing an accurate description and
+connection properties for locally installed SQL Servers and LocalDB
+instances.</p>
+<p>The entry point is the extension method
+<code>Manage(this IDbConnection connection)</code>. The example below
+creates a test database on each local SQL Server, each LocalDB instance,
+and an AWS SQL Server propagated via the
+<code>SQLSERVER_WELLKNOWN_My_AWS_1</code> environment variable.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode csharp"><code class="sourceCode cs"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">[</span>Test<span class="op">]</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">[</span><span class="fu">TestCaseSource</span><span class="op">(</span><span class="fu">nameof</span><span class="op">(</span>GetEnabledServers<span class="op">))]</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">Demo1</span><span class="op">(</span>SqlServerRef testCase<span class="op">)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    IDbConnection cnn <span class="op">=</span> <span class="kw">new</span> <span class="fu">SqlConnection</span><span class="op">(</span>testCase<span class="op">.</span><span class="fu">ConnectionString</span><span class="op">);</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    cnn<span class="op">.</span><span class="fu">Manage</span><span class="op">().</span><span class="fu">Configuration</span><span class="op">.</span><span class="fu">MinServerMemory</span> <span class="op">=</span> <span class="dv">5000</span><span class="op">;</span> <span class="co">// 5Gb</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    cnn<span class="op">.</span><span class="fu">Manage</span><span class="op">().</span><span class="fu">Configuration</span><span class="op">.</span><span class="fu">MaxServerMemory</span> <span class="op">=</span> <span class="dv">128000</span><span class="op">;</span> <span class="co">// 128Gb</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">string</span> newDbName <span class="op">=</span> $<span class="st">&quot;Test DB {Guid.NewGuid():N}&quot;</span><span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">try</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        cnn<span class="op">.</span><span class="fu">Execute</span><span class="op">(</span>$<span class="st">&quot;Create Database [{newDbName}]&quot;</span><span class="op">);</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        cnn<span class="op">.</span><span class="fu">Manage</span><span class="op">().</span><span class="fu">Databases</span><span class="op">[</span>newDbName<span class="op">].</span><span class="fu">RecoveryMode</span> <span class="op">=</span> DatabaseRecoveryMode<span class="op">.</span><span class="fu">Simple</span><span class="op">;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        cnn<span class="op">.</span><span class="fu">Manage</span><span class="op">().</span><span class="fu">Databases</span><span class="op">[</span>newDbName<span class="op">].</span><span class="fu">IsAutoShrink</span> <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        cnn<span class="op">.</span><span class="fu">Manage</span><span class="op">().</span><span class="fu">Databases</span><span class="op">[</span>newDbName<span class="op">].</span><span class="fu">PageVerify</span> <span class="op">=</span> DatabasePageVerify<span class="op">.</span><span class="fu">None</span><span class="op">;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        cnn<span class="op">.</span><span class="fu">Manage</span><span class="op">().</span><span class="fu">Databases</span><span class="op">[</span>newDbName<span class="op">].</span><span class="fu">AutoCreateStatistic</span> <span class="op">=</span> AutoCreateStatisticMode<span class="op">.</span><span class="fu">Off</span><span class="op">;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        cnn<span class="op">.</span><span class="fu">Manage</span><span class="op">().</span><span class="fu">Databases</span><span class="op">[</span>newDbName<span class="op">].</span><span class="fu">AutoUpdateStatistic</span> <span class="op">=</span> AutoUpdateStatisticMode<span class="op">.</span><span class="fu">Off</span><span class="op">;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        Console<span class="op">.</span><span class="fu">WriteLine</span><span class="op">(</span>$<span class="st">&quot;Success: {cnn.Manage().MediumServerVersion}&quot;</span><span class="op">);</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">finally</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        ResilientDbKiller<span class="op">.</span><span class="fu">Kill</span><span class="op">(</span>testCase<span class="op">.</span><span class="fu">ConnectionString</span><span class="op">,</span> newDbName<span class="op">);</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Validate newDbName database is deleted</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    Assert<span class="op">.</span><span class="fu">That</span><span class="op">(</span>cnn<span class="op">.</span><span class="fu">Manage</span><span class="op">().</span><span class="fu">IsDbExists</span><span class="op">(</span>newDbName<span class="op">),</span> Is<span class="op">.</span><span class="fu">False</span><span class="op">);</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="kw">static</span> IEnumerable<span class="op">&lt;</span>SqlServerRef<span class="op">&gt;</span> <span class="fu">GetEnabledServers</span><span class="op">()</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">return</span> </span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* 1 */</span>   SqlDiscovery<span class="op">.</span><span class="fu">GetLocalDbAndServerList</span><span class="op">()</span> </span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* 2 */</span>       <span class="op">.</span><span class="fu">Where</span><span class="op">(</span>server <span class="op">=&gt;</span> server<span class="op">.</span><span class="fu">ServiceStartup</span> <span class="op">!=</span> LocalServiceStartup<span class="op">.</span><span class="fu">Disabled</span><span class="op">)</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* 3 */</span>       <span class="op">.</span><span class="fu">StartLocalIfStopped</span><span class="op">()</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* 4 */</span>       <span class="op">.</span><span class="fu">WarmUp</span><span class="op">(</span>timeout<span class="op">:</span> TimeSpan<span class="op">.</span><span class="fu">FromSeconds</span><span class="op">(</span><span class="dv">30</span><span class="op">))</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>                  <span class="op">.</span><span class="fu">OrderByVersionDesc</span><span class="op">()</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                  <span class="op">.</span><span class="fu">ToList</span><span class="op">();</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<ul>
+<li>Line ①: Retrieves all locally pre-installed SQL Servers
+(<code>Kind=Local</code>) and all pre-installed LocalDB instances
+(<code>Kind=LocalDB</code>). At this step, the <code>DataSource</code>
+and <code>InstallerVersion</code> properties are populated. No
+communication with SQL Server is performed during this step.
+Additionally, for local SQL Server instances, the
+<code>ServiceStartup</code> property is also populated.</li>
+<li>Line ②: Filters out disabled SQL Server services.</li>
+<li>Line ③: Starts local SQL Servers and LocalDB instances if they are
+not already running.</li>
+<li>Line ④: Waits up to 30 seconds for each SQL Server health check to
+complete and populates the <code>Version</code> property.</li>
+</ul>
+<h2 id="sql-server-idbconnection-extensions">SQL Server IDbConnection
+Extensions</h2>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 20%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Data Type</th>
+<th>Member</th>
+<th>Readonly</th>
+<th>Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Version</td>
+<td>ShortServerVersion</td>
+<td>read-only</td>
+<td>@<span class="citation"
+data-cites="MICROSOFTVERSION">@MICROSOFTVERSION</span></td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsLocalDB</td>
+<td>read-only</td>
+<td></td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsAzure</td>
+<td>read-only</td>
+<td></td>
+</tr>
+<tr>
+<td>string</td>
+<td>EngineEditionName</td>
+<td>read-only</td>
+<td>“SQL Azure”, “Express Edition”, “Developer Edition”, “Enterprise
+Edition”, …</td>
+</tr>
+<tr>
+<td>EngineEdition</td>
+<td>EngineEdition</td>
+<td>read-only</td>
+<td>Standard, Exterprise, Express, SqlDatabase, SqlDataWarehouse,
+Personal</td>
+</tr>
+<tr>
+<td>string</td>
+<td>LongServerVersion</td>
+<td>read-only</td>
+<td>@<span class="citation" data-cites="VERSION">@VERSION</span></td>
+</tr>
+<tr>
+<td>SecurityMode</td>
+<td>SecurityMode</td>
+<td>read-only</td>
+<td>IntegratedOnly, Both</td>
+</tr>
+<tr>
+<td>string</td>
+<td>MediumServerVersion</td>
+<td>read-only</td>
+<td></td>
+</tr>
+<tr>
+<td>string</td>
+<td>ProductVersion</td>
+<td>read-only</td>
+<td>GetServerProperty&lt;string&gt;(“ProductVersion”)</td>
+</tr>
+<tr>
+<td>string</td>
+<td>ProductLevel</td>
+<td>read-only</td>
+<td>CTP, RTM, SP1, SP2, …</td>
+</tr>
+<tr>
+<td>string</td>
+<td>ProductUpdateLevel</td>
+<td>read-only</td>
+<td>CU1, CU2, …</td>
+</tr>
+<tr>
+<td>string</td>
+<td>ServerCollation</td>
+<td>read-only</td>
+<td>GetServerProperty&lt;string&gt;(“Collation”)</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsFullTextSearchInstalled</td>
+<td>read-only</td>
+<td></td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsFileStreamSupported</td>
+<td>read-only</td>
+<td>this.ShortServerVersion.Major &gt;= 10 &amp;&amp;
+!this.IsLocalDB</td>
+</tr>
+<tr>
+<td>string</td>
+<td>HostPlatform</td>
+<td>read-only</td>
+<td>“Windows” or “Linux”</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsWindows</td>
+<td>read-only</td>
+<td></td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsLinux</td>
+<td>read-only</td>
+<td></td>
+</tr>
+<tr>
+<td>SqlDefaultPaths</td>
+<td>DefaultPaths</td>
+<td>read-only</td>
+<td>Data, Log, and Backup folders</td>
+</tr>
+<tr>
+<td>FixedServerRoles</td>
+<td>FixedServerRoles</td>
+<td>read-only</td>
+<td>SysAdmin, SetupAdmin, ServerAdmin, SecurityAdmin, ProcessAdmin,
+…</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsCompressedBackupSupported</td>
+<td>read-only</td>
+<td>this.EngineEdition == EngineEdition.Enterprise &amp;&amp;
+this.ShortServerVersion.Major &gt;= 10</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsMemoryOptimizedTableSupported</td>
+<td>read-only</td>
+<td>Depends on edition, version and update level</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsConnectionEncrypted</td>
+<td>read-only</td>
+<td></td>
+</tr>
+<tr>
+<td>string</td>
+<td>NetTransport</td>
+<td>read-only</td>
+<td>“TCP”, “Shared Memory”, “Named Pipe”</td>
+</tr>
+<tr>
+<td>int</td>
+<td>CurrentSPID</td>
+<td>read-only</td>
+<td>@<span class="citation" data-cites="SPID">@SPID</span>, has no sense
+if IDbConnection is closed</td>
+</tr>
+<tr>
+<td>string</td>
+<td>CurrentDatabaseName</td>
+<td>read-only</td>
+<td>DB_NAME()</td>
+</tr>
+<tr>
+<td>ServerConfigurationSettingsManager</td>
+<td>ServerConfigurationSettings</td>
+<td>read-only</td>
+<td>sp_configure</td>
+</tr>
+<tr>
+<td>DatabaseOptionsManagement</td>
+<td>CurrentDatabase</td>
+<td>read-only</td>
+<td>this.Databases[this.CurrentDatabaseName]</td>
+</tr>
+<tr>
+<td>DatabaseOptionsManagement</td>
+<td>Databases[“Db1”]</td>
+<td>read-only</td>
+<td></td>
+</tr>
+<tr>
+<td>Option&lt;T&gt;</td>
+<td>Configuration.ReadAdvancedOption&lt;T&gt;(string name)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Option&lt;T&gt;</td>
+<td>Configuration.ReadOption&lt;T&gt;(string name)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>void</td>
+<td>Configuration.SetAdvancedOption&lt;T&gt;(string name, T value)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>void</td>
+<td>Configuration.SetOption&lt;T&gt;(string name, T value)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>bool</td>
+<td>Configuration.ClrEnabled</td>
+<td>read/write</td>
+<td></td>
+</tr>
+<tr>
+<td>bool</td>
+<td>Configuration.ServerTriggerRecursion</td>
+<td>read/write</td>
+<td></td>
+</tr>
+<tr>
+<td>bool</td>
+<td>Configuration.ShowAdvancedOption</td>
+<td>read/write</td>
+<td></td>
+</tr>
+<tr>
+<td>FileStreamAccessLevels</td>
+<td>Configuration.FileStreamAccessLevel</td>
+<td>read/write</td>
+<td></td>
+</tr>
+<tr>
+<td>bool</td>
+<td>Configuration.BackupCompressionDefault</td>
+<td>read/write</td>
+<td></td>
+</tr>
+<tr>
+<td>bool</td>
+<td>Configuration.XpCmdShell</td>
+<td>read/write</td>
+<td></td>
+</tr>
+<tr>
+<td>int</td>
+<td>Configuration.MaxServerMemory</td>
+<td>read/write</td>
+<td></td>
+</tr>
+<tr>
+<td>int</td>
+<td>Configuration.MinServerMemory</td>
+<td>read/write</td>
+<td></td>
+</tr>
+<tr>
+<td>T</td>
+<td>GetServerProperty&lt;T&gt;(string propertyName)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsDbExists(string dbName)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>HashSet&lt;string&gt;</td>
+<td>FindCollations(IEnumerable&lt;string&gt; namesOrPatters)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>SqlBackupDescription</td>
+<td>GetBackupDescription(string bakFullPath)</td>
+<td></td>
+<td>Backups and files inside each backup</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sql-database-idbconnection-extensions">SQL Database
+IDbConnection Extensions</h2>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 20%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Data Type</th>
+<th>Member</th>
+<th>Readonly</th>
+<th>Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bool</td>
+<td>Exists</td>
+<td>readonly</td>
+<td></td>
+</tr>
+<tr>
+<td>void</td>
+<td>SetState(TargetDatabaseState newState)</td>
+<td></td>
+<td>Online, Offline, Emergency</td>
+</tr>
+<tr>
+<td>void</td>
+<td>Shrink(ShrinkOptions options, int? commandTimeout)</td>
+<td></td>
+<td>options are: Shink and Truncate, Shrink only, Truncate only</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsReadOnly</td>
+<td>read/write</td>
+<td></td>
+</tr>
+<tr>
+<td>DatabaseRecoveryMode</td>
+<td>RecoveryMode</td>
+<td>read/write</td>
+<td>Simple, Bulk logged, or Full</td>
+</tr>
+<tr>
+<td>DatabasePageVerify</td>
+<td>PageVerify</td>
+<td>read/write</td>
+<td>Checksum, Torn Page Detection, or None</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsAutoShrink</td>
+<td>read/write</td>
+<td></td>
+</tr>
+<tr>
+<td>AutoCreateStatisticMode</td>
+<td>AutoCreateStatistic</td>
+<td>read/write</td>
+<td>Complete, Incremental, Off</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>AreTriggersRecursive</td>
+<td>read/write</td>
+<td></td>
+</tr>
+<tr>
+<td>AutoUpdateStatisticMode</td>
+<td>AutoUpdateStatistic</td>
+<td>read/write</td>
+<td>Synchronously, Async, Off</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsIncrementalAutoStatisticCreationSupported</td>
+<td>read-only</td>
+<td>ServerVersion.Major &gt;= 12</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsBrokerEnabled</td>
+<td>read/write</td>
+<td></td>
+</tr>
+<tr>
+<td>string</td>
+<td>DefaultCollationName</td>
+<td>read/write</td>
+<td></td>
+</tr>
+<tr>
+<td>string</td>
+<td>StateDescription</td>
+<td>read-only</td>
+<td>Online, Offline, Emergency, Restoring, Recovering…</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsOnline</td>
+<td>read-only</td>
+<td></td>
+</tr>
+<tr>
+<td>DatabaseComparisonStyle</td>
+<td>ComparisonStyle</td>
+<td>read-only</td>
+<td>flags IgnoreCase, IgnoreAccent, IgnoreKana, IgnoreWidth</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsClone</td>
+<td>read-only</td>
+<td></td>
+</tr>
+<tr>
+<td>string</td>
+<td>AzureServiceObjective</td>
+<td>read-only</td>
+<td>S0, S1, S2, ElasticPool…</td>
+</tr>
+<tr>
+<td>string</td>
+<td>AzureEdition</td>
+<td>read-only</td>
+<td>Basic, Standard, Premium…</td>
+</tr>
+<tr>
+<td>string</td>
+<td>AzureElasticPool</td>
+<td>read-only</td>
+<td>sys.database_service_objectives.elastic_pool_name</td>
+</tr>
+<tr>
+<td>long</td>
+<td>Size</td>
+<td>read-only</td>
+<td></td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsFullTextEnabled</td>
+<td>read-only</td>
+<td></td>
+</tr>
+<tr>
+<td>string</td>
+<td>OwnerName</td>
+<td>read-only</td>
+<td></td>
+</tr>
+<tr>
+<td>bool</td>
+<td>HasMemoryOptimizedTableFileGroup</td>
+<td>read-only</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<!-- Add copy buttons -->
+<script>
+  var copyIcon;
+  copyIcon = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M10 1.75a.75.75 0 0 1 .75.75v.75h1.5A2.75 2.75 0 0 1 15 6v6.25A2.75 2.75 0 0 1 12.25 15H6a.75.75 0 0 1 0-1.5h6.25c.69 0 1.25-.56 1.25-1.25V6c0-.69-.56-1.25-1.25-1.25h-1.5v.75a.75.75 0 0 1-1.5 0V2.5a.75.75 0 0 1 .75-.75ZM2.75 3A2.75 2.75 0 0 0 0 5.75v6.5A2.75 2.75 0 0 0 2.75 15h6.5A2.75 2.75 0 0 0 12 12.25v-6.5A2.75 2.75 0 0 0 9.25 3h-6.5Zm0 1.5h6.5c.69 0 1.25.56 1.25 1.25v6.5c0 .69-.56 1.25-1.25 1.25h-6.5C2.06 13.5 1.5 12.94 1.5 12.25v-6.5C1.5 5.06 2.06 4.5 2.75 4.5Z"/></svg>
+  `;
+
+  copyIcon = `
+  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M16 1H4a2 2 0 0 0-2 2v12h2V3h12V1Zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm0 16H8V7h11v14Z"/>
+  </svg>`;
+  
+  var checkIcon = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M13.78 3.72a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 8.78a.75.75 0 1 1 1.06-1.06l2.72 2.72 6.72-6.72a.75.75 0 0 1 1.06 0Z"/></svg>
+  `;
+  checkIcon = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+      <path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 0 0-1.06 0L6.5 10.44 3.28 7.22a.75.75 0 1 0-1.06 1.06l3.75 3.75a.75.75 0 0 0 1.06 0l6.75-6.75a.75.75 0 0 0 0-1.06z"/>
+    </svg>
+  `;
+
+  document.querySelectorAll('pre code').forEach((block) => {
+    const button = document.createElement('button');
+    button.className = 'copy-btn';
+    button.innerHTML = copyIcon;
+    button.addEventListener('click', () => {
+      navigator.clipboard.writeText(block.innerText).then(() => {
+        button.innerHTML = checkIcon;
+        setTimeout(() => button.innerHTML = copyIcon, 1500);
+      });
+    });
+    block.parentNode.appendChild(button);
+  });
+</script>
+</body>
+</html>

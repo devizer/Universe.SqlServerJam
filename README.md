@@ -3,6 +3,12 @@
 The intention is tinung SQL Servers on functional tests for maximum performance. As well as providing accurate description and connection properties for locally installed sql servers and localdb instances.
 
 The entry proint is extension method ```Manage(this IDbConnection connection)```. The example below creates test database on each local SQL Server, each instance of LocalDB instance, and AWS SQL Server propgated via ```SQLSERVER_WELLKNOWN_My_AWS_1``` environment variable.
+
+The intention is to tune SQL Servers for functional tests to achieve maximum performance, while also providing an accurate description and connection properties for locally installed SQL Servers and LocalDB instances.
+
+The entry point is the extension method `Manage(this IDbConnection connection)`. The example below creates a test database on each local SQL Server, each LocalDB instance, and an AWS SQL Server propagated via the `SQLSERVER_WELLKNOWN_My_AWS_1` environment variable.
+
+
 ```csharp
 [Test]
 [TestCaseSource(nameof(GetEnabledServers))]
@@ -43,12 +49,10 @@ static IEnumerable<SqlServerRef> GetEnabledServers()
                   .ToList();
 }
 ```
-
-* Line ①: Returns all the local pre installed Sql Servers (```Kind=Local```), all the preinstalled LocalDB instances (```Kind=LocalDB```). Populated properties on this step are ```DataSource``` and ```InstallerVersion```. No any communication with sql server performed on this step. For Local SQL Server property ```ServiceStartup``` is also populated.
-* Line ②: Filter out disabled sql server services.
-* Line ③: Local SQL Servers and LocalDB instances are started if they are not.
-* Line ④: Wait up to 30 seconds for each SQL Server health check to pass, and populate ```Version``` property
-
+* Line ①: Retrieves all locally pre-installed SQL Servers (`Kind=Local`) and all pre-installed LocalDB instances (`Kind=LocalDB`). At this step, the `DataSource` and `InstallerVersion` properties are populated. No communication with SQL Server is performed during this step. Additionally, for local SQL Server instances, the `ServiceStartup` property is also populated.
+* Line ②: Filters out disabled SQL Server services.
+* Line ③: Starts local SQL Servers and LocalDB instances if they are not already running.
+* Line ④: Waits up to 30 seconds for each SQL Server health check to complete and populates the `Version` property.
 
 
 
