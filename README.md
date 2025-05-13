@@ -1,9 +1,5 @@
 ## IDbConnection Extensions
 
-The intention is tinung SQL Servers on functional tests for maximum performance. As well as providing accurate description and connection properties for locally installed sql servers and localdb instances.
-
-The entry proint is extension method ```Manage(this IDbConnection connection)```. The example below creates test database on each local SQL Server, each instance of LocalDB instance, and AWS SQL Server propgated via ```SQLSERVER_WELLKNOWN_My_AWS_1``` environment variable.
-
 The intention is to tune SQL Servers for functional tests to achieve maximum performance, while also providing an accurate description and connection properties for locally installed SQL Servers and LocalDB instances.
 
 The entry point is the extension method `Manage(this IDbConnection connection)`. The example below creates a test database on each local SQL Server, each LocalDB instance, and an AWS SQL Server propagated via the `SQLSERVER_WELLKNOWN_My_AWS_1` environment variable.

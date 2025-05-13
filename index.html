@@ -136,14 +136,6 @@ tr:nth-child(even) {
 </head>
 <body>
 <h2 id="idbconnection-extensions">IDbConnection Extensions</h2>
-<p>The intention is tinung SQL Servers on functional tests for maximum
-performance. As well as providing accurate description and connection
-properties for locally installed sql servers and localdb instances.</p>
-<p>The entry proint is extension method
-<code>Manage(this IDbConnection connection)</code>. The example below
-creates test database on each local SQL Server, each instance of LocalDB
-instance, and AWS SQL Server propgated via
-<code>SQLSERVER_WELLKNOWN_My_AWS_1</code> environment variable.</p>
 <p>The intention is to tune SQL Servers for functional tests to achieve
 maximum performance, while also providing an accurate description and
 connection properties for locally installed SQL Servers and LocalDB
