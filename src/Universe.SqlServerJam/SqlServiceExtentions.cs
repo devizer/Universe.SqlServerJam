@@ -103,7 +103,10 @@ namespace Universe.SqlServerJam
             {
                 try
                 {
-                    string cs = String.Format("Data Source={0};Integrated Security=True;Pooling=false;Timeout=2", localDb);
+                    // string cs = String.Format("Data Source={0};Integrated Security=True;Pooling=false;Timeout=2", localDb);
+                    string cs = String.Format(SqlServerJamDiscoveryConfiguration.LocalDbConnectionStringFormat, localDb);
+                    cs = SqlServerJamConfigurationExtensions.ResetConnectionPooling(cs, false);
+                    cs = SqlServerJamConfigurationExtensions.ResetConnectionTimeout(cs, 2);
                     using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(cs))
                     {
                         con.Manage().Ping(timeout: 2);

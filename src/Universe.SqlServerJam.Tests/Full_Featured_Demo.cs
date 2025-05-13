@@ -157,7 +157,7 @@ namespace Universe.SqlServerJam.Tests
                         var currentDatabase = man.CurrentDatabaseName;
                         var dbOptions = man.Databases[currentDatabase];
                         report.Append("Connected DB Info ........: [" + currentDatabase + "]" + Environment.NewLine);
-                        dbOptions.WriteDigest(report, intent: 1);
+                        dbOptions.WriteDigest(report, indent: 1);
 
                         // Expression<Func<ServerConfigurationSettingsManager, object>>[] serverOptions = new Expression<Func<ServerConfigurationSettingsManager, object>>[]
                         Expression<Func<ServerConfigurationSettingsManager, object>>[] serverOptions = new Expression<Func<ServerConfigurationSettingsManager, object>>[]

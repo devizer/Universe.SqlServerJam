@@ -26,9 +26,11 @@ namespace Universe.SqlServerJam
             get
             {
                 if (Kind == SqlServerDiscoverySource.Local)
-                    return string.Format("Data Source={0};Integrated Security=SSPI", Data);
+                    // return string.Format("Data Source={0};Integrated Security=SSPI", Data);
+                    return string.Format(SqlServerJamDiscoveryConfiguration.LocalServerConnectionStringFormat, Data);
                 if (Kind == SqlServerDiscoverySource.LocalDB)
-                    return string.Format("Data Source={0};Integrated Security=SSPI", Data);
+                    // return string.Format("Data Source={0};Integrated Security=SSPI", Data);
+                    return string.Format(SqlServerJamDiscoveryConfiguration.LocalDbConnectionStringFormat, Data);
                 else if (Kind == SqlServerDiscoverySource.WellKnown)
                     return Data;
                 else

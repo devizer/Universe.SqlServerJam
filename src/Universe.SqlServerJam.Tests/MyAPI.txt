@@ -1,0 +1,95 @@
+#2.2 {Show_Core_Only} @ ShowAPI starting...
+Type| SqlServerManagement
+--------------------------------------------------------------------------------
+  Constructor| void SqlServerManagement(IDbConnection sqlConnection)
+  Method| T GetServerProperty<T>(String propertyName)
+
+  Method| Boolean IsDbExists(String dbName)
+  Method| HashSet<String> FindCollations(IEnumerable<String> namesOrPatters)
+  Method| HashSet<String> FindCollations(String[] namesOrPatters)
+  Method| SqlBackupDescription GetBackupDescription(String bakFullPath)
+
+  - Property| IDbConnection SqlConnection | read-only
+  - Property| SqlServerManagement.DatabaseSelector Databases | read-only
+
+| Data Type | Member | Readonly | comments |
+|-----------|--------|----------|----------|
+| Version | ShortServerVersion | read-only | @@MICROSOFTVERSION |
+| Boolean | IsLocalDB          | read-only |
+| Boolean | IsAzure         | read-only | 
+| String | EngineEditionName | read-only    | "SQL Azure", "Express Edition", "Developer Edition", "Enterprise Edition", ... |
+| EngineEdition | EngineEdition | read-only | Standard, Exterprise, Express, SqlDatabase, SqlDataWarehouse, Personal |
+| String | LongServerVersion | read-only | @@VERSION |
+| SecurityMode | SecurityMode | read-only | IntegratedOnly, Both |
+| String | MediumServerVersion | read-only |
+| String | ProductVersion | read-only | GetServerProperty<string>("ProductVersion")
+| String | ProductLevel | read-only | CTP, RTM, SP1, SP2, ... |
+| String | ProductUpdateLevel | read-only | CU1, CU2, ... |
+| String | ServerCollation | read-only | GetServerProperty<string>("Collation") |
+| Boolean | IsFullTextSearchInstalled | read-only |
+| Boolean | IsFileStreamSupported | read-only | this.ShortServerVersion.Major >= 10 && !this.IsLocalDB
+| String | HostPlatform | read-only | "Windows" or "Linux" |
+| Boolean | IsWindows | read-only |
+| Boolean | IsLinux | read-only |
+| SqlDefaultPaths | DefaultPaths            | read-only | Data, Log, Backup |
+| FixedServerRoles | FixedServerRoles       | read-only | SysAdmin, SetupAdmin, ServerAdmin, SecurityAdmin, ProcessAdmin, ... |
+| Boolean | IsCompressedBackupSupported     | read-only | this.EngineEdition == EngineEdition.Enterprise && this.ShortServerVersion.Major >= 10 |
+| Boolean | IsMemoryOptimizedTableSupported | read-only | Depends on edition, version and update level
+| Boolean | IsConnectionEncrypted | read-only | 
+| String | NetTransport | read-only | "TCP", "Shared Memory", "Named Pipe" |
+| Dictionary<String, Int32> | DatabaseSizes | read-only | slow, not recommended
+| Int32 | CurrentSPID | read-only | @@SPID
+| String | CurrentDatabaseName | read-only | 
+| ServerConfigurationSettingsManager | ServerConfigurationSettings | read-only | sp_configure
+| DatabaseOptionsManagement | CurrentDatabase | read-only | this.Databases[this.CurrentDatabaseName]
+
+
+Type| ServerConfigurationSettingsManager
+--------------------------------------------------------------------------------
+  Constructor| void ServerConfigurationSettingsManager(SqlServerManagement serverManagement)
+  Method| ServerConfigurationSettingsManager.Option<T> ReadAdvancedOption<T>(String name)
+  Method| Void SetAdvancedOption<T>(String name, T value)
+  Method| ServerConfigurationSettingsManager.Option<T> ReadOption<T>(String name)
+  Method| Void SetOption<T>(String name, T value)
+  Property| Boolean ClrEnabled
+  Property| Boolean ServerTriggerRecursion
+  Property| Boolean ShowAdvancedOption
+  Property| FileStreamAccessLevels FileStreamAccessLevel
+  Property| Boolean BackupCompressionDefault
+  Property| Boolean XpCmdShell
+  Property| Int32 MaxServerMemory
+  Property| Int32 MinServerMemory
+
+Type| DatabaseOptionsManagement
+--------------------------------------------------------------------------------
+  Constructor| void DatabaseOptionsManagement(SqlServerManagement serverManagement, String databaseName)
+  Method| Void SetState(TargetDatabaseState newState)
+  Method| Void Shrink(ShrinkOptions options, Nullable<Int32> commandTimeout)
+  Method| String GetDigest(Int32 intent)
+  Method| Void WriteDigest(StringBuilder ret, Int32 intent)
+  
+  Property| Boolean IsReadOnly
+  Property| DatabaseRecoveryMode RecoveryMode
+ 
+  Property| Boolean IsAutoShrink
+  Property| AutoCreateStatisticMode AutoCreateStatistic
+  Property| AutoUpdateStatisticMode AutoUpdateStatistic
+  Property| Boolean IsBrokerEnabled
+  Property| String DefaultCollationName
+  Property| String StateDescription | read-only
+  Property| Boolean IsOnline | read-only
+  Property| Boolean IsIncrementalAutoStatisticCreationSupported | read-only
+  Property| DatabaseComparisonStyle ComparisonStyle | read-only
+  Property| Boolean IsClone | read-only
+  Property| String AzureServiceObjective | read-only
+  Property| String AzureEdition | read-only
+  Property| String AzureElasticPool | read-only
+  Property| Nullable<Int64> Size | read-only
+  Property| Boolean AreTriggersRecursive
+  Property| Boolean IsFullTextEnabled | read-only
+  Property| String OwnerName | read-only
+  Property| Boolean HasMemoryOptimizedTableFileGroup | read-only
+
+
+#2.2 {Show_Core_Only} >PASSED< in 00|00|00.0002348 (cpu| 0%, 0.000 = 0.000 [user] + 0.000 [kernel] milliseconds)
+

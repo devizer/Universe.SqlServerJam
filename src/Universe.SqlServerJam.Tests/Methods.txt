@@ -14,8 +14,8 @@ Type: DatabaseOptionsManagement
   Constructor: void DatabaseOptionsManagement(SqlServerManagement serverManagement, String databaseName)
   Method: Void SetState(TargetDatabaseState newState)
   Method: Void Shrink(ShrinkOptions options, Nullable<Int32> commandTimeout)
-  Method: String GetDigest(Int32 intent)
-  Method: Void WriteDigest(StringBuilder ret, Int32 intent)
+  Method: String GetDigest(Int32 indent)
+  Method: Void WriteDigest(StringBuilder ret, Int32 indent)
 
   Property: Boolean IsBrokerEnabled
   Property: Boolean IsReadOnly

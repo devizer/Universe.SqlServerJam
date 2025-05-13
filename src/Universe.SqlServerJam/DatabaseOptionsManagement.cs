@@ -52,6 +52,8 @@ namespace Universe.SqlServerJam
             }
         }
 
+        public bool Exists => _ServerManagement.IsDbExists(DatabaseName);
+
         public bool IsReadOnly
         {
             get { return GetSysDatabasesColumn<bool>("is_read_only"); }
@@ -247,6 +249,37 @@ WHERE d.name = @name
             }
         }
 
+        public DatabasePageVerify PageVerify
+        {
+            get
+            {
+                var rawRet = this.GetSysDatabasesColumn<byte>("page_verify_option");
+                // Console.WriteLine($"[DEBUG] QUERY page_verify_option={rawRet} for {this.DatabaseName}");
+                return (DatabasePageVerify)rawRet;
+            }
+            set
+            {
+                var verifyName = value == DatabasePageVerify.None ? "NONE" : value == DatabasePageVerify.Checksum ? "CHECKSUM" : value == DatabasePageVerify.TornPageDetection ? "TORN_PAGE_DETECTION" : null;
+                if (verifyName == null) throw new ArgumentException($"Unknown DB Page Verify argument {value}");
+                var sqlVerify = $"Alter Database [{this.DatabaseName}] Set PAGE_VERIFY {verifyName}";
+                _ServerManagement.SqlConnection.Execute(sqlVerify);
+
+                /*
+                var tornName = value == DatabasePageVerify.TornPageDetection ? "ON" : "OFF";
+                var sqlTorn = $"Alter Database [{this.DatabaseName}] Set TORN_PAGE_DETECTION {tornName}";
+                sqlTorn = "-- none";
+
+                var sqlCommands = value == DatabasePageVerify.TornPageDetection ? new[] { sqlTorn, sqlVerify } : new[] { sqlVerify, sqlTorn };
+
+                foreach (var sqlCommand in sqlCommands)
+                {
+                    // Console.WriteLine($"[DEBUG] SQL: {sqlCommand}");
+                    _ServerManagement.SqlConnection.Execute(sqlCommand);
+                }
+                */
+            }
+        }
+
         public DatabaseRecoveryMode RecoveryMode
         {
             get
@@ -336,16 +369,16 @@ WHERE d.name = @name
             }
         }
 
-        public string GetDigest(int intent = 4)
+        public string GetDigest(int indent = 4)
         {
             StringBuilder ret = new StringBuilder();
-            WriteDigest(ret, intent);
+            WriteDigest(ret, indent);
             return ret.ToString();
         }
 
-        public void WriteDigest(StringBuilder ret, int intent = 4)
+        public void WriteDigest(StringBuilder ret, int indent = 4)
         {
-            string pre = intent > 0 ? new string(' ', intent) : "";
+            string pre = indent > 0 ? new string(' ', indent) : "";
             ret.AppendLine($"{pre} - Auto Shrink ......... : {IsAutoShrink}");
             ret.AppendLine($"{pre} - Auto Create Statistic : {AutoCreateStatistic}");
             ret.AppendLine($"{pre} - Auto Update Statistic : {AutoUpdateStatistic}");
@@ -403,6 +436,13 @@ WHERE d.name = @name
         Simple,
         Bulk_Logged,
         Full,
+    }
+
+    public enum DatabasePageVerify : byte
+    {
+        None = 0,
+        TornPageDetection = 1,
+        Checksum = 2,
     }
 
     [Flags]

@@ -195,9 +195,11 @@ namespace Universe.SqlServerJam
 
         internal T GetDatabaseProperty<T>(string propertyName, string databaseName = null)
         {
+            var dbName = databaseName ?? CurrentDatabaseName;
+            // Console.WriteLine($"[DEBUG] GetDatabaseProperty for [{dbName}]");
             return SqlConnection.ExecuteScalar<T>("Select DatabasePropertyEx(@db, @property)", new
             {
-                db = databaseName ?? CurrentDatabaseName,
+                db = dbName,
                 property = propertyName
             });
         }
@@ -409,8 +411,6 @@ Else
         {
             return SqlConnection.ExecuteScalar<string>(SqlGetHostPlatform);
         }
-
-
 
         public ServerConfigurationSettingsManager ServerConfigurationSettings => new ServerConfigurationSettingsManager(this);
     }
