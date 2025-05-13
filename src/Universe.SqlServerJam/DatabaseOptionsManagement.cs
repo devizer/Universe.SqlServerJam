@@ -120,7 +120,6 @@ namespace Universe.SqlServerJam
             {
                 
                 string option = (value == AutoCreateStatisticMode.Off ? "OFF" : "ON");
-                bool is2014orAbove = _ServerManagement.ShortServerVersion.Major >= 12;
                 // Only off does not work on 2014+
                 option +=
                     (IsIncrementalAutoStatisticCreationSupported && value != AutoCreateStatisticMode.Off
@@ -158,6 +157,7 @@ namespace Universe.SqlServerJam
                     DatabaseName,
                     option);
 
+                Console.WriteLine($"[DEBUG] AutoUpdateStatistic={value}{Environment.NewLine}{sql}{Environment.NewLine}");
                 _Connection.Execute(sql);
 
             }

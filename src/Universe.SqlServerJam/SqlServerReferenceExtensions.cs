@@ -19,19 +19,19 @@ namespace Universe.SqlServerJam
 
         public static IEnumerable<SqlServerRef> OrderByVersionDesc(this IEnumerable<SqlServerRef> list)
         {
-            return list
+            return list.ToArray()
                 .OrderByDescending(x => x.InstallerVersion == null ? new Version(0, 0, 0) : x.InstallerVersion)
                 .ThenByDescending(x => x.Kind == SqlServerDiscoverySource.LocalDB ? 0 : 1)
                 .ThenByDescending(x => x.Data);
         }
 
-        public static IEnumerable<SqlServerRef> ParallelWarmUp(this IEnumerable<SqlServerRef> sqlServerRefList, TimeSpan timeout = default(TimeSpan))
+        public static IEnumerable<SqlServerRef> WarmUp(this IEnumerable<SqlServerRef> sqlServerRefList, TimeSpan timeout = default(TimeSpan))
         {
             ConcurrentBag<SqlServerRef> ret = new ConcurrentBag<SqlServerRef>();
             Parallel.ForEach(sqlServerRefList.ToList(), sqlServerRef =>
             {
                 var version = sqlServerRef.WarmUp(timeout);
-                // Console.WriteLine($"[DEBUG] {Interlocked.Increment(ref count)} ParallelWarmUp: processed [{sqlServerRef}]");
+                // Console.WriteLine($"[DEBUG] {Interlocked.Increment(ref count)} WarmUp: processed [{sqlServerRef}]");
                 ret.Add(sqlServerRef);
             });
             return ret.ToArray();

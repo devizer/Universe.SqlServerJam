@@ -23,12 +23,17 @@ namespace Universe.SqlServerJam.Tests
             try
             {
                 cnn.Execute($"Create Database [{newDbName}]");
+                cnn.Manage().Databases[newDbName].RecoveryMode = DatabaseRecoveryMode.Full;
+                cnn.Manage().Databases[newDbName].RecoveryMode = DatabaseRecoveryMode.Bulk_Logged;
                 cnn.Manage().Databases[newDbName].RecoveryMode = DatabaseRecoveryMode.Simple;
+                cnn.Manage().Databases[newDbName].IsAutoShrink = true;
                 cnn.Manage().Databases[newDbName].IsAutoShrink = false;
                 cnn.Manage().Databases[newDbName].PageVerify = DatabasePageVerify.None;
                 cnn.Manage().Databases[newDbName].AutoCreateStatistic = AutoCreateStatisticMode.Complete;
                 cnn.Manage().Databases[newDbName].AutoCreateStatistic = AutoCreateStatisticMode.Incremental;
                 cnn.Manage().Databases[newDbName].AutoCreateStatistic = AutoCreateStatisticMode.Off;
+                cnn.Manage().Databases[newDbName].AutoUpdateStatistic = AutoUpdateStatisticMode.Synchronously;
+                cnn.Manage().Databases[newDbName].AutoUpdateStatistic = AutoUpdateStatisticMode.Async;
                 cnn.Manage().Databases[newDbName].AutoUpdateStatistic = AutoUpdateStatisticMode.Off;
                 Console.WriteLine($"Success: {cnn.Manage().MediumServerVersion}");
             }
@@ -40,12 +45,12 @@ namespace Universe.SqlServerJam.Tests
             Assert.That(cnn.Manage().IsDbExists(newDbName), Is.False);
         }
 
-        public static IEnumerable<SqlServerRef> GetEnabledServers()
+        static IEnumerable<SqlServerRef> GetEnabledServers()
         {
             return SqlDiscovery.GetLocalDbAndServerList()
                 .Where(server => server.ServiceStartup != LocalServiceStartup.Disabled)
                 .StartLocalIfStopped()
-                .ParallelWarmUp(timeout: TimeSpan.FromSeconds(30))
+                .WarmUp(timeout: TimeSpan.FromSeconds(30))
                 .OrderByVersionDesc()
                 .ToList();
         }
