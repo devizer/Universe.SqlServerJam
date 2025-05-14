@@ -24,7 +24,7 @@ namespace Universe.SqlServerJam.Tests
             {
                 cnn.Execute($"Create Database [{newDbName}]");
                 cnn.Manage().Databases[newDbName].RecoveryMode = DatabaseRecoveryMode.Full;
-                cnn.Manage().Databases[newDbName].RecoveryMode = DatabaseRecoveryMode.Bulk_Logged;
+                cnn.Manage().Databases[newDbName].RecoveryMode = DatabaseRecoveryMode.BulkLogged;
                 cnn.Manage().Databases[newDbName].RecoveryMode = DatabaseRecoveryMode.Simple;
                 cnn.Manage().Databases[newDbName].IsAutoShrink = true;
                 cnn.Manage().Databases[newDbName].IsAutoShrink = false;

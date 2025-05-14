@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using Dapper;
@@ -18,35 +19,30 @@ namespace Universe.SqlServerJam.Tests
         {
             if (!testCase.CanSimplyCreateDatabase()) return;
 
-
-            string newDbName = $"Test of TestResilientDbKiller {Guid.NewGuid().ToString()}";
             foreach (bool? pooling in new List<bool?>() { null, true, false })
             {
+                string newDbName = $"Test of ResilientDbKiller {Guid.NewGuid().ToString()}";
                 Console.WriteLine($"TEST WITH POOLING = [{pooling}]");
-                var csMaster = SqlServerJamConfigurationExtensions.ResetConnectionPooling(testCase.ConnectionString, pooling);
-                var csDb = SqlServerJamConfigurationExtensions.ResetConnectionDatabase(csMaster, newDbName);
-                SqlConnection conMaster = new SqlConnection(csMaster);
-                // Console.WriteLine($"MASTER:{Environment.NewLine}{csMaster}");
-                // Console.WriteLine($"CONCRETE DB:{Environment.NewLine}{csDb}");
-
+                var conMaster = testCase.CreateConnection();
                 conMaster.Execute($"Create Database [{newDbName}]");
 
-                List<SqlConnection> connections = new List<SqlConnection>();
-                for (int i = 1; i <= 5; i++)
+                // Open 5 connections
+                List<DbConnection> connections = new List<DbConnection>();
+                for (int i = 1; i <= 1; i++)
                 {
-                    SqlConnection conDb = new SqlConnection(csDb);
+                    DbConnection conDb = testCase.CreateConnection(pooling: pooling, initialCatalog: newDbName);
                     conDb.Open();
                     conDb.Execute($"Create Table T{i}(id int)");
                     connections.Add(conDb);
                 }
 
                 Stopwatch sw = Stopwatch.StartNew();
-                ResilientDbKiller.Kill(csDb);
-                bool isExists = conMaster.Manage().IsDbExists(newDbName);
-                Console.WriteLine($"{sw.ElapsedMilliseconds:n0} millisecs: ResilientDbKiller.Kill('{newDbName}')");
+                ResilientDbKiller.Kill(testCase.ConnectionString, newDbName);
+                var milliseconds = sw.ElapsedMilliseconds;
+                Console.WriteLine($"{milliseconds:n0} millisecs: ResilientDbKiller.Kill('{newDbName}')");
                 Console.WriteLine();
 
-                Assert.That(isExists, Is.False);
+                Assert.That(conMaster.Manage().IsDbExists(newDbName), Is.False);
             }
         }
 

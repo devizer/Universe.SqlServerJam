@@ -191,9 +191,9 @@ namespace Universe.SqlServerJam.Tests
                         {
                             var prevRecovery = dbOptions.RecoveryMode;
                             DatabaseRecoveryMode newRecovery =
-                                prevRecovery == DatabaseRecoveryMode.Bulk_Logged
+                                prevRecovery == DatabaseRecoveryMode.BulkLogged
                                     ? DatabaseRecoveryMode.Simple
-                                    : DatabaseRecoveryMode.Bulk_Logged;
+                                    : DatabaseRecoveryMode.BulkLogged;
 
                             dbOptions.RecoveryMode = newRecovery;
                             dbOptions.RecoveryMode = prevRecovery;

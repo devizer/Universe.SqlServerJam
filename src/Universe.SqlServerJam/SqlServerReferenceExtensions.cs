@@ -41,11 +41,12 @@ namespace Universe.SqlServerJam
             return ret.ToArray();
         }
 
-        public static DbConnection CreateConnection(this SqlServerRef sqlServerRef, bool? pooling = true, int? timeout = 30)
+        public static DbConnection CreateConnection(this SqlServerRef sqlServerRef, bool? pooling = true, int? timeout = 30, string initialCatalog = null)
         {
             var cs1 = SqlServerJamConfigurationExtensions.ResetConnectionPooling(sqlServerRef.ConnectionString, pooling);
             var cs2 = SqlServerJamConfigurationExtensions.ResetConnectionTimeout(cs1, timeout);
-            var con = SqlServerJamConfiguration.SqlProviderFactory.CreateConnection(cs2);
+            var cs3 = initialCatalog != null ? SqlServerJamConfigurationExtensions.ResetConnectionDatabase(cs2, initialCatalog) : cs2;
+            var con = SqlServerJamConfiguration.SqlProviderFactory.CreateConnection(cs3);
             return con;
         }
 

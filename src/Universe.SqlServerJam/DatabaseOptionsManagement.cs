@@ -264,7 +264,7 @@ WHERE d.name = @name
             set
             {
                 var verifyName = value == DatabasePageVerify.None ? "NONE" : value == DatabasePageVerify.Checksum ? "CHECKSUM" : value == DatabasePageVerify.TornPageDetection ? "TORN_PAGE_DETECTION" : null;
-                if (verifyName == null) throw new ArgumentException($"Unknown DB Page Verify argument {value}");
+                if (verifyName == null) throw new ArgumentException($"Unknown DB Page Verify argument '{value}'");
                 var sqlVerify = $"Alter Database [{this.DatabaseName}] Set PAGE_VERIFY {verifyName}";
                 _ServerManagement.SqlConnection.Execute(sqlVerify);
 
@@ -291,6 +291,8 @@ WHERE d.name = @name
                 var raw = GetSysDatabasesColumn<string>("recovery_model_desc");
                 var all = Enum.GetValues(typeof(DatabaseRecoveryMode)).OfType<DatabaseRecoveryMode>().ToList();
                 var ret = all.FirstOrDefault(x => x.ToString().Equals(raw, StringComparisonExtensions.IgnoreCase));
+                if ("Bulk_Logged".Equals(raw, StringComparison.OrdinalIgnoreCase))
+                    ret = DatabaseRecoveryMode.BulkLogged;
 
                 if (ret == DatabaseRecoveryMode.Unknown)
                 {
@@ -304,7 +306,8 @@ WHERE d.name = @name
             set
             {
                 if (value == DatabaseRecoveryMode.Unknown) throw new ArgumentOutOfRangeException();
-                var sql = $"Alter Database [{DatabaseName}] Set Recovery {value}";
+                var mode = value == DatabaseRecoveryMode.BulkLogged ? "Bulk_Logged" : value.ToString();
+                var sql = $"Alter Database [{DatabaseName}] Set Recovery {mode}";
                 _Connection.Execute(sql);
             }
 
@@ -438,7 +441,7 @@ WHERE d.name = @name
     {
         Unknown = 0,
         Simple,
-        Bulk_Logged,
+        BulkLogged,
         Full,
     }
 

@@ -18,10 +18,8 @@ namespace Universe.SqlServerJam.Tests
         {
             if (!testCase.CanSimplyCreateDatabase()) return;
 
-            string newDbName = $"Test of DB Page Verify {Guid.NewGuid().ToString()}";
-            var csMaster = SqlServerJamConfigurationExtensions.ResetConnectionPooling(testCase.ConnectionString, true);
-            var csDb = SqlServerJamConfigurationExtensions.ResetConnectionDatabase(csMaster, newDbName);
-            SqlConnection conMaster = new SqlConnection(csMaster);
+            string newDbName = $"Test of DB Page Verify {Guid.NewGuid():N}";
+            var conMaster = testCase.CreateConnection();
             conMaster.Execute($"Create Database [{newDbName}]");
             var dbMan = conMaster.Manage().Databases[newDbName];
 
@@ -42,18 +40,20 @@ namespace Universe.SqlServerJam.Tests
                 {
                     Console.WriteLine($"UPDATING PAGE VERIFY MODE as [{verifyMode}]");
                     dbMan.PageVerify = verifyMode;
-                    var newMode = dbMan.PageVerify;
-                    Console.WriteLine($"UPDATED PAGE VERIFY MODE is '{newMode}'");
-                    Assert.That(newMode, Is.EqualTo(verifyMode));
+                    var actual = dbMan.PageVerify;
+                    Console.WriteLine($"UPDATED PAGE VERIFY MODE '{actual}'");
+                    Assert.That(actual, Is.EqualTo(verifyMode));
                     Console.WriteLine("");
                 }
             }
             finally
             {
-                ResilientDbKiller.Kill(csDb);
+                ResilientDbKiller.Kill(testCase.ConnectionString, newDbName);
             }
+
+            Assert.That(testCase.Manage().IsDbExists(newDbName), Is.False);
         }
-        
+
 
     }
 }

@@ -63,15 +63,15 @@ namespace Universe.SqlServerJam
         }
 
 
-        public static string ResetConnectionDatabase(string connectionString, string dataSource)
+        public static string ResetConnectionDatabase(string connectionString, string initialCatalog)
         {
             if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));
             var b = SqlServerJamConfiguration.SqlProviderFactory.CreateConnectionStringBuilder();
             b.ConnectionString = connectionString;
-            if (dataSource == null)
+            if (initialCatalog == null)
                 b["Initial Catalog"] = null;
             else
-                b["Initial Catalog"] = dataSource;
+                b["Initial Catalog"] = initialCatalog;
 
             return b.ConnectionString;
         }
