@@ -133,18 +133,38 @@ tr:nth-child(even) {
   }
 }
   </style>
+
+<!-- anchors css -->
+<style>
+.header-anchor {
+  margin-left: 0.5em;
+  text-decoration: none;
+  color: var(--muted-text);
+  opacity: 0.6;
+  font-size: 0.8em;
+}
+
+.header-anchor:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+</style>
+
+
 </head>
 <body>
-<h2 id="idbconnection-extensions">IDbConnection Extensions</h2>
+<h2
+id="functional-testing-for-.net-applications-with-sql-server-and-localdb">Functional
+Testing for .NET Applications with SQL Server and LocalDB</h2>
 <p>The intention is to tune SQL Servers for functional tests to achieve
 maximum performance, while also providing an accurate description and
 connection properties for locally installed SQL Servers and LocalDB
 instances.</p>
 <p>The entry point is the extension method
 <code>Manage(this IDbConnection connection)</code>. The example below
-creates a test database on each local SQL Server, each LocalDB instance,
-and an AWS SQL Server propagated via the
-<code>SQLSERVER_WELLKNOWN_My_AWS_1</code> environment variable.</p>
+creates new database <strong><em>per test</em></strong> on each local
+SQL Server, each LocalDB instance, and an AWS SQL Server propagated via
+the <code>SQLSERVER_WELLKNOWN_My_AWS_1</code> environment variable.</p>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode csharp"><code class="sourceCode cs"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">[</span>Test<span class="op">]</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">[</span><span class="fu">TestCaseSource</span><span class="op">(</span><span class="fu">nameof</span><span class="op">(</span>GetEnabledServers<span class="op">))]</span></span>
@@ -181,9 +201,12 @@ class="sourceCode csharp"><code class="sourceCode cs"><span id="cb1-1"><a href="
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* 2 */</span>       <span class="op">.</span><span class="fu">Where</span><span class="op">(</span>server <span class="op">=&gt;</span> server<span class="op">.</span><span class="fu">ServiceStartup</span> <span class="op">!=</span> LocalServiceStartup<span class="op">.</span><span class="fu">Disabled</span><span class="op">)</span></span>
 <span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* 3 */</span>       <span class="op">.</span><span class="fu">StartLocalIfStopped</span><span class="op">()</span></span>
 <span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* 4 */</span>       <span class="op">.</span><span class="fu">WarmUp</span><span class="op">(</span>timeout<span class="op">:</span> TimeSpan<span class="op">.</span><span class="fu">FromSeconds</span><span class="op">(</span><span class="dv">30</span><span class="op">))</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>                  <span class="op">.</span><span class="fu">OrderByVersionDesc</span><span class="op">()</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                  <span class="op">.</span><span class="fu">ToList</span><span class="op">();</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* 5 */</span>       <span class="op">.</span><span class="fu">Where</span><span class="op">(</span>server <span class="op">=&gt;</span> server<span class="op">.</span><span class="fu">Version</span> <span class="op">!=</span> <span class="kw">null</span><span class="op">)</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                  <span class="op">.</span><span class="fu">Where</span><span class="op">(</span>server <span class="op">=&gt;</span> server<span class="op">.</span><span class="fu">Manage</span><span class="op">().</span><span class="fu">EngineEdition</span> <span class="op">==</span> EngineEdition<span class="op">.</span><span class="fu">Enterprise</span><span class="op">)</span> <span class="co">// Developer|Enterprise</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>                  <span class="op">.</span><span class="fu">Where</span><span class="op">(</span>server <span class="op">=&gt;</span> server<span class="op">.</span><span class="fu">Manage</span><span class="op">().</span><span class="fu">ShortServerVersion</span><span class="op">.</span><span class="fu">Major</span> <span class="op">&gt;=</span> <span class="dv">15</span><span class="op">)</span> <span class="co">// 2019 or above</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>                  <span class="op">.</span><span class="fu">OrderByVersionDesc</span><span class="op">()</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>                  <span class="op">.</span><span class="fu">ToList</span><span class="op">();</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <ul>
 <li>Line ①: Retrieves all locally pre-installed SQL Servers
 (<code>Kind=Local</code>) and all pre-installed LocalDB instances
@@ -192,13 +215,26 @@ and <code>InstallerVersion</code> properties are populated. No
 communication with SQL Server is performed during this step.
 Additionally, for local SQL Server instances, the
 <code>ServiceStartup</code> property is also populated.</li>
-<li>Line ②: Filters out disabled SQL Server services.</li>
+<li>Line ②: Filters out disabled SQL Server windows services.</li>
 <li>Line ③: Starts local SQL Servers and LocalDB instances if they are
-not already running.</li>
+not already running. On Linux and macOS it has no effect.</li>
 <li>Line ④: Waits up to 30 seconds for each SQL Server health check to
 complete and populates the <code>Version</code> property.</li>
+<li>Line ⑤: Filter out non-healthy SQL Server instances from the
+previous step. This filter and two next are a dubious ones in most
+cases, but it is added for illustration purposes. Apparently, a
+non-responsive SQL Server should be fixed/removed if you control your
+development environment and your CI pipeline.</li>
 </ul>
-<h2 id="sql-server-idbconnection-extensions">SQL Server IDbConnection
+<h2 id="sql-server-discovery">SQL Server Discovery</h2>
+<p>On <strong>Windows</strong>, SQL Server instances and their versions
+are discovered via the registry path
+<code>HKLM\Software\Microsoft\Microsoft SQL Server</code> (<a
+href="https://learn.microsoft.com/en-us/sql/sql-server/install/file-locations-for-default-and-named-instances-of-sql-server">reference</a>).</p>
+<p>On <strong>Linux</strong> and <strong>macOS</strong>, SQL Server
+instance information is provided through environment variables prefixed
+with <code>SQLSERVER_WELLKNOWN_***</code>.</p>
+<h2 id="sql-server-management-extensions">SQL Server Management
 Extensions</h2>
 <table>
 <colgroup>
@@ -256,16 +292,16 @@ Personal</td>
 <td>@<span class="citation" data-cites="VERSION">@VERSION</span></td>
 </tr>
 <tr>
-<td>SecurityMode</td>
-<td>SecurityMode</td>
-<td>read-only</td>
-<td>IntegratedOnly, Both</td>
-</tr>
-<tr>
 <td>string</td>
 <td>MediumServerVersion</td>
 <td>read-only</td>
 <td></td>
+</tr>
+<tr>
+<td>SecurityMode</td>
+<td>SecurityMode</td>
+<td>read-only</td>
+<td>IntegratedOnly, Both</td>
 </tr>
 <tr>
 <td>string</td>
@@ -419,49 +455,49 @@ if IDbConnection is closed</td>
 <td>bool</td>
 <td>Configuration.ClrEnabled</td>
 <td>read/write</td>
-<td></td>
+<td>sp_configure ‘clr enabled’</td>
 </tr>
 <tr>
 <td>bool</td>
 <td>Configuration.ServerTriggerRecursion</td>
 <td>read/write</td>
-<td></td>
+<td>sp_configure ‘server trigger recursion’</td>
 </tr>
 <tr>
 <td>bool</td>
 <td>Configuration.ShowAdvancedOption</td>
 <td>read/write</td>
-<td></td>
+<td>sp_configure ‘show advanced option’</td>
 </tr>
 <tr>
 <td>FileStreamAccessLevels</td>
 <td>Configuration.FileStreamAccessLevel</td>
 <td>read/write</td>
-<td></td>
+<td>sp_configure ‘filestream access level’</td>
 </tr>
 <tr>
 <td>bool</td>
 <td>Configuration.BackupCompressionDefault</td>
 <td>read/write</td>
-<td></td>
+<td>sp_configure ‘backup compression default’</td>
 </tr>
 <tr>
 <td>bool</td>
 <td>Configuration.XpCmdShell</td>
 <td>read/write</td>
-<td></td>
+<td>sp_configure ‘xp_cmdshell’</td>
 </tr>
 <tr>
 <td>int</td>
 <td>Configuration.MaxServerMemory</td>
 <td>read/write</td>
-<td></td>
+<td>sp_configure ‘max server memory (MB)’</td>
 </tr>
 <tr>
 <td>int</td>
 <td>Configuration.MinServerMemory</td>
 <td>read/write</td>
-<td></td>
+<td>sp_configure ‘min server memory (MB)’</td>
 </tr>
 <tr>
 <td>T</td>
@@ -489,8 +525,8 @@ if IDbConnection is closed</td>
 </tr>
 </tbody>
 </table>
-<h2 id="sql-database-idbconnection-extensions">SQL Database
-IDbConnection Extensions</h2>
+<h2 id="sql-database-management-extensions">SQL Database Management
+Extensions</h2>
 <table>
 <colgroup>
 <col style="width: 28%" />
@@ -688,5 +724,42 @@ IDbConnection Extensions</h2>
     block.parentNode.appendChild(button);
   });
 </script>
+
+<!-- anchors js -->
+<script>
+  function slugify(text) {
+    return text.toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')   // Remove special chars
+      .replace(/\s+/g, '-')            // Replace spaces with dashes
+      .replace(/-+/g, '-');            // Collapse multiple dashes
+  }
+
+    document.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(header => {
+      var slug = slugify(header.textContent);
+      header.id = slug;
+
+      const anchor = document.createElement('a');
+      anchor.href = '#' + slug;
+      anchor.className = 'header-anchor';
+      anchor.setAttribute('aria-label', 'Permalink: ' + header.textContent);
+      anchor.textContent = '#';
+
+      /* 
+      anchor.addEventListener('click', e => {
+        e.preventDefault();
+        if (location.hash === `#`) {
+          history.replaceState(null, null, `#`);
+        } else {
+          location.hash = slug;
+        }
+      });
+      */
+
+      header.appendChild(anchor);
+    });
+</script>
+
+
 </body>
 </html>
