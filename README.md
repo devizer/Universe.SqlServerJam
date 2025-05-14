@@ -1,8 +1,8 @@
-## IDbConnection Extensions
+## Functional Testing for .NET Applications with SQL Server and LocalDB
 
 The intention is to tune SQL Servers for functional tests to achieve maximum performance, while also providing an accurate description and connection properties for locally installed SQL Servers and LocalDB instances.
 
-The entry point is the extension method `Manage(this IDbConnection connection)`. The example below creates a test database on each local SQL Server, each LocalDB instance, and an AWS SQL Server propagated via the `SQLSERVER_WELLKNOWN_My_AWS_1` environment variable.
+The entry point is the extension method `Manage(this IDbConnection connection)`. The example below creates new database ***per test*** on each local SQL Server, each LocalDB instance, and an AWS SQL Server propagated via the `SQLSERVER_WELLKNOWN_My_AWS_1` environment variable.
 
 
 ```csharp
@@ -41,18 +41,27 @@ static IEnumerable<SqlServerRef> GetEnabledServers()
     /* 2 */       .Where(server => server.ServiceStartup != LocalServiceStartup.Disabled)
     /* 3 */       .StartLocalIfStopped()
     /* 4 */       .WarmUp(timeout: TimeSpan.FromSeconds(30))
+    /* 5 */       .Where(server => server.Version != null)
+                  .Where(server => server.Manage().EngineEdition == EngineEdition.Enterprise) // Developer|Enterprise
+                  .Where(server => server.Manage().ShortServerVersion.Major >= 15) // 2019 or above
                   .OrderByVersionDesc()
                   .ToList();
 }
 ```
 * Line ①: Retrieves all locally pre-installed SQL Servers (`Kind=Local`) and all pre-installed LocalDB instances (`Kind=LocalDB`). At this step, the `DataSource` and `InstallerVersion` properties are populated. No communication with SQL Server is performed during this step. Additionally, for local SQL Server instances, the `ServiceStartup` property is also populated.
-* Line ②: Filters out disabled SQL Server services.
-* Line ③: Starts local SQL Servers and LocalDB instances if they are not already running.
+* Line ②: Filters out disabled SQL Server windows services.
+* Line ③: Starts local SQL Servers and LocalDB instances if they are not already running. On Linux and macOS it has no effect.
 * Line ④: Waits up to 30 seconds for each SQL Server health check to complete and populates the `Version` property.
+* Line ⑤: Filter out non-healthy SQL Server instances from the previous step. This filter and two next are a dubious ones in most cases, but it is added for illustration purposes. Apparently, a non-responsive SQL Server should be fixed/removed if you control your development environment and your CI pipeline. 
+
+## SQL Server Discovery
+
+On **Windows**, SQL Server instances and their versions are discovered via the registry path `HKLM\Software\Microsoft\Microsoft SQL Server` ([reference](https://learn.microsoft.com/en-us/sql/sql-server/install/file-locations-for-default-and-named-instances-of-sql-server)).
+
+On **Linux** and **macOS**, SQL Server instance information is provided through environment variables prefixed with `SQLSERVER_WELLKNOWN_***`.
 
 
-
-## SQL Server IDbConnection Extensions
+## SQL Server Management Extensions
 
 | Data Type | Member | Readonly | Comments |
 |-----------|--------|----------|----------|
@@ -62,8 +71,8 @@ static IEnumerable<SqlServerRef> GetEnabledServers()
 | string | EngineEditionName | read-only    | "SQL Azure", "Express Edition", "Developer Edition", "Enterprise Edition", ... |
 | EngineEdition | EngineEdition | read-only | Standard, Exterprise, Express, SqlDatabase, SqlDataWarehouse, Personal |
 | string | LongServerVersion | read-only | @@VERSION |
-| SecurityMode | SecurityMode | read-only | IntegratedOnly, Both |
 | string | MediumServerVersion | read-only |
+| SecurityMode | SecurityMode | read-only | IntegratedOnly, Both |
 | string | ProductVersion | read-only | GetServerProperty&lt;string&gt;("ProductVersion")
 | string | ProductLevel | read-only | CTP, RTM, SP1, SP2, ... |
 | string | ProductUpdateLevel | read-only | CU1, CU2, ... |
@@ -88,21 +97,21 @@ static IEnumerable<SqlServerRef> GetEnabledServers()
 | Option&lt;T&gt; | Configuration.ReadOption&lt;T&gt;(string name)
 | void | Configuration.SetAdvancedOption&lt;T&gt;(string name, T value)
 | void | Configuration.SetOption&lt;T&gt;(string name, T value)
-| bool | Configuration.ClrEnabled | read/write
-| bool | Configuration.ServerTriggerRecursion | read/write
-| bool | Configuration.ShowAdvancedOption | read/write
-| FileStreamAccessLevels | Configuration.FileStreamAccessLevel | read/write
-| bool | Configuration.BackupCompressionDefault | read/write
-| bool | Configuration.XpCmdShell | read/write
-| int | Configuration.MaxServerMemory | read/write
-| int | Configuration.MinServerMemory | read/write
+| bool | Configuration.ClrEnabled | read/write | sp_configure 'clr enabled'
+| bool | Configuration.ServerTriggerRecursion | read/write | sp_configure 'server trigger recursion'
+| bool | Configuration.ShowAdvancedOption | read/write | sp_configure 'show advanced option'
+| FileStreamAccessLevels | Configuration.FileStreamAccessLevel | read/write | sp_configure 'filestream access level'
+| bool | Configuration.BackupCompressionDefault | read/write | sp_configure 'backup compression default'
+| bool | Configuration.XpCmdShell | read/write | sp_configure 'xp_cmdshell'
+| int | Configuration.MaxServerMemory | read/write | sp_configure 'max server memory (MB)'
+| int | Configuration.MinServerMemory | read/write | sp_configure 'min server memory (MB)'
 | T | GetServerProperty&lt;T&gt;(string propertyName)
 | bool | IsDbExists(string dbName)
 | HashSet&lt;string&gt; | FindCollations(IEnumerable&lt;string&gt; namesOrPatters)
 | SqlBackupDescription | GetBackupDescription(string bakFullPath) | | Backups and files inside each backup
 
 
-## SQL Database IDbConnection Extensions
+## SQL Database Management Extensions
   
 | Data Type | Member | Readonly | Comments |
 |-----------|--------|----------|----------|

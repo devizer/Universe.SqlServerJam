@@ -1,0 +1,2 @@
+set SQLSERVER_WELLKNOWN_RPI4=Data Source=192.168.2.45; User Id=sa; Password=`1qazxsw2; Encrypt=False;
+setx SQLSERVER_WELLKNOWN_RPI4 "%SQLSERVER_WELLKNOWN_RPI4%"

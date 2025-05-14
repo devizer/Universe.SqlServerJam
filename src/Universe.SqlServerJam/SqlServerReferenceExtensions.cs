@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Universe.SqlServerJam
@@ -13,7 +13,11 @@ namespace Universe.SqlServerJam
         public static string AsBullets(this IEnumerable<SqlServerRef> list)
         {
             var sorted = OrderByVersionDesc(list);
-            IEnumerable<string> strs = sorted.Select(x => " * " + x.DataSource + (x.InstallerVersion == null ? "" : $" ({x.InstallerVersion})") + (x.ServiceStartup != LocalServiceStartup.Unknown ? $", {x.ServiceStartup}" : ""));
+            IEnumerable<string> strs = sorted.Select(x =>
+            {
+                var ver = x.Version ?? x.InstallerVersion;
+                return " * " + x.DataSource + (ver == null ? "" : $" ({ver})") + (x.ServiceStartup != LocalServiceStartup.Unknown ? $", {x.ServiceStartup}" : "");
+            });
             return strs.JoinIntoString(Environment.NewLine);
         }
 
@@ -37,6 +41,19 @@ namespace Universe.SqlServerJam
             return ret.ToArray();
         }
 
+        public static DbConnection CreateConnection(this SqlServerRef sqlServerRef, bool? pooling = true, int? timeout = 30)
+        {
+            var cs1 = SqlServerJamConfigurationExtensions.ResetConnectionPooling(sqlServerRef.ConnectionString, pooling);
+            var cs2 = SqlServerJamConfigurationExtensions.ResetConnectionTimeout(cs1, timeout);
+            var con = SqlServerJamConfiguration.SqlProviderFactory.CreateConnection(cs2);
+            return con;
+        }
+
+        public static SqlServerManagement Manage(this SqlServerRef sqlServerRef, bool? pooling = true, int? timeout = 30)
+        {
+            return CreateConnection(sqlServerRef, pooling, timeout).Manage();
+        }
+
         public static Version WarmUp(this SqlServerRef sqlServerRef, TimeSpan timeout = default(TimeSpan))
         {
             if (sqlServerRef.ServiceStartup == LocalServiceStartup.Disabled) return null;
@@ -53,10 +70,11 @@ namespace Universe.SqlServerJam
                 try
                 {
                     var con = SqlServerJamConfiguration.SqlProviderFactory.CreateConnection(cs);
-                    var shortServerVersion = con.Manage().GetShortServerVersion(5);
-                    sqlServerRef.Version = shortServerVersion;
-                    if (sqlServerRef.InstallerVersion == null) sqlServerRef.InstallerVersion = shortServerVersion;
-                    return shortServerVersion;
+                    var manager = con.Manage().UseCommandTimeout(4);
+                    var version = manager.ProductVersion ?? manager.ShortServerVersion;
+                    sqlServerRef.Version = version;
+                    if (sqlServerRef.InstallerVersion == null) sqlServerRef.InstallerVersion = version;
+                    return version;
                 }
                 catch(Exception ex)
                 {

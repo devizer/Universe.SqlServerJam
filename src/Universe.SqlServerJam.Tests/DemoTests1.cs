@@ -51,6 +51,9 @@ namespace Universe.SqlServerJam.Tests
                 .Where(server => server.ServiceStartup != LocalServiceStartup.Disabled)
                 .StartLocalIfStopped()
                 .WarmUp(timeout: TimeSpan.FromSeconds(30))
+                // .Where(server => server.Version != null)
+                // .Where(server => server.Manage().EngineEdition == EngineEdition.Enterprise) // Developer|Enterprise
+                // .Where(server => server.Manage().ShortServerVersion.Major >= 15) // 2019 or above
                 .OrderByVersionDesc()
                 .ToList();
         }

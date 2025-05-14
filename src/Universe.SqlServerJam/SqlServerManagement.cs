@@ -18,6 +18,10 @@ namespace Universe.SqlServerJam
         private Lazy<string> _MediumServerVersion;
         private Lazy<string> _LongServerVersion;
         private Lazy<string> _HostPlatform;
+        private readonly Lazy<Version> _ProductVersion;
+        
+        // Actually it is need for WarmUp extension
+        public int CommandTimeout { get; private set; } = 30;
 
         public SqlServerManagement(IDbConnection sqlConnection)
         {
@@ -31,6 +35,8 @@ namespace Universe.SqlServerJam
             _HostPlatform = new Lazy<string>(GetHostPlatform);
 
             Databases = new DatabaseSelector(this);
+
+            _ProductVersion = new Lazy<Version>(() => ResilientVersionParser.Parse(this.ProductVersionRaw));
         }
 
 
@@ -43,7 +49,7 @@ namespace Universe.SqlServerJam
 
             // T ret = SqlConnection.ExecuteScalar<T>($"Select SERVERPROPERTY('{propertyName}')");
             // T ret = OneColumnDataReaderWithoutParameters<T>.Instance.ExecuteScalar(SqlConnection, $"Select SERVERPROPERTY('{propertyName}')");
-            T ret = SqlConnection.ExecuteScalar<T>($"Select SERVERPROPERTY('{propertyName}')");
+            T ret = SqlConnection.ExecuteScalar<T>($"Select SERVERPROPERTY('{propertyName}')", null, commandTimeout: this.CommandTimeout);
 
             _ServerProperties[propertyName] = ret;
             return ret;
@@ -206,7 +212,7 @@ namespace Universe.SqlServerJam
             });
         }
 
-        public string ProductVersion
+        public string ProductVersionRaw
         {
             get
             {
@@ -215,6 +221,8 @@ namespace Universe.SqlServerJam
                 return ret;
             }
         }
+
+        public Version ProductVersion => _ProductVersion.Value;
 
 
         public Version GetShortServerVersion(int? timeout)
@@ -233,7 +241,7 @@ namespace Universe.SqlServerJam
         {
             var mediumStrings = new[]
             {
-                this.ProductVersion,
+                this.ProductVersion.ToString(),
                 this.ProductLevel,
                 this.ProductUpdateLevel,
                 this.IsLocalDB ? "LocalDB" : "",
@@ -415,5 +423,11 @@ Else
         }
 
         public ServerConfigurationSettingsManager Configuration => new ServerConfigurationSettingsManager(this);
+
+        public SqlServerManagement UseCommandTimeout(int seconds)
+        {
+            this.CommandTimeout = Math.Max(1, seconds);
+            return this;
+        }
     }
 }

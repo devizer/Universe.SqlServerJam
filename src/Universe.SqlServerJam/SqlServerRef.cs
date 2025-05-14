@@ -11,8 +11,11 @@ namespace Universe.SqlServerJam
     public class SqlServerRef
     {
         public SqlServerDiscoverySource Kind { get; set; }
+
+        // InstallerVersion is populated by Discovery, null for well known
         public Version InstallerVersion { get; set; }
-        // Select Result
+        
+        // Version is populated by WarmUp
         public Version Version { get; set; }
         public bool IsAlive => Version != null;
         public string Data { get; set; }
@@ -54,7 +57,9 @@ namespace Universe.SqlServerJam
 
         public override string ToString()
         {
-            return $"'{DataSource}'" + (InstallerVersion != null ? (" Ver " + InstallerVersion) : "") + (ServiceStartup != LocalServiceStartup.Unknown ? $", {ServiceStartup}" : "");
+            var ver = Version ?? InstallerVersion;
+            var startupInfo = ServiceStartup != LocalServiceStartup.Unknown ? $", {ServiceStartup}" : "";
+            return $"'{DataSource}'" + (ver != null ? (" Ver " + ver) : "") /* + startupInfo*/;
         }
 
         public List<SqlServerRef> ProbeTransports(int timeoutMilliseconds = 30000)

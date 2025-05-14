@@ -62,6 +62,8 @@ namespace Universe.SqlServerJam.Tests
             var list = SqlServers.OrderByVersionDesc().Where(x => x.IsNotDisabled).ToList();
             foreach (var sqlRef in list)
             {
+                bool isLocal = SqlServiceExtentions.IsLocalService(sqlRef.DataSource) || SqlServiceExtentions.IsLocalDB(sqlRef.DataSource);
+                if (!isLocal) continue;
                 string cs = sqlRef.ConnectionString;
                 string v = sqlRef.InstallerVersion == null ? "N/A" : sqlRef.InstallerVersion.ToString();
                 StringBuilder report = new StringBuilder();
@@ -114,7 +116,8 @@ namespace Universe.SqlServerJam.Tests
                     // alive++;
                     Interlocked.Increment(ref alive);
                     report.AppendLine("Version (4 bytes) ........: " + ver);
-                    report.AppendLine("ProductVersion (string) ..: " + man.ProductVersion);
+                    report.AppendLine("ProductVersion (string) ..: " + man.ProductVersionRaw);
+                    report.AppendLine("ProductVersion ...........: " + man.ProductVersion);
                     report.AppendLine("Product Level ............: " + man.ProductLevel);
                     report.AppendLine("Update Level .............: " + man.ProductUpdateLevel);
                     report.AppendLine("Edition Name .............: " + man.EngineEditionName);
