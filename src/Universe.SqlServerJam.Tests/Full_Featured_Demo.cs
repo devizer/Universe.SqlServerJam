@@ -62,7 +62,9 @@ namespace Universe.SqlServerJam.Tests
             var list = SqlServers.OrderByVersionDesc().Where(x => x.IsNotDisabled).ToList();
             foreach (var sqlRef in list)
             {
-                bool isLocal = SqlServiceExtentions.IsLocalService(sqlRef.DataSource) || SqlServiceExtentions.IsLocalDB(sqlRef.DataSource);
+                // bool isLocal = SqlServiceExtentions.IsLocalService(sqlRef.DataSource) || SqlServiceExtentions.IsLocalDB(sqlRef.DataSource);
+                // bool isLocal = sqlRef.Kind == SqlServerDiscoverySource.Local || sqlRef.Kind == SqlServerDiscoverySource.LocalDB;
+                bool isLocal = DataSourceStructured.ParseDataSource(sqlRef.DataSource)?.IsLocal == true;
                 if (!isLocal) continue;
                 string cs = sqlRef.ConnectionString;
                 string v = sqlRef.InstallerVersion == null ? "N/A" : sqlRef.InstallerVersion.ToString();
@@ -335,7 +337,9 @@ namespace Universe.SqlServerJam.Tests
             StringBuilder errors = new StringBuilder();
             foreach (var sqlRef in list)
             {
-                var blockSize = SqlServiceExtentions.IsLocalDbOrLocalServerByConnectionString(sqlRef.ConnectionString) ? 1024 : 1024;
+                var structured = DataSourceStructured.ParseDataSource(sqlRef.DataSource);
+                bool isLocal = structured?.IsLocal == true;
+                var blockSize = isLocal ? 1024 : 1024;
                 var supportedProtocols = sqlRef.ProbeTransports(timeoutMilliseconds: TRANSPORT_PROBE_DURATION);
                 foreach (var supportedProtocol in supportedProtocols)
                 {
@@ -378,7 +382,9 @@ namespace Universe.SqlServerJam.Tests
             StringBuilder errors = new StringBuilder();
             foreach (var sqlRef in listAll)
             {
-                var blockSize = SqlServiceExtentions.IsLocalDbOrLocalServerByConnectionString(sqlRef.ConnectionString) ? 4096 : 1024;
+                var structured = DataSourceStructured.ParseDataSource(sqlRef.DataSource);
+                bool isLocal = structured?.IsLocal == true;
+                var blockSize = isLocal ? 4096 : 1024;
                 var supportedProtocols = sqlRef.ProbeTransports(timeoutMilliseconds: TRANSPORT_PROBE_DURATION);
                 foreach (var supportedProtocol in supportedProtocols)
                 {

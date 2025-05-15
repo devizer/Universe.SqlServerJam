@@ -24,7 +24,9 @@ namespace Universe.SqlServerJam
         public LocalServiceStartup ServiceStartup { get; set; }
         public bool IsNotDisabled => ServiceStartup != LocalServiceStartup.Disabled;
 
-        public bool CanStartStopService => Kind == SqlServerDiscoverySource.Local || Kind == SqlServerDiscoverySource.LocalDB;
+        public bool CanStartStopService => 
+            TinyCrossInfo.IsWindows
+            && (Kind == SqlServerDiscoverySource.Local || Kind == SqlServerDiscoverySource.LocalDB);
 
         public string ConnectionString
         {

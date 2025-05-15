@@ -33,18 +33,21 @@ namespace Universe.SqlServerJam
             return ret;
         }
 
+        [Obsolete("Use DataSourceStructured", true)]
         public static bool IsLocalService(string dataSource)
         {
             var structured = DataSourceStructured.ParseDataSource(dataSource);
             return structured?.IsLocalService == true;
         }
 
+        [Obsolete("Use DataSourceStructured", true)]
         public static bool IsLocalDB(string dataSource)
         {
             var structured = DataSourceStructured.ParseDataSource(dataSource);
             return structured?.IsLocalDb == true;
         }
 
+        [Obsolete("Use DataSourceStructured", true)]
         public static bool IsLocalDbOrLocalServerByConnectionString(string connectionString)
         {
             var dataSource = SqlServerJamConfigurationExtensions.GetDataSource(connectionString);
@@ -62,18 +65,20 @@ namespace Universe.SqlServerJam
             return structured.ServiceName;
         }
 
-        public static bool StartLocalDB(string localDb, TimeSpan timeout = default(TimeSpan))
+        public static bool StartLocalDB(string dataSource, TimeSpan timeout = default(TimeSpan))
         {
             if (timeout.Ticks == 0)
                 timeout = TimeSpan.FromSeconds(30);
 
-            if (!IsLocalDB(localDb)) return false;
+            var structured = DataSourceStructured.ParseDataSource(dataSource);
+            if (structured?.IsLocalDb != true) return false;
+
             Stopwatch sw = Stopwatch.StartNew();
             while (true)
             {
                 try
                 {
-                    string cs = String.Format(SqlServerJamDiscoveryConfiguration.LocalDbConnectionStringFormat, localDb);
+                    string cs = String.Format(SqlServerJamDiscoveryConfiguration.LocalDbConnectionStringFormat, dataSource);
                     cs = SqlServerJamConfigurationExtensions.ResetConnectionPooling(cs, false);
                     cs = SqlServerJamConfigurationExtensions.ResetConnectionTimeout(cs, 2);
                     using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(cs))
@@ -84,7 +89,7 @@ namespace Universe.SqlServerJam
                 }
                 catch
                 {
-                    string instanceName = localDb.Split('\\').LastOrDefault() ?? "MSSQLLocalDB";
+                    string instanceName = dataSource.Split('\\').LastOrDefault() ?? "MSSQLLocalDB";
                     // try { StartLocalDB_Impl(instanceName, (int)timeout.TotalMilliseconds); } catch { }
                 }
 
@@ -132,9 +137,11 @@ namespace Universe.SqlServerJam
         public static LocalServiceStartup GetLocalServiceStartup(string dataSource)
         {
             if (!TinyCrossInfo.IsWindows) return LocalServiceStartup.Unknown;
-            if (!IsLocalService(dataSource)) return LocalServiceStartup.Unknown;
 
-            string serviceName = GetServiceName(dataSource);
+            var structured = DataSourceStructured.ParseDataSource(dataSource);
+            if (structured?.IsLocalService != true) return LocalServiceStartup.Unknown;
+
+            string serviceName = structured.ServiceName;
             string registryPath = $@"SYSTEM\CurrentControlSet\Services\{serviceName}";
 
             try
@@ -167,10 +174,13 @@ namespace Universe.SqlServerJam
         // Returns true if service is running
         public static bool StartService(string dataSource)
         {
-            if (IsLocalDB(dataSource))
+            var structured = DataSourceStructured.ParseDataSource(dataSource);
+            if (structured == null) return false;
+            if (structured.IsLocalDb)
                 return StartLocalDB(dataSource, TimeSpan.FromSeconds(30));
 
-            if (!IsLocalService(dataSource)) return false;
+            // if (!IsLocalService(dataSource)) return false;
+            if (!structured.IsLocalService) return false;
 
             var serviceStatus = CheckLocalServiceStatus(dataSource);
             // ServiceController service = new ServiceController(GetServiceName(dataSource));
