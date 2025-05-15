@@ -13,9 +13,11 @@ namespace Universe.SqlServerJam
 {
     public static class SqlServiceExtentions
     {
-
         public static SqlServiceStatus CheckLocalServiceStatus(string dataSource)
         {
+            // TODO: Do not return fail on Linux/MacOS
+            // if (TinyCrossInfo.IsWindows) return null;
+
             SqlServiceStatus ret = null;
             try
             {

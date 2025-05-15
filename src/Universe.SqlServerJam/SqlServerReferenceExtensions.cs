@@ -110,7 +110,7 @@ namespace Universe.SqlServerJam
 
         public static void RestartLocalService(this SqlServerRef sqlServerRef, int stopTimeout = 30, int startTimeout = 30)
         {
-            if (TinyCrossInfo.IsWindows) return;
+            if (!TinyCrossInfo.IsWindows) return;
             if (!sqlServerRef.CanStartStopService) return;
 
             Stopwatch stopAt = Stopwatch.StartNew();
@@ -142,6 +142,7 @@ namespace Universe.SqlServerJam
         // Return true if action taken
         public static bool StartLocalIfStopped(this SqlServerRef sqlServerRef)
         {
+            if (!TinyCrossInfo.IsWindows) return false;
             if (sqlServerRef.Kind == SqlServerDiscoverySource.Local)
             {
                 SqlServiceStatus serviceStatus = SqlServiceExtentions.CheckLocalServiceStatus(sqlServerRef.DataSource);
