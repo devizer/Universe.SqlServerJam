@@ -137,7 +137,7 @@ namespace Universe.SqlServerJam
         // Returns true if service is running
         public static bool StartServiceOrLocalDb(string dataSource, int timeout = 30)
         {
-            if (TinyCrossInfo.IsWindows) return false;
+            if (!TinyCrossInfo.IsWindows) return false;
             var structured = DataSourceStructured.ParseDataSource(dataSource);
             if (structured == null) return false;
             if (structured.IsLocalDb)
@@ -176,7 +176,7 @@ namespace Universe.SqlServerJam
         // Return true if action taken
         public static bool StopServiceOrLocalDb(string dataSource, int stopTimeout)
         {
-            if (TinyCrossInfo.IsWindows) return false;
+            if (!TinyCrossInfo.IsWindows) return false;
             DataSourceStructured structured = DataSourceStructured.ParseDataSource(dataSource);
             if (structured == null) return false;
 

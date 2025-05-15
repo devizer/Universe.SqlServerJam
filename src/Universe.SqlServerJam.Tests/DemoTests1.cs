@@ -19,7 +19,7 @@ namespace Universe.SqlServerJam.Tests
             string newDbName = $"Test DB {Guid.NewGuid():N}";
             // IDbConnection cnn = new SqlConnection(testCase.ConnectionString);
             IDbConnection cnn = testCase.CreateConnection(pooling: false, timeout: 30);
-            int targetFillFactor = 79;
+            int targetFillFactor = 78;
             if (cnn.Manage().Configuration.FillFactor != targetFillFactor && testCase.CanStartStopService)
             {
                 cnn.Manage().Configuration.FillFactor = targetFillFactor;
