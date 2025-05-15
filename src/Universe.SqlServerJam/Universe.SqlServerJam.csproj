@@ -2,7 +2,8 @@
 
     <!-- do not refer to Microsoft SqlClient -->
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461;net35;netstandard1.4;net40</TargetFrameworks>
+      <!-- net451 for dapper 1.60.6 -->
+	  <TargetFrameworks>netstandard2.0;netstandard1.4; net35;net40;net45;net451; net461;net6.0;net8.0;</TargetFrameworks>
   </PropertyGroup>
 
     <PropertyGroup>
@@ -32,11 +33,11 @@
 
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="All" />
+      <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
     </ItemGroup>
 
     <!-- Sql Discovery -->
-    <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net6.0' or '$(TargetFramework)' == 'net8.0'">
         <PackageReference Include="Microsoft.Windows.Compatibility" Version="2.0.1" />
     </ItemGroup>
 
@@ -61,21 +62,26 @@
     </ItemGroup>
 
 
-    <ItemGroup Condition=" '$(TargetFramework)' == 'net35' Or '$(TargetFramework)' == 'net40' Or '$(TargetFramework)' == 'net461' ">
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net35' Or '$(TargetFramework)' == 'net40' Or '$(TargetFramework)' == 'net461'  Or '$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net451' ">
         <Reference Include="System.ServiceProcess" />
     </ItemGroup>
 
     <ItemGroup Condition=" 
 			   '$(TargetFramework)' == 'netstandard2.0' 
+			   Or '$(TargetFramework)' == 'net451' 
+			   Or '$(TargetFramework)' == 'net6.0' 
+			   Or '$(TargetFramework)' == 'net8.0' 
 			   Or '$(TargetFramework)' == 'netstandard1.4' 
 			   Or '$(TargetFramework)' == 'netcoreapp1.0'
 			   Or '$(TargetFramework)' == 'netcoreapp1.1' 
 			   Or '$(TargetFramework)' == 'net461' ">
-        <PackageReference Include="Dapper" Version="1.60.6" />
+		<!-- net451+ -->
+		<PackageReference Include="Dapper" Version="1.60.6" />
     </ItemGroup>
 
-    <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0' And '$(TargetFramework)' != 'netstandard1.4' And '$(TargetFramework)' != 'net20' And '$(TargetFramework)' != 'net30' And '$(TargetFramework)' != 'netnetcoreapp1.1' And '$(TargetFramework)' != 'netnetcoreapp1.0' and '$(TargetFramework)' != 'net461'">
-        <PackageReference Include="Dapper" Version="1.42.0" />
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net35' or '$(TargetFramework)' == 'net40' or '$(TargetFramework)' == 'net45'">
+		<!-- net35 ... net45 -->
+	    <PackageReference Include="Dapper" Version="1.42.0" />
     </ItemGroup>
 
     <!-- Theraot.Core -->
