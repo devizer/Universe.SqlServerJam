@@ -3,7 +3,6 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -22,8 +21,8 @@ namespace Universe.SqlServerJam
             {
                 using (ServiceController service = new ServiceController(GetServiceName(dataSource)))
                 {
-                    var status = (SqlServiceStatus.ServiceState)(int)service.Status;
-                    ret = new SqlServiceStatus(status);
+                    var state = (SqlServiceStatus.ServiceState)(int)service.Status;
+                    ret = new SqlServiceStatus(state);
                 }
             }
             catch (Exception e)
@@ -36,60 +35,31 @@ namespace Universe.SqlServerJam
 
         public static bool IsLocalService(string dataSource)
         {
-            var instanceWithoutProtocol = dataSource.Split(':').Last();
-            var hostWithPort = instanceWithoutProtocol.Split('\\').First();
-            var host = hostWithPort.Split(',').First();
-
-            return
-                host.Equals(".", StringComparisonExtensions.IgnoreCase)
-                || host.Equals("(local)", StringComparisonExtensions.IgnoreCase)
-                || host.Equals("::1", StringComparisonExtensions.IgnoreCase)
-                || host.Equals("127.0.0.1", StringComparisonExtensions.IgnoreCase)
-                || host.Equals(EnvironmentExtensions.MachineName, StringComparisonExtensions.IgnoreCase);
-
-            // Before (rough)
-            return dataSource.StartsWith("(local)", StringComparisonExtensions.IgnoreCase);
+            var structured = DataSourceStructured.ParseDataSource(dataSource);
+            return structured?.IsLocalService == true;
         }
 
-        public static bool IsLocalDB(string sqlServerInstance)
+        public static bool IsLocalDB(string dataSource)
         {
-            var instance = sqlServerInstance.Split(':').Last();
-            var host = instance.Split('\\').First();
-            return
-                host.Equals("(LocalDb)", StringComparisonExtensions.IgnoreCase);
-
-            // Before (rough)
-            // return dataSource.StartsWith("(localdb)", StringComparison.InvariantCultureIgnoreCase);
+            var structured = DataSourceStructured.ParseDataSource(dataSource);
+            return structured?.IsLocalDb == true;
         }
 
-        public static bool IsLocalDbOrLocalServer(string connectionString)
+        public static bool IsLocalDbOrLocalServerByConnectionString(string connectionString)
         {
-            // var ds = new SqlConnectionStringBuilder(connectionString).DataSource;
-            var ds = SqlServerJamConfigurationExtensions.GetDataSource(connectionString);
-            var instance = ds.Split(':').Last();
-            var host = instance.Split('\\').First();
-            // Discovery always returns either (local) or (localdb) host only.
-            return
-                host.Equals(".", StringComparisonExtensions.IgnoreCase)
-                || host.Equals("(local)", StringComparisonExtensions.IgnoreCase)
-                || host.Equals("(LocalDb)", StringComparisonExtensions.IgnoreCase)
-                || host.Equals("127.0.0.1", StringComparisonExtensions.IgnoreCase);
+            var dataSource = SqlServerJamConfigurationExtensions.GetDataSource(connectionString);
+            var structured = DataSourceStructured.ParseDataSource(dataSource);
+            return structured?.IsLocal == true;
         }
 
 
         public static string GetServiceName(string sqlServer)
         {
-            var invariant = StringComparisonExtensions.IgnoreCase;
-            if ("(local)".Equals(sqlServer, StringComparison.Ordinal))
-            {
-                return "MSSQLServer";
-            }
+            var structured = DataSourceStructured.ParseDataSource(sqlServer);
+            if (structured?.IsLocalService != true)
+                throw new Exception("GetServiceName() is applicable for local sql servers");
 
-            const string prefix = "(local)\\";
-            if (!sqlServer.StartsWith(prefix, invariant))
-                throw new Exception("It is applicable for local sql servers");
-
-            return "MSSQL$" + sqlServer.Substring(prefix.Length);
+            return structured.ServiceName;
         }
 
         public static bool StartLocalDB(string localDb, TimeSpan timeout = default(TimeSpan))
@@ -103,7 +73,6 @@ namespace Universe.SqlServerJam
             {
                 try
                 {
-                    // string cs = String.Format("Data Source={0};Integrated Security=True;Pooling=false;Timeout=2", localDb);
                     string cs = String.Format(SqlServerJamDiscoveryConfiguration.LocalDbConnectionStringFormat, localDb);
                     cs = SqlServerJamConfigurationExtensions.ResetConnectionPooling(cs, false);
                     cs = SqlServerJamConfigurationExtensions.ResetConnectionTimeout(cs, 2);
@@ -126,11 +95,10 @@ namespace Universe.SqlServerJam
 
         }
 
-        // Incorrect
-        static void StartLocalDB_Impl(string instanceName, int timeout)
+        [Obsolete("Deprecated. Will be removed", false)]
+        public static IEnumerable<string> FindSqlLocalDbExes()
         {
-            string[] vers = new[] {"160", "150", "140", "130", "120"};
-            string exePath = null;
+            string[] vers = new[] { "170", "160", "150", "140", "130", "120" };
             foreach (var ver in vers)
             {
                 string candidate = Environment.ExpandEnvironmentVariables(
@@ -139,10 +107,15 @@ namespace Universe.SqlServerJam
 
                 if (File.Exists(candidate))
                 {
-                    exePath = candidate;
-                    break;
+                    yield return candidate;
                 }
             }
+        }
+
+        // Incorrect
+        static void StartLocalDB_Impl(string instanceName, int timeout)
+        {
+            string exePath = FindSqlLocalDbExes().FirstOrDefault();
 
             ProcessStartInfo si = new ProcessStartInfo(exePath, "start " + instanceName);
             si.UseShellExecute = false;
@@ -191,13 +164,14 @@ namespace Universe.SqlServerJam
             return LocalServiceStartup.Unknown;
         }
 
-        // Remove Warn Up
+        // Returns true if service is running
         public static bool StartService(string dataSource)
         {
             if (IsLocalDB(dataSource))
                 return StartLocalDB(dataSource, TimeSpan.FromSeconds(30));
 
             if (!IsLocalService(dataSource)) return false;
+
             var serviceStatus = CheckLocalServiceStatus(dataSource);
             // ServiceController service = new ServiceController(GetServiceName(dataSource));
             // if (service.Status == ServiceControllerStatus.Running)
@@ -223,7 +197,137 @@ namespace Universe.SqlServerJam
 
             return false;
         }
+
+        
+        // Return true if action taken
+        public static bool StopServiceOrLocalDb(string dataSource, int stopTimeout)
+        {
+            DataSourceStructured structured = DataSourceStructured.ParseDataSource(dataSource);
+            if (structured == null) return false;
+
+            if (structured.IsLocalDb)
+            {
+                string instanceName = structured.LocalDbInstance;
+                var sqlLocalDbExe = FindSqlLocalDbExes().FirstOrDefault();
+                if (sqlLocalDbExe != null)
+                {
+                    try
+                    {
+                        SqlLocalDbDiscovery.TinyHiddenExec(sqlLocalDbExe, $"stop \"{instanceName}\"", stopTimeout);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine($"Stop failed for LocalDB instance [{instanceName}] using '{sqlLocalDbExe}'{Environment.NewLine}{ex}");
+                    }
+                }
+            }
+            else if (structured.IsLocalService)
+            {
+                var serviceName = structured.ServiceName;
+
+                var serviceStatus = CheckLocalServiceStatus(dataSource);
+                if (serviceStatus?.State == SqlServiceStatus.ServiceState.Stopped) return false;
+
+                var startup = GetLocalServiceStartup(dataSource);
+                if (startup == LocalServiceStartup.Disabled) return false;
+
+                try
+                {
+                    ServiceController service = new ServiceController(serviceName);
+                    service.Stop();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    // LOG fail
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+
     }
+
+    // Only Local Service or LocalDB
+    public class DataSourceStructured
+    {
+        public bool IsLocalService { get; set; }
+        public bool IsLocalDb { get; set; }
+
+        public bool IsLocal => IsLocalDb || IsLocalService;
+
+        // Not Null if IsLocalService
+        public string ServiceName { get; set; }
+
+        public string LocalDbInstance { get; set; }
+
+        public override string ToString()
+        {
+            if (IsLocalDb)
+                return $"LocalDb '{LocalDbInstance}'";
+
+            if (IsLocalService)
+                return $" Local Service '{ServiceName}'";
+
+            return "Non-local or null service, e.g. neither SQL Server nor LocalDB";
+        }
+
+        public static DataSourceStructured ParseConnectionString(string connectionString)
+        {
+            var dataSource = SqlServerJamConfigurationExtensions.GetDataSource(connectionString);
+            return ParseDataSource(dataSource);
+        }
+
+        public static DataSourceStructured ParseDataSource(string dataSource)
+        {
+            var instanceWithoutProtocol = dataSource.Split(':').Last();
+            var hostWithPort = instanceWithoutProtocol.Split('\\').First();
+            var host = hostWithPort.Split(',').First();
+
+            bool isLocalService =
+                host.Equals("(local)", StringComparisonExtensions.IgnoreCase)
+                || host.Equals(".", StringComparisonExtensions.IgnoreCase)
+                || host.Equals("::1", StringComparisonExtensions.IgnoreCase)
+                || host.Equals("127.0.0.1", StringComparisonExtensions.IgnoreCase)
+                || host.Equals(EnvironmentExtensions.MachineName, StringComparisonExtensions.IgnoreCase);
+
+            bool isLocalDb = 
+                host.StartsWith("(LocalDB)", StringComparisonExtensions.IgnoreCase)
+                && dataSource.StartsWith("(LocalDB)\\", StringComparisonExtensions.IgnoreCase);
+
+            string instanceName =
+                dataSource.IndexOf("\\", StringComparison.Ordinal) < 0
+                ? null
+                : dataSource.Split('\\').LastOrDefault();
+
+            if (isLocalService)
+            {
+                var serviceName = instanceName == null ? "MSSQLSERVER" : $"MSSQL${instanceName}";
+                return new DataSourceStructured()
+                {
+                    IsLocalService = true,
+                    IsLocalDb = false,
+                    ServiceName = serviceName
+                };
+            }
+            else if (isLocalDb)
+            {
+                return new DataSourceStructured()
+                {
+                    IsLocalDb = true,
+                    IsLocalService = false,
+                    ServiceName = null,
+                    LocalDbInstance = instanceName ?? "MSSQLLocalDB"
+                };
+            }
+
+            return null;
+        }
+
+    }
+
 
     public enum LocalServiceStartup
     {

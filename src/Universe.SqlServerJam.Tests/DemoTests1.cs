@@ -17,8 +17,21 @@ namespace Universe.SqlServerJam.Tests
         public void Demo1(SqlServerRef testCase)
         {
             string newDbName = $"Test DB {Guid.NewGuid():N}";
-            IDbConnection cnn = new SqlConnection(testCase.ConnectionString);
+            // IDbConnection cnn = new SqlConnection(testCase.ConnectionString);
+            IDbConnection cnn = testCase.CreateConnection(pooling: false, timeout: 30);
+            int targetFillFactor = 80;
+            if (cnn.Manage().Configuration.FillFactor != targetFillFactor && testCase.CanStartStopService)
+            {
+                cnn.Manage().Configuration.FillFactor = targetFillFactor;
+                Console.WriteLine($"RESTARTING {testCase} for configuration");
+                testCase.RestartLocalService(stopTimeout: 30, startTimeout: 30);
+                Assert.That(cnn.Manage().Configuration.FillFactor, Is.EqualTo(targetFillFactor), () => "FillFactor does not match");
+            }
+            Console.WriteLine($"FillFactor: {cnn.Manage().Configuration.FillFactor}");
+
+            cnn = testCase.CreateConnection(pooling: true, timeout: 30);
             cnn.Manage().Configuration.MinServerMemory = 4000; // 4Gb
+            Assert.That(cnn.Manage().Configuration.MinServerMemory, Is.EqualTo(4000));
             cnn.Manage().Configuration.MaxServerMemory = 64000; // 64Gb
             try
             {

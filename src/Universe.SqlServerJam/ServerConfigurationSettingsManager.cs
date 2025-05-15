@@ -43,6 +43,14 @@ namespace Universe.SqlServerJam
             set => SetAdvancedOption<bool>(Names.XpCmdShell, value);
         }
 
+        // Not a dynamic option, restart required
+        // 0 and 100 are the same
+        public int FillFactor
+        {
+            get => ReadAdvancedOption<int>("fill factor (%)")?.RunValue ?? 0;
+            set => SetAdvancedOption<int>("fill factor (%)", value);
+        }
+
         public int MaxServerMemory
         {
             get => ReadAdvancedOption<int>(Names.MaxServerMemory).RunValue;

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Universe.SqlServerJam
@@ -94,6 +95,37 @@ namespace Universe.SqlServerJam
                 sqlServerRef.StartLocalIfStopped();
                 yield return sqlServerRef;
             }
+        }
+
+        public static void RestartLocalService(this SqlServerRef sqlServerRef, int stopTimeout = 30, int startTimeout = 30)
+        {
+            if (!sqlServerRef.CanStartStopService)
+                return;
+
+            Stopwatch stopAt = Stopwatch.StartNew();
+            if (sqlServerRef.Kind == SqlServerDiscoverySource.LocalDB)
+            {
+                bool isStoppedDetails = SqlServiceExtentions.StopServiceOrLocalDb(sqlServerRef.DataSource, stopTimeout);
+                // Stop takes 5 sec usually
+                Thread.Sleep(10);
+            }
+            else if (sqlServerRef.Kind == SqlServerDiscoverySource.Local)
+            {
+                SqlServiceStatus serviceStatus = SqlServiceExtentions.CheckLocalServiceStatus(sqlServerRef.DataSource);
+                var isStoppedAtStart = serviceStatus?.State == SqlServiceStatus.ServiceState.Stopped;
+                if (!isStoppedAtStart)
+                {
+                    bool isStoppedDetails = SqlServiceExtentions.StopServiceOrLocalDb(sqlServerRef.DataSource, stopTimeout);
+                    do
+                    {
+                        var isStopped = SqlServiceStatus.ServiceState.Stopped == SqlServiceExtentions.CheckLocalServiceStatus(sqlServerRef.DataSource)?.State;
+                        if (isStopped) break;
+                    } while (stopAt.ElapsedMilliseconds < stopTimeout * 1000);
+                }
+            }
+
+            SqlServiceExtentions.StartService(sqlServerRef.DataSource);
+            sqlServerRef.WarmUp(timeout: TimeSpan.FromSeconds(startTimeout));
         }
 
         // Return true if action taken

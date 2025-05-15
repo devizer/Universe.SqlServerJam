@@ -335,7 +335,7 @@ namespace Universe.SqlServerJam.Tests
             StringBuilder errors = new StringBuilder();
             foreach (var sqlRef in list)
             {
-                var blockSize = SqlServiceExtentions.IsLocalDbOrLocalServer(sqlRef.ConnectionString) ? 1024 : 1024;
+                var blockSize = SqlServiceExtentions.IsLocalDbOrLocalServerByConnectionString(sqlRef.ConnectionString) ? 1024 : 1024;
                 var supportedProtocols = sqlRef.ProbeTransports(timeoutMilliseconds: TRANSPORT_PROBE_DURATION);
                 foreach (var supportedProtocol in supportedProtocols)
                 {
@@ -378,7 +378,7 @@ namespace Universe.SqlServerJam.Tests
             StringBuilder errors = new StringBuilder();
             foreach (var sqlRef in listAll)
             {
-                var blockSize = SqlServiceExtentions.IsLocalDbOrLocalServer(sqlRef.ConnectionString) ? 4096 : 1024;
+                var blockSize = SqlServiceExtentions.IsLocalDbOrLocalServerByConnectionString(sqlRef.ConnectionString) ? 4096 : 1024;
                 var supportedProtocols = sqlRef.ProbeTransports(timeoutMilliseconds: TRANSPORT_PROBE_DURATION);
                 foreach (var supportedProtocol in supportedProtocols)
                 {
