@@ -95,23 +95,6 @@ namespace Universe.SqlServerJam
             }
         }
 
-        // Incorrect
-        static void StartLocalDB_Impl(string instanceName, int timeout)
-        {
-            string exePath = FindSqlLocalDbExes().FirstOrDefault();
-
-            ProcessStartInfo si = new ProcessStartInfo(exePath, "start " + instanceName);
-            si.UseShellExecute = false;
-#if !NETSTANDARD1_4
-            si.WindowStyle = ProcessWindowStyle.Hidden;
-#endif
-            si.CreateNoWindow = true;
-            using (Process p = Process.Start(si))
-            {
-                p.WaitForExit(Math.Min(Math.Max(1, timeout), 60000));
-            }
-        }
-
         public static LocalServiceStartup GetLocalServiceStartup(string dataSource)
         {
             if (!TinyCrossInfo.IsWindows) return LocalServiceStartup.Unknown;
@@ -150,12 +133,13 @@ namespace Universe.SqlServerJam
         }
 
         // Returns true if service is running
-        public static bool StartService(string dataSource)
+        public static bool StartServiceOrLocalDb(string dataSource, int timeout = 30)
         {
+            if (TinyCrossInfo.IsWindows) return false;
             var structured = DataSourceStructured.ParseDataSource(dataSource);
             if (structured == null) return false;
             if (structured.IsLocalDb)
-                return StartLocalDB(dataSource, TimeSpan.FromSeconds(30));
+                return StartLocalDB(dataSource, TimeSpan.FromSeconds(timeout));
 
             // if (!IsLocalService(dataSource)) return false;
             if (!structured.IsLocalService) return false;
@@ -190,6 +174,7 @@ namespace Universe.SqlServerJam
         // Return true if action taken
         public static bool StopServiceOrLocalDb(string dataSource, int stopTimeout)
         {
+            if (TinyCrossInfo.IsWindows) return false;
             DataSourceStructured structured = DataSourceStructured.ParseDataSource(dataSource);
             if (structured == null) return false;
 

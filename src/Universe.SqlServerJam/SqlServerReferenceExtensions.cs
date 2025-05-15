@@ -97,10 +97,21 @@ namespace Universe.SqlServerJam
             }
         }
 
+
+        public static void StartLocalService(this SqlServerRef sqlServerRef, int startTimeout = 30)
+        {
+            SqlServiceExtentions.StartServiceOrLocalDb(sqlServerRef.DataSource, startTimeout);
+        }
+
+        public static void StopLocalService(this SqlServerRef sqlServerRef, int stopTimeout = 30)
+        {
+            SqlServiceExtentions.StopServiceOrLocalDb(sqlServerRef.DataSource, stopTimeout);
+        }
+
         public static void RestartLocalService(this SqlServerRef sqlServerRef, int stopTimeout = 30, int startTimeout = 30)
         {
-            if (!sqlServerRef.CanStartStopService)
-                return;
+            if (TinyCrossInfo.IsWindows) return;
+            if (!sqlServerRef.CanStartStopService) return;
 
             Stopwatch stopAt = Stopwatch.StartNew();
             if (sqlServerRef.Kind == SqlServerDiscoverySource.LocalDB)
@@ -124,7 +135,7 @@ namespace Universe.SqlServerJam
                 }
             }
 
-            SqlServiceExtentions.StartService(sqlServerRef.DataSource);
+            SqlServiceExtentions.StartServiceOrLocalDb(sqlServerRef.DataSource);
             sqlServerRef.WarmUp(timeout: TimeSpan.FromSeconds(startTimeout));
         }
 
@@ -137,7 +148,7 @@ namespace Universe.SqlServerJam
                 // Console.WriteLine($"[DEBUG] «{sqlServerRef}» Current Service status is '{serviceStatus?.State}'");
                 if (serviceStatus?.State != SqlServiceStatus.ServiceState.Running)
                 {
-                    bool isStarted = SqlServiceExtentions.StartService(sqlServerRef.DataSource);
+                    bool isStarted = SqlServiceExtentions.StartServiceOrLocalDb(sqlServerRef.DataSource);
                     // Console.WriteLine($"[DEBUG] «{sqlServerRef}» Is Started: {isStarted}");
                     return isStarted;
                 }
