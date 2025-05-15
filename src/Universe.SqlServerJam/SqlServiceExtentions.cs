@@ -33,28 +33,6 @@ namespace Universe.SqlServerJam
             return ret;
         }
 
-        [Obsolete("Use DataSourceStructured", true)]
-        public static bool IsLocalService(string dataSource)
-        {
-            var structured = DataSourceStructured.ParseDataSource(dataSource);
-            return structured?.IsLocalService == true;
-        }
-
-        [Obsolete("Use DataSourceStructured", true)]
-        public static bool IsLocalDB(string dataSource)
-        {
-            var structured = DataSourceStructured.ParseDataSource(dataSource);
-            return structured?.IsLocalDb == true;
-        }
-
-        [Obsolete("Use DataSourceStructured", true)]
-        public static bool IsLocalDbOrLocalServerByConnectionString(string connectionString)
-        {
-            var dataSource = SqlServerJamConfigurationExtensions.GetDataSource(connectionString);
-            var structured = DataSourceStructured.ParseDataSource(dataSource);
-            return structured?.IsLocal == true;
-        }
-
 
         public static string GetServiceName(string sqlServer)
         {
@@ -93,7 +71,7 @@ namespace Universe.SqlServerJam
                     // try { StartLocalDB_Impl(instanceName, (int)timeout.TotalMilliseconds); } catch { }
                 }
 
-                Thread.Sleep(100);
+                Thread.Sleep(10);
                 if (sw.Elapsed > timeout)
                     return false;
             }
