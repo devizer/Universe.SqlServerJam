@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using Universe.NUnitTests;
 
 namespace Universe.SqlServerJam.Tests
 {
     [TestFixture]
-    public class TestLocalDbDiscovery
+    public class TestLocalDbDiscovery : NUnitTestsBase
     {
         public TestLocalDbDiscovery()
         {

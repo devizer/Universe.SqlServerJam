@@ -82,9 +82,17 @@ namespace Universe.SqlServerJam
 
         }
 
-        [Obsolete("Deprecated. Will be removed", false)]
+        // Merge SqlLocalDbDiscovery.GetVersionList() and local file system
+        // Always sorted by descending
         public static IEnumerable<string> FindSqlLocalDbExes()
         {
+            if (!TinyCrossInfo.IsWindows) return new string[0];
+            
+            Dictionary<string,object> ret = new Dictionary<string,object>();
+            var versions = SqlLocalDbDiscovery.GetVersionList();
+            foreach (var ver in versions)
+                ret[ver.Exe] = null;
+
             string[] vers = new[] { "170", "160", "150", "140", "130", "120" };
             foreach (var ver in vers)
             {
@@ -94,9 +102,14 @@ namespace Universe.SqlServerJam
 
                 if (File.Exists(candidate))
                 {
-                    yield return candidate;
+                    ret[candidate] = null;
                 }
             }
+
+            return ret
+                .Select(x => x.Key)
+                .OrderByDescending(x => x, VersionStringComparer.Instance)
+                .ToArray();
         }
 
         public static LocalServiceStartup GetLocalServiceStartup(string dataSource)
