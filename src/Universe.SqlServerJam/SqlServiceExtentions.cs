@@ -297,8 +297,14 @@ namespace Universe.SqlServerJam
 
             if (isLocalDb)
             {
+                // tcp is not a 
+                bool isProperProtocol =
+                    protocol == null
+                    || "lpc".Equals(protocol, StringComparison.OrdinalIgnoreCase)
+                    || "np".Equals(protocol, StringComparison.OrdinalIgnoreCase);
+
                 // instanceName is Mandatory
-                if (instanceName != null && (protocol == null || ("lpc".Equals(protocol, StringComparison.OrdinalIgnoreCase))))
+                if (instanceName != null && isProperProtocol)
                 {
                     return new DataSourceStructured()
                     {
