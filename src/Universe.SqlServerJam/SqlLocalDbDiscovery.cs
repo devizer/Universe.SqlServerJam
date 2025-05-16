@@ -143,7 +143,7 @@ namespace Universe.SqlServerJam
         {
             if (!TinyCrossInfo.IsWindows) return new string[0];
 
-            Dictionary<string, object> ret = new Dictionary<string, object>();
+            Dictionary<string, object> ret = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             var versions = SqlLocalDbDiscovery.GetVersionList();
             foreach (var ver in versions)
                 ret[ver.Exe] = null;

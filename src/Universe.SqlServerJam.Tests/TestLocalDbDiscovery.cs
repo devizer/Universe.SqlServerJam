@@ -32,7 +32,7 @@ namespace Universe.SqlServerJam.Tests
         [TestCase("Next")]
         public void Test2_Show_Instances(string idRunner)
         {
-            var instances = SqlLocalDbDiscovery.GetInstances();
+            var instances = SqlLocalDbDiscovery.GetInstances().OrderByVersionDesc();
             foreach (var v in instances)
             {
                 Console.WriteLine($"{v.Kind} {v.InstallerVersion}:  {v.Data}");
