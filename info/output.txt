@@ -37,6 +37,8 @@ Engine Edition ...........: Enterprise
 Medium Version ...........: 16.0.4145.4 RTM CU15 Developer Edition (64-bit)
 Long Version .............: Microsoft SQL Server 2022 (RTM-CU15) (KB5041321) - 16.0.4145.4 (X64) Sep 19 2024 08:25:04 Copyright (C) 2022 Microsoft Corporation Developer Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
 Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
 Security Mode ............: Both
 Is LocalDB ...............: False
 Has Full Text Search .....: True
@@ -75,56 +77,7 @@ Server Configuration Settings [sp_configure]:
    * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
    * [Boolean] ServerTriggerRecursion ...................: True
 
-«2 of 22» SERVER '(local)\DEV_2016' Ver 13.0.6441.1
-Version (4 bytes) ........: 13.0.6441
-ProductVersion (string) ..: 13.0.6441.1
-ProductVersion ...........: 13.0.6441.1
-Product Level ............: SP3
-Update Level .............: 
-Edition Name .............: Developer Edition (64-bit)
-Engine Edition ...........: Enterprise
-Medium Version ...........: 13.0.6441.1 SP3 Developer Edition (64-bit)
-Long Version .............: Microsoft SQL Server 2016 (SP3-GDR) (KB5040946) - 13.0.6441.1 (X64) Jun 18 2024 00:46:21 Copyright (c) Microsoft Corporation Developer Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
-Host Platform ............: Windows
-Security Mode ............: Both
-Is LocalDB ...............: False
-Has Full Text Search .....: True
-Can Mem Optimized ........: True
-Transport ................: Shared memory, Without Encryption
-Server Collation .........: SQL_Latin1_General_CP1_CI_AS
-Built-in Roles ...........: Sys Admin
-Databases ................: 6 (177344 Kb)
-Default Data .............: C:\SQL\MSSQL13.DEV_2016\MSSQL\DATA\
-Default Log ..............: C:\SQL\MSSQL13.DEV_2016\MSSQL\DATA\
-Default Backup ...........: C:\SQL\MSSQL13.DEV_2016\MSSQL\Backup
-Connected DB Info ........: [master]
-  - Auto Shrink ......... : False
-  - Auto Create Statistic : Complete
-  - Auto Update Statistic : Synchronously
-  - Recursive Triggers .. : False
-  - Broker Enabled ...... : False
-  - State ............... : Online
-  - Is Readonly ......... : False
-  - Is Memory Optimized . : False
-  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
-  - Fulltext Search ..... : Not Enabled
-  - Size (KB) ........... : 6592
-  - Recovery Mode ....... : Simple
-  - Owner ............... : sa
-  - AZ Edition .......... : 
-  - AZ Service Objective. : 
-  - AZ Elastic Pool ..... : 
-Server Configuration Settings [sp_configure]:
-   * [Boolean] BackupCompressionDefault .................: False
-   * [Int32] MinServerMemory ............................: 4,000
-   * [Int32] MaxServerMemory ............................: 64,000
-   * [Boolean] ShowAdvancedOption .......................: False
-   * [Boolean] XpCmdShell ...............................: True
-   * [Boolean] ClrEnabled ...............................: False
-   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
-   * [Boolean] ServerTriggerRecursion ...................: True
-
-«3 of 22» SERVER '(local)\DEV_2017' Ver 14.0.3456.2
+«2 of 22» SERVER '(local)\DEV_2017' Ver 14.0.3456.2
 Version (4 bytes) ........: 14.0.3456
 ProductVersion (string) ..: 14.0.3456.2
 ProductVersion ...........: 14.0.3456.2
@@ -135,6 +88,8 @@ Engine Edition ...........: Enterprise
 Medium Version ...........: 14.0.3456.2 RTM CU31 Developer Edition (64-bit)
 Long Version .............: Microsoft SQL Server 2017 (RTM-CU31) (KB5016884) - 14.0.3456.2 (X64) Sep 2 2022 11:01:50 Copyright (C) 2017 Microsoft Corporation Developer Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
 Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
 Security Mode ............: Both
 Is LocalDB ...............: False
 Has Full Text Search .....: True
@@ -173,8 +128,7 @@ Server Configuration Settings [sp_configure]:
    * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
    * [Boolean] ServerTriggerRecursion ...................: True
 
-Warning! CurrentSPID property is invoked for Closed connection
-«4 of 22» SERVER '(local)\DEV_2019' Ver 15.0.4385.2
+«3 of 22» SERVER '(local)\DEV_2019' Ver 15.0.4385.2
 Version (4 bytes) ........: 15.0.4385
 ProductVersion (string) ..: 15.0.4385.2
 ProductVersion ...........: 15.0.4385.2
@@ -185,6 +139,8 @@ Engine Edition ...........: Enterprise
 Medium Version ...........: 15.0.4385.2 RTM CU28 Developer Edition (64-bit)
 Long Version .............: Microsoft SQL Server 2019 (RTM-CU28) (KB5039747) - 15.0.4385.2 (X64) Jul 25 2024 21:32:40 Copyright (C) 2019 Microsoft Corporation Developer Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
 Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
 Security Mode ............: Both
 Is LocalDB ...............: False
 Has Full Text Search .....: True
@@ -224,7 +180,111 @@ Server Configuration Settings [sp_configure]:
    * [Boolean] ServerTriggerRecursion ...................: True
 
 Warning! CurrentSPID property is invoked for Closed connection
-«5 of 22» SERVER '(local)\DEV2022UTF8' Ver 16.0.4145.4
+«4 of 22» SERVER '(local)\DEV_2016' Ver 13.0.6441.1
+Version (4 bytes) ........: 13.0.6441
+ProductVersion (string) ..: 13.0.6441.1
+ProductVersion ...........: 13.0.6441.1
+Product Level ............: SP3
+Update Level .............: 
+Edition Name .............: Developer Edition (64-bit)
+Engine Edition ...........: Enterprise
+Medium Version ...........: 13.0.6441.1 SP3 Developer Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2016 (SP3-GDR) (KB5040946) - 13.0.6441.1 (X64) Jun 18 2024 00:46:21 Copyright (c) Microsoft Corporation Developer Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
+Security Mode ............: Both
+Is LocalDB ...............: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: True
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 6 (177344 Kb)
+Default Data .............: C:\SQL\MSSQL13.DEV_2016\MSSQL\DATA\
+Default Log ..............: C:\SQL\MSSQL13.DEV_2016\MSSQL\DATA\
+Default Backup ...........: C:\SQL\MSSQL13.DEV_2016\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 6592
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sp_configure]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Boolean] XpCmdShell ...............................: True
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+
+Warning! CurrentSPID property is invoked for Closed connection
+«5 of 22» SERVER '(LocalDB)\My-v13.0' Ver 13.0.6300.2
+Version (4 bytes) ........: 13.0.6300
+ProductVersion (string) ..: 13.0.6300.2
+ProductVersion ...........: 13.0.6300.2
+Product Level ............: SP3
+Update Level .............: 
+Edition Name .............: Express Edition (64-bit)
+Engine Edition ...........: Express
+Medium Version ...........: 13.0.6300.2 SP3 LocalDB Express Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2016 (SP3) (KB5003279) - 13.0.6300.2 (X64) Aug 7 2021 01:20:37 Copyright (c) Microsoft Corporation Express Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
+Security Mode ............: Both
+Is LocalDB ...............: True
+Has Full Text Search .....: False
+Can Mem Optimized ........: False
+Transport ................: Named pipe, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (55552 Kb)
+Default Data .............: C:\Users\Administrator\
+Default Log ..............: C:\Users\Administrator\
+Default Backup ...........: 
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 6848
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sp_configure]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Boolean] XpCmdShell ...............................: True
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
+   * [Boolean] ServerTriggerRecursion ...................: True
+
+Warning! CurrentSPID property is invoked for Closed connection
+«6 of 22» SERVER '(local)\DEV2022UTF8' Ver 16.0.4145.4
 Version (4 bytes) ........: 16.0.4145
 ProductVersion (string) ..: 16.0.4145.4
 ProductVersion ...........: 16.0.4145.4
@@ -235,6 +295,8 @@ Engine Edition ...........: Enterprise
 Medium Version ...........: 16.0.4145.4 RTM CU15 Developer Edition (64-bit)
 Long Version .............: Microsoft SQL Server 2022 (RTM-CU15) (KB5041321) - 16.0.4145.4 (X64) Sep 19 2024 08:25:04 Copyright (C) 2022 Microsoft Corporation Developer Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
 Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
 Security Mode ............: Both
 Is LocalDB ...............: False
 Has Full Text Search .....: False
@@ -274,7 +336,7 @@ Server Configuration Settings [sp_configure]:
    * [Boolean] ServerTriggerRecursion ...................: True
 
 Warning! CurrentSPID property is invoked for Closed connection
-«6 of 22» SERVER '(LocalDB)\LocalDB-v14.0' Ver 14.0.3456.2
+«7 of 22» SERVER '(LocalDB)\LocalDB-v14.0' Ver 14.0.3456.2
 Version (4 bytes) ........: 14.0.3456
 ProductVersion (string) ..: 14.0.3456.2
 ProductVersion ...........: 14.0.3456.2
@@ -285,6 +347,8 @@ Engine Edition ...........: Express
 Medium Version ...........: 14.0.3456.2 RTM CU31 LocalDB Express Edition (64-bit)
 Long Version .............: Microsoft SQL Server 2017 (RTM-CU31) (KB5016884) - 14.0.3456.2 (X64) Sep 2 2022 11:01:50 Copyright (C) 2017 Microsoft Corporation Express Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
 Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
 Security Mode ............: Both
 Is LocalDB ...............: True
 Has Full Text Search .....: False
@@ -324,7 +388,7 @@ Server Configuration Settings [sp_configure]:
    * [Boolean] ServerTriggerRecursion ...................: True
 
 Warning! CurrentSPID property is invoked for Closed connection
-«7 of 22» SERVER '(LocalDB)\MSSQLLocalDB' Ver 15.0.4382.1
+«8 of 22» SERVER '(LocalDB)\MSSQLLocalDB' Ver 15.0.4382.1
 Version (4 bytes) ........: 15.0.4382
 ProductVersion (string) ..: 15.0.4382.1
 ProductVersion ...........: 15.0.4382.1
@@ -335,6 +399,8 @@ Engine Edition ...........: Express
 Medium Version ...........: 15.0.4382.1 RTM CU27 LocalDB Express Edition (64-bit)
 Long Version .............: Microsoft SQL Server 2019 (RTM-CU27-GDR) (KB5040948) - 15.0.4382.1 (X64) Jul 1 2024 20:03:23 Copyright (C) 2019 Microsoft Corporation Express Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
 Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
 Security Mode ............: Both
 Is LocalDB ...............: True
 Has Full Text Search .....: False
@@ -374,56 +440,6 @@ Server Configuration Settings [sp_configure]:
    * [Boolean] ServerTriggerRecursion ...................: True
 
 Warning! CurrentSPID property is invoked for Closed connection
-«8 of 22» SERVER '(LocalDB)\LocalDB-v16.0' Ver 16.0.1000.6
-Version (4 bytes) ........: 16.0.1000
-ProductVersion (string) ..: 16.0.1000.6
-ProductVersion ...........: 16.0.1000.6
-Product Level ............: RTM
-Update Level .............: 
-Edition Name .............: Express Edition (64-bit)
-Engine Edition ...........: Express
-Medium Version ...........: 16.0.1000.6 RTM LocalDB Express Edition (64-bit)
-Long Version .............: Microsoft SQL Server 2022 (RTM) - 16.0.1000.6 (X64) Oct 8 2022 05:58:25 Copyright (C) 2022 Microsoft Corporation Express Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
-Host Platform ............: Windows
-Security Mode ............: Both
-Is LocalDB ...............: True
-Has Full Text Search .....: False
-Can Mem Optimized ........: False
-Transport ................: Named pipe, Without Encryption
-Server Collation .........: SQL_Latin1_General_CP1_CI_AS
-Built-in Roles ...........: Sys Admin
-Databases ................: 5 (71488 Kb)
-Default Data .............: C:\Users\Administrator\
-Default Log ..............: C:\Users\Administrator\
-Default Backup ...........: 
-Connected DB Info ........: [master]
-  - Auto Shrink ......... : False
-  - Auto Create Statistic : Complete
-  - Auto Update Statistic : Synchronously
-  - Recursive Triggers .. : False
-  - Broker Enabled ...... : False
-  - State ............... : Online
-  - Is Readonly ......... : False
-  - Is Memory Optimized . : False
-  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
-  - Fulltext Search ..... : Not Enabled
-  - Size (KB) ........... : 5376
-  - Recovery Mode ....... : Simple
-  - Owner ............... : sa
-  - AZ Edition .......... : 
-  - AZ Service Objective. : 
-  - AZ Elastic Pool ..... : 
-Server Configuration Settings [sp_configure]:
-   * [Boolean] BackupCompressionDefault .................: False
-   * [Int32] MinServerMemory ............................: 4,000
-   * [Int32] MaxServerMemory ............................: 64,000
-   * [Boolean] ShowAdvancedOption .......................: False
-   * [Boolean] XpCmdShell ...............................: True
-   * [Boolean] ClrEnabled ...............................: False
-   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
-   * [Boolean] ServerTriggerRecursion ...................: True
-
-Warning! CurrentSPID property is invoked for Closed connection
 «9 of 22» SERVER '(local)\DEV_2014_X64' Ver 12.0.6024.0
 Version (4 bytes) ........: 12.0.6024
 ProductVersion (string) ..: 12.0.6024.0
@@ -435,6 +451,8 @@ Engine Edition ...........: Enterprise
 Medium Version ...........: 12.0.6024.0 SP3 Developer Edition (64-bit)
 Long Version .............: Microsoft SQL Server 2014 (SP3) (KB4022619) - 12.0.6024.0 (X64) Sep 7 2018 01:37:51 Copyright (c) Microsoft Corporation Developer Edition (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
 Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
 Security Mode ............: Both
 Is LocalDB ...............: False
 Has Full Text Search .....: False
@@ -485,6 +503,8 @@ Engine Edition ...........: Enterprise
 Medium Version ...........: 11.0.7001.0 SP4 Developer Edition (64-bit)
 Long Version .............: Microsoft SQL Server 2012 (SP4) (KB4018073) - 11.0.7001.0 (X64) Aug 15 2017 10:23:29 Copyright (c) Microsoft Corporation Developer Edition (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
 Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
 Security Mode ............: Both
 Is LocalDB ...............: False
 Has Full Text Search .....: True
@@ -524,7 +544,59 @@ Server Configuration Settings [sp_configure]:
    * [Boolean] ServerTriggerRecursion ...................: True
 
 Warning! CurrentSPID property is invoked for Closed connection
-«11 of 22» SERVER '(LocalDB)\LocalDB-v15.0' Ver 15.0.4382.1
+«11 of 22» SERVER '(LocalDB)\LocalDB-v16.0' Ver 16.0.1000.6
+Version (4 bytes) ........: 16.0.1000
+ProductVersion (string) ..: 16.0.1000.6
+ProductVersion ...........: 16.0.1000.6
+Product Level ............: RTM
+Update Level .............: 
+Edition Name .............: Express Edition (64-bit)
+Engine Edition ...........: Express
+Medium Version ...........: 16.0.1000.6 RTM LocalDB Express Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2022 (RTM) - 16.0.1000.6 (X64) Oct 8 2022 05:58:25 Copyright (C) 2022 Microsoft Corporation Express Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
+Security Mode ............: Both
+Is LocalDB ...............: True
+Has Full Text Search .....: False
+Can Mem Optimized ........: False
+Transport ................: Named pipe, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 5 (71488 Kb)
+Default Data .............: C:\Users\Administrator\
+Default Log ..............: C:\Users\Administrator\
+Default Backup ...........: 
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 5376
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sp_configure]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Boolean] XpCmdShell ...............................: True
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
+   * [Boolean] ServerTriggerRecursion ...................: True
+
+Warning! CurrentSPID property is invoked for Closed connection
+«12 of 22» SERVER '(LocalDB)\LocalDB-v15.0' Ver 15.0.4382.1
 Version (4 bytes) ........: 15.0.4382
 ProductVersion (string) ..: 15.0.4382.1
 ProductVersion ...........: 15.0.4382.1
@@ -535,6 +607,8 @@ Engine Edition ...........: Express
 Medium Version ...........: 15.0.4382.1 RTM CU27 LocalDB Express Edition (64-bit)
 Long Version .............: Microsoft SQL Server 2019 (RTM-CU27-GDR) (KB5040948) - 15.0.4382.1 (X64) Jul 1 2024 20:03:23 Copyright (C) 2019 Microsoft Corporation Express Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
 Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
 Security Mode ............: Both
 Is LocalDB ...............: True
 Has Full Text Search .....: False
@@ -574,7 +648,59 @@ Server Configuration Settings [sp_configure]:
    * [Boolean] ServerTriggerRecursion ...................: True
 
 Warning! CurrentSPID property is invoked for Closed connection
-«12 of 22» SERVER '(LocalDB)\LocalDB-v12.0' Ver 12.0.6024.0
+«13 of 22» SERVER '(LocalDB)\v11.0' Ver 11.0.7001.0
+Version (4 bytes) ........: 11.0.7001
+ProductVersion (string) ..: 11.0.7001.0
+ProductVersion ...........: 11.0.7001.0
+Product Level ............: SP4
+Update Level .............: 
+Edition Name .............: Express Edition (64-bit)
+Engine Edition ...........: Express
+Medium Version ...........: 11.0.7001.0 SP4 LocalDB Express Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2012 (SP4) (KB4018073) - 11.0.7001.0 (X64) Aug 15 2017 10:23:29 Copyright (c) Microsoft Corporation Express Edition (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
+Security Mode ............: Both
+Is LocalDB ...............: True
+Has Full Text Search .....: False
+Can Mem Optimized ........: False
+Transport ................: Named pipe, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (26176 Kb)
+Default Data .............: C:\Users\Administrator\
+Default Log ..............: C:\Users\Administrator\
+Default Backup ...........: 
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 4864
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sp_configure]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Boolean] XpCmdShell ...............................: True
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
+   * [Boolean] ServerTriggerRecursion ...................: True
+
+Warning! CurrentSPID property is invoked for Closed connection
+«14 of 22» SERVER '(LocalDB)\LocalDB-v12.0' Ver 12.0.6024.0
 Version (4 bytes) ........: 12.0.6024
 ProductVersion (string) ..: 12.0.6024.0
 ProductVersion ...........: 12.0.6024.0
@@ -585,6 +711,8 @@ Engine Edition ...........: Express
 Medium Version ...........: 12.0.6024.0 SP3 LocalDB Express Edition (64-bit)
 Long Version .............: Microsoft SQL Server 2014 (SP3) (KB4022619) - 12.0.6024.0 (X64) Sep 7 2018 01:37:51 Copyright (c) Microsoft Corporation Express Edition (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
 Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
 Security Mode ............: Both
 Is LocalDB ...............: True
 Has Full Text Search .....: False
@@ -624,7 +752,7 @@ Server Configuration Settings [sp_configure]:
    * [Boolean] ServerTriggerRecursion ...................: True
 
 Warning! CurrentSPID property is invoked for Closed connection
-«13 of 22» SERVER '(local)\DEV_2008R2_X64' Ver 10.50.6000.34
+«15 of 22» SERVER '(local)\DEV_2008R2_X64' Ver 10.50.6000.34
 Version (4 bytes) ........: 10.50.6000
 ProductVersion (string) ..: 10.50.6000.34
 ProductVersion ...........: 10.50.6000.34
@@ -635,6 +763,8 @@ Engine Edition ...........: Enterprise
 Medium Version ...........: 10.50.6000.34 SP3 Developer Edition (64-bit)
 Long Version .............: Microsoft SQL Server 2008 R2 (SP3) - 10.50.6000.34 (X64) Aug 19 2014 12:21:34 Copyright (c) Microsoft Corporation Developer Edition (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
 Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
 Security Mode ............: Both
 Is LocalDB ...............: False
 Has Full Text Search .....: True
@@ -674,7 +804,59 @@ Server Configuration Settings [sp_configure]:
    * [Boolean] ServerTriggerRecursion ...................: True
 
 Warning! CurrentSPID property is invoked for Closed connection
-«14 of 22» SERVER '(LocalDB)\My-v13.0' Ver 13.0.6300.2
+«16 of 22» SERVER '(LocalDB)\LocalDB-v11.0' Ver 11.0.7001.0
+Version (4 bytes) ........: 11.0.7001
+ProductVersion (string) ..: 11.0.7001.0
+ProductVersion ...........: 11.0.7001.0
+Product Level ............: SP4
+Update Level .............: 
+Edition Name .............: Express Edition (64-bit)
+Engine Edition ...........: Express
+Medium Version ...........: 11.0.7001.0 SP4 LocalDB Express Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2012 (SP4) (KB4018073) - 11.0.7001.0 (X64) Aug 15 2017 10:23:29 Copyright (c) Microsoft Corporation Express Edition (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
+Security Mode ............: Both
+Is LocalDB ...............: True
+Has Full Text Search .....: False
+Can Mem Optimized ........: False
+Transport ................: Named pipe, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (26176 Kb)
+Default Data .............: C:\Users\Administrator\
+Default Log ..............: C:\Users\Administrator\
+Default Backup ...........: 
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 4864
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sp_configure]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Boolean] XpCmdShell ...............................: True
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
+   * [Boolean] ServerTriggerRecursion ...................: True
+
+Warning! CurrentSPID property is invoked for Closed connection
+«17 of 22» SERVER '(LocalDB)\LocalDB-v13.0' Ver 13.0.6300.2
 Version (4 bytes) ........: 13.0.6300
 ProductVersion (string) ..: 13.0.6300.2
 ProductVersion ...........: 13.0.6300.2
@@ -685,6 +867,8 @@ Engine Edition ...........: Express
 Medium Version ...........: 13.0.6300.2 SP3 LocalDB Express Edition (64-bit)
 Long Version .............: Microsoft SQL Server 2016 (SP3) (KB5003279) - 13.0.6300.2 (X64) Aug 7 2021 01:20:37 Copyright (c) Microsoft Corporation Express Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
 Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
 Security Mode ............: Both
 Is LocalDB ...............: True
 Has Full Text Search .....: False
@@ -724,7 +908,7 @@ Server Configuration Settings [sp_configure]:
    * [Boolean] ServerTriggerRecursion ...................: True
 
 Warning! CurrentSPID property is invoked for Closed connection
-«15 of 22» SERVER '(local)\ADV_2008R2_X64' Ver 10.50.6000.34
+«18 of 22» SERVER '(local)\ADV_2008R2_X64' Ver 10.50.6000.34
 Version (4 bytes) ........: 10.50.6000
 ProductVersion (string) ..: 10.50.6000.34
 ProductVersion ...........: 10.50.6000.34
@@ -735,6 +919,8 @@ Engine Edition ...........: Express
 Medium Version ...........: 10.50.6000.34 SP3 Express Edition with Advanced Services (64-bit)
 Long Version .............: Microsoft SQL Server 2008 R2 (SP3) - 10.50.6000.34 (X64) Aug 19 2014 12:21:34 Copyright (c) Microsoft Corporation Express Edition with Advanced Services (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
 Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
 Security Mode ............: Both
 Is LocalDB ...............: False
 Has Full Text Search .....: True
@@ -774,57 +960,7 @@ Server Configuration Settings [sp_configure]:
    * [Boolean] ServerTriggerRecursion ...................: True
 
 Warning! CurrentSPID property is invoked for Closed connection
-«16 of 22» SERVER '(LocalDB)\LocalDB-v13.0' Ver 13.0.6300.2
-Version (4 bytes) ........: 13.0.6300
-ProductVersion (string) ..: 13.0.6300.2
-ProductVersion ...........: 13.0.6300.2
-Product Level ............: SP3
-Update Level .............: 
-Edition Name .............: Express Edition (64-bit)
-Engine Edition ...........: Express
-Medium Version ...........: 13.0.6300.2 SP3 LocalDB Express Edition (64-bit)
-Long Version .............: Microsoft SQL Server 2016 (SP3) (KB5003279) - 13.0.6300.2 (X64) Aug 7 2021 01:20:37 Copyright (c) Microsoft Corporation Express Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
-Host Platform ............: Windows
-Security Mode ............: Both
-Is LocalDB ...............: True
-Has Full Text Search .....: False
-Can Mem Optimized ........: False
-Transport ................: Named pipe, Without Encryption
-Server Collation .........: SQL_Latin1_General_CP1_CI_AS
-Built-in Roles ...........: Sys Admin
-Databases ................: 4 (55552 Kb)
-Default Data .............: C:\Users\Administrator\
-Default Log ..............: C:\Users\Administrator\
-Default Backup ...........: 
-Connected DB Info ........: [master]
-  - Auto Shrink ......... : False
-  - Auto Create Statistic : Complete
-  - Auto Update Statistic : Synchronously
-  - Recursive Triggers .. : False
-  - Broker Enabled ...... : False
-  - State ............... : Online
-  - Is Readonly ......... : False
-  - Is Memory Optimized . : False
-  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
-  - Fulltext Search ..... : Not Enabled
-  - Size (KB) ........... : 6848
-  - Recovery Mode ....... : Simple
-  - Owner ............... : sa
-  - AZ Edition .......... : 
-  - AZ Service Objective. : 
-  - AZ Elastic Pool ..... : 
-Server Configuration Settings [sp_configure]:
-   * [Boolean] BackupCompressionDefault .................: False
-   * [Int32] MinServerMemory ............................: 4,000
-   * [Int32] MaxServerMemory ............................: 64,000
-   * [Boolean] ShowAdvancedOption .......................: False
-   * [Boolean] XpCmdShell ...............................: True
-   * [Boolean] ClrEnabled ...............................: False
-   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
-   * [Boolean] ServerTriggerRecursion ...................: True
-
-Warning! CurrentSPID property is invoked for Closed connection
-«17 of 22» SERVER '(local)\DEV_2008_X64' Ver 10.0.6000.29
+«19 of 22» SERVER '(local)\DEV_2008_X64' Ver 10.0.6000.29
 Version (4 bytes) ........: 10.0.6000
 ProductVersion (string) ..: 10.0.6000.29
 ProductVersion ...........: 10.0.6000.29
@@ -835,6 +971,8 @@ Engine Edition ...........: Enterprise
 Medium Version ...........: 10.0.6000.29 SP4 Developer Edition (64-bit)
 Long Version .............: Microsoft SQL Server 2008 (SP4) - 10.0.6000.29 (X64) Sep 3 2014 04:11:34 Copyright (c) 1988-2008 Microsoft Corporation Developer Edition (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
 Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
 Security Mode ............: Both
 Is LocalDB ...............: False
 Has Full Text Search .....: True
@@ -874,157 +1012,7 @@ Server Configuration Settings [sp_configure]:
    * [Boolean] ServerTriggerRecursion ...................: True
 
 Warning! CurrentSPID property is invoked for Closed connection
-«18 of 22» SERVER '(LocalDB)\LocalDB-v11.0' Ver 11.0.7001.0
-Version (4 bytes) ........: 11.0.7001
-ProductVersion (string) ..: 11.0.7001.0
-ProductVersion ...........: 11.0.7001.0
-Product Level ............: SP4
-Update Level .............: 
-Edition Name .............: Express Edition (64-bit)
-Engine Edition ...........: Express
-Medium Version ...........: 11.0.7001.0 SP4 LocalDB Express Edition (64-bit)
-Long Version .............: Microsoft SQL Server 2012 (SP4) (KB4018073) - 11.0.7001.0 (X64) Aug 15 2017 10:23:29 Copyright (c) Microsoft Corporation Express Edition (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
-Host Platform ............: Windows
-Security Mode ............: Both
-Is LocalDB ...............: True
-Has Full Text Search .....: False
-Can Mem Optimized ........: False
-Transport ................: Named pipe, Without Encryption
-Server Collation .........: SQL_Latin1_General_CP1_CI_AS
-Built-in Roles ...........: Sys Admin
-Databases ................: 4 (26176 Kb)
-Default Data .............: C:\Users\Administrator\
-Default Log ..............: C:\Users\Administrator\
-Default Backup ...........: 
-Connected DB Info ........: [master]
-  - Auto Shrink ......... : False
-  - Auto Create Statistic : Complete
-  - Auto Update Statistic : Synchronously
-  - Recursive Triggers .. : False
-  - Broker Enabled ...... : False
-  - State ............... : Online
-  - Is Readonly ......... : False
-  - Is Memory Optimized . : False
-  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
-  - Fulltext Search ..... : Not Enabled
-  - Size (KB) ........... : 4864
-  - Recovery Mode ....... : Simple
-  - Owner ............... : sa
-  - AZ Edition .......... : 
-  - AZ Service Objective. : 
-  - AZ Elastic Pool ..... : 
-Server Configuration Settings [sp_configure]:
-   * [Boolean] BackupCompressionDefault .................: False
-   * [Int32] MinServerMemory ............................: 4,000
-   * [Int32] MaxServerMemory ............................: 64,000
-   * [Boolean] ShowAdvancedOption .......................: False
-   * [Boolean] XpCmdShell ...............................: True
-   * [Boolean] ClrEnabled ...............................: False
-   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
-   * [Boolean] ServerTriggerRecursion ...................: True
-
-Warning! CurrentSPID property is invoked for Closed connection
-«19 of 22» SERVER '(LocalDB)\v11.0' Ver 11.0.7001.0
-Version (4 bytes) ........: 11.0.7001
-ProductVersion (string) ..: 11.0.7001.0
-ProductVersion ...........: 11.0.7001.0
-Product Level ............: SP4
-Update Level .............: 
-Edition Name .............: Express Edition (64-bit)
-Engine Edition ...........: Express
-Medium Version ...........: 11.0.7001.0 SP4 LocalDB Express Edition (64-bit)
-Long Version .............: Microsoft SQL Server 2012 (SP4) (KB4018073) - 11.0.7001.0 (X64) Aug 15 2017 10:23:29 Copyright (c) Microsoft Corporation Express Edition (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
-Host Platform ............: Windows
-Security Mode ............: Both
-Is LocalDB ...............: True
-Has Full Text Search .....: False
-Can Mem Optimized ........: False
-Transport ................: Named pipe, Without Encryption
-Server Collation .........: SQL_Latin1_General_CP1_CI_AS
-Built-in Roles ...........: Sys Admin
-Databases ................: 4 (26176 Kb)
-Default Data .............: C:\Users\Administrator\
-Default Log ..............: C:\Users\Administrator\
-Default Backup ...........: 
-Connected DB Info ........: [master]
-  - Auto Shrink ......... : False
-  - Auto Create Statistic : Complete
-  - Auto Update Statistic : Synchronously
-  - Recursive Triggers .. : False
-  - Broker Enabled ...... : False
-  - State ............... : Online
-  - Is Readonly ......... : False
-  - Is Memory Optimized . : False
-  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
-  - Fulltext Search ..... : Not Enabled
-  - Size (KB) ........... : 4864
-  - Recovery Mode ....... : Simple
-  - Owner ............... : sa
-  - AZ Edition .......... : 
-  - AZ Service Objective. : 
-  - AZ Elastic Pool ..... : 
-Server Configuration Settings [sp_configure]:
-   * [Boolean] BackupCompressionDefault .................: False
-   * [Int32] MinServerMemory ............................: 4,000
-   * [Int32] MaxServerMemory ............................: 64,000
-   * [Boolean] ShowAdvancedOption .......................: False
-   * [Boolean] XpCmdShell ...............................: True
-   * [Boolean] ClrEnabled ...............................: False
-   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
-   * [Boolean] ServerTriggerRecursion ...................: True
-
-Warning! CurrentSPID property is invoked for Closed connection
-«20 of 22» SERVER '(local)\ADV_2008_X86' Ver 10.0.6000.29
-Version (4 bytes) ........: 10.0.6000
-ProductVersion (string) ..: 10.0.6000.29
-ProductVersion ...........: 10.0.6000.29
-Product Level ............: SP4
-Update Level .............: 
-Edition Name .............: Express Edition with Advanced Services
-Engine Edition ...........: Express
-Medium Version ...........: 10.0.6000.29 SP4 Express Edition with Advanced Services
-Long Version .............: Microsoft SQL Server 2008 (SP4) - 10.0.6000.29 (Intel X86) Sep 2 2014 22:55:13 Copyright (c) 1988-2008 Microsoft Corporation Express Edition with Advanced Services on Windows NT 6.3 <X64> (Build 20348: ) (WOW64) 
-Host Platform ............: Windows
-Security Mode ............: Both
-Is LocalDB ...............: False
-Has Full Text Search .....: True
-Can Mem Optimized ........: False
-Transport ................: Shared memory, Without Encryption
-Server Collation .........: SQL_Latin1_General_CP1_CI_AS
-Built-in Roles ...........: Sys Admin
-Databases ................: 5 (29240 Kb)
-Default Data .............: C:\SQL\MSSQL10.ADV_2008_X86\MSSQL\DATA
-Default Log ..............: C:\SQL\MSSQL10.ADV_2008_X86\MSSQL\DATA
-Default Backup ...........: C:\SQL\MSSQL10.ADV_2008_X86\MSSQL\Backup
-Connected DB Info ........: [master]
-  - Auto Shrink ......... : False
-  - Auto Create Statistic : Complete
-  - Auto Update Statistic : Synchronously
-  - Recursive Triggers .. : False
-  - Broker Enabled ...... : False
-  - State ............... : Online
-  - Is Readonly ......... : False
-  - Is Memory Optimized . : False
-  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
-  - Fulltext Search ..... : Not Enabled
-  - Size (KB) ........... : 4864
-  - Recovery Mode ....... : BulkLogged
-  - Owner ............... : sa
-  - AZ Edition .......... : 
-  - AZ Service Objective. : 
-  - AZ Elastic Pool ..... : 
-Server Configuration Settings [sp_configure]:
-   * [Boolean] BackupCompressionDefault .................: False
-   * [Int32] MinServerMemory ............................: 4,000
-   * [Int32] MaxServerMemory ............................: 64,000
-   * [Boolean] ShowAdvancedOption .......................: False
-   * [Boolean] XpCmdShell ...............................: True
-   * [Boolean] ClrEnabled ...............................: False
-   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
-   * [Boolean] ServerTriggerRecursion ...................: True
-
-Warning! CurrentSPID property is invoked for Closed connection
-«21 of 22» SERVER '(local)\ADV_2005_X86' Ver 9.0.5000.0
+«20 of 22» SERVER '(local)\ADV_2005_X86' Ver 9.0.5000.0
 Version (4 bytes) ........: 9.0.5000
 ProductVersion (string) ..: 9.00.5000.00
 ProductVersion ...........: 9.0.5000.0
@@ -1035,6 +1023,8 @@ Engine Edition ...........: Express
 Medium Version ...........: 9.0.5000.0 SP4 Express Edition with Advanced Services
 Long Version .............: Microsoft SQL Server 2005 - 9.00.5000.00 (Intel X86) Dec 10 2010 10:56:29 Copyright (c) 1988-2005 Microsoft Corporation Express Edition with Advanced Services on Windows NT 6.2 (Build 9200: ) 
 Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
 Security Mode ............: Both
 Is LocalDB ...............: False
 Has Full Text Search .....: True
@@ -1074,6 +1064,58 @@ Server Configuration Settings [sp_configure]:
    * [Boolean] ServerTriggerRecursion ...................: True
 
 Warning! CurrentSPID property is invoked for Closed connection
+«21 of 22» SERVER '(local)\ADV_2008_X86' Ver 10.0.6000.29
+Version (4 bytes) ........: 10.0.6000
+ProductVersion (string) ..: 10.0.6000.29
+ProductVersion ...........: 10.0.6000.29
+Product Level ............: SP4
+Update Level .............: 
+Edition Name .............: Express Edition with Advanced Services
+Engine Edition ...........: Express
+Medium Version ...........: 10.0.6000.29 SP4 Express Edition with Advanced Services
+Long Version .............: Microsoft SQL Server 2008 (SP4) - 10.0.6000.29 (Intel X86) Sep 2 2014 22:55:13 Copyright (c) 1988-2008 Microsoft Corporation Express Edition with Advanced Services on Windows NT 6.3 <X64> (Build 20348: ) (WOW64) 
+Host Platform ............: Windows
+CPU Count ................: 8
+Physical Memory (MB) .....: 65,132
+Security Mode ............: Both
+Is LocalDB ...............: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: False
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 5 (29240 Kb)
+Default Data .............: C:\SQL\MSSQL10.ADV_2008_X86\MSSQL\DATA
+Default Log ..............: C:\SQL\MSSQL10.ADV_2008_X86\MSSQL\DATA
+Default Backup ...........: C:\SQL\MSSQL10.ADV_2008_X86\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 4864
+  - Recovery Mode ....... : BulkLogged
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sp_configure]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Boolean] XpCmdShell ...............................: True
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+
+Warning! CurrentSPID property is invoked for Closed connection
 «22 of 22» SERVER '192.168.2.45' Ver 12.0.6024.0
 Version (4 bytes) ........: 12.0.6024
 ProductVersion (string) ..: 12.0.6024.0
@@ -1085,6 +1127,8 @@ Engine Edition ...........: Enterprise
 Medium Version ...........: 12.0.6024.0 SP3 Developer Edition
 Long Version .............: Microsoft SQL Server 2014 (SP3) (KB4022619) - 12.0.6024.0 (Intel X86) Sep 7 2018 01:41:22 Copyright (c) Microsoft Corporation Developer Edition on Windows NT 6.3 <X64> (Build 22000: ) (WOW64) 
 Host Platform ............: Windows
+CPU Count ................: 4
+Physical Memory (MB) .....: 3,947
 Security Mode ............: Both
 Is LocalDB ...............: False
 Has Full Text Search .....: True
@@ -1124,29 +1168,29 @@ Server Configuration Settings [sp_configure]:
    * [Boolean] ServerTriggerRecursion ...................: True
 
 Done:
- '(local)' Ver 16.0.4145.4 examined in 0.90 secs
- '(local)\DEV_2016' Ver 13.0.6441.1 examined in 0.90 secs
- '(local)\DEV_2017' Ver 14.0.3456.2 examined in 0.90 secs
- '(local)\DEV_2019' Ver 15.0.4385.2 examined in 0.92 secs
- '(local)\DEV2022UTF8' Ver 16.0.4145.4 examined in 0.92 secs
- '(LocalDB)\LocalDB-v14.0' Ver 14.0.3456.2 examined in 0.95 secs
- '(LocalDB)\MSSQLLocalDB' Ver 15.0.4382.1 examined in 1.25 secs
- '(LocalDB)\LocalDB-v16.0' Ver 16.0.1000.6 examined in 1.28 secs
- '(local)\DEV_2014_X64' Ver 12.0.6024.0 examined in 1.34 secs
- '(local)\DEV_2012_X64' Ver 11.0.7001.0 examined in 1.35 secs
- '(LocalDB)\LocalDB-v15.0' Ver 15.0.4382.1 examined in 1.38 secs
- '(LocalDB)\LocalDB-v12.0' Ver 12.0.6024.0 examined in 1.56 secs
- '(local)\DEV_2008R2_X64' Ver 10.50.6000.34 examined in 1.57 secs
- '(LocalDB)\My-v13.0' Ver 13.0.6300.2 examined in 1.58 secs
- '(local)\ADV_2008R2_X64' Ver 10.50.6000.34 examined in 1.58 secs
- '(LocalDB)\LocalDB-v13.0' Ver 13.0.6300.2 examined in 1.59 secs
+ '(local)' Ver 16.0.4145.4 examined in 0.77 secs
+ '(local)\DEV_2017' Ver 14.0.3456.2 examined in 0.78 secs
+ '(local)\DEV_2019' Ver 15.0.4385.2 examined in 0.78 secs
+ '(local)\DEV_2016' Ver 13.0.6441.1 examined in 0.83 secs
+ '(LocalDB)\My-v13.0' Ver 13.0.6300.2 examined in 0.87 secs
+ '(local)\DEV2022UTF8' Ver 16.0.4145.4 examined in 0.89 secs
+ '(LocalDB)\LocalDB-v14.0' Ver 14.0.3456.2 examined in 0.91 secs
+ '(LocalDB)\MSSQLLocalDB' Ver 15.0.4382.1 examined in 1.29 secs
+ '(local)\DEV_2014_X64' Ver 12.0.6024.0 examined in 1.37 secs
+ '(local)\DEV_2012_X64' Ver 11.0.7001.0 examined in 1.38 secs
+ '(LocalDB)\LocalDB-v16.0' Ver 16.0.1000.6 examined in 1.39 secs
+ '(LocalDB)\LocalDB-v15.0' Ver 15.0.4382.1 examined in 1.39 secs
+ '(LocalDB)\v11.0' Ver 11.0.7001.0 examined in 1.51 secs
+ '(LocalDB)\LocalDB-v12.0' Ver 12.0.6024.0 examined in 1.55 secs
+ '(local)\DEV_2008R2_X64' Ver 10.50.6000.34 examined in 1.56 secs
+ '(LocalDB)\LocalDB-v11.0' Ver 11.0.7001.0 examined in 1.57 secs
+ '(LocalDB)\LocalDB-v13.0' Ver 13.0.6300.2 examined in 1.58 secs
+ '(local)\ADV_2008R2_X64' Ver 10.50.6000.34 examined in 1.60 secs
  '(local)\DEV_2008_X64' Ver 10.0.6000.29 examined in 1.61 secs
- '(LocalDB)\LocalDB-v11.0' Ver 11.0.7001.0 examined in 1.69 secs
- '(LocalDB)\v11.0' Ver 11.0.7001.0 examined in 1.70 secs
- '(local)\ADV_2008_X86' Ver 10.0.6000.29 examined in 1.72 secs
- '(local)\ADV_2005_X86' Ver 9.0.5000.0 examined in 1.78 secs
- '192.168.2.45' Ver 12.0.6024.0 examined in 3.43 secs
+ '(local)\ADV_2005_X86' Ver 9.0.5000.0 examined in 1.62 secs
+ '(local)\ADV_2008_X86' Ver 10.0.6000.29 examined in 1.63 secs
+ '192.168.2.45' Ver 12.0.6024.0 examined in 3.30 secs
 
 Alive Servers: 22. SysAdmins Permissions: 22.
-#1.3 {_3_Exam_Servers} >PASSED< in 00:00:03.4401085 (cpu: 9%, 296.875 = 281.250 [user] + 15.625 [kernel] milliseconds)
+#1.3 {_3_Exam_Servers} >PASSED< in 00:00:03.2981157 (cpu: 4%, 140.625 = 109.375 [user] + 31.250 [kernel] milliseconds)
 
