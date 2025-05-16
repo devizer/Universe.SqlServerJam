@@ -29,12 +29,27 @@ namespace Universe.SqlServerJam.Tests
         [Test]
         [TestCase("First")]
         [TestCase("Next")]
-        public void Test1_Show_Instances(string idRunner)
+        public void Test2_Show_Instances(string idRunner)
         {
             var instances = SqlLocalDbDiscovery.GetInstances();
             foreach (var v in instances)
             {
                 Console.WriteLine($"{v.Kind} {v.InstallerVersion}:  {v.Data}");
+            }
+        }
+
+        [Test]
+        [TestCase("First")]
+        [TestCase("Next")]
+        public void Test3_Show_Executable(string idRunner)
+        {
+            var exes = SqlServiceExtentions.FindSqlLocalDbExes().ToArray();
+            Console.WriteLine($"Total SqlLocalDB.exe executables: {exes.Length}");
+            int index = 0;
+            foreach (var exe in exes)
+            {
+                index++;
+                Console.WriteLine($"{index}: «{exe}»");
             }
         }
 
