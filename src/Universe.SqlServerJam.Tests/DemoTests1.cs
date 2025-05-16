@@ -16,10 +16,12 @@ namespace Universe.SqlServerJam.Tests
         [TestCaseSource(nameof(GetEnabledServers))]
         public void Demo1(SqlServerRef testCase)
         {
+            if (!testCase.CanSimplyCreateDatabase()) return;
+
             string newDbName = $"Test DB {Guid.NewGuid():N}";
             // IDbConnection cnn = new SqlConnection(testCase.ConnectionString);
             IDbConnection cnn = testCase.CreateConnection(pooling: false, timeout: 30);
-            int targetFillFactor = 77;
+            int targetFillFactor = 76;
             if (cnn.Manage().Configuration.FillFactor != targetFillFactor && testCase.CanStartStopService)
             {
                 cnn.Manage().Configuration.FillFactor = targetFillFactor;
