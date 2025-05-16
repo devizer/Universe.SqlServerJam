@@ -271,6 +271,7 @@ jobs:
               $servers = Parse-SqlServers-Input "${{ matrix.SqlServers }}"
               $servers | ? { "$($_.InstanceName)" -ne "" } | % {
                 $instance = $_.InstanceName;
+                $version = $_.Version
                 $i = IIf ($instance -eq "MSSQLSERVER") "(local)" "(local)\$($instance)"
                 Say "Configure instance `"$instance`" Server=$i";
                 Set-SQLServer-Options -Title "Instance $instance" -Instance "$i" -Options @{ 
@@ -281,6 +282,12 @@ jobs:
                    "Server Trigger Recursion" = $true; 
                 };
 
+                if ($version -match "2005") {
+                   Say "Switch SQL Server 2005 to Local System account"
+                   & net.exe stop "$instance"
+                   & sc.exe config "$instance" obj= LocalSystem
+                   & net.exe start "$instance"
+                }
                 
                 $instanceFull = "$((Find-Local-SqlServers | Select -First 1).Instance)"
                 if ($instanceFull -and "$($ENV:SQL_SERVERS)" -match "2022") {
