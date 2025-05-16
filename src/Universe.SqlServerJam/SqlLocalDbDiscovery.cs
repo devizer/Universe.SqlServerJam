@@ -47,7 +47,7 @@ namespace Universe.SqlServerJam
         public static List<SqlServerRef> GetInstances()
         {
             List<SqlServerRef> ret = new List<SqlServerRef>();
-            Dictionary<string,object> added = new Dictionary<string,object>();
+            Dictionary<string, object> added = new Dictionary<string, object>();
             var localDbVersions = GetVersionList();
             foreach (var localDbVersion in localDbVersions)
             {
@@ -90,9 +90,9 @@ namespace Universe.SqlServerJam
         }
 
         // net 3.5 is not able to access "SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL11E.LOCALDB", 12, 13, ...
-        public static List<SqlLocalDbDiscovery.LocalDbVersion> GetVersionList()
+        public static List<LocalDbVersion> GetVersionList()
         {
-            List<SqlLocalDbDiscovery.LocalDbVersion> ret = new List<SqlLocalDbDiscovery.LocalDbVersion>();
+            List<LocalDbVersion> ret = new List<LocalDbVersion>();
             if (!TinyCrossInfo.IsWindows) return ret;
             using (RegistryKey lm = Registry.LocalMachine)
             {
@@ -133,6 +133,40 @@ namespace Universe.SqlServerJam
             ret.Reverse();
             return ret;
         }
+
+        // Merge SqlLocalDbDiscovery.GetVersionList() and local file system
+        // Always sorted by descending
+        // Takes 0.4 milliseconds on AMD EPYC 7763 on single LocalDB Version
+        // TODO: Move To LocalDBDiscovery
+
+        public static IEnumerable<string> FindSqlLocalDbExes()
+        {
+            if (!TinyCrossInfo.IsWindows) return new string[0];
+
+            Dictionary<string, object> ret = new Dictionary<string, object>();
+            var versions = SqlLocalDbDiscovery.GetVersionList();
+            foreach (var ver in versions)
+                ret[ver.Exe] = null;
+
+            string[] vers = new[] { "170", "160", "150", "140", "130", "120" };
+            foreach (var ver in vers)
+            {
+                string candidate = Environment.ExpandEnvironmentVariables(
+                    @"%ProgramFiles%\Microsoft SQL Server\" + ver + @"\Tools\Binn\SqlLocalDB.exe"
+                );
+
+                if (File.Exists(candidate))
+                {
+                    ret[candidate] = null;
+                }
+            }
+
+            return ret
+                .Select(x => x.Key)
+                .OrderByDescending(x => x, VersionStringComparer.Instance)
+                .ToArray();
+        }
+
 
         static string ReadRegValue(RegistryKey lm, string lmPath, string keyName)
         {

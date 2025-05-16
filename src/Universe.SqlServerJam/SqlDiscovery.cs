@@ -126,7 +126,7 @@ namespace Universe.SqlServerJam
 
             foreach (var sqlServerRef in ret)
             {
-                sqlServerRef.ServiceStartup = SqlServiceExtentions.GetLocalServiceStartup(sqlServerRef.DataSource);
+                sqlServerRef.ServiceStartup = SqlServerDataSourceExtensions.GetLocalServiceStartup(SqlServerDataSource.ParseDataSource(sqlServerRef.DataSource));
             }
             return ret;
         }

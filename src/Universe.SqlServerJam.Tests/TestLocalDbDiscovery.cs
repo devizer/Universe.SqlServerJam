@@ -44,7 +44,7 @@ namespace Universe.SqlServerJam.Tests
         [TestCase("Next")]
         public void Test3_Show_Executable(string idRunner)
         {
-            var exes = SqlServiceExtentions.FindSqlLocalDbExes().ToArray();
+            var exes = SqlLocalDbDiscovery.FindSqlLocalDbExes().ToArray();
             Console.WriteLine($"Total SqlLocalDB.exe executables: {exes.Length}");
             int index = 0;
             foreach (var exe in exes)

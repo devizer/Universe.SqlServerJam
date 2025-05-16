@@ -11,6 +11,11 @@ namespace Universe.SqlServerJam
 {
     public static class SqlServerReferenceExtensions
     {
+        public static SqlServerDataSource ToSqlServerDataSource(this SqlServerRef sqlServerRef)
+        {
+            return SqlServerDataSource.ParseDataSource(sqlServerRef.DataSource);
+        }
+
         public static string AsBullets(this IEnumerable<SqlServerRef> list)
         {
             var sorted = OrderByVersionDesc(list);
@@ -100,12 +105,12 @@ namespace Universe.SqlServerJam
 
         public static void StartLocalService(this SqlServerRef sqlServerRef, int startTimeout = 30)
         {
-            SqlServiceExtentions.StartServiceOrLocalDb(sqlServerRef.DataSource, startTimeout);
+            sqlServerRef.ToSqlServerDataSource().StartServiceOrLocalDb(startTimeout);
         }
 
         public static void StopLocalService(this SqlServerRef sqlServerRef, int stopTimeout = 30)
         {
-            SqlServiceExtentions.StopServiceOrLocalDb(sqlServerRef.DataSource, stopTimeout);
+            sqlServerRef.ToSqlServerDataSource().StopServiceOrLocalDb(stopTimeout);
         }
 
         // TODO: Move to DataSourceStructuredExtensions
@@ -114,29 +119,31 @@ namespace Universe.SqlServerJam
             if (!TinyCrossInfo.IsWindows) return;
             if (!sqlServerRef.CanStartStopService) return;
 
+            var sqlServerDataSource = sqlServerRef.ToSqlServerDataSource();
+
             Stopwatch stopAt = Stopwatch.StartNew();
             if (sqlServerRef.Kind == SqlServerDiscoverySource.LocalDB)
             {
-                bool isStoppedDetails = SqlServiceExtentions.StopServiceOrLocalDb(sqlServerRef.DataSource, stopTimeout);
+                bool isStoppedDetails = sqlServerDataSource.StopServiceOrLocalDb(stopTimeout);
                 // Stop takes 5 sec usually
                 Thread.Sleep(10);
             }
             else if (sqlServerRef.Kind == SqlServerDiscoverySource.Local)
             {
-                SqlServiceStatus serviceStatus = SqlServiceExtentions.CheckLocalServiceStatus(sqlServerRef.DataSource);
+                SqlServiceStatus serviceStatus = sqlServerDataSource.CheckLocalServiceStatus();
                 var isStoppedAtStart = serviceStatus?.State == SqlServiceStatus.ServiceState.Stopped;
                 if (!isStoppedAtStart)
                 {
-                    bool isStoppedDetails = SqlServiceExtentions.StopServiceOrLocalDb(sqlServerRef.DataSource, stopTimeout);
+                    bool isStoppedDetails = sqlServerDataSource.StopServiceOrLocalDb(stopTimeout);
                     do
                     {
-                        var isStopped = SqlServiceStatus.ServiceState.Stopped == SqlServiceExtentions.CheckLocalServiceStatus(sqlServerRef.DataSource)?.State;
+                        var isStopped = SqlServiceStatus.ServiceState.Stopped == sqlServerDataSource.CheckLocalServiceStatus()?.State;
                         if (isStopped) break;
                     } while (stopAt.ElapsedMilliseconds < stopTimeout * 1000);
                 }
             }
 
-            SqlServiceExtentions.StartServiceOrLocalDb(sqlServerRef.DataSource);
+            sqlServerDataSource.StartServiceOrLocalDb();
             sqlServerRef.WarmUp(timeout: TimeSpan.FromSeconds(startTimeout));
         }
 
@@ -144,13 +151,14 @@ namespace Universe.SqlServerJam
         public static bool StartLocalIfStopped(this SqlServerRef sqlServerRef)
         {
             if (!TinyCrossInfo.IsWindows) return false;
+            var sqlServerDataSource = sqlServerRef.ToSqlServerDataSource();
             if (sqlServerRef.Kind == SqlServerDiscoverySource.Local)
             {
-                SqlServiceStatus serviceStatus = SqlServiceExtentions.CheckLocalServiceStatus(sqlServerRef.DataSource);
+                SqlServiceStatus serviceStatus = sqlServerDataSource.CheckLocalServiceStatus();
                 // Console.WriteLine($"[DEBUG] «{sqlServerRef}» Current Service status is '{serviceStatus?.State}'");
                 if (serviceStatus?.State != SqlServiceStatus.ServiceState.Running)
                 {
-                    bool isStarted = SqlServiceExtentions.StartServiceOrLocalDb(sqlServerRef.DataSource);
+                    bool isStarted = sqlServerDataSource.StartServiceOrLocalDb();
                     // Console.WriteLine($"[DEBUG] «{sqlServerRef}» Is Started: {isStarted}");
                     return isStarted;
                 }
@@ -160,7 +168,7 @@ namespace Universe.SqlServerJam
 
             else if (sqlServerRef.Kind == SqlServerDiscoverySource.LocalDB)
             {
-                bool isStarted = SqlServiceExtentions.StartLocalDB(sqlServerRef.DataSource);
+                bool isStarted = sqlServerDataSource.StartLocalDB();
                 return isStarted;
             }
 

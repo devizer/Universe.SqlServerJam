@@ -12,9 +12,9 @@ using System.Threading;
 namespace Universe.SqlServerJam
 {
     // TODO: Rename to DataSourceStructuredExtensions
-    public static class SqlServiceExtentions
+    public static class SqlServerDataSourceExtensions
     {
-        public static SqlServiceStatus CheckLocalServiceStatus(string dataSource)
+        public static SqlServiceStatus CheckLocalServiceStatus(this SqlServerDataSource dataSource)
         {
             // TODO: Do not return fail on Linux/MacOS
             if (!TinyCrossInfo.IsWindows) 
@@ -38,29 +38,27 @@ namespace Universe.SqlServerJam
         }
 
 
-        public static string GetServiceName(string dataSource)
+        public static string GetServiceName(this SqlServerDataSource dataSource)
         {
-            var structured = DataSourceStructured.ParseDataSource(dataSource);
-            if (structured?.IsLocalService != true)
+            if (dataSource?.IsLocalService != true)
                 throw new Exception("GetServiceName() is applicable for local sql servers");
 
-            return structured.ServiceName;
+            return dataSource.ServiceName;
         }
 
-        public static bool StartLocalDB(string dataSource, TimeSpan timeout = default(TimeSpan))
+        public static bool StartLocalDB(this SqlServerDataSource dataSource, TimeSpan timeout = default(TimeSpan))
         {
             if (timeout.Ticks == 0)
                 timeout = TimeSpan.FromSeconds(30);
 
-            var structured = DataSourceStructured.ParseDataSource(dataSource);
-            if (structured?.IsLocalDb != true) return false;
+            if (dataSource?.IsLocalDb != true) return false;
 
             Stopwatch sw = Stopwatch.StartNew();
             while (true)
             {
                 try
                 {
-                    string cs = String.Format(SqlServerJamDiscoveryConfiguration.LocalDbConnectionStringFormat, dataSource);
+                    string cs = String.Format(SqlServerJamDiscoveryConfiguration.LocalDbConnectionStringFormat, dataSource.Original);
                     cs = SqlServerJamConfigurationExtensions.ResetConnectionPooling(cs, false);
                     cs = SqlServerJamConfigurationExtensions.ResetConnectionTimeout(cs, 2);
                     using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(cs))
@@ -71,7 +69,7 @@ namespace Universe.SqlServerJam
                 }
                 catch
                 {
-                    string instanceName = dataSource.Split('\\').LastOrDefault() ?? "MSSQLLocalDB";
+                    string instanceName = dataSource.LocalDbInstance;
                     // try { StartLocalDB_Impl(instanceName, (int)timeout.TotalMilliseconds); } catch { }
                 }
 
@@ -82,41 +80,12 @@ namespace Universe.SqlServerJam
 
         }
 
-        // Merge SqlLocalDbDiscovery.GetVersionList() and local file system
-        // Always sorted by descending
-        public static IEnumerable<string> FindSqlLocalDbExes()
-        {
-            if (!TinyCrossInfo.IsWindows) return new string[0];
-            
-            Dictionary<string,object> ret = new Dictionary<string,object>();
-            var versions = SqlLocalDbDiscovery.GetVersionList();
-            foreach (var ver in versions)
-                ret[ver.Exe] = null;
 
-            string[] vers = new[] { "170", "160", "150", "140", "130", "120" };
-            foreach (var ver in vers)
-            {
-                string candidate = Environment.ExpandEnvironmentVariables(
-                    @"%ProgramFiles%\Microsoft SQL Server\" + ver + @"\Tools\Binn\SqlLocalDB.exe"
-                );
-
-                if (File.Exists(candidate))
-                {
-                    ret[candidate] = null;
-                }
-            }
-
-            return ret
-                .Select(x => x.Key)
-                .OrderByDescending(x => x, VersionStringComparer.Instance)
-                .ToArray();
-        }
-
-        public static LocalServiceStartup GetLocalServiceStartup(string dataSource)
+        public static LocalServiceStartup GetLocalServiceStartup(this SqlServerDataSource dataSource)
         {
             if (!TinyCrossInfo.IsWindows) return LocalServiceStartup.Unknown;
 
-            var structured = DataSourceStructured.ParseDataSource(dataSource);
+            var structured = dataSource;
             if (structured?.IsLocalService != true) return LocalServiceStartup.Unknown;
 
             string serviceName = structured.ServiceName;
@@ -150,16 +119,15 @@ namespace Universe.SqlServerJam
         }
 
         // Returns true if service is running
-        public static bool StartServiceOrLocalDb(string dataSource, int timeout = 30)
+        public static bool StartServiceOrLocalDb(this SqlServerDataSource dataSource, int timeout = 30)
         {
             if (!TinyCrossInfo.IsWindows) return false;
-            var structured = DataSourceStructured.ParseDataSource(dataSource);
-            if (structured == null) return false;
-            if (structured.IsLocalDb)
+            if (dataSource == null) return false;
+            if (dataSource.IsLocalDb)
                 return StartLocalDB(dataSource, TimeSpan.FromSeconds(timeout));
 
             // if (!IsLocalService(dataSource)) return false;
-            if (!structured.IsLocalService) return false;
+            if (!dataSource.IsLocalService) return false;
 
             var serviceStatus = CheckLocalServiceStatus(dataSource);
             // ServiceController service = new ServiceController(GetServiceName(dataSource));
@@ -189,16 +157,15 @@ namespace Universe.SqlServerJam
 
         
         // Return true if action taken
-        public static bool StopServiceOrLocalDb(string dataSource, int stopTimeout)
+        public static bool StopServiceOrLocalDb(this SqlServerDataSource dataSource, int stopTimeout)
         {
             if (!TinyCrossInfo.IsWindows) return false;
-            DataSourceStructured structured = DataSourceStructured.ParseDataSource(dataSource);
-            if (structured == null) return false;
+            if (dataSource == null) return false;
 
-            if (structured.IsLocalDb)
+            if (dataSource.IsLocalDb)
             {
-                string instanceName = structured.LocalDbInstance;
-                var sqlLocalDbExe = FindSqlLocalDbExes().FirstOrDefault();
+                string instanceName = dataSource.LocalDbInstance;
+                var sqlLocalDbExe = SqlLocalDbDiscovery.FindSqlLocalDbExes().FirstOrDefault();
                 if (sqlLocalDbExe != null)
                 {
                     try
@@ -211,9 +178,9 @@ namespace Universe.SqlServerJam
                     }
                 }
             }
-            else if (structured.IsLocalService)
+            else if (dataSource.IsLocalService)
             {
-                var serviceName = structured.ServiceName;
+                var serviceName = dataSource.ServiceName;
 
                 var serviceStatus = CheckLocalServiceStatus(dataSource);
                 if (serviceStatus?.State == SqlServiceStatus.ServiceState.Stopped) return false;
@@ -236,104 +203,7 @@ namespace Universe.SqlServerJam
 
             return false;
         }
-
-
     }
-
-    // Only Local Service or LocalDB
-    // TODO: Rename to SqlDataSource
-    public class DataSourceStructured
-    {
-        public bool IsLocalService { get; set; }
-        public bool IsLocalDb { get; set; }
-
-        public bool IsLocal => IsLocalDb || IsLocalService;
-
-        // Not Null if IsLocalService
-        public string ServiceName { get; set; }
-
-        public string LocalDbInstance { get; set; }
-
-        public override string ToString()
-        {
-            if (IsLocalDb)
-                return $"LocalDb '{LocalDbInstance}'";
-
-            if (IsLocalService)
-                return $" Local Service '{ServiceName}'";
-
-            return "Non-local or null service, e.g. neither SQL Server nor LocalDB";
-        }
-
-        public static DataSourceStructured ParseConnectionString(string connectionString)
-        {
-            var dataSource = SqlServerJamConfigurationExtensions.GetDataSource(connectionString);
-            return ParseDataSource(dataSource);
-        }
-
-        public static DataSourceStructured ParseDataSource(string dataSource)
-        {
-            var arrWithProtocol = dataSource.Split(':');
-            var instanceWithoutProtocol = arrWithProtocol.Last();
-            var protocol = arrWithProtocol.Length >= 2 ? arrWithProtocol[0] : null; // null | lpc | tcp | np
-            var hostWithPort = instanceWithoutProtocol.Split('\\').First();
-            var host = hostWithPort.Split(',').First();
-
-            // TODO: if Port or Protocol tcp or named pipe then NOT a LocalDB
-            bool isLocalService =
-                host.Equals("(local)", StringComparisonExtensions.IgnoreCase)
-                || host.Equals(".", StringComparisonExtensions.IgnoreCase)
-                || host.Equals("::1", StringComparisonExtensions.IgnoreCase)
-                || host.Equals("127.0.0.1", StringComparisonExtensions.IgnoreCase)
-                || host.Equals(EnvironmentExtensions.MachineName, StringComparisonExtensions.IgnoreCase);
-
-            string instanceName =
-                dataSource.IndexOf("\\", StringComparison.Ordinal) < 0
-                    ? null
-                    : dataSource.Split('\\').LastOrDefault();
-
-            if (isLocalService)
-            {
-                var serviceName = instanceName == null ? "MSSQLSERVER" : $"MSSQL${instanceName}";
-                return new DataSourceStructured()
-                {
-                    IsLocalService = true,
-                    IsLocalDb = false,
-                    ServiceName = serviceName
-                };
-            }
-
-            bool isLocalDb = 
-                host.StartsWith("(LocalDB)", StringComparisonExtensions.IgnoreCase)
-                && dataSource.StartsWith("(LocalDB)\\", StringComparisonExtensions.IgnoreCase);
-
-
-            if (isLocalDb)
-            {
-                // tcp is not a 
-                bool isProperProtocol =
-                    protocol == null
-                    || "lpc".Equals(protocol, StringComparison.OrdinalIgnoreCase)
-                    || "np".Equals(protocol, StringComparison.OrdinalIgnoreCase);
-
-                // instanceName is Mandatory
-                if (instanceName != null && isProperProtocol)
-                {
-                    return new DataSourceStructured()
-                    {
-                        IsLocalDb = true,
-                        IsLocalService = false,
-                        ServiceName = null,
-                        LocalDbInstance = instanceName ?? "MSSQLLocalDB"
-                    };
-                }
-            }
-
-            return null;
-        }
-
-    }
-
 
     public enum LocalServiceStartup
     {
