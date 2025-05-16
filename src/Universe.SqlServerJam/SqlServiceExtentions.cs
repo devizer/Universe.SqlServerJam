@@ -11,6 +11,7 @@ using System.Threading;
 
 namespace Universe.SqlServerJam
 {
+    // TODO: Rename to DataSourceStructuredExtensions
     public static class SqlServiceExtentions
     {
         public static SqlServiceStatus CheckLocalServiceStatus(string dataSource)
@@ -37,9 +38,9 @@ namespace Universe.SqlServerJam
         }
 
 
-        public static string GetServiceName(string sqlServer)
+        public static string GetServiceName(string dataSource)
         {
-            var structured = DataSourceStructured.ParseDataSource(sqlServer);
+            var structured = DataSourceStructured.ParseDataSource(dataSource);
             if (structured?.IsLocalService != true)
                 throw new Exception("GetServiceName() is applicable for local sql servers");
 
@@ -227,6 +228,7 @@ namespace Universe.SqlServerJam
     }
 
     // Only Local Service or LocalDB
+    // TODO: Rename to SqlDataSource
     public class DataSourceStructured
     {
         public bool IsLocalService { get; set; }
@@ -258,10 +260,13 @@ namespace Universe.SqlServerJam
 
         public static DataSourceStructured ParseDataSource(string dataSource)
         {
-            var instanceWithoutProtocol = dataSource.Split(':').Last();
+            var arrWithProtocol = dataSource.Split(':');
+            var instanceWithoutProtocol = arrWithProtocol.Last();
+            var protocol = arrWithProtocol.Length >= 2 ? arrWithProtocol[0] : null; // null | lpc | tcp | np
             var hostWithPort = instanceWithoutProtocol.Split('\\').First();
             var host = hostWithPort.Split(',').First();
 
+            // TODO: if Port or Protocol tcp or named pipe then NOT a LocalDB
             bool isLocalService =
                 host.Equals("(local)", StringComparisonExtensions.IgnoreCase)
                 || host.Equals(".", StringComparisonExtensions.IgnoreCase)
@@ -269,14 +274,10 @@ namespace Universe.SqlServerJam
                 || host.Equals("127.0.0.1", StringComparisonExtensions.IgnoreCase)
                 || host.Equals(EnvironmentExtensions.MachineName, StringComparisonExtensions.IgnoreCase);
 
-            bool isLocalDb = 
-                host.StartsWith("(LocalDB)", StringComparisonExtensions.IgnoreCase)
-                && dataSource.StartsWith("(LocalDB)\\", StringComparisonExtensions.IgnoreCase);
-
             string instanceName =
                 dataSource.IndexOf("\\", StringComparison.Ordinal) < 0
-                ? null
-                : dataSource.Split('\\').LastOrDefault();
+                    ? null
+                    : dataSource.Split('\\').LastOrDefault();
 
             if (isLocalService)
             {
@@ -288,15 +289,25 @@ namespace Universe.SqlServerJam
                     ServiceName = serviceName
                 };
             }
-            else if (isLocalDb)
+
+            bool isLocalDb = 
+                host.StartsWith("(LocalDB)", StringComparisonExtensions.IgnoreCase)
+                && dataSource.StartsWith("(LocalDB)\\", StringComparisonExtensions.IgnoreCase);
+
+
+            if (isLocalDb)
             {
-                return new DataSourceStructured()
+                // instanceName is Mandatory
+                if (instanceName != null && (protocol == null || ("lpc".Equals(protocol, StringComparison.OrdinalIgnoreCase))))
                 {
-                    IsLocalDb = true,
-                    IsLocalService = false,
-                    ServiceName = null,
-                    LocalDbInstance = instanceName ?? "MSSQLLocalDB"
-                };
+                    return new DataSourceStructured()
+                    {
+                        IsLocalDb = true,
+                        IsLocalService = false,
+                        ServiceName = null,
+                        LocalDbInstance = instanceName ?? "MSSQLLocalDB"
+                    };
+                }
             }
 
             return null;

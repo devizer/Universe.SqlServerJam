@@ -6,6 +6,7 @@ namespace Universe.SqlServerJam.Tests
     // Narayana Pandita’s algorithm that returns indexes only
     public static class SimplePermutations
     {
+        
         public static IEnumerable<int[]> GetAll(int elementsCount) => GetAll(elementsCount, false);
         public static IEnumerable<int[]> GetAllIsolated(int elementsCount) => GetAll(elementsCount, true);
 
@@ -21,6 +22,17 @@ namespace Universe.SqlServerJam.Tests
 
             int[] array = new int[elementsCount];
             for(int i = 0; i < elementsCount; i++) array[i] = i;
+            if (needNewCopy)
+            {
+                int[] copy = new int[elementsCount];
+                for (int i = 0; i < elementsCount; i++) copy[i] = array[i];
+                yield return copy;
+            }
+            else
+            {
+                yield return array;
+            }
+
             while (NextPermutation(array))
             {
                 if (needNewCopy)

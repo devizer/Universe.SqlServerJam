@@ -108,6 +108,7 @@ namespace Universe.SqlServerJam
             SqlServiceExtentions.StopServiceOrLocalDb(sqlServerRef.DataSource, stopTimeout);
         }
 
+        // TODO: Move to DataSourceStructuredExtensions
         public static void RestartLocalService(this SqlServerRef sqlServerRef, int stopTimeout = 30, int startTimeout = 30)
         {
             if (!TinyCrossInfo.IsWindows) return;
