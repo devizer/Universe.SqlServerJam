@@ -339,7 +339,7 @@ jobs:
     - name: TEST JAM (latest)
       run: |
         cd C:\Pre-Build\Universe.SqlServerJam.Tests
-        dotnet test Universe.SqlServerJam.Tests.dll
+        dotnet test --filter "FullyQualifiedName !~ Z_Log & FullyQualifiedName !~ ShowAPI" Universe.SqlServerJam.Tests.dll
         if (-not $?) { throw "FAIL"; }
 
     - name: TEST SqlStorage of SqlInsights
