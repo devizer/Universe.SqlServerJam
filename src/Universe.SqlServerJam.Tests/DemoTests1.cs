@@ -16,9 +16,8 @@ namespace Universe.SqlServerJam.Tests
         [TestCaseSource(nameof(GetEnabledServers))]
         public void Demo1(SqlServerRef testCase)
         {
-            if (!testCase.CanSimplyCreateDatabase()) return;
 
-            string newDbName = $"Test DB {Guid.NewGuid():N}";
+            // TEST RESTART for fill factor
             // IDbConnection cnn = new SqlConnection(testCase.ConnectionString);
             IDbConnection cnn = testCase.CreateConnection(pooling: false, timeout: 30);
             int targetFillFactor = 76;
@@ -31,10 +30,14 @@ namespace Universe.SqlServerJam.Tests
             }
             Console.WriteLine($"FillFactor: {cnn.Manage().Configuration.FillFactor}");
 
+            string newDbName = $"Test DB {Guid.NewGuid():N}";
             cnn = testCase.CreateConnection(pooling: true, timeout: 30);
             cnn.Manage().Configuration.MinServerMemory = 4000; // 4Gb
             Assert.That(cnn.Manage().Configuration.MinServerMemory, Is.EqualTo(4000));
             cnn.Manage().Configuration.MaxServerMemory = 64000; // 64Gb
+
+            if (!testCase.CanSimplyCreateDatabase()) return;
+
             try
             {
                 cnn.Execute($"Create Database [{newDbName}]");
