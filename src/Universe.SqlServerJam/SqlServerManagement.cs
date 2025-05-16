@@ -18,8 +18,14 @@ namespace Universe.SqlServerJam
         private Lazy<string> _MediumServerVersion;
         private Lazy<string> _LongServerVersion;
         private Lazy<string> _HostPlatform;
+        private Lazy<SqlServerSysInfo> _SqlServerSysInfo;
         private readonly Lazy<Version> _ProductVersion;
-        
+
+        public SqlServerSysInfo SystemInfo => _SqlServerSysInfo.Value;
+
+        public int CpuCount => SystemInfo.CpuCount;
+        public int PhysicalMemoryKb => SystemInfo.PhysicalMemoryKb;
+
         // Actually it is need for WarmUp extension
         public int CommandTimeout { get; private set; } = 30;
 
@@ -33,10 +39,11 @@ namespace Universe.SqlServerJam
             _MediumServerVersion = new Lazy<string>(GetMediumServerVersion);
             _LongServerVersion = new Lazy<string>(GetLongServerVersion);
             _HostPlatform = new Lazy<string>(GetHostPlatform);
+            _ProductVersion = new Lazy<Version>(() => ResilientVersionParser.Parse(this.ProductVersionRaw));
+            _SqlServerSysInfo = new Lazy<SqlServerSysInfo>(() => SqlServerSysInfo.Query(SqlConnection));
 
             Databases = new DatabaseSelector(this);
 
-            _ProductVersion = new Lazy<Version>(() => ResilientVersionParser.Parse(this.ProductVersionRaw));
         }
 
 
@@ -83,23 +90,21 @@ namespace Universe.SqlServerJam
             return this.SqlConnection.ExecuteScalar<bool>(sql, new { dbName });
         }
 
-        public FixedServerRoles FixedServerRoles
-        {
-            get
-            {
-                IEnumerable<FixedServerRoles> all = Enum.GetValues(typeof(FixedServerRoles)).OfType<FixedServerRoles>();
-                FixedServerRoles ret = FixedServerRoles.None;
-                foreach (var i in all)
-                {
-                    if (i == FixedServerRoles.None) continue;
-                    int? isMember = SqlConnection.ExecuteScalar<int?>($"Select IS_SRVROLEMEMBER('{i}')");
-                    if (isMember.HasValue && isMember.Value != 0)
-                        ret |= i;
-                }
+        // On Azure it always 0:
+        // https://learn.microsoft.com/en-us/sql/t-sql/functions/is-srvrolemember-transact-sql?view=sql-server-ver16#return-types
+        public FixedServerRoles FixedServerRoles => 
+            (FixedServerRoles)SqlConnection.ExecuteScalar<int>(_SqlQueryFixedRoles.Value);
 
-                return ret;
-            }
-        }
+        static Lazy<string> _SqlQueryFixedRoles = new Lazy<string>(() =>
+        {
+            IEnumerable<string> roleParts = Enum.GetValues(typeof(FixedServerRoles))
+                .OfType<FixedServerRoles>()
+                .Where(x => x != FixedServerRoles.None)
+                .Select(x => $"(Case When 0 = IS_SRVROLEMEMBER('{x.ToString()}') Then 0 Else {(int)x} End)");
+
+            return $"Select {string.Join($"{Environment.NewLine} + ", roleParts.ToArray())} as Roles";
+        });
+
 
         public bool IsFullTextSearchInstalled =>
             // 1 == SqlConnection.ExecuteScalar<int?>("SELECT FULLTEXTSERVICEPROPERTY('IsFullTextInstalled')");
@@ -225,9 +230,9 @@ namespace Universe.SqlServerJam
         public Version ProductVersion => _ProductVersion.Value;
 
 
-        public Version GetShortServerVersion(int? timeout)
+        public Version GetShortServerVersion(int? commandTimeout)
         {
-            int ver32Bit = SqlConnection.ExecuteScalar<int>("Select @@MICROSOFTVERSION", null, commandTimeout: 4);
+            int ver32Bit = SqlConnection.ExecuteScalar<int>("Select @@MICROSOFTVERSION", null, commandTimeout: commandTimeout);
             // int ver32Bit = OneColumnDataReaderWithoutParameters<int>.Instance.ExecuteScalar(SqlConnection, "Select @@MICROSOFTVERSION");
             int v1 = ver32Bit >> 24;
             int v2 = ver32Bit >> 16 & 0xFF;
@@ -304,6 +309,7 @@ namespace Universe.SqlServerJam
         {
             get
             {
+                // 2005 and 2008
                 const string sql = @"
 declare @DefaultData nvarchar(1024)
 exec master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'DefaultData', @DefaultData output
@@ -314,14 +320,14 @@ exec master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\
 declare @DefaultBackup nvarchar(1024)
 exec master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'BackupDirectory', @DefaultBackup output
 
-declare @MasterData nvarchar(512)
+declare @MasterData nvarchar(1024)
 exec master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer\Parameters', N'SqlArg0', @MasterData output
-select @MasterData=substring(@MasterData, 3, 255)
+select @MasterData=substring(@MasterData, 3, 1024)
 select @MasterData=substring(@MasterData, 1, len(@MasterData) - charindex('\', reverse(@MasterData)))
 
-declare @MasterLog nvarchar(512)
+declare @MasterLog nvarchar(1024)
 exec master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer\Parameters', N'SqlArg2', @MasterLog output
-select @MasterLog=substring(@MasterLog, 3, 255)
+select @MasterLog=substring(@MasterLog, 3, 1024)
 select @MasterLog=substring(@MasterLog, 1, len(@MasterLog) - charindex('\', reverse(@MasterLog)))
 
 select 

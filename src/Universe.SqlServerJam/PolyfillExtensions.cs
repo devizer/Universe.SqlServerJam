@@ -8,6 +8,24 @@ using Dapper;
 namespace Universe.SqlServerJam
 {
 
+    public static class TitleCaseString
+    {
+        public static string Produce(string arg)
+        {
+            if (arg == null) return null;
+            StringBuilder ret = new StringBuilder();
+            bool prevSpace = true;
+            foreach (var ch in arg)
+            {
+                bool isLetter = Char.IsLetter(ch);
+                ret.Append((isLetter && prevSpace) ? Char.ToUpper(ch) : ch);
+                prevSpace = !isLetter;
+            }
+
+            return ret.ToString();
+        }
+    }
+
     public static class StringComparisonExtensions
     {
 #if NETSTANDARD1_4

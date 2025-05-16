@@ -133,6 +133,9 @@ namespace Universe.SqlServerJam.Tests
                     // report.AppendLine("BackupCompressionDefault .: " + man.Configuration.BackupCompressionDefault);
 
                     report.AppendLine("Host Platform ............: " + man.HostPlatform);
+                    report.AppendLine("CPU Count ................: " + (man.CpuCount == 0 ? "" : man.CpuCount.ToString("n0")));
+                    report.AppendLine("Physical Memory (MB) .....: " + (man.PhysicalMemoryKb == 0 ? "" : (man.PhysicalMemoryKb / 1024).ToString("n0")));
+
                     report.AppendLine("Security Mode ............: " + man.SecurityMode);
                     report.AppendLine("Is LocalDB ...............: " + man.IsLocalDB);
                     report.AppendLine("Has Full Text Search .....: " + man.IsFullTextSearchInstalled);

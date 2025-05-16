@@ -16,7 +16,8 @@ namespace Universe.SqlServerJam
         public static SqlServiceStatus CheckLocalServiceStatus(string dataSource)
         {
             // TODO: Do not return fail on Linux/MacOS
-            // if (TinyCrossInfo.IsWindows) return null;
+            if (!TinyCrossInfo.IsWindows) 
+                return new SqlServiceStatus(new InvalidOperationException("CheckLocalServiceStatus() is supported on Windows only"));
 
             SqlServiceStatus ret = null;
             try
