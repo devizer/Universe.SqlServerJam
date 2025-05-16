@@ -62,6 +62,9 @@ jobs:
            # '2022 Developer, 2008 Core, 2005 Core',
            # '2022 Developer, 2019 Developer, 2017 Developer, 2016 Developer',
            # '2022 Developer Update, 2019 Developer Update, 2017 Developer Update, 2016 Developer Update',
+           '2005-x86 Advanced Update',
+           '2005-x86 Advanced',
+           '2005-x86 Core',
            '2022 Developer Update',
            '2022 Developer',
            '2022 Advanced Update',
@@ -127,10 +130,7 @@ jobs:
            '2008-x86 Advanced Update',
            '2008-x86 Advanced',
            '2008-x86 Core Update',
-           '2008-x86 Core',
-           '2005-x86 Advanced Update',
-           '2005-x86 Advanced',
-           '2005-x86 Core'
+           '2008-x86 Core'
         ]
 
     runs-on: windows-2019
@@ -284,10 +284,11 @@ jobs:
                 };
 
                 if ($version -match "2005") {
-                   Say "Switch SQL Server 2005 to Local System account"
-                   & net.exe stop "$instance"
-                   & sc.exe config "$instance" obj= LocalSystem
-                   & net.exe start "$instance"
+                   $serviceName = IIf ($instance -eq "MSSQLSERVER") "MSSQLSERVER" "MSSQL`$$($instance)"
+                   Say "Switch SQL Server 2005 to Local System account. Service is '$serviceName'"
+                   & net.exe stop "$serviceName"
+                   & sc.exe config "$serviceName" obj= LocalSystem
+                   & net.exe start "$serviceName"
                 }
                 
                 $instanceFull = "$((Find-Local-SqlServers | Select -First 1).Instance)"
