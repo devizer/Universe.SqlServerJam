@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-    - name: dotnet build
+    - name: dotnet build tests for SqlServerStorage and Jam
       shell: bash
       run: |
         set -eu; set -o pipefail
@@ -26,11 +26,18 @@ jobs:
         Say --Reset-Stopwatch
         Say "CPU: $(Get-CpuName)"
         
+        bindir="${{ github.workspace }}/bin"
+
         Say "Build fx-dependent [https://github.com/devizer/Universe.SqlInsights].Tests"
         try-and-retry git clone https://github.com/devizer/Universe.SqlInsights ~/Universe.SqlInsights-Sources
         pushd ~/Universe.SqlInsights-Sources/src/Universe.SqlInsights.SqlServerStorage.Tests
-        bindir="${{ github.workspace }}/bin/Universe.SqlInsights.SqlServerStorage.Tests"
-        time try-and-retry dotnet publish -c Release -o "$bindir" -f net6.0 -v:m
+        time try-and-retry dotnet publish -c Release -o "$bindir/Universe.SqlInsights.SqlServerStorage.Tests" -f net6.0 -v:m
+        popd
+
+        Say "Build fx-dependent [https://github.com/devizer/Universe.SqlServerJam].Tests"
+        try-and-retry git clone https://github.com/devizer/Universe.SqlServerJam ~/Universe.SqlServerJam-Sources
+        pushd ~/Universe.SqlServerJam-Sources/src/Universe.SqlServerJam.Tests
+        time try-and-retry dotnet publish -c Release -o "$bindir/Universe.SqlServerJam.Tests" -f net6.0 -v:m
         popd
         ls -lah "$bindir"
         echo "bindir=[$bindir]"
@@ -328,6 +335,12 @@ jobs:
        $jsonObject = @($jsonString | ConvertFrom-Json) | Select -First 1
        $jsonObject | Add-Member -MemberType NoteProperty -Name "MediumVersion" -Value $mediumVersion
        $jsonObject | ConvertTo-Json > "$jsonFile"
+
+    - name: TEST JAM (latest)
+      run: |
+        cd C:\Pre-Build\Universe.SqlServerJam.Tests
+        dotnet test Universe.SqlServerJam.Tests.dll
+        if (-not $?) { throw "FAIL"; }
 
     - name: TEST SqlStorage of SqlInsights
       run: |
