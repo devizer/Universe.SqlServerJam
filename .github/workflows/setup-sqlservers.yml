@@ -143,6 +143,7 @@ jobs:
 
     steps:
     - name: Total Modules
+      if: ${{ false }}
       run: 'Write-Host "Total Modules: $((get-module -ListAvailable).Count)"'
 
     - name: Bootstrap
