@@ -20,6 +20,7 @@ namespace Universe.SqlServerJam
             if (!TinyCrossInfo.IsWindows) return;
             if (!dataSource.IsLocal) return;
 
+            // Console.WriteLine($"[DEBUG] DO Restart {dataSource}");
             Stopwatch stopAt = Stopwatch.StartNew();
             // if (sqlServerRef.Kind == SqlServerDiscoverySource.LocalDB)
             if (dataSource.IsLocalDb)
@@ -28,7 +29,7 @@ namespace Universe.SqlServerJam
                 // Stop takes 5 sec usually
                 Thread.Sleep(10);
             }
-            else if (dataSource.IsLocalDb)
+            else if (dataSource.IsLocalService)
             {
                 SqlServiceStatus serviceStatus = dataSource.CheckLocalServiceStatus();
                 var isStoppedAtStart = serviceStatus?.State == SqlServiceStatus.ServiceState.Stopped;

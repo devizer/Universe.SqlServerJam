@@ -4,6 +4,7 @@ using System.Data;
 using System;
 using Dapper;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Universe.SqlServerJam.Tests
@@ -21,12 +22,14 @@ namespace Universe.SqlServerJam.Tests
             // TEST RESTART for fill factor
             // IDbConnection cnn = new SqlConnection(testCase.ConnectionString);
             IDbConnection cnn = testCase.CreateConnection(pooling: false, timeout: 30);
-            int targetFillFactor = 75;
+            int targetFillFactor = 73;
             if (cnn.Manage().Configuration.FillFactor != targetFillFactor && testCase.CanStartStopService)
             {
                 cnn.Manage().Configuration.FillFactor = targetFillFactor;
                 Console.WriteLine($"RESTARTING {testCase} for configuration");
+                Stopwatch sw = Stopwatch.StartNew();
                 testCase.RestartLocalService(stopTimeout: 30, startTimeout: 30);
+                Console.WriteLine($"RESTARTED {testCase} {sw.ElapsedMilliseconds:n0} milliseconds");
                 Assert.That(cnn.Manage().Configuration.FillFactor, Is.EqualTo(targetFillFactor), () => "FillFactor does not match");
             }
             Console.WriteLine($"FillFactor: {cnn.Manage().Configuration.FillFactor}");
