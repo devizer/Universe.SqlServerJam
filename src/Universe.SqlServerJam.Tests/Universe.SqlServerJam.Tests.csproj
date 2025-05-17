@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net35;net5.0;net6.0;net40;net45;net48</TargetFrameworks>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net35;net5.0;net6.0;net40;net45;net48</TargetFrameworks>
+		<IsPackable>false</IsPackable>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
 
-  <Import Project="..\Shared-Files\NUnit-Platform.props" />
+	<Import Project="..\Shared-Files\NUnit-Platform.props" />
 
   <ItemGroup>
     <None Remove="Assets\DB For Tests.bak.gz" />

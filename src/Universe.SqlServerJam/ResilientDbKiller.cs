@@ -22,7 +22,7 @@ namespace Universe.SqlServerJam
             var master = SqlServerJamConfiguration.SqlProviderFactory.CreateConnectionStringBuilder();
             master.ConnectionString = masterConnectionString;
 
-            // master.Remove("Initial Catalog");
+            master.Remove("Initial Catalog");
             // master["Pooling"] = true.ToString();
             master["Pooling"] = true;
 

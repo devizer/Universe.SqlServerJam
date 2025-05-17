@@ -68,6 +68,85 @@ namespace Universe.SqlServerJam
             set => SetAdvancedOption<int>(Names.MinServerMemory, value);
         }
 
+        public short AffinityCount
+        {
+            get => MaskToCount(this.AffinityMask);
+            set => this.AffinityMask = CountToMask(value);
+        }
+
+        private short MaskToCount(long affinityMask)
+        {
+            if (affinityMask == 0) return (short)this._ServerManagement.CpuCount;
+            int count = 0;
+            long scale = 1;
+            for (int i = 0; i < 64; i++)
+            {
+                if ((affinityMask & scale) != 0) count++;
+                scale <<= 1;
+            }
+
+            return (short)count;
+        }
+
+        long CountToMask(short count)
+        {
+            short cpuCount = (short) this._ServerManagement.CpuCount;
+            if (count == cpuCount) return 0;
+            long ret = 0;
+            long scale = 1;
+            for (int i = 0; i < count; i++)
+            {
+                ret += scale;
+                scale <<= 1;
+            }
+
+            return ret;
+        }
+
+        public long AffinityMask
+        {
+            get => GetAffinityMask("");
+            set => SetAffinityMask("", value);
+        }
+        private long AffinityIoMask
+        {
+            get => GetAffinityMask("I/O");
+            set => SetAffinityMask("I/O", value);
+        }
+
+        private void SetAffinityMask(string suffix, long value)
+        {
+            Console.WriteLine($"[DEBUG] SetAffinityMask={value}");
+            suffix = string.IsNullOrEmpty(suffix) ? "" : $"{suffix} ";
+            var lowName = $"affinity {suffix}mask";
+            var highName = $"affinity64 {suffix}mask";
+            int lowValue = (int)(value & 0xFFFFFFFF);
+            int highValue = (int)((value >> 32) & 0xFFFFFFFF);
+            SetAdvancedOption(lowName, lowValue);
+            try
+            {
+                SetAdvancedOption(highName, highValue);
+            }
+            catch (Exception ex)
+            {
+                bool is32bit = true;
+            }
+        }
+
+        private long GetAffinityMask(string suffix)
+        {
+            suffix = string.IsNullOrEmpty(suffix) ? "" : $"{suffix} ";
+            var lowName = $"affinity {suffix}mask";
+            var highName = $"affinity64 {suffix}mask";
+            var lowOption = ReadAdvancedOption<int>(lowName);
+            var highOption = ReadAdvancedOption<int>(highName);
+            var lowValue = lowOption?.RunValue ?? 0;
+            var highValue = highOption?.RunValue ?? 0;
+            long ret = ((long)highValue) << 32 | ((long)lowValue);
+            return ret;
+        }
+
+
 
         static class Names
         {

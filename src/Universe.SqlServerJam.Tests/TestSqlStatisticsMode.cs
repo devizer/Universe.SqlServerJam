@@ -6,9 +6,8 @@ using Universe.NUnitTests;
 
 namespace Universe.SqlServerJam.Tests
 {
-
     [TestFixture]
-    public class TestStatistics : NUnitTestsBase
+    public class TestSqlStatisticsMode : NUnitTestsBase
     {
         [Test]
         [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetEnabledServers))]

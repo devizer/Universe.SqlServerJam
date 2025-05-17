@@ -19,7 +19,7 @@ namespace Universe.SqlServerJam.Tests
         {
             SqlJamLog.EnableDebugLog = true;
             if (!testCase.CanSimplyCreateDatabase()) return;
-            if (!testCase.IsNotAzure()) return;
+            // if (!testCase.IsNotAzure()) return;
 
 
             var enumerable =
