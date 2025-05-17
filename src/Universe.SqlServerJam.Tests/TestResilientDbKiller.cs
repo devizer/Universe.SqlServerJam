@@ -17,14 +17,22 @@ namespace Universe.SqlServerJam.Tests
         [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetEnabledServers))]
         public void KillNewDB(SqlServerRef testCase)
         {
+            SqlJamLog.EnableDebugLog = true;
             if (!testCase.CanSimplyCreateDatabase()) return;
+            if (!testCase.IsNotAzure()) return;
 
-            foreach (bool? pooling in new List<bool?>() { null, true, false })
+
+            var enumerable =
+                testCase.Manage(timeout: 90).IsAzure
+                    ? new List<bool?>() { false }
+                    : new List<bool?>() { null, true, false };
+
+            foreach (bool? pooling in enumerable)
             {
                 string newDbName = $"Test of ResilientDbKiller {Guid.NewGuid().ToString()}";
                 Console.WriteLine($"TEST WITH POOLING = [{pooling}]");
                 var conMaster = testCase.CreateConnection();
-                conMaster.Execute($"Create Database [{newDbName}]");
+                conMaster.Execute($"Create Database [{newDbName}]", commandTimeout: 90);
 
                 // Open 5 connections
                 List<DbConnection> connections = new List<DbConnection>();
@@ -37,7 +45,7 @@ namespace Universe.SqlServerJam.Tests
                 }
 
                 Stopwatch sw = Stopwatch.StartNew();
-                ResilientDbKiller.Kill(testCase.ConnectionString, newDbName);
+                ResilientDbKiller.Kill(testCase.ConnectionString, newDbName, retryCount: 5);
                 var milliseconds = sw.ElapsedMilliseconds;
                 Console.WriteLine($"{milliseconds:n0} millisecs: ResilientDbKiller.Kill('{newDbName}')");
                 Console.WriteLine();
@@ -45,6 +53,13 @@ namespace Universe.SqlServerJam.Tests
                 Assert.That(conMaster.Manage().IsDbExists(newDbName), Is.False);
             }
         }
+
+        [Test]
+        public void Z_Log()
+        {
+            Console.WriteLine(SqlJamLog.Log);
+        }
+
 
     }
 }

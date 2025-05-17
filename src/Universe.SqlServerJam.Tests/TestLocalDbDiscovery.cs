@@ -12,7 +12,7 @@ namespace Universe.SqlServerJam.Tests
     {
         public TestLocalDbDiscovery()
         {
-            SqlLocalDbDiscovery.EnableDebugLog = true;
+            SqlJamLog.EnableDebugLog = true;
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace Universe.SqlServerJam.Tests
         [Test]
         public void Z_Log()
         {
-            Console.WriteLine(SqlLocalDbDiscovery.Log);
+            Console.WriteLine(SqlJamLog.Log);
         }
 
     }

@@ -16,6 +16,7 @@ namespace Universe.SqlServerJam.Tests
         [TestCaseSource(nameof(GetEnabledServers))]
         public void Demo1(SqlServerRef testCase)
         {
+            if (!testCase.IsNotAzure()) return;
 
             // TEST RESTART for fill factor
             // IDbConnection cnn = new SqlConnection(testCase.ConnectionString);

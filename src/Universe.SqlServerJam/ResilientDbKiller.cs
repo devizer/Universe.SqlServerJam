@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using Dapper;
 
@@ -11,6 +12,8 @@ namespace Universe.SqlServerJam
 {
     public class ResilientDbKiller
     {
+
+        // TODO: Success On Azure, but DB is not deleted
         public static void Kill(string masterConnectionString, string dbName, bool throwOnError = false, int retryCount = 2)
         {
             if (masterConnectionString == null)
@@ -43,7 +46,9 @@ namespace Universe.SqlServerJam
 
                             // Single User Mode is needless
                             // con.Execute(sql);
-                            con.Execute($"Drop Database [{dbName}]");
+
+                            using var actionLog = SqlJamLog.LogAction($"ResilientDbKiller({dbName}): Execute 'Drop Database', Counter={counter+1}");
+                            con.Execute($"Drop Database [{dbName}]", commandTimeout: 90);
                             return;
                         }
                         catch
@@ -85,6 +90,8 @@ namespace Universe.SqlServerJam
         // It kills connections explicitly
         private static void KillConnections(DbConnection con, string dbName)
         {
+            using var actionLog = SqlJamLog.LogAction($"ResilientDbKiller({dbName}): KillConnections()");
+
             // int mySpid = con.ExecuteScalar<int>("Select @@SPID");
             int mySpid = con.ExecuteScalar<short>("Select @@SPID");
             List<sp_who> query = con.Query<sp_who>("exec sp_who").ToList();

@@ -4,6 +4,7 @@
   <PropertyGroup>
       <!-- net451 for dapper 1.60.6 -->
 	  <TargetFrameworks>netstandard2.0;netstandard1.4; net35;net40;net45;net451; net461;net6.0;net8.0;</TargetFrameworks>
+	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
     <PropertyGroup>

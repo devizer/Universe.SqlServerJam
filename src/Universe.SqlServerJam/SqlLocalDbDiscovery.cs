@@ -8,6 +8,7 @@ using System.Text;
 
 namespace Universe.SqlServerJam
 {
+
     // DONE: Exception of Exec and timeouts
     // INFO: for predefined instance MSSQLLocalDB version and info are not available if it is not created
     // "The automatic instance "MSSQLLocalDB" is not created."
@@ -15,17 +16,6 @@ namespace Universe.SqlServerJam
     {
         private static int ExecInfoTimeout = 60*1000;
 
-        public static volatile bool EnableDebugLog = false;
-        static StringBuilder DebuggerLog = new StringBuilder();
-        private static readonly object SyncLog = new object();
-
-        public static string Log
-        {
-            get
-            {
-                lock (SyncLog) return DebuggerLog.ToString();
-            }
-        }
 
         public class LocalDbVersion
         {
@@ -58,7 +48,7 @@ namespace Universe.SqlServerJam
                 }
                 catch(Exception ex)
                 {
-                    DebugLog(() => $"Unable to fetch Instance List by [{localDbVersion.Exe}]{Environment.NewLine}{ex}");
+                    SqlJamLog.DebugLog(() => $"Unable to fetch Instance List by [{localDbVersion.Exe}]{Environment.NewLine}{ex}");
                     continue;
                 }
 
@@ -78,7 +68,7 @@ namespace Universe.SqlServerJam
                     }
                     catch (Exception ex)
                     {
-                        DebugLog(() => $"Unable to get LocalDB Instance Version '{instanceName}' info{Environment.NewLine}{ex}");
+                        SqlJamLog.DebugLog(() => $"Unable to get LocalDB Instance Version '{instanceName}' info{Environment.NewLine}{ex}");
                     }
 
                     ret.Add(sqlServerRef);
@@ -226,12 +216,12 @@ namespace Universe.SqlServerJam
 
         static LocalDBInstance GetLocalDbInstanceInfo(string exe, string instanceName)
         {
-            DebugLog(() => $"Starting GetLocalDbInstanceInfo('{exe}', '{instanceName}')");
+            SqlJamLog.DebugLog(() => $"Starting GetLocalDbInstanceInfo('{exe}', '{instanceName}')");
             var nonEmptyLines = ParseNonEmptyLines(TinyHiddenExec(exe, $"i \"{instanceName}\"", ExecInfoTimeout))
                 .Where(x => x.IndexOf(":") > 1)
                 .ToArray();
 
-            DebugLog(() => $"GetLocalDbInstanceInfo() Intermediate Raw Info: {Environment.NewLine}{string.Join(Environment.NewLine, nonEmptyLines)}");
+            SqlJamLog.DebugLog(() => $"GetLocalDbInstanceInfo() Intermediate Raw Info: {Environment.NewLine}{string.Join(Environment.NewLine, nonEmptyLines)}");
 
             string GetValueByIndex(int keyIndex)
             {
@@ -260,7 +250,7 @@ namespace Universe.SqlServerJam
 
             }
 
-            DebugLog(() => $"GetLocalDbInstanceInfo() Instance info not found. Return null");
+            SqlJamLog.DebugLog(() => $"GetLocalDbInstanceInfo() Instance info not found. Return null");
             return null;
         }
 
@@ -287,14 +277,9 @@ namespace Universe.SqlServerJam
                 var output = p.StandardOutput.ReadToEnd();
                 output.TrimEnd('\r', '\n');
 
-                DebugLog(() => $"Successful Invocation result for [{exe} {args}]{Environment.NewLine}{output}");
+                SqlJamLog.DebugLog(() => $"Successful Invocation result for [{exe} {args}]{Environment.NewLine}{output}");
                 return output;
             }
-        }
-
-        static void DebugLog(Func<string> message)
-        {
-            if (true || EnableDebugLog) lock (SyncLog) DebuggerLog.AppendLine().AppendLine(message()).AppendLine();
         }
     }
 }

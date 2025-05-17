@@ -100,14 +100,15 @@ namespace Universe.SqlServerJam.Tests
             int completeCount = 0;
             Parallel.For(0, list.Count, opts, (i) =>
             {
-                var sqlRef = list[i];
+                SqlServerRef sqlRef = list[i];
                 // if (Debugger.IsAttached && sqlRef.DataSource.IndexOf("Ubuntu-16.04-LTS", StringComparison.InvariantCultureIgnoreCase) >= 0) Debugger.Break();
                 string cs = sqlRef.ConnectionString;
                 string v = sqlRef.InstallerVersion == null ? "N/A" : sqlRef.InstallerVersion.ToString();
                 StringBuilder report = new StringBuilder();
                 report.AppendLine($"«{{SERVER_INDEX}} of {list.Count}» SERVER {sqlRef}");
 
-                using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(cs))
+                // using (DbConnection con = SqlServerJamConfigurationExtensions.CreateConnection(cs))
+                using (var con = sqlRef.CreateConnection(pooling: true))
                 {
                     // TryAndForget(() => con.Manage().ShortServerVersion?.ToString());
                     var warmUpError = WarmUp(cs, timeoutSeconds: 100);
@@ -135,9 +136,13 @@ namespace Universe.SqlServerJam.Tests
                     report.AppendLine("Host Platform ............: " + man.HostPlatform);
                     report.AppendLine("CPU Count ................: " + (man.CpuCount == 0 ? "" : man.CpuCount.ToString("n0")));
                     report.AppendLine("Physical Memory (MB) .....: " + (man.PhysicalMemoryKb == 0 ? "" : (man.PhysicalMemoryKb / 1024).ToString("n0")));
-
+                    var availableMemoryKb = man.AvailableMemoryKb;
+                    report.AppendLine("Available Memory (MB) ....: " + (availableMemoryKb == 0 ? "" : (availableMemoryKb / 1024).ToString("n0")));
+                    var committedKb = man.CommittedMemoryKb;
+                    report.AppendLine("Committed Memory (MB) ....: " + (committedKb == 0 ? "" : (committedKb / 1024).ToString("n0")));
                     report.AppendLine("Security Mode ............: " + man.SecurityMode);
                     report.AppendLine("Is LocalDB ...............: " + man.IsLocalDB);
+                    report.AppendLine("Is Azure .................: " + man.IsAzure);
                     report.AppendLine("Has Full Text Search .....: " + man.IsFullTextSearchInstalled);
                     report.AppendLine("Can Mem Optimized ........: " + man.IsMemoryOptimizedTableSupported);
 
@@ -174,10 +179,11 @@ namespace Universe.SqlServerJam.Tests
                             x => x.MinServerMemory,
                             x => x.MaxServerMemory,
                             x => x.ShowAdvancedOption,
-                            x => x.XpCmdShell,
+                            x => x.FillFactor,
                             x => x.ClrEnabled,
                             x => x.FileStreamAccessLevel,
                             x => x.ServerTriggerRecursion,
+                            x => x.XpCmdShell,
                         };
 
                         report.AppendLine("Server Configuration Settings [sp_configure]:");
@@ -185,8 +191,16 @@ namespace Universe.SqlServerJam.Tests
                         {
                             string title = ExpressionExtensions.GetTitle1(serverOption) + " ";
                             title = title.PadRight(52, '.');
-                            object value = serverOption.Compile().Invoke(man.Configuration);
-                            if (value is int) value = string.Format("{0:n0}", value);
+                            object value;
+                            try
+                            {
+                                value = serverOption.Compile().Invoke(man.Configuration);
+                                if (value is int) value = string.Format("{0:n0}", value);
+                            }
+                            catch (Exception ex)
+                            {
+                                value = ex.GetLegacyExceptionDigest();
+                            }
                             report.AppendLine($"   * {title}: " + value);
                         }
 
@@ -432,7 +446,7 @@ namespace Universe.SqlServerJam.Tests
         [Test]
         public void Z_Log()
         {
-            Console.WriteLine(SqlLocalDbDiscovery.Log);
+            Console.WriteLine(SqlJamLog.Log);
         }
 
 

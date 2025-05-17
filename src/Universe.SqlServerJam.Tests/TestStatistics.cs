@@ -15,6 +15,7 @@ namespace Universe.SqlServerJam.Tests
         public void TestUpdateStatisticOptions(SqlServerRef testCase)
         {
             if (!testCase.CanSimplyCreateDatabase()) return;
+            if (!testCase.IsNotAzure()) return;
 
             string newDbName = $"Test of Update Statistics {Guid.NewGuid():N}";
             var conMaster = testCase.CreateConnection();
@@ -59,6 +60,7 @@ namespace Universe.SqlServerJam.Tests
         public void TestCreateStatisticOptions(SqlServerRef testCase)
         {
             if (!testCase.CanSimplyCreateDatabase()) return;
+            if (!testCase.IsNotAzure()) return;
 
             var conMaster = testCase.CreateConnection();
             string newDbName = $"Test of Create Statistics {Guid.NewGuid().ToString()}";

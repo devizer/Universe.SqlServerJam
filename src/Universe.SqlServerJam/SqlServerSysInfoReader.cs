@@ -55,14 +55,14 @@ namespace Universe.SqlServerJam
 
         public static SqlServerSysInfo Query(IDbConnection connection)
         {
-            ICollection<InfoRow> sqlSysInfoList = QueryRaw(connection);
+            List<InfoRow> sqlSysInfoList = QueryRaw(connection).ToList();
             Dictionary<string, InfoRow> di = new Dictionary<string, InfoRow>(StringComparer.OrdinalIgnoreCase);
             foreach (InfoRow row in sqlSysInfoList)
                 di[row.Name] = row;
 
             SqlServerSysInfo ret = new SqlServerSysInfo()
             {
-                RawRows = sqlSysInfoList.ToList(),
+                RawRows = sqlSysInfoList,
                 Dictionary = di
             };
 

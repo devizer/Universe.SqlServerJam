@@ -19,6 +19,8 @@ namespace Universe.SqlServerJam
             get => ReadOption<bool>("server trigger recursion")?.RunValue == true;
             set => SetOption<bool>("server trigger recursion", value);
         }
+        
+        // On Azure always false
         public bool ShowAdvancedOption
         {
             get => ReadOption<bool>(Names.ShowAdvancedOption)?.RunValue == true;
@@ -37,6 +39,7 @@ namespace Universe.SqlServerJam
             set => SetOption<bool>(Names.BackupCompressionDefault, value);
         }
 
+        // On Azure always false
         public bool XpCmdShell
         {
             get => _ServerManagement.IsWindows && ReadAdvancedOption<bool>(Names.XpCmdShell)?.RunValue == true;
@@ -51,15 +54,17 @@ namespace Universe.SqlServerJam
             set => SetAdvancedOption<int>("fill factor (%)", value);
         }
 
+        // On Azure always 0 (zero)
         public int MaxServerMemory
         {
-            get => ReadAdvancedOption<int>(Names.MaxServerMemory).RunValue;
+            get => ReadAdvancedOption<int>(Names.MaxServerMemory)?.RunValue ?? 0;
             set => SetAdvancedOption<int>(Names.MaxServerMemory, value);
         }
 
+        // On Azure always 0 (zero)
         public int MinServerMemory
         {
-            get => ReadAdvancedOption<int>(Names.MinServerMemory).RunValue;
+            get => ReadAdvancedOption<int>(Names.MinServerMemory)?.RunValue ?? 0;
             set => SetAdvancedOption<int>(Names.MinServerMemory, value);
         }
 
@@ -91,8 +96,8 @@ namespace Universe.SqlServerJam
         class OptionRecord
         {
             public string Name { get; set; }
-            public int run_value { get; set; }
-            public int config_value { get; set; }
+            public int run_value { get; set; } // "value_in_use"
+            public int config_value { get; set; } // "value"
             public int minimum { get; set; }
             public int maximum { get; set; }
         }
@@ -105,6 +110,7 @@ namespace Universe.SqlServerJam
 
         public Option<T> ReadAdvancedOption<T>(string name)
         {
+            if (_ServerManagement.IsAzure) return null;
             bool showAdvancedOption = this.ShowAdvancedOption;
             try
             {
@@ -120,6 +126,8 @@ namespace Universe.SqlServerJam
 
         public void SetAdvancedOption<T>(string name, T value)
         {
+            if (_ServerManagement.IsAzure) return;
+
             bool showAdvancedOption = this.ShowAdvancedOption;
             try
             {
@@ -135,10 +143,15 @@ namespace Universe.SqlServerJam
 
         public Option<T> ReadOption<T>(string name)
         {
+            var sqlViaSp = "exec sp_configure @name";
+            var sqlViaView = "Select name, value_in_use run_value, value config_value, minimum, maximum from sys.configurations where name = @name";
             var row = _ServerManagement.SqlConnection.Query<OptionRecord>(
-                "exec sp_configure @name",
+                sqlViaView,
                 new { name }
             ).FirstOrDefault();
+
+            // null on Azure or incorrect name.
+            if (row == null) return null;
 
             return new Option<T>()
             {

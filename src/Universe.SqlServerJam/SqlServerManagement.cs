@@ -13,7 +13,7 @@ namespace Universe.SqlServerJam
     {
         public IDbConnection SqlConnection { get; }
         public DatabaseSelector Databases { get; }
-        
+
         readonly Lazy<Version> _ShortServerVersion;
         private Lazy<string> _MediumServerVersion;
         private Lazy<string> _LongServerVersion;
@@ -48,9 +48,10 @@ namespace Universe.SqlServerJam
 
 
         ConcurrentDictionary<string, object> _ServerProperties = new ConcurrentDictionary<string, object>();
+
         public T GetServerProperty<T>(string propertyName)
         {
-            
+
             if (_ServerProperties.TryGetValue(propertyName, out var raw))
                 return (T)raw;
 
@@ -64,9 +65,9 @@ namespace Universe.SqlServerJam
 
         public string EngineEditionName => GetServerProperty<string>("Edition");
 
-        public EngineEdition EngineEdition => (EngineEdition) GetServerProperty<int>("EngineEdition");
+        public EngineEdition EngineEdition => (EngineEdition)GetServerProperty<int>("EngineEdition");
 
-        public SecurityMode SecurityMode => (SecurityMode) GetServerProperty<int>("IsIntegratedSecurityOnly");
+        public SecurityMode SecurityMode => (SecurityMode)GetServerProperty<int>("IsIntegratedSecurityOnly");
 
         // Returns either "Windows" or "Linux"
         public string HostPlatform => _HostPlatform.Value;
@@ -92,7 +93,7 @@ namespace Universe.SqlServerJam
 
         // On Azure it always 0:
         // https://learn.microsoft.com/en-us/sql/t-sql/functions/is-srvrolemember-transact-sql?view=sql-server-ver16#return-types
-        public FixedServerRoles FixedServerRoles => 
+        public FixedServerRoles FixedServerRoles =>
             (FixedServerRoles)SqlConnection.ExecuteScalar<int>(_SqlQueryFixedRoles.Value);
 
         static Lazy<string> _SqlQueryFixedRoles = new Lazy<string>(() =>
@@ -129,13 +130,13 @@ namespace Universe.SqlServerJam
             }
         }
 
-        public bool IsCompressedBackupSupported => 
-            this.EngineEdition == EngineEdition.Enterprise 
+        public bool IsCompressedBackupSupported =>
+            this.EngineEdition == EngineEdition.Enterprise
             && this.ShortServerVersion.Major >= 10;
 
         // Since 2008, except of LocalDB
         public bool IsFileStreamSupported => this.ShortServerVersion.Major >= 10 && !this.IsLocalDB;
-        
+
         public bool IsMemoryOptimizedTableSupported
         {
             get
@@ -186,7 +187,7 @@ namespace Universe.SqlServerJam
                     decimal size = SqlConnection.ExecuteScalar<decimal>(sql);
                     return new Dictionary<string, int>
                     {
-                        {CurrentDatabaseName, (int) (size / 1024m)}
+                        { CurrentDatabaseName, (int)(size / 1024m) }
                     };
                 }
             }
@@ -288,6 +289,61 @@ namespace Universe.SqlServerJam
             }
         }
 
+        public long AvailableMemoryKb => GetAvailableMemoryKb();
+
+
+        public long CommittedMemoryKb => GetCommittedMemoryKb();
+
+        private long GetAvailableMemoryKb()
+        {
+            // Azure: process_memory_limit_mb from sys.dm_os_job_object
+            if (IsAzure)
+            {
+                var sql = "select process_memory_limit_mb from sys.dm_os_job_object";
+                var ret = this.SqlConnection.ExecuteScalar<long>(sql, null, commandTimeout: CommandTimeout);
+                return ret * 1024;
+            }
+
+            var sysInfo = SystemInfo;
+
+            // 2012+
+            var committed_Target_Kb = sysInfo.GetNullableLong("Committed_Target_Kb");
+            var visible_Target_Kb = sysInfo.GetNullableLong("Visible_Target_Kb");
+            var visibleKbMemory = GetMin(committed_Target_Kb, visible_Target_Kb);
+            if (visibleKbMemory.HasValue && visibleKbMemory.GetValueOrDefault() > 0) return visibleKbMemory.Value;
+
+            // 2005...2008R2
+            var bpool_Commit_Target = sysInfo.GetNullableLong("Bpool_Commit_Target");
+            var bpool_Visible = sysInfo.GetNullableLong("Bpool_Visible");
+            long? visibleKbLegacy = GetMin(bpool_Commit_Target, bpool_Visible);
+            if (visibleKbLegacy.HasValue) return 8 * visibleKbLegacy.Value;
+
+            return 0;
+        }
+
+        private long GetCommittedMemoryKb()
+        {
+            var sysInfo = SystemInfo;
+
+            // 2012+
+            var Committed_Kb = sysInfo.GetNullableLong("Committed_Kb");
+            if (Committed_Kb.HasValue) return Committed_Kb.Value;
+
+            // 2005...2008R2
+            var bpool_Committed = sysInfo.GetNullableLong("Bpool_Committed");
+            if (bpool_Committed.HasValue) return 8 * bpool_Committed.Value;
+
+            return 0;
+        }
+
+        static long? GetMin(params long?[] values)
+        {
+            var notNull = values.Where(x => x.HasValue).ToArray();
+            return notNull.Length == 0 ? null : notNull.Min();
+        }
+
+
+
         public string CurrentDatabaseName => SqlConnection.ExecuteScalar<string>("Select DB_NAME()");
 
         public DatabaseOptionsManagement CurrentDatabase => this.Databases[CurrentDatabaseName];
@@ -302,8 +358,9 @@ namespace Universe.SqlServerJam
             Stopwatch sw = Stopwatch.StartNew();
             // SqlConnection.Execute("-- ping", commandTimeout: Math.Max(1, timeout));
             SqlConnection.Execute("-- ping", Math.Max(1, timeout));
-            return sw.ElapsedTicks / (double) Stopwatch.Frequency;
+            return sw.ElapsedTicks / (double)Stopwatch.Frequency;
         }
+
 
         public SqlDefaultPaths DefaultPaths
         {
@@ -336,7 +393,7 @@ select
     isnull(@DefaultBackup, @MasterLog) DefaultBackup";
 
                 SqlDefaultPaths ret = new SqlDefaultPaths();
-                
+
                 // Azure doesn't allow master.dbo.xp_instance_regread
                 try
                 {
@@ -360,6 +417,7 @@ select
                 return ret;
             }
         }
+
 
         public SqlBackupDescription GetBackupDescription(string bakFullPath)
         {

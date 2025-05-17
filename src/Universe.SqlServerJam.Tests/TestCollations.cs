@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
@@ -14,7 +15,8 @@ namespace Universe.SqlServerJam.Tests
         [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetEnabledServers))]
         public void Has_Tons_of_Collations(SqlServerRef testCase)
         {
-            SqlConnection con = new SqlConnection(testCase.ConnectionString);
+            // SqlConnection con = new SqlConnection(testCase.ConnectionString);
+            var con = testCase.CreateConnection(pooling: true, timeout: 60);
             var allCollations = con.Manage().FindCollations();
             Console.WriteLine($"Found Collations Count = {allCollations.Count}");
             // Assert.GreaterOrEqual(allCollations.Count, 42);
@@ -25,7 +27,7 @@ namespace Universe.SqlServerJam.Tests
         [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetEnabledServers))]
         public void Has_Latin1_Collations(SqlServerRef testCase)
         {
-            SqlConnection con = new SqlConnection(testCase.ConnectionString);
+            var con = testCase.CreateConnection(pooling: true, timeout: 60);
             var allCollations = con.Manage().FindCollations("%Latin1%");
             Console.WriteLine($"Found Collations Count = {allCollations.Count}");
             Console.WriteLine(string.Join(Environment.NewLine, allCollations.ToArray()));
@@ -38,7 +40,7 @@ namespace Universe.SqlServerJam.Tests
         [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetEnabledServers))]
         public void May_Have_Latin1_UTF8_Collations(SqlServerRef testCase)
         {
-            SqlConnection con = new SqlConnection(testCase.ConnectionString);
+            var con = testCase.CreateConnection(pooling: true, timeout: 60);
             var foundUtfCollations = con.Manage().FindCollations("%Latin1%UTF%");
             Console.WriteLine($"Found Collations Count = {foundUtfCollations.Count}");
             Console.WriteLine(string.Join(Environment.NewLine, foundUtfCollations.ToArray()));
@@ -58,7 +60,7 @@ namespace Universe.SqlServerJam.Tests
         [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetEnabledServers))]
         public void Hash_Latin1_General_CI_AS_Collations(SqlServerRef testCase)
         {
-            SqlConnection con = new SqlConnection(testCase.ConnectionString);
+            var con = testCase.CreateConnection(pooling: true, timeout: 60);
             var none = "No Such Collation";
             for (int n = 0; n <= 4; n++)
             {
@@ -73,8 +75,5 @@ namespace Universe.SqlServerJam.Tests
                 Assert.That(allCollations.Count, Is.EqualTo(1));
             }
         }
-
-
-
     }
 }

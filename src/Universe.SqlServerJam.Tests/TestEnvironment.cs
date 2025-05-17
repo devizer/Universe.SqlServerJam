@@ -15,7 +15,7 @@ namespace Universe.SqlServerJam.Tests
     {
         private static Lazy<List<SqlServerRef>> _SqlServers = new Lazy<List<SqlServerRef>>(() =>
         {
-            SqlLocalDbDiscovery.EnableDebugLog = true;
+            SqlJamLog.EnableDebugLog = true;
             var sqlServers = SqlDiscovery.GetLocalDbAndServerList();
             // For ReadME. Tests has explicit Start Test Step
             // sqlServers.ForEach(sqlServer => sqlServer.StartLocalIfStopped());

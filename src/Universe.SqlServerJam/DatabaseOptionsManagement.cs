@@ -253,16 +253,21 @@ WHERE d.name = @name
             }
         }
 
+        // On Azure it is hardcoded as Checksum, update is not available
         public DatabasePageVerify PageVerify
         {
             get
             {
+                if (this._ServerManagement.IsAzure) return DatabasePageVerify.Checksum;
                 var rawRet = this.GetSysDatabasesColumn<byte>("page_verify_option");
                 // Console.WriteLine($"[DEBUG] QUERY page_verify_option={rawRet} for {this.DatabaseName}");
                 return (DatabasePageVerify)rawRet;
             }
             set
             {
+                if (this._ServerManagement.IsAzure)
+                    throw new InvalidOperationException("Azure SQL does not support for updating Page Verify mode");
+
                 var verifyName = value == DatabasePageVerify.None ? "NONE" : value == DatabasePageVerify.Checksum ? "CHECKSUM" : value == DatabasePageVerify.TornPageDetection ? "TORN_PAGE_DETECTION" : null;
                 if (verifyName == null) throw new ArgumentException($"Unknown DB Page Verify argument '{value}'");
                 var sqlVerify = $"Alter Database [{this.DatabaseName}] Set PAGE_VERIFY {verifyName}";
@@ -389,6 +394,7 @@ WHERE d.name = @name
             ret.AppendLine($"{pre} - Auto Shrink ......... : {IsAutoShrink}");
             ret.AppendLine($"{pre} - Auto Create Statistic : {AutoCreateStatistic}");
             ret.AppendLine($"{pre} - Auto Update Statistic : {AutoUpdateStatistic}");
+            ret.AppendLine($"{pre} - Page Verify ......... : {PageVerify}");
             ret.AppendLine($"{pre} - Recursive Triggers .. : {AreTriggersRecursive}");
             ret.AppendLine($"{pre} - Broker Enabled ...... : {IsBrokerEnabled}");
             ret.AppendLine($"{pre} - State ............... : {(IsOnline ? "Online" : StateDescription)}");
