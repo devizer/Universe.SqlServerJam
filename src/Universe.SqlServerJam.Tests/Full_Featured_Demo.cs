@@ -135,6 +135,7 @@ namespace Universe.SqlServerJam.Tests
 
                     report.AppendLine("Host Platform ............: " + man.HostPlatform);
                     report.AppendLine("CPU Count ................: " + (man.CpuCount == 0 ? "" : man.CpuCount.ToString("n0")));
+                    report.AppendLine("Affinity Cores ...........: " + man.Configuration.AffinityCount);
                     report.AppendLine("Physical Memory (MB) .....: " + (man.PhysicalMemoryKb == 0 ? "" : (man.PhysicalMemoryKb / 1024).ToString("n0")));
                     var availableMemoryKb = man.AvailableMemoryKb;
                     report.AppendLine("Available Memory (MB) ....: " + (availableMemoryKb == 0 ? "" : (availableMemoryKb / 1024).ToString("n0")));
