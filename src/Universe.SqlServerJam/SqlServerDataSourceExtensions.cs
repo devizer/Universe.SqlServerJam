@@ -11,9 +11,55 @@ using System.Threading;
 
 namespace Universe.SqlServerJam
 {
-    // TODO: Rename to DataSourceStructuredExtensions
     public static class SqlServerDataSourceExtensions
     {
+
+        // It does not warm it up
+        public static void RestartServiceOrLocalDb(this SqlServerDataSource dataSource, int stopTimeout = 30, int startTimeout = 30)
+        {
+            if (!TinyCrossInfo.IsWindows) return;
+            if (!dataSource.IsLocal) return;
+
+            Stopwatch stopAt = Stopwatch.StartNew();
+            // if (sqlServerRef.Kind == SqlServerDiscoverySource.LocalDB)
+            if (dataSource.IsLocalDb)
+            {
+                bool isStoppedDetails = dataSource.StopServiceOrLocalDb(stopTimeout);
+                // Stop takes 5 sec usually
+                Thread.Sleep(10);
+            }
+            else if (dataSource.IsLocalDb)
+            {
+                SqlServiceStatus serviceStatus = dataSource.CheckLocalServiceStatus();
+                var isStoppedAtStart = serviceStatus?.State == SqlServiceStatus.ServiceState.Stopped;
+                if (!isStoppedAtStart)
+                {
+                    bool isStoppedDetails = dataSource.StopServiceOrLocalDb(stopTimeout);
+                    do
+                    {
+                        var isStopped = SqlServiceStatus.ServiceState.Stopped == dataSource.CheckLocalServiceStatus()?.State;
+                        if (isStopped) break;
+                    } while (stopAt.ElapsedMilliseconds < stopTimeout * 1000);
+                }
+            }
+
+            dataSource.StartServiceOrLocalDb(timeout: startTimeout);
+
+            /*
+            THIS WILL NOT populate Version of original SqlServerRef 
+            SqlServerRef sqlServerRef = new SqlServerRef()
+            {
+                Kind = dataSource.IsLocalDb ? SqlServerDiscoverySource.LocalDB : dataSource.IsLocalService ? SqlServerDiscoverySource.Local : SqlServerDiscoverySource.WellKnown,
+                Version = null,
+                InstallerVersion = null,
+                ServiceStartup = LocalServiceStartup.Unknown,
+                Data = dataSource.Original
+            };
+            sqlServerRef.WarmUp(timeout: TimeSpan.FromSeconds(startTimeout));
+            */
+        }
+
+
         public static SqlServiceStatus CheckLocalServiceStatus(this SqlServerDataSource dataSource)
         {
             // TODO: Do not return fail on Linux/MacOS
@@ -77,7 +123,6 @@ namespace Universe.SqlServerJam
                 if (sw.Elapsed > timeout)
                     return false;
             }
-
         }
 
 

@@ -56,6 +56,14 @@ namespace Universe.SqlServerJam
             return con;
         }
 
+        // It also warning up service
+        public static void RestartLocalService(this SqlServerRef sqlServerRef, int stopTimeout, int startTimeout)
+        {
+            sqlServerRef.ToSqlServerDataSource().RestartServiceOrLocalDb(stopTimeout, startTimeout);
+            sqlServerRef.WarmUp(timeout: TimeSpan.FromSeconds(startTimeout));
+        }
+
+
         public static SqlServerManagement Manage(this SqlServerRef sqlServerRef, bool? pooling = true, int? timeout = 30)
         {
             return CreateConnection(sqlServerRef, pooling, timeout).Manage();
@@ -113,39 +121,6 @@ namespace Universe.SqlServerJam
             sqlServerRef.ToSqlServerDataSource().StopServiceOrLocalDb(stopTimeout);
         }
 
-        // TODO: Move to DataSourceStructuredExtensions
-        public static void RestartLocalService(this SqlServerRef sqlServerRef, int stopTimeout = 30, int startTimeout = 30)
-        {
-            if (!TinyCrossInfo.IsWindows) return;
-            if (!sqlServerRef.CanStartStopService) return;
-
-            var sqlServerDataSource = sqlServerRef.ToSqlServerDataSource();
-
-            Stopwatch stopAt = Stopwatch.StartNew();
-            if (sqlServerRef.Kind == SqlServerDiscoverySource.LocalDB)
-            {
-                bool isStoppedDetails = sqlServerDataSource.StopServiceOrLocalDb(stopTimeout);
-                // Stop takes 5 sec usually
-                Thread.Sleep(10);
-            }
-            else if (sqlServerRef.Kind == SqlServerDiscoverySource.Local)
-            {
-                SqlServiceStatus serviceStatus = sqlServerDataSource.CheckLocalServiceStatus();
-                var isStoppedAtStart = serviceStatus?.State == SqlServiceStatus.ServiceState.Stopped;
-                if (!isStoppedAtStart)
-                {
-                    bool isStoppedDetails = sqlServerDataSource.StopServiceOrLocalDb(stopTimeout);
-                    do
-                    {
-                        var isStopped = SqlServiceStatus.ServiceState.Stopped == sqlServerDataSource.CheckLocalServiceStatus()?.State;
-                        if (isStopped) break;
-                    } while (stopAt.ElapsedMilliseconds < stopTimeout * 1000);
-                }
-            }
-
-            sqlServerDataSource.StartServiceOrLocalDb();
-            sqlServerRef.WarmUp(timeout: TimeSpan.FromSeconds(startTimeout));
-        }
 
         // Return true if action taken
         public static bool StartLocalIfStopped(this SqlServerRef sqlServerRef)

@@ -54,13 +54,6 @@ static IEnumerable<SqlServerRef> GetEnabledServers()
 * Line ④: Waits up to 30 seconds for each SQL Server health check to complete and populates the `Version` property.
 * Line ⑤: Filter out non-healthy SQL Server instances from the previous step. This filter and two next are a dubious ones in most cases, but it is added for illustration purposes. Apparently, a non-responsive SQL Server should be fixed/removed if you control your development environment and your CI pipeline. 
 
-## SQL Server Discovery
-
-On **Windows**, SQL Server instances and their versions are discovered via the registry path `HKLM\Software\Microsoft\Microsoft SQL Server` ([reference](https://learn.microsoft.com/en-us/sql/sql-server/install/file-locations-for-default-and-named-instances-of-sql-server)).
-
-On **Linux** and **macOS**, SQL Server instance information is provided through environment variables prefixed with `SQLSERVER_WELLKNOWN_***`.
-
-
 ## SQL Server Management Extensions
 
 | Data Type | Member | Readonly | Comments |
@@ -96,7 +89,17 @@ On **Linux** and **macOS**, SQL Server instance information is provided through 
 | string | CurrentDatabaseName | read-only | DB_NAME()
 | DatabaseOptionsManagement | CurrentDatabase | read-only | this.Databases[this.CurrentDatabaseName]
 | DatabaseOptionsManagement | Databases["Db1"] | read-only | 
-| ConfigurationSettingsManager | Configuration | read-only | sys.configurations and sp_configure
+| HashSet&lt;string&gt; | FindCollations(IEnumerable&lt;string&gt; namesOrPatters)
+| SqlBackupDescription | GetBackupDescription (string&nbsp;bakFullPath) | | Backups and files inside each backup
+| bool | IsDbExists(string dbName)
+
+
+## SQL Server Configuration
+
+The entry point is the extension method `Manage(this IDbConnection connection).Configuration`
+
+| Data Type | Member | Readonly | Comments |
+|-----------|--------|----------|----------|
 | Option&lt;T&gt; | ReadAdvancedOption&lt;T&gt;(string&nbsp;name)   | read
 | void | SetAdvancedOption&lt;T&gt;(string&nbsp;name, T&nbsp;value) | write
 | Option&lt;T&gt; | ReadOption&lt;T&gt;(string&nbsp;name)           | read
@@ -109,10 +112,6 @@ On **Linux** and **macOS**, SQL Server instance information is provided through 
 | bool | Configuration.XpCmdShell | read/write | sp_configure 'xp_cmdshell'
 | int | Configuration.MaxServerMemory | read/write | sp_configure 'max server memory (MB)'
 | int | Configuration.MinServerMemory | read/write | sp_configure 'min server memory (MB)'
-| T | GetServerProperty&lt;T&gt;(string propertyName)
-| bool | IsDbExists(string dbName)
-| HashSet&lt;string&gt; | FindCollations(IEnumerable&lt;string&gt; namesOrPatters)
-| SqlBackupDescription | GetBackupDescription(string bakFullPath) | | Backups and files inside each backup
 
 
 ## SQL Database Management Extensions
@@ -143,6 +142,12 @@ On **Linux** and **macOS**, SQL Server instance information is provided through 
 | bool | IsFullTextEnabled | read-only
 | string | OwnerName | read-only
 | bool | HasMemoryOptimizedTableFileGroup | read-only
+
+## SQL Server Discovery
+
+On **Windows**, SQL Server instances and their versions are discovered via the registry path `HKLM\Software\Microsoft\Microsoft SQL Server` ([reference](https://learn.microsoft.com/en-us/sql/sql-server/install/file-locations-for-default-and-named-instances-of-sql-server)).
+
+On **Linux** and **macOS**, SQL Server instance information is provided through environment variables prefixed with `SQLSERVER_WELLKNOWN_***`.
 
 
 

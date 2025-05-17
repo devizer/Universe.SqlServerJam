@@ -153,13 +153,13 @@ namespace Universe.SqlServerJam.Tests
 
                     try
                     {
-
                         var roles = man.FixedServerRoles;
                         var isSysAdmin = (roles & FixedServerRoles.SysAdmin) != 0;
                         var rolesString = isSysAdmin ? "Sys Admin" : roles.ToString();
                         report.AppendLine("Built-in Roles ...........: " + rolesString);
                         var dbList = man.DatabaseSizes;
-                        report.AppendLine("Databases ................: " + dbList.Count + " (" + dbList.Sum(x => x.Value) + " Kb)");
+                        var sumDbSize = dbList.Count == 0 ? 0 : dbList.Sum(x => x.Value);
+                        report.AppendLine("Databases ................: " + dbList.Count + " (" + sumDbSize.ToString("n0") + " Kb)");
                         if (isSysAdmin) sysadmin++;
                         var paths = man.DefaultPaths;
                         report.AppendLine("Default Data .............: " + paths.DefaultData);

@@ -448,11 +448,44 @@ if IDbConnection is closed</td>
 <td></td>
 </tr>
 <tr>
-<td>ConfigurationSettingsManager</td>
-<td>Configuration</td>
-<td>read-only</td>
-<td>sys.configurations and sp_configure</td>
+<td>HashSet&lt;string&gt;</td>
+<td>FindCollations(IEnumerable&lt;string&gt; namesOrPatters)</td>
+<td></td>
+<td></td>
 </tr>
+<tr>
+<td>SqlBackupDescription</td>
+<td>GetBackupDescription (string bakFullPath)</td>
+<td></td>
+<td>Backups and files inside each backup</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsDbExists(string dbName)</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="sql-server-configuration">SQL Server Configuration</h2>
+<p>The entry point is the extension method
+<code>Manage(this IDbConnection connection).Configuration</code></p>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 20%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Data Type</th>
+<th>Member</th>
+<th>Readonly</th>
+<th>Comments</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td>Option&lt;T&gt;</td>
 <td>ReadAdvancedOption&lt;T&gt;(string name)</td>
@@ -524,30 +557,6 @@ if IDbConnection is closed</td>
 <td>Configuration.MinServerMemory</td>
 <td>read/write</td>
 <td>sp_configure ‘min server memory (MB)’</td>
-</tr>
-<tr>
-<td>T</td>
-<td>GetServerProperty&lt;T&gt;(string propertyName)</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>bool</td>
-<td>IsDbExists(string dbName)</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>HashSet&lt;string&gt;</td>
-<td>FindCollations(IEnumerable&lt;string&gt; namesOrPatters)</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>SqlBackupDescription</td>
-<td>GetBackupDescription(string bakFullPath)</td>
-<td></td>
-<td>Backups and files inside each backup</td>
 </tr>
 </tbody>
 </table>

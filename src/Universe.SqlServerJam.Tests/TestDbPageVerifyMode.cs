@@ -18,6 +18,7 @@ namespace Universe.SqlServerJam.Tests
         public void TestAllVerifyModes(SqlServerRef testCase)
         {
             if (!testCase.CanSimplyCreateDatabase()) return;
+            if (!testCase.IsNotAzure()) return;
 
             string newDbName = $"Test of DB Page Verify {Guid.NewGuid():N}";
             var conMaster = testCase.CreateConnection();
