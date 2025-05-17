@@ -322,6 +322,32 @@ Personal</td>
 <td>CU1, CU2, …</td>
 </tr>
 <tr>
+<td>int</td>
+<td>CpuCount</td>
+<td>read-only</td>
+<td></td>
+</tr>
+<tr>
+<td>long</td>
+<td>AvailableMemoryKb</td>
+<td>read-only</td>
+<td>process_memory_limit_mb, Committed_Target_Kb, or Visible_Target_Kb
+depending on edition and version</td>
+</tr>
+<tr>
+<td>long</td>
+<td>CommittedMemoryKb</td>
+<td>read-only</td>
+<td>Committed_Kb</td>
+</tr>
+<tr>
+<td>long</td>
+<td>PhysicalMemoryKb</td>
+<td>read-only</td>
+<td>physical_memory_in_bytes or physical_memory_kb depending on
+version</td>
+</tr>
+<tr>
 <td>string</td>
 <td>ServerCollation</td>
 <td>read-only</td>
@@ -410,12 +436,6 @@ if IDbConnection is closed</td>
 <td>DB_NAME()</td>
 </tr>
 <tr>
-<td>ServerConfigurationSettingsManager</td>
-<td>ServerConfigurationSettings</td>
-<td>read-only</td>
-<td>sp_configure</td>
-</tr>
-<tr>
 <td>DatabaseOptionsManagement</td>
 <td>CurrentDatabase</td>
 <td>read-only</td>
@@ -428,27 +448,33 @@ if IDbConnection is closed</td>
 <td></td>
 </tr>
 <tr>
-<td>Option&lt;T&gt;</td>
-<td>Configuration.ReadAdvancedOption&lt;T&gt;(string name)</td>
-<td></td>
-<td></td>
+<td>ConfigurationSettingsManager</td>
+<td>Configuration</td>
+<td>read-only</td>
+<td>sys.configurations and sp_configure</td>
 </tr>
 <tr>
 <td>Option&lt;T&gt;</td>
-<td>Configuration.ReadOption&lt;T&gt;(string name)</td>
-<td></td>
+<td>ReadAdvancedOption&lt;T&gt;(string name)</td>
+<td>read</td>
 <td></td>
 </tr>
 <tr>
 <td>void</td>
-<td>Configuration.SetAdvancedOption&lt;T&gt;(string name, T value)</td>
+<td>SetAdvancedOption&lt;T&gt;(string name, T value)</td>
+<td>write</td>
 <td></td>
+</tr>
+<tr>
+<td>Option&lt;T&gt;</td>
+<td>ReadOption&lt;T&gt;(string name)</td>
+<td>read</td>
 <td></td>
 </tr>
 <tr>
 <td>void</td>
-<td>Configuration.SetOption&lt;T&gt;(string name, T value)</td>
-<td></td>
+<td>SetOption&lt;T&gt;(string name, T value)</td>
+<td>write</td>
 <td></td>
 </tr>
 <tr>
@@ -577,7 +603,7 @@ Extensions</h2>
 <td>DatabasePageVerify</td>
 <td>PageVerify</td>
 <td>read/write</td>
-<td>Checksum, Torn Page Detection, or None</td>
+<td>Checksum, Torn Page Detection, or None. Not supported by Azure</td>
 </tr>
 <tr>
 <td>bool</td>

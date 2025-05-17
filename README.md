@@ -76,6 +76,10 @@ On **Linux** and **macOS**, SQL Server instance information is provided through 
 | string | ProductVersion | read-only | GetServerProperty&lt;string&gt;("ProductVersion")
 | string | ProductLevel | read-only | CTP, RTM, SP1, SP2, ... |
 | string | ProductUpdateLevel | read-only | CU1, CU2, ... |
+| int    | CpuCount           | read-only
+| long   | AvailableMemoryKb  | read-only | process_memory_limit_mb, Committed_Target_Kb, or Visible_Target_Kb depending on edition and version
+| long   | CommittedMemoryKb  | read-only | Committed_Kb
+| long   | PhysicalMemoryKb   | read-only | physical_memory_in_bytes or physical_memory_kb depending on version
 | string | ServerCollation | read-only | GetServerProperty&lt;string&gt;("Collation") |
 | bool | IsFullTextSearchInstalled | read-only |
 | bool | IsFileStreamSupported | read-only | this.ShortServerVersion.Major &gt;= 10 && !this.IsLocalDB
@@ -90,13 +94,13 @@ On **Linux** and **macOS**, SQL Server instance information is provided through 
 | string | NetTransport | read-only | "TCP", "Shared Memory", "Named Pipe" |
 | int | CurrentSPID | read-only | @@SPID, has no sense if IDbConnection is closed
 | string | CurrentDatabaseName | read-only | DB_NAME()
-| ServerConfigurationSettingsManager | ServerConfigurationSettings | read-only | sp_configure
 | DatabaseOptionsManagement | CurrentDatabase | read-only | this.Databases[this.CurrentDatabaseName]
 | DatabaseOptionsManagement | Databases["Db1"] | read-only | 
-| Option&lt;T&gt; | Configuration.ReadAdvancedOption&lt;T&gt;(string name)
-| Option&lt;T&gt; | Configuration.ReadOption&lt;T&gt;(string name)
-| void | Configuration.SetAdvancedOption&lt;T&gt;(string name, T value)
-| void | Configuration.SetOption&lt;T&gt;(string name, T value)
+| ConfigurationSettingsManager | Configuration | read-only | sys.configurations and sp_configure
+| Option&lt;T&gt; | ReadAdvancedOption&lt;T&gt;(string&nbsp;name)   | read
+| void | SetAdvancedOption&lt;T&gt;(string&nbsp;name, T&nbsp;value) | write
+| Option&lt;T&gt; | ReadOption&lt;T&gt;(string&nbsp;name)           | read
+| void | SetOption&lt;T&gt;(string&nbsp;name, T&nbsp;value)         | write
 | bool | Configuration.ClrEnabled | read/write | sp_configure 'clr enabled'
 | bool | Configuration.ServerTriggerRecursion | read/write | sp_configure 'server trigger recursion'
 | bool | Configuration.ShowAdvancedOption | read/write | sp_configure 'show advanced option'
@@ -120,7 +124,7 @@ On **Linux** and **macOS**, SQL Server instance information is provided through 
 | void | Shrink(ShrinkOptions&#160;options, int?&#160;commandTimeout) | | options are: Shink and Truncate, Shrink only, Truncate only |
 | bool | IsReadOnly | read/write |
 | DatabaseRecoveryMode | RecoveryMode | read/write | Simple, Bulk logged, or Full
-| DatabasePageVerify   | PageVerify | read/write | Checksum, Torn Page Detection, or None
+| DatabasePageVerify   | PageVerify | read/write | Checksum, Torn Page Detection, or None. Not supported by Azure
 | bool | IsAutoShrink | read/write |
 | AutoCreateStatisticMode | AutoCreateStatistic | read/write | Complete, Incremental, Off
 | bool | AreTriggersRecursive | read/write
