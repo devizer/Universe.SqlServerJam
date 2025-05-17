@@ -12,7 +12,7 @@ public static class SqlJamLog
 
     public static void DebugLog(Func<string> message)
     {
-        if (true || EnableDebugLog) lock (SyncLog) DebuggerLog.AppendLine().AppendLine(message()).AppendLine();
+        if (true || EnableDebugLog) lock (SyncLog) DebuggerLog.AppendLine(message()).AppendLine();
     }
 
     public static string Log
@@ -45,6 +45,6 @@ public class ActionLogger : IDisposable
 
     public void Dispose()
     {
-        SqlJamLog.DebugLog(() => $"{StartedAt.TotalMilliseconds:-20,n0} {Stopwatch.ElapsedMilliseconds:n0} {Caption}{(Error == null ? "" : Error.Message)}");
+        SqlJamLog.DebugLog(() => $"{StartedAt.TotalMilliseconds,-10:n0} {Stopwatch.ElapsedMilliseconds,-5:n0} {Caption}{(Error == null ? "" : Error.Message)}");
     }
 }

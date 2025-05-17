@@ -47,7 +47,7 @@ namespace Universe.SqlServerJam
                             // Single User Mode is needless
                             // con.Execute(sql);
 
-                            using var actionLog = SqlJamLog.LogAction($"ResilientDbKiller({dbName}): Execute 'Drop Database', Counter={counter+1}");
+                            using var actionLog = SqlJamLog.LogAction($"ResilientDbKiller({dbName}): Execute 'Drop Database', Counter={retryCount - counter}");
                             con.Execute($"Drop Database [{dbName}]", commandTimeout: 90);
                             return;
                         }
