@@ -5,7 +5,7 @@ using Universe.NUnitTests;
 namespace Universe.SqlServerJam.Tests;
 
 [TestFixture]
-public class TestAffinityLoop : NUnitTestsBase
+public class TestAffinityInLoop : NUnitTestsBase
 {
     [Test]
     [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetEnabledServers))]

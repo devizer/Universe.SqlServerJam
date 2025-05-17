@@ -68,6 +68,7 @@ namespace Universe.SqlServerJam
             set => SetAdvancedOption<int>(Names.MinServerMemory, value);
         }
 
+        // Not for Express and Azure
         public short AffinityCount
         {
             get => MaskToCount(this.AffinityMask);
@@ -103,6 +104,7 @@ namespace Universe.SqlServerJam
             return ret;
         }
 
+        // Not for Express and Azure
         public long AffinityMask
         {
             get => GetAffinityMask("");
@@ -116,7 +118,7 @@ namespace Universe.SqlServerJam
 
         private void SetAffinityMask(string suffix, long value)
         {
-            Console.WriteLine($"[DEBUG] SetAffinityMask={value}");
+            // Console.WriteLine($"[DEBUG] SetAffinityMask={value}");
             suffix = string.IsNullOrEmpty(suffix) ? "" : $"{suffix} ";
             var lowName = $"affinity {suffix}mask";
             var highName = $"affinity64 {suffix}mask";
@@ -127,8 +129,10 @@ namespace Universe.SqlServerJam
             {
                 SetAdvancedOption(highName, highValue);
             }
-            catch (Exception ex)
+            catch
             {
+                // No Additional Action is required,
+                // Because lower 32 bit affinity is successfully updated
                 bool is32bit = true;
             }
         }
