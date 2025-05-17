@@ -6,11 +6,12 @@ using Dapper;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Universe.NUnitTests;
 
 namespace Universe.SqlServerJam.Tests
 {
     [TestFixture]
-    public class DemoTests1
+    public class DemoTests1 : NUnitTestsBase
     {
 
         [Test]
