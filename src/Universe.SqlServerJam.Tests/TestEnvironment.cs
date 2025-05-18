@@ -40,6 +40,7 @@ namespace Universe.SqlServerJam.Tests
                 .OrderByVersionDesc()
                 .Where(x => x.ServiceStartup != LocalServiceStartup.Disabled)
                 .WarmUp(timeout: TimeSpan.FromSeconds(30))
+                .Where(x => x.Version != null) // is alive by warmup
                 .Where(x => !x.Manage().IsExpressOrLocalDb)
                 .ToList();
         }

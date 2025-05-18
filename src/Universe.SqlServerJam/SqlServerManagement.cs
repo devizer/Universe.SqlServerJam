@@ -23,8 +23,13 @@ namespace Universe.SqlServerJam
 
         public SqlServerSysInfo SystemInfo => _SqlServerSysInfo.Value;
 
-        public int CpuCount => SystemInfo.CpuCount;
-        public int PhysicalMemoryKb => SystemInfo.PhysicalMemoryKb;
+        // System Info
+        public int CpuCount => this.SystemInfo.GetCpuCount();
+        public int PhysicalMemoryKb => this.SystemInfo.GetPhysicalMemoryKb();
+        // TODO: AvailableMemoryKb is cached except of Azure
+        public long AvailableMemoryKb => this.SystemInfo.GetAvailableMemoryKb();
+        public long CommittedMemoryKb => this.SystemInfo.GetCommittedMemoryKb();
+
 
         // Actually it is need for WarmUp extension
         public int CommandTimeout { get; private set; } = 30;
@@ -40,7 +45,7 @@ namespace Universe.SqlServerJam
             _LongServerVersion = new Lazy<string>(GetLongServerVersion);
             _HostPlatform = new Lazy<string>(GetHostPlatform);
             _ProductVersion = new Lazy<Version>(() => ResilientVersionParser.Parse(this.ProductVersionRaw));
-            _SqlServerSysInfo = new Lazy<SqlServerSysInfo>(() => SqlServerSysInfo.Query(SqlConnection));
+            _SqlServerSysInfo = new Lazy<SqlServerSysInfo>(() => new SqlServerSysInfo(this));
 
             Databases = new DatabaseSelector(this);
 
@@ -75,7 +80,6 @@ namespace Universe.SqlServerJam
 
         public bool IsWindows => "Windows".Equals(HostPlatform, StringComparison.OrdinalIgnoreCase);
         public bool IsLinux => "Linux".Equals(HostPlatform, StringComparison.OrdinalIgnoreCase);
-
         public Version ShortServerVersion => _ShortServerVersion.Value;
         public string MediumServerVersion => _MediumServerVersion.Value;
         public string LongServerVersion => _LongServerVersion.Value;
@@ -88,7 +92,8 @@ namespace Universe.SqlServerJam
             || LongServerVersion.IndexOf("Express", StringComparison.OrdinalIgnoreCase) >= 0
             || IsLocalDB;
 
-        public bool IsCpuAffinitySupported => /* !IsAzure && */ !IsExpressOrLocalDb;
+        // sp_configure is not available on azure
+        public bool IsCpuAffinitySupported => !IsAzure && !IsExpressOrLocalDb;
 
         public bool IsDbExists(string dbName)
         {
@@ -296,61 +301,6 @@ namespace Universe.SqlServerJam
                 return SqlConnection.ExecuteScalar<short>("Select @@SPID");
             }
         }
-
-        public long AvailableMemoryKb => GetAvailableMemoryKb();
-
-
-        public long CommittedMemoryKb => GetCommittedMemoryKb();
-
-        private long GetAvailableMemoryKb()
-        {
-            // Azure: process_memory_limit_mb from sys.dm_os_job_object
-            if (IsAzure)
-            {
-                var sql = "select process_memory_limit_mb from sys.dm_os_job_object";
-                var ret = this.SqlConnection.ExecuteScalar<long>(sql, null, commandTimeout: CommandTimeout);
-                return ret * 1024;
-            }
-
-            var sysInfo = SystemInfo;
-
-            // 2012+
-            var committed_Target_Kb = sysInfo.GetNullableLong("Committed_Target_Kb");
-            var visible_Target_Kb = sysInfo.GetNullableLong("Visible_Target_Kb");
-            var visibleKbMemory = GetMin(committed_Target_Kb, visible_Target_Kb);
-            if (visibleKbMemory.HasValue && visibleKbMemory.GetValueOrDefault() > 0) return visibleKbMemory.Value;
-
-            // 2005...2008R2
-            var bpool_Commit_Target = sysInfo.GetNullableLong("Bpool_Commit_Target");
-            var bpool_Visible = sysInfo.GetNullableLong("Bpool_Visible");
-            long? visibleKbLegacy = GetMin(bpool_Commit_Target, bpool_Visible);
-            if (visibleKbLegacy.HasValue) return 8 * visibleKbLegacy.Value;
-
-            return 0;
-        }
-
-        private long GetCommittedMemoryKb()
-        {
-            var sysInfo = SystemInfo;
-
-            // 2012+
-            var Committed_Kb = sysInfo.GetNullableLong("Committed_Kb");
-            if (Committed_Kb.HasValue) return Committed_Kb.Value;
-
-            // 2005...2008R2
-            var bpool_Committed = sysInfo.GetNullableLong("Bpool_Committed");
-            if (bpool_Committed.HasValue) return 8 * bpool_Committed.Value;
-
-            return 0;
-        }
-
-        static long? GetMin(params long?[] values)
-        {
-            var notNull = values.Where(x => x.HasValue).ToArray();
-            return notNull.Length == 0 ? null : notNull.Min();
-        }
-
-
 
         public string CurrentDatabaseName => SqlConnection.ExecuteScalar<string>("Select DB_NAME()");
 
