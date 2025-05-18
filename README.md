@@ -59,17 +59,19 @@ static IEnumerable<SqlServerRef> GetEnabledServers()
 | Data Type | Member | Readonly | Comments |
 |-----------|--------|----------|----------|
 | Version | ShortServerVersion | read-only | @@MICROSOFTVERSION |
-| bool | IsLocalDB          | read-only |
-| bool | IsAzure         | read-only | 
-| string | EngineEditionName | read-only    | "SQL Azure", "Express Edition", "Developer Edition", "Enterprise Edition", ... |
+| bool | IsLocalDB              | read-only |
+| bool | IsAzure                | read-only | 
+| bool | IsExpressOrLocalDb     | read-only |
 | EngineEdition | EngineEdition | read-only | Standard, Exterprise, Express, SqlDatabase, SqlDataWarehouse, Personal |
-| string | LongServerVersion | read-only | @@VERSION |
-| string | MediumServerVersion | read-only |
+| string | EngineEditionName    | read-only | "SQL Azure", "Express Edition", "Developer Edition", "Enterprise Edition", ... |
+| string | LongServerVersion    | read-only | @@VERSION |
+| string | MediumServerVersion  | read-only |
 | SecurityMode | SecurityMode | read-only | IntegratedOnly, Both |
 | string | ProductVersion | read-only | GetServerProperty&lt;string&gt;("ProductVersion")
 | string | ProductLevel | read-only | CTP, RTM, SP1, SP2, ... |
 | string | ProductUpdateLevel | read-only | CU1, CU2, ... |
 | int    | CpuCount           | read-only
+| bool   | IsCpuAffinitySupported | read-only | If not an express edition
 | long   | AvailableMemoryKb  | read-only | process_memory_limit_mb, Committed_Target_Kb, or Visible_Target_Kb depending on edition and version
 | long   | CommittedMemoryKb  | read-only | Committed_Kb
 | long   | PhysicalMemoryKb   | read-only | physical_memory_in_bytes or physical_memory_kb depending on version
@@ -89,7 +91,7 @@ static IEnumerable<SqlServerRef> GetEnabledServers()
 | string | CurrentDatabaseName | read-only | DB_NAME()
 | DatabaseOptionsManagement | CurrentDatabase | read-only | this.Databases[this.CurrentDatabaseName]
 | DatabaseOptionsManagement | Databases["Db1"] | read-only | 
-| HashSet&lt;string&gt; | FindCollations(IEnumerable&lt;string&gt; namesOrPatters)
+| HashSet&lt;string&gt; | FindCollations(params string[]&nbsp;namesOrPatters)
 | SqlBackupDescription | GetBackupDescription (string&nbsp;bakFullPath) | | Backups and files inside each backup
 | bool | IsDbExists(string dbName)
 
@@ -100,18 +102,23 @@ The entry point is the extension method `Manage(this IDbConnection connection).C
 
 | Data Type | Member | Readonly | Comments |
 |-----------|--------|----------|----------|
-| Option&lt;T&gt; | ReadAdvancedOption&lt;T&gt;(string&nbsp;name)   | read
-| void | SetAdvancedOption&lt;T&gt;(string&nbsp;name, T&nbsp;value) | write
-| Option&lt;T&gt; | ReadOption&lt;T&gt;(string&nbsp;name)           | read
-| void | SetOption&lt;T&gt;(string&nbsp;name, T&nbsp;value)         | write
-| bool | Configuration.ClrEnabled | read/write | sp_configure 'clr enabled'
-| bool | Configuration.ServerTriggerRecursion | read/write | sp_configure 'server trigger recursion'
-| bool | Configuration.ShowAdvancedOption | read/write | sp_configure 'show advanced option'
-| FileStreamAccessLevels | Configuration.FileStreamAccessLevel | read/write | sp_configure 'filestream access level'
-| bool | Configuration.BackupCompressionDefault | read/write | sp_configure 'backup compression default'
-| bool | Configuration.XpCmdShell | read/write | sp_configure 'xp_cmdshell'
-| int | Configuration.MaxServerMemory | read/write | sp_configure 'max server memory (MB)'
-| int | Configuration.MinServerMemory | read/write | sp_configure 'min server memory (MB)'
+| short | AffinityCount | read/write | Cores Count, 1 … Cpu Count
+| long  | AffinityMask  | read/write | sp_configure 'affinity[64] mask'
+| bool  | ClrEnabled | read/write | sp_configure 'clr enabled'
+| bool  | ServerTriggerRecursion | read/write | sp_configure 'server trigger recursion'
+| bool  | ShowAdvancedOption | read/write | sp_configure 'show advanced option'
+| FileStreamAccessLevels |FileStreamAccessLevel | read/write | sp_configure 'filestream access level'
+| bool  | BackupCompressionDefault | read/write | sp_configure 'backup compression default'
+| bool  | XpCmdShell | read/write | sp_configure 'xp_cmdshell'
+| int   | MaxServerMemory | read/write | sp_configure 'max server memory (MB)'
+| int   | MinServerMemory | read/write | sp_configure 'min server memory (MB)'
+
+Generic SQL Server configuration API:
+
+* `Option<T> ReadAdvancedOption<T>(string<T> name)`
+* `void SetAdvancedOption<T>(string name, T value)`
+* `Option<T> ReadOption<T>(string name)`
+* `void SetOption<T>(string name, T value)`
 
 
 ## SQL Database Management Extensions
@@ -125,10 +132,10 @@ The entry point is the extension method `Manage(this IDbConnection connection).C
 | DatabaseRecoveryMode | RecoveryMode | read/write | Simple, Bulk logged, or Full
 | DatabasePageVerify   | PageVerify | read/write | Checksum, Torn Page Detection, or None. Not supported by Azure
 | bool | IsAutoShrink | read/write |
-| AutoCreateStatisticMode | AutoCreateStatistic | read/write | Complete, Incremental, Off
 | bool | AreTriggersRecursive | read/write
-| AutoUpdateStatisticMode | AutoUpdateStatistic | read/write | Synchronously, Async, Off
 | bool | IsIncrementalAutoStatisticCreationSupported | read-only | ServerVersion.Major >= 12
+| AutoCreateStatisticMode | AutoCreateStatistic | read/write | Complete, Incremental, Off
+| AutoUpdateStatisticMode | AutoUpdateStatistic | read/write | Synchronously, Async, Off
 | bool | IsBrokerEnabled | read/write |
 | string | DefaultCollationName | read/write |
 | string | StateDescription | read-only | Online, Offline, Emergency, Restoring, Recovering… |

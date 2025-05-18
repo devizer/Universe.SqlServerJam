@@ -34,6 +34,17 @@ namespace Universe.SqlServerJam.Tests
                 .ToList();
         }
 
+        public static List<SqlServerRef> GetNonExpressServers()
+        {
+            return TestEnvironment.SqlServers
+                .OrderByVersionDesc()
+                .Where(x => x.ServiceStartup != LocalServiceStartup.Disabled)
+                .WarmUp(timeout: TimeSpan.FromSeconds(30))
+                .Where(x => !x.Manage().IsExpressOrLocalDb)
+                .ToList();
+        }
+
+
 
 
         public static int SqlPingDuration => GetVar("Ping");

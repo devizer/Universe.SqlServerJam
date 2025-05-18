@@ -82,6 +82,14 @@ namespace Universe.SqlServerJam
 
         public bool IsLocalDB => ShortServerVersion.Major >= 11 && GetServerProperty<int>("IsLocalDB") == 1;
 
+        public bool IsExpressOrLocalDb =>
+            EngineEdition == EngineEdition.Express
+            || EngineEdition == EngineEdition.Personal
+            || LongServerVersion.IndexOf("Express", StringComparison.OrdinalIgnoreCase) >= 0
+            || IsLocalDB;
+
+        public bool IsCpuAffinitySupported => /* !IsAzure && */ !IsExpressOrLocalDb;
+
         public bool IsDbExists(string dbName)
         {
             if (dbName == null)

@@ -226,14 +226,6 @@ cases, but it is added for illustration purposes. Apparently, a
 non-responsive SQL Server should be fixed/removed if you control your
 development environment and your CI pipeline.</li>
 </ul>
-<h2 id="sql-server-discovery">SQL Server Discovery</h2>
-<p>On <strong>Windows</strong>, SQL Server instances and their versions
-are discovered via the registry path
-<code>HKLM\Software\Microsoft\Microsoft SQL Server</code> (<a
-href="https://learn.microsoft.com/en-us/sql/sql-server/install/file-locations-for-default-and-named-instances-of-sql-server">reference</a>).</p>
-<p>On <strong>Linux</strong> and <strong>macOS</strong>, SQL Server
-instance information is provided through environment variables prefixed
-with <code>SQLSERVER_WELLKNOWN_***</code>.</p>
 <h2 id="sql-server-management-extensions">SQL Server Management
 Extensions</h2>
 <table>
@@ -272,11 +264,10 @@ data-cites="MICROSOFTVERSION">@MICROSOFTVERSION</span></td>
 <td></td>
 </tr>
 <tr>
-<td>string</td>
-<td>EngineEditionName</td>
+<td>bool</td>
+<td>IsExpressOrLocalDb</td>
 <td>read-only</td>
-<td>“SQL Azure”, “Express Edition”, “Developer Edition”, “Enterprise
-Edition”, …</td>
+<td></td>
 </tr>
 <tr>
 <td>EngineEdition</td>
@@ -284,6 +275,13 @@ Edition”, …</td>
 <td>read-only</td>
 <td>Standard, Exterprise, Express, SqlDatabase, SqlDataWarehouse,
 Personal</td>
+</tr>
+<tr>
+<td>string</td>
+<td>EngineEditionName</td>
+<td>read-only</td>
+<td>“SQL Azure”, “Express Edition”, “Developer Edition”, “Enterprise
+Edition”, …</td>
 </tr>
 <tr>
 <td>string</td>
@@ -326,6 +324,12 @@ Personal</td>
 <td>CpuCount</td>
 <td>read-only</td>
 <td></td>
+</tr>
+<tr>
+<td>bool</td>
+<td>IsCpuAffinitySupported</td>
+<td>read-only</td>
+<td>If not an express edition</td>
 </tr>
 <tr>
 <td>long</td>
@@ -449,7 +453,7 @@ if IDbConnection is closed</td>
 </tr>
 <tr>
 <td>HashSet&lt;string&gt;</td>
-<td>FindCollations(IEnumerable&lt;string&gt; namesOrPatters)</td>
+<td>FindCollations(params string[] namesOrPatters)</td>
 <td></td>
 <td></td>
 </tr>
@@ -487,79 +491,74 @@ if IDbConnection is closed</td>
 </thead>
 <tbody>
 <tr>
-<td>Option&lt;T&gt;</td>
-<td>ReadAdvancedOption&lt;T&gt;(string name)</td>
-<td>read</td>
-<td></td>
+<td>short</td>
+<td>AffinityCount</td>
+<td>read/write</td>
+<td>Cores Count, 1 … Cpu Count</td>
 </tr>
 <tr>
-<td>void</td>
-<td>SetAdvancedOption&lt;T&gt;(string name, T value)</td>
-<td>write</td>
-<td></td>
-</tr>
-<tr>
-<td>Option&lt;T&gt;</td>
-<td>ReadOption&lt;T&gt;(string name)</td>
-<td>read</td>
-<td></td>
-</tr>
-<tr>
-<td>void</td>
-<td>SetOption&lt;T&gt;(string name, T value)</td>
-<td>write</td>
-<td></td>
+<td>long</td>
+<td>AffinityMask</td>
+<td>read/write</td>
+<td>sp_configure ‘affinity[64] mask’</td>
 </tr>
 <tr>
 <td>bool</td>
-<td>Configuration.ClrEnabled</td>
+<td>ClrEnabled</td>
 <td>read/write</td>
 <td>sp_configure ‘clr enabled’</td>
 </tr>
 <tr>
 <td>bool</td>
-<td>Configuration.ServerTriggerRecursion</td>
+<td>ServerTriggerRecursion</td>
 <td>read/write</td>
 <td>sp_configure ‘server trigger recursion’</td>
 </tr>
 <tr>
 <td>bool</td>
-<td>Configuration.ShowAdvancedOption</td>
+<td>ShowAdvancedOption</td>
 <td>read/write</td>
 <td>sp_configure ‘show advanced option’</td>
 </tr>
 <tr>
 <td>FileStreamAccessLevels</td>
-<td>Configuration.FileStreamAccessLevel</td>
+<td>FileStreamAccessLevel</td>
 <td>read/write</td>
 <td>sp_configure ‘filestream access level’</td>
 </tr>
 <tr>
 <td>bool</td>
-<td>Configuration.BackupCompressionDefault</td>
+<td>BackupCompressionDefault</td>
 <td>read/write</td>
 <td>sp_configure ‘backup compression default’</td>
 </tr>
 <tr>
 <td>bool</td>
-<td>Configuration.XpCmdShell</td>
+<td>XpCmdShell</td>
 <td>read/write</td>
 <td>sp_configure ‘xp_cmdshell’</td>
 </tr>
 <tr>
 <td>int</td>
-<td>Configuration.MaxServerMemory</td>
+<td>MaxServerMemory</td>
 <td>read/write</td>
 <td>sp_configure ‘max server memory (MB)’</td>
 </tr>
 <tr>
 <td>int</td>
-<td>Configuration.MinServerMemory</td>
+<td>MinServerMemory</td>
 <td>read/write</td>
 <td>sp_configure ‘min server memory (MB)’</td>
 </tr>
 </tbody>
 </table>
+<p>Generic SQL Server configuration API:</p>
+<ul>
+<li><code>Option&lt;T&gt; ReadAdvancedOption&lt;T&gt;(string&lt;T&gt; name)</code></li>
+<li><code>void SetAdvancedOption&lt;T&gt;(string name, T value)</code></li>
+<li><code>Option&lt;T&gt; ReadOption&lt;T&gt;(string name)</code></li>
+<li><code>void SetOption&lt;T&gt;(string name, T value)</code></li>
+</ul>
 <h2 id="sql-database-management-extensions">SQL Database Management
 Extensions</h2>
 <table>
@@ -621,28 +620,28 @@ Extensions</h2>
 <td></td>
 </tr>
 <tr>
-<td>AutoCreateStatisticMode</td>
-<td>AutoCreateStatistic</td>
-<td>read/write</td>
-<td>Complete, Incremental, Off</td>
-</tr>
-<tr>
 <td>bool</td>
 <td>AreTriggersRecursive</td>
 <td>read/write</td>
 <td></td>
 </tr>
 <tr>
-<td>AutoUpdateStatisticMode</td>
-<td>AutoUpdateStatistic</td>
-<td>read/write</td>
-<td>Synchronously, Async, Off</td>
-</tr>
-<tr>
 <td>bool</td>
 <td>IsIncrementalAutoStatisticCreationSupported</td>
 <td>read-only</td>
 <td>ServerVersion.Major &gt;= 12</td>
+</tr>
+<tr>
+<td>AutoCreateStatisticMode</td>
+<td>AutoCreateStatistic</td>
+<td>read/write</td>
+<td>Complete, Incremental, Off</td>
+</tr>
+<tr>
+<td>AutoUpdateStatisticMode</td>
+<td>AutoUpdateStatistic</td>
+<td>read/write</td>
+<td>Synchronously, Async, Off</td>
 </tr>
 <tr>
 <td>bool</td>
@@ -724,6 +723,14 @@ Extensions</h2>
 </tr>
 </tbody>
 </table>
+<h2 id="sql-server-discovery">SQL Server Discovery</h2>
+<p>On <strong>Windows</strong>, SQL Server instances and their versions
+are discovered via the registry path
+<code>HKLM\Software\Microsoft\Microsoft SQL Server</code> (<a
+href="https://learn.microsoft.com/en-us/sql/sql-server/install/file-locations-for-default-and-named-instances-of-sql-server">reference</a>).</p>
+<p>On <strong>Linux</strong> and <strong>macOS</strong>, SQL Server
+instance information is provided through environment variables prefixed
+with <code>SQLSERVER_WELLKNOWN_***</code>.</p>
 
 <!-- Add copy buttons -->
 <script>

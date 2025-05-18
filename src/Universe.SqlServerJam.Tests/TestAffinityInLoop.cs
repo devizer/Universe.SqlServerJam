@@ -8,7 +8,7 @@ namespace Universe.SqlServerJam.Tests;
 public class TestAffinityInLoop : NUnitTestsBase
 {
     [Test]
-    [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetEnabledServers))]
+    [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetNonExpressServers))]
     public void TestAllCpuCores(SqlServerRef testCase)
     {
         if (!testCase.IsNotAzure()) return; // SQL Azure FREE TIER (2 cores) is not supported. Always return 0 (all cores)
@@ -39,4 +39,6 @@ public class TestAffinityInLoop : NUnitTestsBase
             manager.Configuration.AffinityMask = 0L;
         }
     }
+
+
 }
