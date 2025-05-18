@@ -49,6 +49,14 @@ namespace Universe.SqlServerJam
             return b.ConnectionString;
         }
 
+        public static string GetClientSizeDataSource(string connectionString)
+        {
+            if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));
+            var b = SqlServerJamConfiguration.SqlProviderFactory.CreateConnectionStringBuilder();
+            b.ConnectionString = connectionString;
+            return b["Data Source"]?.ToString();
+        }
+
         public static string ResetConnectionPooling(string connectionString, bool? pooling)
         {
             if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));

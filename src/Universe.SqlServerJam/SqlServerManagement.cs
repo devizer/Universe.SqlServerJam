@@ -19,6 +19,7 @@ namespace Universe.SqlServerJam
         private Lazy<string> _LongServerVersion;
         private Lazy<string> _HostPlatform;
         private Lazy<SqlServerSysInfo> _SqlServerSysInfo;
+        private Lazy<string> _CpuName;
         private readonly Lazy<Version> _ProductVersion;
 
         public SqlServerSysInfo SystemInfo => _SqlServerSysInfo.Value;
@@ -29,6 +30,19 @@ namespace Universe.SqlServerJam
         // TODO: AvailableMemoryKb is cached except of Azure
         public long AvailableMemoryKb => this.SystemInfo.GetAvailableMemoryKb();
         public long CommittedMemoryKb => this.SystemInfo.GetCommittedMemoryKb();
+        public string CpuName => _CpuName.Value;
+
+
+        private static string NormalizeCpuName(string[] arr)
+        {
+            string ret;
+            ret = string.Join(" ", arr);
+            ret = ret.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ");
+            while (ret.IndexOf("  ", StringComparison.Ordinal) >= 0) ret = ret.Replace("  ", " ");
+            return ret;
+        }
+
+        public string ClientDataSource => SqlServerJamConfigurationExtensions.GetClientSizeDataSource(SqlConnection.ConnectionString);
 
 
         // Actually it is need for WarmUp extension
@@ -46,6 +60,7 @@ namespace Universe.SqlServerJam
             _HostPlatform = new Lazy<string>(GetHostPlatform);
             _ProductVersion = new Lazy<Version>(() => ResilientVersionParser.Parse(this.ProductVersionRaw));
             _SqlServerSysInfo = new Lazy<SqlServerSysInfo>(() => new SqlServerSysInfo(this));
+            _CpuName = new Lazy<string>(GetCpuName);
 
             Databases = new DatabaseSelector(this);
 
@@ -243,6 +258,52 @@ namespace Universe.SqlServerJam
 
         public Version ProductVersion => _ProductVersion.Value;
 
+        // Windows Only
+        private string GetCpuName()
+        {
+            string FormatCpuCores()
+            {
+                int cores = CpuCount;
+                return cores == 1 ? "one CPU core" : $"{cores} CPU cores";
+            }
+
+            if (IsAzure) return $"Azure {FormatCpuCores()}";
+            if (IsLinux) return $"Linux {FormatCpuCores()}";
+
+            string ret = null;
+
+            var action1Title = $"Query CPU Name via regread for {ClientDataSource}";
+            try
+            {
+                using var act = SqlJamLog.LogAction(action1Title);
+                var cpuNameRaw = SqlConnection.ExecuteScalar<string>(SqlGetCpuNameByRegistry, null, commandTimeout: CommandTimeout);
+                ret = NormalizeCpuName(new string[] { cpuNameRaw, });
+                if (!string.IsNullOrEmpty(ret?.Trim())) return ret;
+            }
+            catch (Exception ex)
+            {
+                SqlJamLog.DebugLog(() => $"{action1Title}failed. {ex.GetLegacyExceptionDigest()}{Environment.NewLine}{ex}");
+            }
+
+            var action2Title = $"Query CPU Name via powershell for {ClientDataSource}";
+            try
+            {
+                Configuration.XpCmdShell = true;
+                using var act = SqlJamLog.LogAction(action2Title);
+                // var cmd = "powershell -NoProfile -ExecutionPolicy RemoteSigned -c \"(Get-WmiObject Win32_Processor).Name\"";
+                var cmd = "powershell -NoProfile -ExecutionPolicy RemoteSigned -c \"(Get-WmiObject Win32_Processor | Select -First 1).Name\"";
+                var query = SqlConnection.Query<string>("exec xp_cmdshell @cmd", new { cmd });
+                // var ret = query.FirstOrDefault() ?? string.Empty;
+                ret = NormalizeCpuName(query.ToArray());
+            }
+            catch (Exception ex)
+            {
+                SqlJamLog.DebugLog(() => $"{action2Title}failed. {ex.GetLegacyExceptionDigest()}{Environment.NewLine}{ex}");
+            }
+
+            if (string.IsNullOrEmpty(ret)) ret = $"Windows {FormatCpuCores()}";
+            return ret;
+        }
 
         public Version GetShortServerVersion(int? commandTimeout)
         {
@@ -451,5 +512,39 @@ Else
             this.CommandTimeout = Math.Max(1, seconds);
             return this;
         }
+
+        private static readonly string SqlGetCpuNameByRegistry = @"
+DECLARE @cpuName NVARCHAR(4000);
+DECLARE @subKey NVARCHAR(4000);
+-- DECLARE @value NVARCHAR(4000);
+DECLARE @processorIndex INT; SET @processorIndex = 0;
+DECLARE @success INT;        SET @success = 1;
+DECLARE @maxIndex INT;       SET @maxIndex = 16;
+
+WHILE @success = 1 AND @processorIndex < @maxIndex
+BEGIN
+    SET @subKey = 'HARDWARE\DESCRIPTION\System\CentralProcessor\' + CAST(@processorIndex AS NVARCHAR);
+
+    EXEC @success = master..xp_regread
+        N'HKEY_LOCAL_MACHINE',
+        @subKey,
+        N'ProcessorNameString',
+        @cpuName OUTPUT;
+
+    IF @success = 0 AND @cpuName IS NOT NULL AND LEN(@cpuName) > 0
+    BEGIN
+        Select @cpuName As CpuName;
+        PRINT 'CPU Name: ' + @cpuName;
+        BREAK; -- Found valid CPU name
+    END
+
+    SET @processorIndex = @processorIndex + 1;
+END
+
+IF @success <> 0 OR @cpuName IS NULL
+BEGIN
+    PRINT 'CPU Name: Unknown';
+END
+";
     }
 }

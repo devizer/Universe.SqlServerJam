@@ -70,6 +70,7 @@ static IEnumerable<SqlServerRef> GetEnabledServers()
 | string | ProductVersion | read-only | GetServerProperty&lt;string&gt;("ProductVersion")
 | string | ProductLevel | read-only | CTP, RTM, SP1, SP2, ... |
 | string | ProductUpdateLevel | read-only | CU1, CU2, ... |
+| string | CpuName            | read-only | Accurate name on Windows only
 | int    | CpuCount           | read-only
 | bool   | IsCpuAffinitySupported | read-only | If not an express edition
 | long   | AvailableMemoryKb  | read-only | process_memory_limit_mb, Committed_Target_Kb, or Visible_Target_Kb depending on edition and version
