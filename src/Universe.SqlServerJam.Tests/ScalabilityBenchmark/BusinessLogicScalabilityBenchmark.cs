@@ -48,7 +48,8 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
         DataAccess dataAccess = new DataAccess(() => NewConnection(open: true));
         DataSeeder seeder = new DataSeeder(dataAccess);
         Stopwatch startSeedAt = Stopwatch.StartNew();
-        seeder.Seed(20000, timeLimit: TimeSpan.FromSeconds(90));
+        var categoriesCount = BuildServerInfo.IsBuildServer ? 120000 : 20000;
+        seeder.Seed(categoriesCount, timeLimit: TimeSpan.FromSeconds(90));
         Console.WriteLine($"Stress DB [{newDbName}] is ready. Seed took {startSeedAt.Elapsed.TotalSeconds:n2} seconds");
         StressState.Categories = dataAccess.GetAllCategories().ToArray();
         Console.WriteLine($"DB Size: {management.Databases[newDbName].Size:n0} KB");
@@ -75,13 +76,6 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
             Console.WriteLine(totalResults + Environment.NewLine);
         }
     }
-
-    TotalStressResult RunStress(int workerUpdaterCount, int workerReaderCount, DataAccess dataAccess, TimeSpan duration)
-    {
-        throw new NotImplementedException();
-    }
-
-
 
     [TearDown]
     public void TearDown()

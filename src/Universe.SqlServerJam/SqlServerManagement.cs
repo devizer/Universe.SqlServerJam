@@ -32,14 +32,13 @@ namespace Universe.SqlServerJam
         public long CommittedMemoryKb => this.SystemInfo.GetCommittedMemoryKb();
         public string CpuName => _CpuName.Value;
 
-
         private static string NormalizeCpuName(string[] arr)
         {
             string ret;
-            ret = string.Join(" ", arr);
+            ret = string.Join(" ", arr).Trim();
             ret = ret.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ");
             while (ret.IndexOf("  ", StringComparison.Ordinal) >= 0) ret = ret.Replace("  ", " ");
-            return ret;
+            return ret.Trim();
         }
 
         public string ClientDataSource => SqlServerJamConfigurationExtensions.GetClientSizeDataSource(SqlConnection.ConnectionString);

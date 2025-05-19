@@ -91,14 +91,8 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
                     var totalCpuUsage = syncCpuUsage.GetValueOrDefault() + asyncCpuUsage;
                     workerResults.TotalCount = totalCount;
                     workerResults.TotalDuration = workerTotalDuration;
+                    workerResults.TotalDurationSquared = workerTotalDurationSecondsSquared;
                     workerResults.TotalCpuUsage = totalCpuUsage;
-
-                    // std_dev = math.sqrt((s0 * s2 - s1 * s1) / (s0 * (s0 - 1)))
-                    workerResults.StdDevDuration =
-                        totalCount <= 1
-                            ? 0
-                            : Math.Sqrt((totalCount * workerTotalDurationSecondsSquared - workerTotalDurationSeconds * workerTotalDurationSeconds) / (totalCount * (totalCount - 1)));
-
                     lock (ret) ret.WorkerResults.Add(workerResults);
                 });
                 thread.IsBackground = true;
@@ -138,11 +132,18 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
     {
         public Type WorkerType { get; set; }
         public string WorkerTitle { get; set; }
-        public double StdDevDuration { get; set; }
         public double TotalDuration { get; set; }
+        public double TotalDurationSquared { get; set; }
         public CpuUsage.CpuUsage TotalCpuUsage { get; set; }
         public long TotalCount { get; set; }
         public List<Exception> UpdateActionErrors { get; } = new List<Exception>();
+
+        // std_dev = math.sqrt((s0 * s2 - s1 * s1) / (s0 * (s0 - 1)))
+        public double StdDevDuration =>
+            TotalCount <= 1
+                ? 0
+                : Math.Sqrt((TotalCount * TotalDurationSquared - TotalDuration * TotalDuration) / (TotalCount * (TotalCount - 1)));
+
 
         public override string ToString()
         {
