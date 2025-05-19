@@ -18,7 +18,7 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
     {
         private List<TitledWorker> Workers = new List<TitledWorker>();
         public TimeSpan MaxDuration { get; set; }
-        public bool NeedCpuUsage { get; set; }
+        // public bool NeedCpuUsage { get; set; }
 
         public StressOrchestrator()
         {
@@ -34,8 +34,9 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
             TotalStressResult ret = new TotalStressResult();
 
             List<Thread> threads = new List<Thread>();
-            Stopwatch stressStartedAt = Stopwatch.StartNew();
+            // Stopwatch stressStartedAt = Stopwatch.StartNew();
             CountdownEvent countdownStart = new CountdownEvent(Workers.Count);
+            Stopwatch countdownStartedAt = null;
             foreach (var titledWorker in Workers)
             {
                 var thread = new Thread(() =>
@@ -53,6 +54,7 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
                     double workerTotalDurationSecondsSquared = 0;
                     countdownStart.Signal();
                     countdownStart.Wait();
+                    Interlocked.CompareExchange(ref countdownStartedAt, Stopwatch.StartNew(), null);
                     Stopwatch workerStartedAt = Stopwatch.StartNew();
                     do
                     {
@@ -96,7 +98,7 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
 
             foreach (var thread in threads) thread.Join();
 
-            ret.TotalDuration = stressStartedAt.Elapsed;
+            ret.TotalDuration = (countdownStartedAt ?? Stopwatch.StartNew()).Elapsed;
             ret.WorkerResults = ret.WorkerResults.OrderBy(x => x.WorkerTitle).ToList();
             return ret;
         }

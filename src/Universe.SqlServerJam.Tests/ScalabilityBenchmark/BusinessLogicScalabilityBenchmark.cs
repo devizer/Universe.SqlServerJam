@@ -62,9 +62,10 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
         preJit.AddWorker("2", updater);
         preJit.Run();
 
+        var sqlCpuName = management.CpuName;
         for (int sqlCores = 1; sqlCores <= sqlServerCpuCores; sqlCores++)
         {
-            Console.WriteLine($"SQL CPU AFFINITY COUNT is {sqlCores}");
+            Console.WriteLine($"SQL CPU AFFINITY COUNT is {sqlCores} of {sqlServerCpuCores}, {sqlCpuName}");
             management.Configuration.AffinityCount = (short)sqlCores;
             StressOrchestrator stressOrchestrator = new StressOrchestrator()
             {
