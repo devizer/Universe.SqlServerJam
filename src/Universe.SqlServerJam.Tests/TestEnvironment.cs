@@ -13,6 +13,16 @@ namespace Universe.SqlServerJam.Tests
 {
     static class TestEnvironment
     {
+        public static int? SQL_STRESS_DURATION_SECONDS
+        {
+            get
+            {
+                if (int.TryParse(Environment.GetEnvironmentVariable("SQL_STRESS_DURATION_SECONDS"), out var ret))
+                    return ret;
+
+                return null;
+            }
+        }
         private static Lazy<List<SqlServerRef>> _SqlServers = new Lazy<List<SqlServerRef>>(() =>
         {
             SqlJamLog.EnableDebugLog = true;
