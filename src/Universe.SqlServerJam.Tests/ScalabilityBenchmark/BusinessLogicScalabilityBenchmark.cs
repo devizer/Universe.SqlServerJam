@@ -72,7 +72,7 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
             var stressDuration = TimeSpan.FromSeconds(TestEnvironment.SQL_STRESS_DURATION_SECONDS ?? 2);
             StressOrchestrator stressOrchestrator = new StressOrchestrator() { MaxDuration = stressDuration };
             stressOrchestrator.AddWorker($"Updater", updater);
-            stressOrchestrator.AddWorkers("Dashboard", sqlCores, reader);
+            stressOrchestrator.AddWorkers("Dashboard", Math.Max(1, sqlServerCpuCores - 1), reader);
             var totalResults = stressOrchestrator.Run();
             Console.WriteLine(totalResults);
         }
