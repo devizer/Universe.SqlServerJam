@@ -190,8 +190,16 @@ jobs:
 
 
     - name: Install-SqlServer-Version-Management
-      run: |
-        iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1'))
+      env:
+        SQL_SERVERS: ${{ matrix.SqlServers }}
+      uses: nick-fields/retry@v3
+      with:
+        timeout_minutes: 1
+        max_attempts: 5
+        shell: powershell
+        retry_wait_seconds: 10
+        command: |
+           iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1'))
 
         # $moduleName = "SqlServer-Version-Management"; Write-Host "Existing `"$moduleName`" module version is $(get-Module -ListAvailable | ? { $_.Name -eq "SqlServer-Version-Management" } | % { "$($_.Version)" })"
 
