@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Universe.CpuUsage;
+using Universe.GenericTreeTable;
 
 namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
 {
@@ -54,7 +55,8 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
                     WorkerStressResults workerResults = new WorkerStressResults()
                     {
                         WorkerType = titledWorker.Worker.GetType(),
-                        WorkerTitle = titledWorker.Title
+                        WorkerTitle = titledWorker.Title,
+                        WorkerGroup = titledWorker.Group
                     };
 
                     long totalCount = 0;
@@ -120,7 +122,80 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
         public TimeSpan TotalDuration { get; set; } // Includes wait on countdown
         public List<WorkerStressResults> WorkerResults { get; internal set; } = new List<WorkerStressResults>();
 
+
         public override string ToString()
+        {
+            string[] groups = WorkerResults.Select(x => x.WorkerGroup).OrderBy(x => x).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+            if (groups.Length == 0) return string.Empty;
+            int maxGroupNameLength = groups.Max(x => x.Length);
+            StringBuilder ret = new StringBuilder();
+
+            long actionsCount = WorkerResults.Count == 0 ? 0 : WorkerResults.Sum(x => x.TotalCount);
+            var totalRow = $"Total Actions: {actionsCount:n0} in {TotalDuration.TotalSeconds:n2} seconds";
+
+            ConsoleTable mainTable = new ConsoleTable("●", "C", "*", "-N", "A", "➛", "-%", "%", "!")
+            {
+                HideColumnBorders = true,
+                HideHeader = true
+            };
+
+            string FirstColumnBorder() => mainTable.LineCount == 0 ? "╶┬╴ " : " │ ";
+
+            foreach (var group in groups)
+            {
+                var workersOfGroup = WorkerResults.Where(x => x.WorkerGroup.Equals(group, StringComparison.OrdinalIgnoreCase)).ToArray();
+                var countOfGroup = workersOfGroup.Length;
+                var sumActionCount = workersOfGroup.Sum(x => x.TotalCount);
+                var sumDuration = workersOfGroup.Sum(x => x.TotalDuration);
+                var sumDurationSquared = workersOfGroup.Sum(x => x.TotalDurationSquared);
+                var sumCpuUsage = new CpuUsage.CpuUsage();
+                foreach (var w in workersOfGroup) sumCpuUsage += w.TotalCpuUsage;
+                double sumStdev = WorkerStressResults.GetStdDev(sumActionCount, sumDuration, sumDurationSquared);
+                var stdevString = sumActionCount > 2 ? $" ± {1000 * sumStdev:n3}" : "";
+                var avgString = sumActionCount == 0 ? "" : $" (avg = {(1000 * sumDuration / sumActionCount):n2}{stdevString})";
+                var cpuPercents = 100d * sumCpuUsage.TotalMicroSeconds / sumDuration / 1000000;
+                var groupErrorsCount = workersOfGroup.Sum(x => x.UpdateActionErrors.Count);
+                var groupErrorsString = groupErrorsCount == 0 ? "no errors" : $"{groupErrorsCount} {(groupErrorsCount == 1 ? "error" : "errors")}";
+                mainTable.AddRow("", $"«{group}»", $"{FirstColumnBorder()}", $"{sumActionCount:n0}", avgString, " ➛", $" {cpuPercents:n2}% ", sumCpuUsage.ToString(), " " + groupErrorsString);
+
+                if (workersOfGroup.Length >= 2)
+                {
+                    var index = 1;
+                    foreach (var worker in workersOfGroup)
+                    {
+                        var stdevString_ = worker.TotalCount > 2 ? $" ± {1000 * worker.StdDevDuration:n3}" : "";
+                        var avgString_ = worker.TotalCount == 0 ? "" : $" (avg = {(1000 * worker.TotalDuration / worker.TotalCount):n2}{stdevString_})";
+                        var cpuPercents_ = 100d * worker.TotalCpuUsage.TotalMicroSeconds / sumDuration / 1000000;
+                        var indexString = $"{index:0}{GetOrdinalSuffix(index)}";
+                        indexString = indexString.PadLeft(maxGroupNameLength + 2);
+                        mainTable.AddRow("", $"{indexString}", $"{FirstColumnBorder()}", $"{worker.TotalCount:n0}", avgString_, " ➛", $" {cpuPercents_:n2}% ", worker.TotalCpuUsage.ToString(), " " + groupErrorsString);
+                        index++;
+                    }
+                }
+            }
+
+            if (mainTable.LineCount >= 2)
+                mainTable.Cells[mainTable.LineCount - 1, 2] = " ╵ ";
+            else if (mainTable.LineCount >= 1)
+                mainTable.Cells[mainTable.LineCount - 1, 2] = " | ";
+
+            var r = string.Join(Environment.NewLine, WorkerResults.Select(x => $" • {x}").ToArray());
+            return $"{totalRow}{Environment.NewLine}{mainTable}";
+        }
+
+        private static string GetOrdinalSuffix(int num)
+        {
+            string number = num.ToString("0");
+            if (number.EndsWith("11")) return "th";
+            if (number.EndsWith("12")) return "th";
+            if (number.EndsWith("13")) return "th";
+            if (number.EndsWith("1")) return "st";
+            if (number.EndsWith("2")) return "nd";
+            if (number.EndsWith("3")) return "rd";
+            return "th";
+        }
+
+        public string ToStringLegacy()
         {
             var r = string.Join(Environment.NewLine, WorkerResults.Select(x => $" • {x}").ToArray());
             long actionsCount = WorkerResults.Count == 0 ? 0 : WorkerResults.Sum(x => x.TotalCount);
@@ -130,6 +205,7 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
 
     public class WorkerStressResults
     {
+        public string WorkerGroup { get; set; }
         public Type WorkerType { get; set; }
         public string WorkerTitle { get; set; }
         public double TotalDuration { get; set; }
@@ -138,11 +214,15 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
         public long TotalCount { get; set; }
         public List<Exception> UpdateActionErrors { get; } = new List<Exception>();
 
+        public double StdDevDuration => GetStdDev(TotalCount, TotalDuration, TotalDurationSquared);
+
         // std_dev = math.sqrt((s0 * s2 - s1 * s1) / (s0 * (s0 - 1)))
-        public double StdDevDuration =>
-            TotalCount <= 1
+        internal static double GetStdDev(long s0, double s1, double s2)
+        {
+            return s0 <= 1
                 ? 0
-                : Math.Sqrt((TotalCount * TotalDurationSquared - TotalDuration * TotalDuration) / (TotalCount * (TotalCount - 1)));
+                : Math.Sqrt((s0 * s2 - s1 * s1) / (s0 * (s0 - 1)));
+        }
 
 
         public override string ToString()

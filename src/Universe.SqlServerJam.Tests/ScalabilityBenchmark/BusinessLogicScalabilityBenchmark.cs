@@ -19,7 +19,7 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
     private Action CleanUp;
 
     [Test]
-    [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetApp1Servers))]
+    [TestCaseSource(typeof(TestEnvironment), nameof(TestEnvironment.GetApp1DeveloperServers))]
     public void StressScalability(SqlServerRef testCase)
     {
         if (!testCase.CanSimplyCreateDatabase()) return;
@@ -64,6 +64,7 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
         preJit.Run();
 
         var sqlCpuName = management.CpuName;
+        Console.WriteLine("");
         for (int sqlCores = 1; sqlCores <= sqlServerCpuCores; sqlCores++)
         {
             Console.WriteLine($"SQL CPU AFFINITY COUNT is {sqlCores}/{sqlServerCpuCores} on \"{sqlCpuName}\"");
@@ -73,7 +74,7 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
             stressOrchestrator.AddWorker($"Updater", updater);
             stressOrchestrator.AddWorkers("Dashboard", sqlCores, reader);
             var totalResults = stressOrchestrator.Run();
-            Console.WriteLine(totalResults + Environment.NewLine);
+            Console.WriteLine(totalResults);
         }
     }
 

@@ -1,0 +1,75 @@
+#1.8 {StressScalability('(local)' Ver 16.0.4145.4)} @ BusinessLogicScalabilityBenchmark starting...
+Stress DB [Test of App1 d91b83d66d654387aca7a6d83467bf63] is ready. Seed took 12.09 seconds
+DB Size: 5,824 KB
+Categories Count: 20,000
+
+SQL CPU AFFINITY COUNT is 1/8 on "Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz"
+Total Actions: 4,485 in 2.00 seconds
+ • «Dashboard 1» * 2,267 (avg = 0.88 ± 3.852) ➛ CPU 24.21% {484.375 = 406.250 [user] + 78.125 [kernel] milliseconds}, Errors: 0
+ • «Updater»     * 2,218 (avg = 0.90 ± 3.896) ➛ CPU 18.75% {375.000 = 343.750 [user] + 31.250 [kernel] milliseconds}, Errors: 0
+
+SQL CPU AFFINITY COUNT is 2/8 on "Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz"
+Total Actions: 8,211 in 2.00 seconds
+ • «Dashboard 1» * 2,860 (avg = 0.70 ± 1.152) ➛ CPU 35.15% {703.125 = 578.125 [user] + 125.000 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 2» * 2,831 (avg = 0.71 ± 1.231) ➛ CPU 25.00% {500.000 = 468.750 [user] + 31.250 [kernel] milliseconds}, Errors: 0
+ • «Updater» * 2,520 (avg = 0.79 ± 1.541) ➛ CPU 29.69% {593.750 = 515.625 [user] + 78.125 [kernel] milliseconds}, Errors: 0
+
+SQL CPU AFFINITY COUNT is 3/8 on "Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz"
+Total Actions: 9,360 in 2.00 seconds
+ • «Dashboard 1» * 2,377 (avg = 0.84 ± 3.918) ➛ CPU 27.34% {546.875 = 453.125 [user] + 93.750 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 2» * 2,365 (avg = 0.85 ± 4.122) ➛ CPU 29.68% {593.750 = 546.875 [user] + 46.875 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 3» * 2,454 (avg = 0.82 ± 3.813) ➛ CPU 20.31% {406.250 = 359.375 [user] + 46.875 [kernel] milliseconds}, Errors: 0
+ • «Updater» * 2,164 (avg = 0.92 ± 3.380) ➛ CPU 23.43% {468.750 = 359.375 [user] + 109.375 [kernel] milliseconds}, Errors: 0
+
+SQL CPU AFFINITY COUNT is 4/8 on "Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz"
+Total Actions: 14,273 in 2.00 seconds
+ • «Dashboard 1» * 2,918 (avg = 0.69 ± 0.520) ➛ CPU 21.09% {421.875 = 390.625 [user] + 31.250 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 2» * 3,002 (avg = 0.67 ± 0.490) ➛ CPU 33.59% {671.875 = 625.000 [user] + 46.875 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 3» * 3,008 (avg = 0.66 ± 0.469) ➛ CPU 32.81% {656.250 = 578.125 [user] + 78.125 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 4» * 2,959 (avg = 0.68 ± 0.480) ➛ CPU 31.24% {625.000 = 468.750 [user] + 156.250 [kernel] milliseconds}, Errors: 0
+ • «Updater» * 2,386 (avg = 0.84 ± 0.457) ➛ CPU 15.62% {312.500 = 234.375 [user] + 78.125 [kernel] milliseconds}, Errors: 0
+
+SQL CPU AFFINITY COUNT is 5/8 on "Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz"
+Total Actions: 13,626 in 2.00 seconds
+ • «Dashboard 1» * 2,372 (avg = 0.84 ± 2.399) ➛ CPU 31.25% {625.000 = 515.625 [user] + 109.375 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 2» * 2,333 (avg = 0.86 ± 3.813) ➛ CPU 32.02% {640.625 = 562.500 [user] + 78.125 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 3» * 2,475 (avg = 0.81 ± 2.157) ➛ CPU 32.80% {656.250 = 625.000 [user] + 31.250 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 4» * 2,391 (avg = 0.84 ± 2.737) ➛ CPU 32.03% {640.625 = 593.750 [user] + 46.875 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 5» * 2,269 (avg = 0.88 ± 3.020) ➛ CPU 33.59% {671.875 = 593.750 [user] + 78.125 [kernel] milliseconds}, Errors: 0
+ • «Updater» * 1,786 (avg = 1.12 ± 4.453) ➛ CPU 21.87% {437.500 = 359.375 [user] + 78.125 [kernel] milliseconds}, Errors: 0
+
+SQL CPU AFFINITY COUNT is 6/8 on "Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz"
+Total Actions: 14,857 in 2.16 seconds
+ • «Dashboard 1» * 1,869 (avg = 1.15 ± 5.856) ➛ CPU 21.02% {453.125 = 406.250 [user] + 46.875 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 2» * 2,251 (avg = 0.89 ± 1.889) ➛ CPU 21.87% {437.500 = 375.000 [user] + 62.500 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 3» * 2,437 (avg = 0.82 ± 1.509) ➛ CPU 28.12% {562.500 = 468.750 [user] + 93.750 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 4» * 2,220 (avg = 0.90 ± 2.173) ➛ CPU 27.34% {546.875 = 484.375 [user] + 62.500 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 5» * 2,238 (avg = 0.89 ± 2.201) ➛ CPU 25.78% {515.625 = 484.375 [user] + 31.250 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 6» * 2,168 (avg = 0.99 ± 4.840) ➛ CPU 23.20% {500.000 = 406.250 [user] + 93.750 [kernel] milliseconds}, Errors: 0
+ • «Updater» * 1,674 (avg = 1.19 ± 3.206) ➛ CPU 14.06% {281.250 = 203.125 [user] + 78.125 [kernel] milliseconds}, Errors: 0
+
+SQL CPU AFFINITY COUNT is 7/8 on "Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz"
+Total Actions: 15,800 in 2.07 seconds
+ • «Dashboard 1» * 1,725 (avg = 1.20 ± 5.568) ➛ CPU 18.91% {390.625 = 359.375 [user] + 31.250 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 2» * 2,260 (avg = 0.89 ± 2.036) ➛ CPU 24.21% {484.375 = 406.250 [user] + 78.125 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 3» * 2,025 (avg = 0.99 ± 2.995) ➛ CPU 18.75% {375.000 = 328.125 [user] + 46.875 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 4» * 1,970 (avg = 1.02 ± 3.228) ➛ CPU 21.08% {421.875 = 343.750 [user] + 78.125 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 5» * 2,004 (avg = 1.00 ± 3.405) ➛ CPU 16.41% {328.125 = 296.875 [user] + 31.250 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 6» * 2,094 (avg = 0.96 ± 2.462) ➛ CPU 24.21% {484.375 = 437.500 [user] + 46.875 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 7» * 2,176 (avg = 0.92 ± 1.947) ➛ CPU 30.46% {609.375 = 578.125 [user] + 31.250 [kernel] milliseconds}, Errors: 0
+ • «Updater» * 1,546 (avg = 1.34 ± 4.970) ➛ CPU 15.89% {328.125 = 296.875 [user] + 31.250 [kernel] milliseconds}, Errors: 0
+
+SQL CPU AFFINITY COUNT is 8/8 on "Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz"
+Total Actions: 20,472 in 2.00 seconds
+ • «Dashboard 1» * 2,432 (avg = 0.82 ± 0.591) ➛ CPU 32.02% {640.625 = 562.500 [user] + 78.125 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 2» * 2,392 (avg = 0.84 ± 0.622) ➛ CPU 28.90% {578.125 = 531.250 [user] + 46.875 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 3» * 2,429 (avg = 0.82 ± 0.596) ➛ CPU 21.09% {421.875 = 390.625 [user] + 31.250 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 4» * 2,432 (avg = 0.82 ± 0.587) ➛ CPU 23.43% {468.750 = 390.625 [user] + 78.125 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 5» * 2,411 (avg = 0.83 ± 0.596) ➛ CPU 37.49% {750.000 = 656.250 [user] + 93.750 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 6» * 2,418 (avg = 0.83 ± 0.598) ➛ CPU 35.93% {718.750 = 640.625 [user] + 78.125 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 7» * 1,756 (avg = 1.14 ± 14.322) ➛ CPU 21.09% {421.875 = 375.000 [user] + 46.875 [kernel] milliseconds}, Errors: 0
+ • «Dashboard 8» * 2,427 (avg = 0.82 ± 0.600) ➛ CPU 32.80% {656.250 = 578.125 [user] + 78.125 [kernel] milliseconds}, Errors: 0
+ • «Updater»     * 1,775 (avg = 1.13 ± 0.630) ➛ CPU 14.06% {281.250 = 218.750 [user] + 62.500 [kernel] milliseconds}, Errors: 0
+
+#1.8 {StressScalability('(local)' Ver 16.0.4145.4)} >PASSED< in 00:00:29.0729652 (cpu: 12%, 3,421.875 = 2,921.875 [user] + 500.000 [kernel] milliseconds)
+

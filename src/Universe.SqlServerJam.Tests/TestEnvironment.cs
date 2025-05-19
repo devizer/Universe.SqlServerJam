@@ -66,6 +66,19 @@ namespace Universe.SqlServerJam.Tests
                 .ToList();
         }
 
+        public static List<SqlServerRef> GetApp1DeveloperServers()
+        {
+            return TestEnvironment.SqlServers
+                .OrderByVersionDesc()
+                .Where(x => x.ServiceStartup != LocalServiceStartup.Disabled)
+                .WarmUp(timeout: TimeSpan.FromSeconds(30))
+                .Where(x => x.Version != null) // is alive by warmup
+                .Where(x => x.Manage().ShortServerVersion.Major >= 10)
+                .Where(x => !x.Manage().IsExpressOrLocalDb)
+                .Where(x => !x.Manage().IsAzure)
+                .ToList();
+        }
+
 
 
 

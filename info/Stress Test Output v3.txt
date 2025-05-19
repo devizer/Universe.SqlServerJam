@@ -1,0 +1,89 @@
+#1.1 {StressScalability('(local)' Ver 16.0.4145.4)} @ BusinessLogicScalabilityBenchmark starting...
+Stress DB [Test of App1 f18e14f2b06649e1be4a1dfdfd792c59] is ready. Seed took 19.40 seconds
+DB Size: 5,824 KB
+Categories Count: 20,000
+
+SQL CPU AFFINITY COUNT is 1/8 on "Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz"
+Total Actions: 4,938 in 2.01 seconds
+ «Dashboard»╶┬╴ 3,158 (avg = 0.64 ± 1.289) ➛ 34.28% {687.500 = 562.500 [user] + 125.000 [kernel] milliseconds} no errors
+ «Updater»   ╵  1,780 (avg = 1.13 ± 1.750) ➛ 14.80% {296.875 = 265.625 [user] + 31.250 [kernel] milliseconds}  no errors
+
+
+SQL CPU AFFINITY COUNT is 2/8 on "Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz"
+Total Actions: 5,176 in 2.00 seconds
+ «Dashboard»╶┬╴ 3,979 (avg = 1.01 ± 3.124) ➛ 23.44% {937.500 = 750.000 [user] + 187.500 [kernel] milliseconds} no errors
+         1st │  2,104 (avg = 0.95 ± 2.791) ➛ 11.33% {453.125 = 375.000 [user] + 78.125 [kernel] milliseconds}  no errors
+         2nd │  1,875 (avg = 1.07 ± 3.461) ➛ 12.11% {484.375 = 375.000 [user] + 109.375 [kernel] milliseconds} no errors
+ «Updater»   ╵  1,197 (avg = 1.67 ± 4.086) ➛  7.81% {156.250 = 125.000 [user] + 31.250 [kernel] milliseconds}  no errors
+
+
+SQL CPU AFFINITY COUNT is 3/8 on "Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz"
+Total Actions: 10,492 in 2.00 seconds
+ «Dashboard»╶┬╴ 8,913 (avg = 0.67 ± 1.666) ➛ 33.06% {1,984.375 = 1,718.750 [user] + 265.625 [kernel] milliseconds} no errors
+         1st │  2,940 (avg = 0.68 ± 1.807) ➛ 10.67% {640.625 = 578.125 [user] + 62.500 [kernel] milliseconds}      no errors
+         2nd │  2,900 (avg = 0.69 ± 1.828) ➛ 11.19% {671.875 = 578.125 [user] + 93.750 [kernel] milliseconds}      no errors
+         3rd │  3,073 (avg = 0.65 ± 1.333) ➛ 11.19% {671.875 = 562.500 [user] + 109.375 [kernel] milliseconds}     no errors
+ «Updater»   ╵  1,579 (avg = 1.27 ± 2.692) ➛ 21.09% {421.875 = 390.625 [user] + 31.250 [kernel] milliseconds}      no errors
+
+
+SQL CPU AFFINITY COUNT is 4/8 on "Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz"
+Total Actions: 12,755 in 2.02 seconds
+ «Dashboard»╶┬╴ 11,264 (avg = 0.71 ± 2.534) ➛ 31.17% {2,500.000 = 2,265.625 [user] + 234.375 [kernel] milliseconds} no errors
+         1st │   2,309 (avg = 0.87 ± 4.048) ➛  6.82% {546.875 = 500.000 [user] + 46.875 [kernel] milliseconds}      no errors
+         2nd │   2,908 (avg = 0.69 ± 2.026) ➛  7.21% {578.125 = 531.250 [user] + 46.875 [kernel] milliseconds}      no errors
+         3rd │   2,901 (avg = 0.70 ± 1.976) ➛  7.60% {609.375 = 515.625 [user] + 93.750 [kernel] milliseconds}      no errors
+         4th │   3,146 (avg = 0.64 ± 1.886) ➛  9.55% {765.625 = 718.750 [user] + 46.875 [kernel] milliseconds}      no errors
+ «Updater»   ╵   1,491 (avg = 1.35 ± 4.268) ➛ 16.25% {328.125 = 265.625 [user] + 62.500 [kernel] milliseconds}      no errors
+
+
+SQL CPU AFFINITY COUNT is 5/8 on "Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz"
+Total Actions: 15,646 in 2.00 seconds
+ «Dashboard»╶┬╴ 15,188 (avg = 0.66 ± 2.153)  ➛ 35.78% {3,578.125 = 3,203.125 [user] + 375.000 [kernel] milliseconds} no errors
+         1st │   3,439 (avg = 0.58 ± 0.814)  ➛  7.97% {796.875 = 734.375 [user] + 62.500 [kernel] milliseconds}      no errors
+         2nd │   2,876 (avg = 0.70 ± 2.507)  ➛  5.78% {578.125 = 484.375 [user] + 93.750 [kernel] milliseconds}      no errors
+         3rd │   2,804 (avg = 0.71 ± 2.936)  ➛  7.19% {718.750 = 656.250 [user] + 62.500 [kernel] milliseconds}      no errors
+         4th │   2,977 (avg = 0.67 ± 2.312)  ➛  7.97% {796.875 = 703.125 [user] + 93.750 [kernel] milliseconds}      no errors
+         5th │   3,092 (avg = 0.65 ± 1.792)  ➛  6.87% {687.500 = 625.000 [user] + 62.500 [kernel] milliseconds}      no errors
+ «Updater»   ╵     458 (avg = 4.37 ± 73.209) ➛  4.69% {93.750 = 93.750 [user] + 0.000 [kernel] milliseconds}         no errors
+
+
+SQL CPU AFFINITY COUNT is 6/8 on "Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz"
+Total Actions: 15,841 in 2.10 seconds
+ «Dashboard»╶┬╴ 14,286 (avg = 0.85 ± 4.191) ➛ 30.08% {3,640.625 = 3,187.500 [user] + 453.125 [kernel] milliseconds} no errors
+         1st │   2,376 (avg = 0.84 ± 4.015) ➛  4.39% {531.250 = 484.375 [user] + 46.875 [kernel] milliseconds}      no errors
+         2nd │   2,343 (avg = 0.85 ± 4.080) ➛  4.52% {546.875 = 468.750 [user] + 78.125 [kernel] milliseconds}      no errors
+         3rd │   2,421 (avg = 0.87 ± 4.394) ➛  4.78% {578.125 = 515.625 [user] + 62.500 [kernel] milliseconds}      no errors
+         4th │   2,353 (avg = 0.85 ± 4.015) ➛  4.91% {593.750 = 468.750 [user] + 125.000 [kernel] milliseconds}     no errors
+         5th │   2,292 (avg = 0.87 ± 4.787) ➛  5.94% {718.750 = 609.375 [user] + 109.375 [kernel] milliseconds}     no errors
+         6th │   2,501 (avg = 0.80 ± 3.819) ➛  5.55% {671.875 = 640.625 [user] + 31.250 [kernel] milliseconds}      no errors
+ «Updater»   ╵   1,555 (avg = 1.29 ± 4.844) ➛ 14.06% {281.250 = 218.750 [user] + 62.500 [kernel] milliseconds}      no errors
+
+
+SQL CPU AFFINITY COUNT is 7/8 on "Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz"
+Total Actions: 10,468 in 2.36 seconds
+ «Dashboard»╶┬╴ 9,340 (avg = 1.54 ± 25.201) ➛ 17.68% {2,546.875 = 2,296.875 [user] + 250.000 [kernel] milliseconds} no errors
+         1st │  1,569 (avg = 1.27 ± 6.088)  ➛  3.36% {484.375 = 468.750 [user] + 15.625 [kernel] milliseconds}      no errors
+         2nd │  1,599 (avg = 1.25 ± 5.885)  ➛  2.71% {390.625 = 375.000 [user] + 15.625 [kernel] milliseconds}      no errors
+         3rd │  1,500 (avg = 1.33 ± 6.347)  ➛  3.25% {468.750 = 390.625 [user] + 78.125 [kernel] milliseconds}      no errors
+         4th │      1 (avg = 2,362.55)      ➛  0.00% {0.000 = 0.000 [user] + 0.000 [kernel] milliseconds}           no errors
+         5th │  1,572 (avg = 1.27 ± 5.791)  ➛  3.04% {437.500 = 421.875 [user] + 15.625 [kernel] milliseconds}      no errors
+         6th │  1,562 (avg = 1.28 ± 6.473)  ➛  3.14% {453.125 = 359.375 [user] + 93.750 [kernel] milliseconds}      no errors
+         7th │  1,537 (avg = 1.33 ± 6.455)  ➛  2.17% {312.500 = 281.250 [user] + 31.250 [kernel] milliseconds}      no errors
+ «Updater»   ╵  1,128 (avg = 1.77 ± 6.757)  ➛ 19.53% {390.625 = 343.750 [user] + 46.875 [kernel] milliseconds}      no errors
+
+
+SQL CPU AFFINITY COUNT is 8/8 on "Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz"
+Total Actions: 20,404 in 2.00 seconds
+ «Dashboard»╶┬╴ 18,675 (avg = 0.86 ± 0.622) ➛ 27.51% {4,406.250 = 3,859.375 [user] + 546.875 [kernel] milliseconds} no errors
+         1st │   2,317 (avg = 0.86 ± 0.640) ➛  3.71% {593.750 = 546.875 [user] + 46.875 [kernel] milliseconds}      no errors
+         2nd │   2,328 (avg = 0.86 ± 0.609) ➛  3.61% {578.125 = 468.750 [user] + 109.375 [kernel] milliseconds}     no errors
+         3rd │   2,315 (avg = 0.86 ± 0.630) ➛  3.32% {531.250 = 484.375 [user] + 46.875 [kernel] milliseconds}      no errors
+         4th │   2,353 (avg = 0.85 ± 0.599) ➛  3.61% {578.125 = 546.875 [user] + 31.250 [kernel] milliseconds}      no errors
+         5th │   2,335 (avg = 0.86 ± 0.614) ➛  2.93% {468.750 = 390.625 [user] + 78.125 [kernel] milliseconds}      no errors
+         6th │   2,377 (avg = 0.84 ± 0.623) ➛  3.02% {484.375 = 468.750 [user] + 15.625 [kernel] milliseconds}      no errors
+         7th │   2,328 (avg = 0.86 ± 0.630) ➛  3.90% {625.000 = 531.250 [user] + 93.750 [kernel] milliseconds}      no errors
+         8th │   2,322 (avg = 0.86 ± 0.632) ➛  3.41% {546.875 = 421.875 [user] + 125.000 [kernel] milliseconds}     no errors
+ «Updater»   ╵   1,729 (avg = 1.16 ± 0.605) ➛ 21.85% {437.500 = 390.625 [user] + 46.875 [kernel] milliseconds}      no errors
+
+#1.1 {StressScalability('(local)' Ver 16.0.4145.4)} >PASSED< in 00:00:40.0465801 (cpu: 11%, 4,578.125 = 4,031.250 [user] + 546.875 [kernel] milliseconds)
+
