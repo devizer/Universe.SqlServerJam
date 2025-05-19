@@ -8,6 +8,16 @@ using Dapper;
 namespace Universe.SqlServerJam
 {
 
+#if NET35 || NET40 || NET45
+    public static class DapperQueryFirstOrDefaultPolyfill
+    {
+        public static T QueryFirstOrDefault<T>(this IDbConnection connection, string query, object parameters = null)
+        {
+            return connection.Query<T>(query, parameters).FirstOrDefault();
+        }
+    }
+#endif
+
     public static class TitleCaseString
     {
         public static string Produce(string arg)
@@ -58,6 +68,13 @@ namespace Universe.SqlServerJam
     {
 #if NET35
 
+        public static void Add(this DynamicParameters parameters, string name, object value)
+        {
+            if (value is string s)
+                parameters.Add(name, value, DbType.String, ParameterDirection.Input, s.Length);
+            else
+                throw new ArgumentException("Unsupported value");
+        }
         public static T ExecuteScalar<T>(this IDbConnection cnn, string sql)
         {
             return cnn.ExecuteScalar<T>(sql, null, null, null, CommandType.Text);

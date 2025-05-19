@@ -87,7 +87,7 @@
 
     <!-- Theraot.Core -->
 
-    <ItemGroup Condition=" '$(TargetFramework)' == 'net35' Or '$(TargetFramework)' == 'netstandard1.3' ">
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net35' Or  '$(TargetFramework)' == 'net40' Or '$(TargetFramework)' == 'netstandard1.3' ">
         <PackageReference Include="Theraot.Core" Version="3.2.11" />
     </ItemGroup>
 
