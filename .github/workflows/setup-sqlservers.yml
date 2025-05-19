@@ -348,6 +348,7 @@ jobs:
     - name: TEST JAM (latest)
       run: |
         cd C:\Pre-Build\Universe.SqlServerJam.Tests
+        $ENV:SQL_STRESS_DURATION_SECONDS="10"
         dotnet test --filter "FullyQualifiedName !~ Z_Log & FullyQualifiedName !~ ShowAPI" Universe.SqlServerJam.Tests.dll
         if (-not $?) { throw "FAIL"; }
 

@@ -133,9 +133,11 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
 
         public override string ToString()
         {
-            var avgString = TotalCount == 0 ? "" : $" Avg = {(1000*TotalDuration / TotalCount):n2} ± {1000*StdDevDuration:n3}";
+            var stdevString = TotalCount > 2 ? $" ± {1000 * StdDevDuration:n3}" : "";
+            var avgString = TotalCount == 0 ? "" : $" Avg = {(1000*TotalDuration / TotalCount):n2}{stdevString}";
             var cpuPercents = 100d * TotalCpuUsage.TotalMicroSeconds / TotalDuration / 1000000;
-            return $"«{WorkerTitle}» * {TotalCount:n0}{avgString} ➛ CPU {cpuPercents:n2}% {TotalCpuUsage}, {nameof(UpdateActionErrors)}: {UpdateActionErrors.Count:n0}, Type: {WorkerType.Name}";
+            var type = $"Type: {WorkerType.Name}";
+            return $"«{WorkerTitle}» * {TotalCount:n0}{avgString} ➛ CPU {cpuPercents:n2}% {TotalCpuUsage}, Errors: {UpdateActionErrors.Count:n0}";
         }
     }
 }

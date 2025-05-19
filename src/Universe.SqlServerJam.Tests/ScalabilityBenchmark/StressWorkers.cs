@@ -13,7 +13,6 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
             DataAccess = dataAccess;
         }
 
-
         public void Act()
         {
             string categoryName =
