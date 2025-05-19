@@ -9,11 +9,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Universe.NUnitTests;
 
 namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark;
 
 [TestFixture]
-public class BusinessLogicScalabilityBenchmark
+public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
 {
     private Action CleanUp;
 
@@ -46,17 +47,36 @@ public class BusinessLogicScalabilityBenchmark
         migration.Migrate();
         DataAccess dataAccess = new DataAccess(() => NewConnection(open: true));
         DataSeeder seeder = new DataSeeder(dataAccess);
+        Stopwatch startSeedAt = Stopwatch.StartNew();
         seeder.Seed(20000, timeLimit: TimeSpan.FromSeconds(90));
+        Console.WriteLine($"Stress DB [{newDbName}] is ready. Seed took {startSeedAt.Elapsed.TotalSeconds:n2} seconds");
         StressState.Categories = dataAccess.GetAllCategories().ToArray();
-        Console.WriteLine($"Stress DB [{newDbName}] is ready");
         Console.WriteLine($"DB Size: {management.Databases[newDbName].Size:n0} KB");
         Console.WriteLine($"Categories Count: {StressState.Categories.Length:n0}");
+
+        StressWorkerReader reader = new StressWorkerReader(dataAccess);
+        StressWorkerUpdater updater = new StressWorkerUpdater(dataAccess);
+
+        StressOrchestrator preJit = new StressOrchestrator() { MaxDuration = TimeSpan.Zero };
+        preJit.AddWorker("1", reader);
+        preJit.AddWorker("2", updater);
+        preJit.Run();
 
         for (int sqlCores = 1; sqlCores <= sqlServerCpuCores; sqlCores++)
         {
             Console.WriteLine($"SQL CPU AFFINITY COUNT is {sqlCores}");
             management.Configuration.AffinityCount = (short)sqlCores;
-            Console.WriteLine($"not implemented");
+            StressOrchestrator stressOrchestrator = new StressOrchestrator()
+            {
+                MaxDuration = TimeSpan.FromSeconds(2),
+            };
+
+            stressOrchestrator.AddWorker($"Updater", updater);
+            for (int i=1; i<=sqlCores;i++) 
+                stressOrchestrator.AddWorker($"Dashboard {i}", reader);
+
+            var totalResults = stressOrchestrator.Run();
+            Console.WriteLine(totalResults + Environment.NewLine);
         }
     }
 

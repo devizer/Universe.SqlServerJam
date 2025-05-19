@@ -16,7 +16,7 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
 
     public class StressOrchestrator
     {
-        private List<TitledWorker> Workers;
+        private List<TitledWorker> Workers = new List<TitledWorker>();
         public TimeSpan MaxDuration { get; set; }
         public bool NeedCpuUsage { get; set; }
 
@@ -97,7 +97,7 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
             foreach (var thread in threads) thread.Join();
 
             ret.TotalDuration = stressStartedAt.Elapsed;
-
+            ret.WorkerResults = ret.WorkerResults.OrderBy(x => x.WorkerTitle).ToList();
             return ret;
         }
 
@@ -111,7 +111,14 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
     public class TotalStressResult
     {
         public TimeSpan TotalDuration { get; set; } // Includes wait on countdown
-        public List<WorkerStressResults> WorkerResults { get; internal set; }
+        public List<WorkerStressResults> WorkerResults { get; internal set; } = new List<WorkerStressResults>();
+
+        public override string ToString()
+        {
+            var r = string.Join(Environment.NewLine, WorkerResults.Select(x => $" • {x}").ToArray());
+            long actionsCount = WorkerResults.Count == 0 ? 0 : WorkerResults.Sum(x => x.TotalCount);
+            return $"Total Actions: {actionsCount:n0} in {TotalDuration.TotalSeconds:n2} seconds{Environment.NewLine}{r}";
+        }
     }
 
     public class WorkerStressResults
@@ -123,5 +130,12 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
         public CpuUsage.CpuUsage TotalCpuUsage { get; set; }
         public long TotalCount { get; set; }
         public List<Exception> UpdateActionErrors { get; } = new List<Exception>();
+
+        public override string ToString()
+        {
+            var avgString = TotalCount == 0 ? "" : $" Avg = {(1000*TotalDuration / TotalCount):n2} ± {1000*StdDevDuration:n3}";
+            var cpuPercents = 100d * TotalCpuUsage.TotalMicroSeconds / TotalDuration / 1000000;
+            return $"«{WorkerTitle}» * {TotalCount:n0}{avgString} ➛ CPU {cpuPercents:n2}% {TotalCpuUsage}, {nameof(UpdateActionErrors)}: {UpdateActionErrors.Count:n0}, Type: {WorkerType.Name}";
+        }
     }
 }
