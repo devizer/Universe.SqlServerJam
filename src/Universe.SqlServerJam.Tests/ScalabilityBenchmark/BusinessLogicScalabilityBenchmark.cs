@@ -69,7 +69,7 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
             management.Configuration.AffinityCount = (short)sqlCores;
             StressOrchestrator stressOrchestrator = new StressOrchestrator()
             {
-                MaxDuration = TimeSpan.FromSeconds(TestEnvironment.SQL_STRESS_DURATION_SECONDS ?? 3),
+                MaxDuration = TimeSpan.FromSeconds(TestEnvironment.SQL_STRESS_DURATION_SECONDS ?? 2),
             };
 
             stressOrchestrator.AddWorker($"Updater", updater);
