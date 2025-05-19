@@ -26,7 +26,17 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
 
         public void AddWorker(string title, IStressAction worker)
         {
-            Workers.Add(new TitledWorker() { Title = title, Worker = worker});
+            Workers.Add(new TitledWorker() { Group = title, Title = title, Worker = worker });
+        }
+
+        public void AddWorkers(string group, int workersCount, IStressAction worker)
+        {
+            int formatLength = workersCount.ToString("0").Length;
+            for (int i = 1; i <= workersCount; i++)
+            {
+                var title = group + " " + i.ToString("0").PadLeft(formatLength, ' ');
+                Workers.Add(new TitledWorker() { Group = group, Title = title, Worker = worker });
+            }
         }
 
         public TotalStressResult Run()
@@ -106,6 +116,7 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
         public class TitledWorker
         {
             public IStressAction Worker { get; set; }
+            public string Group { get; set; }
             public string Title { get; set; }
         }
     }
