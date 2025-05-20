@@ -82,7 +82,7 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
             Console.WriteLine($"SQL CPU AFFINITY COUNT is {sqlCores}/{sqlServerCpuCores}. Affinity mask = {management.Configuration.AffinityMask}");
             var stressDuration = TimeSpan.FromSeconds(TestEnvironment.SQL_STRESS_DURATION_SECONDS ?? 2);
             StressOrchestrator stressOrchestrator = new StressOrchestrator() { MaxDuration = stressDuration };
-            // stressOrchestrator.AddWorker($"Updater", updater);
+            stressOrchestrator.AddWorker($"Merging", updater);
             stressOrchestrator.AddWorkers("Dashboard", Math.Max(1, sqlServerCpuCores - 1), reader);
             var totalResults = stressOrchestrator.Run();
             Console.WriteLine(totalResults);
