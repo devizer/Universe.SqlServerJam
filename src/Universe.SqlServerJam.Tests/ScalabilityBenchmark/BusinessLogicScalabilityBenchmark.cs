@@ -18,7 +18,11 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark;
 public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
 {
     // 1M - 2 minutes, 2.8Gb + 0.6Gb
-    static int StressCategoriesCount => BuildServerInfo.IsBuildServer ? (CrossInfo.ThePlatform == CrossInfo.Platform.Windows ? 1000 : 400) *1000 : 100*1000;
+    static int StressCategoriesCount => 
+        BuildServerInfo.IsBuildServer && !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("RAM_DISK"))
+            ? (CrossInfo.ThePlatform == CrossInfo.Platform.Windows ? 1000 : 400) *1000 
+            : 100*1000;
+
     static bool KillTempDB = true;
 
     private Action CleanUp;
