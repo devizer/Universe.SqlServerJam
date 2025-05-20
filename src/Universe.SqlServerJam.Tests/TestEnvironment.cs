@@ -163,7 +163,7 @@ namespace Universe.SqlServerJam.Tests
                         isBuildServer = true;
                 }
 
-                return false;
+                return isBuildServer;
             }
         }
     }
