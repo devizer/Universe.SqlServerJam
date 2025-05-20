@@ -17,7 +17,8 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark;
 [TestFixture]
 public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
 {
-    static int StressCategoriesCount => BuildServerInfo.IsBuildServer ? 1*1000*1000 : 100*1000;
+    // 1M - 2 minutes, 2.8Gb + 0.6Gb
+    static int StressCategoriesCount => BuildServerInfo.IsBuildServer ? 400*1000 : 100*1000;
     static bool KillTempDB = true;
 
     private Action CleanUp;
