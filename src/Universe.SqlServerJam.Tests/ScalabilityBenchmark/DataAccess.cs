@@ -26,7 +26,7 @@ public class DataAccess
     {
         var sql = "Select * From [CategorySummary]";
         using var conn = NewConnection();
-        return conn.Query<CategorySummaryEntity>(sql);
+        return conn.Query<CategorySummaryEntity>(sql, null, commandTimeout: 100);
     }
 
     public IEnumerable<CategorySummaryEntity> GetCategories(IEnumerable<string> categoryNames)

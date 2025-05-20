@@ -92,6 +92,14 @@ namespace Universe.SqlServerJam
             return cnn.Query<T>(sql, null, null, true, null, null);
         }
 
+        // return conn.Query<CategorySummaryEntity>(sql, null, commandTimeout: 100);
+        public static IEnumerable<T> Query<T>(this IDbConnection cnn, string sql, object parameters, int? commandTimeout = 30)
+        {
+            
+            return cnn.Query<T>(sql, parameters, null, true, commandTimeout, null);
+        }
+
+
         public static void Execute(this IDbConnection cnn, string sql)
         {
             cnn.Execute(sql, null, null, null, CommandType.Text);            
