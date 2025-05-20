@@ -8,7 +8,8 @@ namespace Universe.StressOrchestration;
 
 public class TotalStressResult
 {
-    public TimeSpan TotalDuration { get; set; } // Includes wait on countdown
+    public TimeSpan TotalDuration { get; internal set; } // Includes wait on countdown and join
+    public TimeSpan PayloadDuration => TimeSpan.FromSeconds(WorkerResults.Count == 0 ? 0 : WorkerResults.Max(x => x.TotalDuration));
     public List<WorkerStressResults> WorkerResults { get; internal set; } = new List<WorkerStressResults>();
 
     public override string ToString()
@@ -45,8 +46,10 @@ public class TotalStressResult
         string FormatLongCpuUsage(CpuUsage.CpuUsage cpuUsage, double duration)
         {
             if (Math.Abs(duration) <= Double.Epsilon) return "";
-            var meaningful = $"user = {FormatAsPercents(cpuUsage.UserUsage.TotalMicroSeconds, duration)} + " +
-                             $"kernel = {FormatAsPercents(cpuUsage.KernelUsage.TotalMicroSeconds, duration)}";
+            var meaningful =
+                $"user = {FormatAsPercents(cpuUsage.UserUsage.TotalMicroSeconds, duration)} + "
+                + $"kernel = {FormatAsPercents(cpuUsage.KernelUsage.TotalMicroSeconds, duration)}";
+
             return $"{{{meaningful.Trim()}}}";
         }
 
