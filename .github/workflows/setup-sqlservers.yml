@@ -181,12 +181,18 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     - name: Uninstall LocalDB
-      run: |
-        # & powershell -f Scripts\Uninstall-LocalDB.ps1
-        iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/SqlServer-Version-Management.ps1'))
-        Uninstall-LocalDB-List "*"
-        cd C:\Pre-Build
-        ls
+      uses: nick-fields/retry@v3
+      with:
+        timeout_minutes: 3
+        max_attempts: 5
+        shell: powershell
+        retry_wait_seconds: 10
+        command: |
+            # & powershell -f Scripts\Uninstall-LocalDB.ps1
+            iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/SqlServer-Version-Management.ps1'))
+            Uninstall-LocalDB-List "*"
+            cd C:\Pre-Build
+            ls
 
 
     - name: Install-SqlServer-Version-Management
