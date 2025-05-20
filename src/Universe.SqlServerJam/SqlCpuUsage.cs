@@ -16,7 +16,7 @@ public struct SqlCpuUsage
     }
 
     public override string ToString() =>
-        $"{TotalMilliseconds/1000d:n3} = {UserMilliseconds/1000d:n3} (user) + {KernelMilliseconds/1000d:n3} (kernel) milliseconds";
+        $"{TotalMilliseconds/1000d:n3} = {UserMilliseconds/1000d:n3} (user) + {KernelMilliseconds/1000d:n3} (kernel) seconds";
 
     public long TotalMilliseconds => UserMilliseconds + KernelMilliseconds;
 
