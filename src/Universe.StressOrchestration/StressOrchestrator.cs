@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Universe.CpuUsage;
 
 namespace Universe.StressOrchestration
@@ -56,7 +57,7 @@ namespace Universe.StressOrchestration
             Stopwatch countdownStartedAt = null;
             foreach (var titledWorker in Workers)
             {
-                var thread = new Thread(() =>
+                Func<Task> asyncThreadBody = async () =>
                 {
                     WorkerStressResults workerResults = new WorkerStressResults()
                     {
@@ -74,12 +75,25 @@ namespace Universe.StressOrchestration
                     countdownStart.Wait();
                     Interlocked.CompareExchange(ref countdownStartedAt, Stopwatch.StartNew(), null);
                     Stopwatch workerStartedAt = Stopwatch.StartNew();
+                    var theAsyncWorker = titledWorker.AsyncWorker;
+                    var theSyncWorker = titledWorker.Worker;
                     do
                     {
                         Stopwatch actStartedAt = Stopwatch.StartNew();
                         try
                         {
-                            titledWorker.Worker.Act();
+                            if (theAsyncWorker != null)
+                            {
+                                await theAsyncWorker.ActAsync();
+                            }
+                            else if (theSyncWorker != null)
+                            {
+                                theSyncWorker.Act();
+                            }
+                            else
+                            {
+                                throw new InvalidOperationException($"Worker '{titledWorker.Title}' is not supplied by Worker or AsyncWorker");
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -97,12 +111,19 @@ namespace Universe.StressOrchestration
                     CpuUsage.CpuUsage? syncCpuUsage = syncCpuUsageOnEnd - syncCpuUsageOnStart;
                     CpuUsage.CpuUsage asyncCpuUsage = cpuUsageWatcher.GetSummaryCpuUsage();
                     var totalCpuUsage = syncCpuUsage.GetValueOrDefault() + asyncCpuUsage;
+                    // Console.WriteLine($"[DEBUG] Worker '{titledWorker.Title}'{Environment.NewLine}  - SYNC CPU USAGE {syncCpuUsage}{Environment.NewLine}  - A-SYNC Cpu Usage {asyncCpuUsage}");
                     workerResults.TotalCount = totalCount;
                     workerResults.TotalDuration = workerTotalDuration;
                     workerResults.TotalDurationSquared = workerTotalDurationSecondsSquared;
                     workerResults.TotalCpuUsage = totalCpuUsage;
                     lock (ret) ret.WorkerResults.Add(workerResults);
+                }; // end of async thread body
+
+                var thread = new Thread(() =>
+                {
+                    asyncThreadBody().ConfigureAwait(false).GetAwaiter().GetResult();
                 });
+
                 thread.IsBackground = true;
                 thread.Start();
                 threads.Add(thread);
