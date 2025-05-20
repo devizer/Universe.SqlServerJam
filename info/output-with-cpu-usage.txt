@@ -1,0 +1,1682 @@
+#1.1 {_3_Exam_Servers} @ Full_Featured_Demo starting...
+Exam 27 sql servers:
+ * (local)\DEV2022UTF8 (16.0.1000.6), Manual
+ * (local)\ADV_2022 (16.0.1000.6), Manual
+ * (local) (16.0.1000.6), Automatic
+ * (LocalDB)\LocalDB-v16.0 (16.0.1000.6)
+ * (LocalDB)\MSSQLLocalDB (15.0.4382.1)
+ * (LocalDB)\LocalDB-v15.0 (15.0.4382.1)
+ * (local)\DEV_2019 (15.0.2000.5), Manual
+ * (LocalDB)\LocalDB-v14.0 (14.0.3456.2)
+ * (local)\DEV_2017 (14.0.1000.169), Manual
+ * (local)\DEV_2016 (13.0.6441.1), Manual
+ * (LocalDB)\My-v13.0 (13.0.6300.2)
+ * (LocalDB)\LocalDB-v13.0 (13.0.6300.2)
+ * (local)\DEV_2014_X86 (12.0.6024.0), Manual
+ * (local)\DEV_2014_X64 (12.0.6024.0), Manual
+ * (LocalDB)\LocalDB-v12.0 (12.0.6024.0)
+ * (local)\DEV_2012_X86 (11.0.7001.0), Manual
+ * (local)\DEV_2012_X64 (11.0.7001.0), Manual
+ * (LocalDB)\v11.0 (11.0.7001.0)
+ * (LocalDB)\LocalDB-v11.0 (11.0.7001.0)
+ * (local)\DEV_2008R2_X86 (10.50.6000.34), Manual
+ * (local)\DEV_2008R2_X64 (10.50.6000.34), Manual
+ * (local)\ADV_2008R2_X64 (10.50.6000.34), Manual
+ * (local)\DEV_2008_X64 (10.0.6000.29), Manual
+ * (local)\DEV_2008_X86 (10.0.1600.22), Manual
+ * (local)\ADV_2008_X86 (10.0.1600.22), Manual
+ * (local)\ADV_2005_X86 (9.0.5000.0), Manual
+ * 192.168.2.45
+
+«1 of 27» SERVER '(local)\ADV_2022' Ver 16.0.1000.6
+Version (4 bytes) ........: 16.0.4175
+ProductVersion (string) ..: 16.0.4175.1
+ProductVersion ...........: 16.0.4175.1
+Product Level ............: RTM
+Update Level .............: CU17
+Edition Name .............: Express Edition (64-bit)
+Engine Edition ...........: Express
+Medium Version ...........: 16.0.4175.1 RTM CU17 Express Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2022 (RTM-CU17) (KB5048038) - 16.0.4175.1 (X64) Dec 13 2024 09:01:53 Copyright (C) 2022 Microsoft Corporation Express Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 52.515 = 47.890 (user) + 4.625 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 453
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: True
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (79,808 Kb)
+Default Data .............: C:\SQL\MSSQL16.ADV_2022\MSSQL\DATA\
+Default Log ..............: C:\SQL\MSSQL16.ADV_2022\MSSQL\DATA\
+Default Backup ...........: C:\SQL\MSSQL16.ADV_2022\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 5376
+  - Size Detailed ....... : 5,376 KB (Data: 4,096 KB; Log: 1,280 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«2 of 27» SERVER '(local)\DEV_2019' Ver 15.0.2000.5
+Version (4 bytes) ........: 15.0.4385
+ProductVersion (string) ..: 15.0.4385.2
+ProductVersion ...........: 15.0.4385.2
+Product Level ............: RTM
+Update Level .............: CU28
+Edition Name .............: Developer Edition (64-bit)
+Engine Edition ...........: Enterprise
+Medium Version ...........: 15.0.4385.2 RTM CU28 Developer Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2019 (RTM-CU28) (KB5039747) - 15.0.4385.2 (X64) Jul 25 2024 21:32:40 Copyright (C) 2019 Microsoft Corporation Developer Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 107.515 = 97.687 (user) + 9.828 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 619
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: True
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 5 (154,368 Kb)
+Default Data .............: C:\SQL\MSSQL15.DEV_2019\MSSQL\DATA\
+Default Log ..............: C:\SQL\MSSQL15.DEV_2019\MSSQL\DATA\
+Default Backup ...........: C:\SQL\MSSQL15.DEV_2019\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 6848
+  - Size Detailed ....... : 6,848 KB (Data: 4,544 KB; Log: 2,304 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«3 of 27» SERVER '(local)\DEV2022UTF8' Ver 16.0.1000.6
+Version (4 bytes) ........: 16.0.4145
+ProductVersion (string) ..: 16.0.4145.4
+ProductVersion ...........: 16.0.4145.4
+Product Level ............: RTM
+Update Level .............: CU15
+Edition Name .............: Developer Edition (64-bit)
+Engine Edition ...........: Enterprise
+Medium Version ...........: 16.0.4145.4 RTM CU15 Developer Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2022 (RTM-CU15) (KB5041321) - 16.0.4145.4 (X64) Sep 19 2024 08:25:04 Copyright (C) 2022 Microsoft Corporation Developer Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 153.390 = 141.750 (user) + 11.640 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 687
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: False
+Can Mem Optimized ........: True
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: Latin1_General_100_CI_AS_SC_UTF8
+Built-in Roles ...........: Sys Admin
+Databases ................: 7 (191,040 Kb)
+Default Data .............: C:\SQL\MSSQL16.DEV2022UTF8\MSSQL\DATA\
+Default Log ..............: C:\SQL\MSSQL16.DEV2022UTF8\MSSQL\DATA\
+Default Backup ...........: C:\SQL\MSSQL16.DEV2022UTF8\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : Latin1_General_100_CI_AS_SC_UTF8 [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 8384
+  - Size Detailed ....... : 8,384 KB (Data: 6,080 KB; Log: 2,304 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«4 of 27» SERVER '(local)' Ver 16.0.1000.6
+Version (4 bytes) ........: 16.0.4145
+ProductVersion (string) ..: 16.0.4145.4
+ProductVersion ...........: 16.0.4145.4
+Product Level ............: RTM
+Update Level .............: CU15
+Edition Name .............: Developer Edition (64-bit)
+Engine Edition ...........: Enterprise
+Medium Version ...........: 16.0.4145.4 RTM CU15 Developer Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2022 (RTM-CU15) (KB5041321) - 16.0.4145.4 (X64) Sep 19 2024 08:25:04 Copyright (C) 2022 Microsoft Corporation Developer Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 1,655.702 = 1,500.984 (user) + 154.718 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,675
+Committed Memory (MB) ....: 2,749
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: True
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 12 (23,822,336 Kb)
+Default Data .............: C:\SQL\MSSQL16.MSSQLSERVER\MSSQL\DATA\
+Default Log ..............: C:\SQL\MSSQL16.MSSQLSERVER\MSSQL\DATA\
+Default Backup ...........: C:\SQL\MSSQL16.MSSQLSERVER\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 5824
+  - Size Detailed ....... : 5,824 KB (Data: 4,544 KB; Log: 1,280 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«5 of 27» SERVER '(LocalDB)\LocalDB-v14.0' Ver 14.0.3456.2
+Version (4 bytes) ........: 14.0.3456
+ProductVersion (string) ..: 14.0.3456.2
+ProductVersion ...........: 14.0.3456.2
+Product Level ............: RTM
+Update Level .............: CU31
+Edition Name .............: Express Edition (64-bit)
+Engine Edition ...........: Express
+Medium Version ...........: 14.0.3456.2 RTM CU31 LocalDB Express Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2017 (RTM-CU31) (KB5016884) - 14.0.3456.2 (X64) Sep 2 2022 11:01:50 Copyright (C) 2017 Microsoft Corporation Express Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 3.827 = 2.468 (user) + 1.359 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 243
+Security Mode ............: Both
+Is LocalDB ...............: True
+Is Azure .................: False
+Has Full Text Search .....: False
+Can Mem Optimized ........: False
+Transport ................: Named pipe, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (54,720 Kb)
+Default Data .............: C:\Users\Administrator\
+Default Log ..............: C:\Users\Administrator\
+Default Backup ...........: 
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 6144
+  - Size Detailed ....... : 6,144 KB (Data: 4,096 KB; Log: 2,048 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«6 of 27» SERVER '(LocalDB)\MSSQLLocalDB' Ver 15.0.4382.1
+Version (4 bytes) ........: 15.0.4382
+ProductVersion (string) ..: 15.0.4382.1
+ProductVersion ...........: 15.0.4382.1
+Product Level ............: RTM
+Update Level .............: CU27
+Edition Name .............: Express Edition (64-bit)
+Engine Edition ...........: Express
+Medium Version ...........: 15.0.4382.1 RTM CU27 LocalDB Express Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2019 (RTM-CU27-GDR) (KB5040948) - 15.0.4382.1 (X64) Jul 1 2024 20:03:23 Copyright (C) 2019 Microsoft Corporation Express Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 4.296 = 2.703 (user) + 1.593 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 273
+Security Mode ............: Both
+Is LocalDB ...............: True
+Is Azure .................: False
+Has Full Text Search .....: False
+Can Mem Optimized ........: False
+Transport ................: Named pipe, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 5 (70,592 Kb)
+Default Data .............: C:\Users\Administrator\
+Default Log ..............: C:\Users\Administrator\
+Default Backup ...........: 
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 6912
+  - Size Detailed ....... : 6,912 KB (Data: 4,608 KB; Log: 2,304 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«7 of 27» SERVER '(local)\DEV_2014_X86' Ver 12.0.6024.0
+Version (4 bytes) ........: 12.0.6024
+ProductVersion (string) ..: 12.0.6024.0
+ProductVersion ...........: 12.0.6024.0
+Product Level ............: SP3
+Update Level .............: 
+Edition Name .............: Developer Edition
+Engine Edition ...........: Enterprise
+Medium Version ...........: 12.0.6024.0 SP3 Developer Edition
+Long Version .............: Microsoft SQL Server 2014 (SP3) (KB4022619) - 12.0.6024.0 (Intel X86) Sep 7 2018 01:41:22 Copyright (c) Microsoft Corporation Developer Edition on Windows NT 6.3 <X64> (Build 20348: ) (WOW64) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 177.718 = 166.156 (user) + 11.562 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 3,543
+Committed Memory (MB) ....: 141
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: True
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (63,232 Kb)
+Default Data .............: C:\SQL\MSSQL12.DEV_2014_X86\MSSQL\DATA\
+Default Log ..............: C:\SQL\MSSQL12.DEV_2014_X86\MSSQL\DATA\
+Default Backup ...........: C:\SQL\MSSQL12.DEV_2014_X86\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 6144
+  - Size Detailed ....... : 6,144 KB (Data: 4,096 KB; Log: 2,048 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«8 of 27» SERVER '(local)\DEV_2017' Ver 14.0.1000.169
+Version (4 bytes) ........: 14.0.3456
+ProductVersion (string) ..: 14.0.3456.2
+ProductVersion ...........: 14.0.3456.2
+Product Level ............: RTM
+Update Level .............: CU31
+Edition Name .............: Developer Edition (64-bit)
+Engine Edition ...........: Enterprise
+Medium Version ...........: 14.0.3456.2 RTM CU31 Developer Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2017 (RTM-CU31) (KB5016884) - 14.0.3456.2 (X64) Sep 2 2022 11:01:50 Copyright (C) 2017 Microsoft Corporation Developer Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 121.171 = 109.062 (user) + 12.109 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 599
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: True
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 5 (357,440 Kb)
+Default Data .............: C:\SQL\MSSQL14.DEV_2017\MSSQL\DATA\
+Default Log ..............: C:\SQL\MSSQL14.DEV_2017\MSSQL\DATA\
+Default Backup ...........: C:\SQL\MSSQL14.DEV_2017\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 6592
+  - Size Detailed ....... : 6,592 KB (Data: 4,544 KB; Log: 2,048 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«9 of 27» SERVER '(local)\DEV_2016' Ver 13.0.6441.1
+Version (4 bytes) ........: 13.0.6441
+ProductVersion (string) ..: 13.0.6441.1
+ProductVersion ...........: 13.0.6441.1
+Product Level ............: SP3
+Update Level .............: 
+Edition Name .............: Developer Edition (64-bit)
+Engine Edition ...........: Enterprise
+Medium Version ...........: 13.0.6441.1 SP3 Developer Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2016 (SP3-GDR) (KB5040946) - 13.0.6441.1 (X64) Jun 18 2024 00:46:21 Copyright (c) Microsoft Corporation Developer Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 161.265 = 122.390 (user) + 38.875 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 573
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: True
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 6 (177,344 Kb)
+Default Data .............: C:\SQL\MSSQL13.DEV_2016\MSSQL\DATA\
+Default Log ..............: C:\SQL\MSSQL13.DEV_2016\MSSQL\DATA\
+Default Backup ...........: C:\SQL\MSSQL13.DEV_2016\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 6592
+  - Size Detailed ....... : 6,592 KB (Data: 4,544 KB; Log: 2,048 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«10 of 27» SERVER '(LocalDB)\LocalDB-v16.0' Ver 16.0.1000.6
+Version (4 bytes) ........: 16.0.1000
+ProductVersion (string) ..: 16.0.1000.6
+ProductVersion ...........: 16.0.1000.6
+Product Level ............: RTM
+Update Level .............: 
+Edition Name .............: Express Edition (64-bit)
+Engine Edition ...........: Express
+Medium Version ...........: 16.0.1000.6 RTM LocalDB Express Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2022 (RTM) - 16.0.1000.6 (X64) Oct 8 2022 05:58:25 Copyright (C) 2022 Microsoft Corporation Express Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 5.311 = 3.140 (user) + 2.171 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 312
+Security Mode ............: Both
+Is LocalDB ...............: True
+Is Azure .................: False
+Has Full Text Search .....: False
+Can Mem Optimized ........: False
+Transport ................: Named pipe, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 6 (350,016 Kb)
+Default Data .............: C:\Users\Administrator\
+Default Log ..............: C:\Users\Administrator\
+Default Backup ...........: 
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 5376
+  - Size Detailed ....... : 5,376 KB (Data: 4,096 KB; Log: 1,280 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«11 of 27» SERVER '(LocalDB)\LocalDB-v15.0' Ver 15.0.4382.1
+Version (4 bytes) ........: 15.0.4382
+ProductVersion (string) ..: 15.0.4382.1
+ProductVersion ...........: 15.0.4382.1
+Product Level ............: RTM
+Update Level .............: CU27
+Edition Name .............: Express Edition (64-bit)
+Engine Edition ...........: Express
+Medium Version ...........: 15.0.4382.1 RTM CU27 LocalDB Express Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2019 (RTM-CU27-GDR) (KB5040948) - 15.0.4382.1 (X64) Jul 1 2024 20:03:23 Copyright (C) 2019 Microsoft Corporation Express Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 4.530 = 2.546 (user) + 1.984 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 278
+Security Mode ............: Both
+Is LocalDB ...............: True
+Is Azure .................: False
+Has Full Text Search .....: False
+Can Mem Optimized ........: False
+Transport ................: Named pipe, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 6 (86,720 Kb)
+Default Data .............: C:\Users\Administrator\
+Default Log ..............: C:\Users\Administrator\
+Default Backup ...........: 
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 6656
+  - Size Detailed ....... : 6,656 KB (Data: 4,608 KB; Log: 2,048 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«12 of 27» SERVER '(LocalDB)\My-v13.0' Ver 13.0.6300.2
+Version (4 bytes) ........: 13.0.6300
+ProductVersion (string) ..: 13.0.6300.2
+ProductVersion ...........: 13.0.6300.2
+Product Level ............: SP3
+Update Level .............: 
+Edition Name .............: Express Edition (64-bit)
+Engine Edition ...........: Express
+Medium Version ...........: 13.0.6300.2 SP3 LocalDB Express Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2016 (SP3) (KB5003279) - 13.0.6300.2 (X64) Aug 7 2021 01:20:37 Copyright (c) Microsoft Corporation Express Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 6.796 = 3.125 (user) + 3.671 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 240
+Security Mode ............: Both
+Is LocalDB ...............: True
+Is Azure .................: False
+Has Full Text Search .....: False
+Can Mem Optimized ........: False
+Transport ................: Named pipe, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (55,552 Kb)
+Default Data .............: C:\Users\Administrator\
+Default Log ..............: C:\Users\Administrator\
+Default Backup ...........: 
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 6848
+  - Size Detailed ....... : 6,848 KB (Data: 4,544 KB; Log: 2,304 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«13 of 27» SERVER '(LocalDB)\LocalDB-v13.0' Ver 13.0.6300.2
+Version (4 bytes) ........: 13.0.6300
+ProductVersion (string) ..: 13.0.6300.2
+ProductVersion ...........: 13.0.6300.2
+Product Level ............: SP3
+Update Level .............: 
+Edition Name .............: Express Edition (64-bit)
+Engine Edition ...........: Express
+Medium Version ...........: 13.0.6300.2 SP3 LocalDB Express Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2016 (SP3) (KB5003279) - 13.0.6300.2 (X64) Aug 7 2021 01:20:37 Copyright (c) Microsoft Corporation Express Edition (64-bit) on Windows Server 2022 Standard 10.0 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 6.593 = 3.031 (user) + 3.562 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 242
+Security Mode ............: Both
+Is LocalDB ...............: True
+Is Azure .................: False
+Has Full Text Search .....: False
+Can Mem Optimized ........: False
+Transport ................: Named pipe, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (55,552 Kb)
+Default Data .............: C:\Users\Administrator\
+Default Log ..............: C:\Users\Administrator\
+Default Backup ...........: 
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 6848
+  - Size Detailed ....... : 6,848 KB (Data: 4,544 KB; Log: 2,304 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«14 of 27» SERVER '(local)\DEV_2014_X64' Ver 12.0.6024.0
+Version (4 bytes) ........: 12.0.6024
+ProductVersion (string) ..: 12.0.6024.0
+ProductVersion ...........: 12.0.6024.0
+Product Level ............: SP3
+Update Level .............: 
+Edition Name .............: Developer Edition (64-bit)
+Engine Edition ...........: Enterprise
+Medium Version ...........: 12.0.6024.0 SP3 Developer Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2014 (SP3) (KB4022619) - 12.0.6024.0 (X64) Sep 7 2018 01:37:51 Copyright (c) Microsoft Corporation Developer Edition (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 128.203 = 87.828 (user) + 40.375 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 583
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: False
+Can Mem Optimized ........: True
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 5 (68,608 Kb)
+Default Data .............: C:\SQL\MSSQL12.DEV_2014_X64\MSSQL\DATA\
+Default Log ..............: C:\SQL\MSSQL12.DEV_2014_X64\MSSQL\DATA\
+Default Backup ...........: C:\SQL\MSSQL12.DEV_2014_X64\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 6400
+  - Size Detailed ....... : 6,400 KB (Data: 4,096 KB; Log: 2,304 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«15 of 27» SERVER '(local)\DEV_2008R2_X86' Ver 10.50.6000.34
+Version (4 bytes) ........: 10.50.6000
+ProductVersion (string) ..: 10.50.6000.34
+ProductVersion ...........: 10.50.6000.34
+Product Level ............: SP3
+Update Level .............: 
+Edition Name .............: Developer Edition
+Engine Edition ...........: Enterprise
+Medium Version ...........: 10.50.6000.34 SP3 Developer Edition
+Long Version .............: Microsoft SQL Server 2008 R2 (SP3) - 10.50.6000.34 (Intel X86) Aug 19 2014 12:21:07 Copyright (c) Microsoft Corporation Developer Edition on Windows NT 6.3 <X64> (Build 20348: ) (WOW64) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 53.858 = 45.390 (user) + 8.468 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 3,456
+Committed Memory (MB) ....: 83
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: False
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (54,848 Kb)
+Default Data .............: C:\SQL\MSSQL10_50.DEV_2008R2_X86\MSSQL\DATA
+Default Log ..............: C:\SQL\MSSQL10_50.DEV_2008R2_X86\MSSQL\DATA
+Default Backup ...........: C:\SQL\MSSQL10_50.DEV_2008R2_X86\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 4864
+  - Size Detailed ....... : 4,864 KB (Data: 4,096 KB; Log: 768 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«16 of 27» SERVER '(local)\DEV_2012_X86' Ver 11.0.7001.0
+Version (4 bytes) ........: 11.0.7001
+ProductVersion (string) ..: 11.0.7001.0
+ProductVersion ...........: 11.0.7001.0
+Product Level ............: SP4
+Update Level .............: 
+Edition Name .............: Developer Edition
+Engine Edition ...........: Enterprise
+Medium Version ...........: 11.0.7001.0 SP4 Developer Edition
+Long Version .............: Microsoft SQL Server 2012 (SP4) (KB4018073) - 11.0.7001.0 (Intel X86) Aug 15 2017 10:26:40 Copyright (c) Microsoft Corporation Developer Edition on Windows NT 6.3 <X64> (Build 20348: ) (WOW64) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 160.609 = 150.281 (user) + 10.328 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 3,587
+Committed Memory (MB) ....: 143
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: False
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (61,632 Kb)
+Default Data .............: C:\SQL\MSSQL11.DEV_2012_X86\MSSQL\DATA\
+Default Log ..............: C:\SQL\MSSQL11.DEV_2012_X86\MSSQL\DATA\
+Default Backup ...........: C:\SQL\MSSQL11.DEV_2012_X86\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 5120
+  - Size Detailed ....... : 5,120 KB (Data: 4,096 KB; Log: 1,024 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«17 of 27» SERVER '(local)\DEV_2012_X64' Ver 11.0.7001.0
+Version (4 bytes) ........: 11.0.7001
+ProductVersion (string) ..: 11.0.7001.0
+ProductVersion ...........: 11.0.7001.0
+Product Level ............: SP4
+Update Level .............: 
+Edition Name .............: Developer Edition (64-bit)
+Engine Edition ...........: Enterprise
+Medium Version ...........: 11.0.7001.0 SP4 Developer Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2012 (SP4) (KB4018073) - 11.0.7001.0 (X64) Aug 15 2017 10:23:29 Copyright (c) Microsoft Corporation Developer Edition (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 93.796 = 83.625 (user) + 10.171 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 587
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: False
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (61,632 Kb)
+Default Data .............: C:\SQL\MSSQL11.DEV_2012_X64\MSSQL\DATA\
+Default Log ..............: C:\SQL\MSSQL11.DEV_2012_X64\MSSQL\DATA\
+Default Backup ...........: C:\SQL\MSSQL11.DEV_2012_X64\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 5120
+  - Size Detailed ....... : 5,120 KB (Data: 4,096 KB; Log: 1,024 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«18 of 27» SERVER '(local)\ADV_2008R2_X64' Ver 10.50.6000.34
+Version (4 bytes) ........: 10.50.6000
+ProductVersion (string) ..: 10.50.6000.34
+ProductVersion ...........: 10.50.6000.34
+Product Level ............: SP3
+Update Level .............: 
+Edition Name .............: Express Edition with Advanced Services (64-bit)
+Engine Edition ...........: Express
+Medium Version ...........: 10.50.6000.34 SP3 Express Edition with Advanced Services (64-bit)
+Long Version .............: Microsoft SQL Server 2008 R2 (SP3) - 10.50.6000.34 (X64) Aug 19 2014 12:21:34 Copyright (c) Microsoft Corporation Express Edition with Advanced Services (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 7.578 = 5.828 (user) + 1.750 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 1,410
+Committed Memory (MB) ....: 29
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: False
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (50,240 Kb)
+Default Data .............: C:\SQL\MSSQL10_50.ADV_2008R2_X64\MSSQL\DATA
+Default Log ..............: C:\SQL\MSSQL10_50.ADV_2008R2_X64\MSSQL\DATA
+Default Backup ...........: C:\SQL\MSSQL10_50.ADV_2008R2_X64\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 4864
+  - Size Detailed ....... : 4,864 KB (Data: 4,096 KB; Log: 768 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«19 of 27» SERVER '(local)\DEV_2008R2_X64' Ver 10.50.6000.34
+Version (4 bytes) ........: 10.50.6000
+ProductVersion (string) ..: 10.50.6000.34
+ProductVersion ...........: 10.50.6000.34
+Product Level ............: SP3
+Update Level .............: 
+Edition Name .............: Developer Edition (64-bit)
+Engine Edition ...........: Enterprise
+Medium Version ...........: 10.50.6000.34 SP3 Developer Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2008 R2 (SP3) - 10.50.6000.34 (X64) Aug 19 2014 12:21:34 Copyright (c) Microsoft Corporation Developer Edition (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 49.171 = 41.203 (user) + 7.968 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 86
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: False
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (54,848 Kb)
+Default Data .............: C:\SQL\MSSQL10_50.DEV_2008R2_X64\MSSQL\DATA
+Default Log ..............: C:\SQL\MSSQL10_50.DEV_2008R2_X64\MSSQL\DATA
+Default Backup ...........: C:\SQL\MSSQL10_50.DEV_2008R2_X64\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 4864
+  - Size Detailed ....... : 4,864 KB (Data: 4,096 KB; Log: 768 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«20 of 27» SERVER '(local)\DEV_2008_X64' Ver 10.0.6000.29
+Version (4 bytes) ........: 10.0.6000
+ProductVersion (string) ..: 10.0.6000.29
+ProductVersion ...........: 10.0.6000.29
+Product Level ............: SP4
+Update Level .............: 
+Edition Name .............: Developer Edition (64-bit)
+Engine Edition ...........: Enterprise
+Medium Version ...........: 10.0.6000.29 SP4 Developer Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2008 (SP4) - 10.0.6000.29 (X64) Sep 3 2014 04:11:34 Copyright (c) 1988-2008 Microsoft Corporation Developer Edition (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 87
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: False
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (34,624 Kb)
+Default Data .............: C:\SQL\MSSQL10.DEV_2008_X64\MSSQL\DATA
+Default Log ..............: C:\SQL\MSSQL10.DEV_2008_X64\MSSQL\DATA
+Default Backup ...........: C:\SQL\MSSQL10.DEV_2008_X64\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 4864
+  - Size Detailed ....... : 4,864 KB (Data: 4,096 KB; Log: 768 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«21 of 27» SERVER '(local)\DEV_2008_X86' Ver 10.0.1600.22
+Version (4 bytes) ........: 10.0.6000
+ProductVersion (string) ..: 10.0.6000.29
+ProductVersion ...........: 10.0.6000.29
+Product Level ............: SP4
+Update Level .............: 
+Edition Name .............: Developer Edition
+Engine Edition ...........: Enterprise
+Medium Version ...........: 10.0.6000.29 SP4 Developer Edition
+Long Version .............: Microsoft SQL Server 2008 (SP4) - 10.0.6000.29 (Intel X86) Sep 2 2014 22:55:13 Copyright (c) 1988-2008 Microsoft Corporation Developer Edition on Windows NT 6.3 <X64> (Build 20348: ) (WOW64) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 3,456
+Committed Memory (MB) ....: 84
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: False
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 5 (79,936 Kb)
+Default Data .............: C:\SQL\MSSQL10.DEV_2008_X86\MSSQL\DATA
+Default Log ..............: C:\SQL\MSSQL10.DEV_2008_X86\MSSQL\DATA
+Default Backup ...........: C:\SQL\MSSQL10.DEV_2008_X86\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 4864
+  - Size Detailed ....... : 4,864 KB (Data: 4,096 KB; Log: 768 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«22 of 27» SERVER '(local)\ADV_2005_X86' Ver 9.0.5000.0
+Version (4 bytes) ........: 9.0.5000
+ProductVersion (string) ..: 9.00.5000.00
+ProductVersion ...........: 9.0.5000.0
+Product Level ............: SP4
+Update Level .............: 
+Edition Name .............: Express Edition with Advanced Services
+Engine Edition ...........: Express
+Medium Version ...........: 9.0.5000.0 SP4 Express Edition with Advanced Services
+Long Version .............: Microsoft SQL Server 2005 - 9.00.5000.00 (Intel X86) Dec 10 2010 10:56:29 Copyright (c) 1988-2005 Microsoft Corporation Express Edition with Advanced Services on Windows NT 6.2 (Build 9200: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 1,408
+Committed Memory (MB) ....: 25
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: False
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 6 (111,168 Kb)
+Default Data .............: C:\SQL\MSSQL.1\MSSQL\DATA
+Default Log ..............: C:\SQL\MSSQL.1\MSSQL\DATA
+Default Backup ...........: C:\SQL\MSSQL.1\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 6912
+  - Size Detailed ....... : 6,912 KB (Data: 4,096 KB; Log: 2,816 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«23 of 27» SERVER '(local)\ADV_2008_X86' Ver 10.0.1600.22
+Version (4 bytes) ........: 10.0.6000
+ProductVersion (string) ..: 10.0.6000.29
+ProductVersion ...........: 10.0.6000.29
+Product Level ............: SP4
+Update Level .............: 
+Edition Name .............: Express Edition with Advanced Services
+Engine Edition ...........: Express
+Medium Version ...........: 10.0.6000.29 SP4 Express Edition with Advanced Services
+Long Version .............: Microsoft SQL Server 2008 (SP4) - 10.0.6000.29 (Intel X86) Sep 2 2014 22:55:13 Copyright (c) 1988-2008 Microsoft Corporation Express Edition with Advanced Services on Windows NT 6.3 <X64> (Build 20348: ) (WOW64) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 1,408
+Committed Memory (MB) ....: 26
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: False
+Transport ................: Shared memory, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 5 (29,240 Kb)
+Default Data .............: C:\SQL\MSSQL10.ADV_2008_X86\MSSQL\DATA
+Default Log ..............: C:\SQL\MSSQL10.ADV_2008_X86\MSSQL\DATA
+Default Backup ...........: C:\SQL\MSSQL10.ADV_2008_X86\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 4864
+  - Size Detailed ....... : 4,864 KB (Data: 4,096 KB; Log: 768 KB)
+  - Recovery Mode ....... : BulkLogged
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«24 of 27» SERVER '(LocalDB)\v11.0' Ver 11.0.7001.0
+Version (4 bytes) ........: 11.0.7001
+ProductVersion (string) ..: 11.0.7001.0
+ProductVersion ...........: 11.0.7001.0
+Product Level ............: SP4
+Update Level .............: 
+Edition Name .............: Express Edition (64-bit)
+Engine Edition ...........: Express
+Medium Version ...........: 11.0.7001.0 SP4 LocalDB Express Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2012 (SP4) (KB4018073) - 11.0.7001.0 (X64) Aug 15 2017 10:23:29 Copyright (c) Microsoft Corporation Express Edition (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 25.264 = 14.421 (user) + 10.843 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 248
+Security Mode ............: Both
+Is LocalDB ...............: True
+Is Azure .................: False
+Has Full Text Search .....: False
+Can Mem Optimized ........: False
+Transport ................: Named pipe, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (26,176 Kb)
+Default Data .............: C:\Users\Administrator\
+Default Log ..............: C:\Users\Administrator\
+Default Backup ...........: 
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 4864
+  - Size Detailed ....... : 4,864 KB (Data: 4,096 KB; Log: 768 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«25 of 27» SERVER '(LocalDB)\LocalDB-v12.0' Ver 12.0.6024.0
+Version (4 bytes) ........: 12.0.6024
+ProductVersion (string) ..: 12.0.6024.0
+ProductVersion ...........: 12.0.6024.0
+Product Level ............: SP3
+Update Level .............: 
+Edition Name .............: Express Edition (64-bit)
+Engine Edition ...........: Express
+Medium Version ...........: 12.0.6024.0 SP3 LocalDB Express Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2014 (SP3) (KB4022619) - 12.0.6024.0 (X64) Sep 7 2018 01:37:51 Copyright (c) Microsoft Corporation Express Edition (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 3.453 = 1.953 (user) + 1.500 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 259
+Security Mode ............: Both
+Is LocalDB ...............: True
+Is Azure .................: False
+Has Full Text Search .....: False
+Can Mem Optimized ........: False
+Transport ................: Named pipe, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (28,224 Kb)
+Default Data .............: C:\Users\Administrator\
+Default Log ..............: C:\Users\Administrator\
+Default Backup ...........: 
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 6400
+  - Size Detailed ....... : 6,400 KB (Data: 4,096 KB; Log: 2,304 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«26 of 27» SERVER '(LocalDB)\LocalDB-v11.0' Ver 11.0.7001.0
+Version (4 bytes) ........: 11.0.7001
+ProductVersion (string) ..: 11.0.7001.0
+ProductVersion ...........: 11.0.7001.0
+Product Level ............: SP4
+Update Level .............: 
+Edition Name .............: Express Edition (64-bit)
+Engine Edition ...........: Express
+Medium Version ...........: 11.0.7001.0 SP4 LocalDB Express Edition (64-bit)
+Long Version .............: Microsoft SQL Server 2012 (SP4) (KB4018073) - 11.0.7001.0 (X64) Aug 15 2017 10:23:29 Copyright (c) Microsoft Corporation Express Edition (64-bit) on Windows NT 6.3 <X64> (Build 20348: ) 
+Host Platform ............: Windows
+CPU Count ................: 8
+CPU ......................: Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz
+Affinity Cores ...........: 8
+CPU Usage ................: 24.874 = 14.468 (user) + 10.406 (kernel) milliseconds
+Physical Memory (MB) .....: 65,132
+Available Memory (MB) ....: 4,000
+Committed Memory (MB) ....: 252
+Security Mode ............: Both
+Is LocalDB ...............: True
+Is Azure .................: False
+Has Full Text Search .....: False
+Can Mem Optimized ........: False
+Transport ................: Named pipe, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 5 (54,672 Kb)
+Default Data .............: C:\Users\Administrator\
+Default Log ..............: C:\Users\Administrator\
+Default Backup ...........: 
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 4864
+  - Size Detailed ....... : 4,864 KB (Data: 4,096 KB; Log: 768 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 73
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: NotSupported
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+«27 of 27» SERVER '192.168.2.45'
+Version (4 bytes) ........: 12.0.6024
+ProductVersion (string) ..: 12.0.6024.0
+ProductVersion ...........: 12.0.6024.0
+Product Level ............: SP3
+Update Level .............: 
+Edition Name .............: Developer Edition
+Engine Edition ...........: Enterprise
+Medium Version ...........: 12.0.6024.0 SP3 Developer Edition
+Long Version .............: Microsoft SQL Server 2014 (SP3) (KB4022619) - 12.0.6024.0 (Intel X86) Sep 7 2018 01:41:22 Copyright (c) Microsoft Corporation Developer Edition on Windows NT 6.3 <X64> (Build 22000: ) (WOW64) 
+Host Platform ............: Windows
+CPU Count ................: 4
+CPU ......................: BCM2711 (ARM Cortex-A72)
+Affinity Cores ...........: 4
+CPU Usage ................: 13,481.015 = 11,320.000 (user) + 2,161.015 (kernel) milliseconds
+Physical Memory (MB) .....: 3,947
+Available Memory (MB) ....: 3,364
+Committed Memory (MB) ....: 322
+Security Mode ............: Both
+Is LocalDB ...............: False
+Is Azure .................: False
+Has Full Text Search .....: True
+Can Mem Optimized ........: True
+Transport ................: TCP, Without Encryption
+Server Collation .........: SQL_Latin1_General_CP1_CI_AS
+Built-in Roles ...........: Sys Admin
+Databases ................: 4 (63,488 Kb)
+Default Data .............: C:\SQL\MSSQL12.MSSQLSERVER\MSSQL\DATA\
+Default Log ..............: C:\SQL\MSSQL12.MSSQLSERVER\MSSQL\DATA\
+Default Backup ...........: C:\SQL\MSSQL12.MSSQLSERVER\MSSQL\Backup
+Connected DB Info ........: [master]
+  - Auto Shrink ......... : False
+  - Auto Create Statistic : Complete
+  - Auto Update Statistic : Synchronously
+  - Page Verify ......... : Checksum
+  - Recursive Triggers .. : False
+  - Broker Enabled ...... : False
+  - State ............... : Online
+  - Is Readonly ......... : False
+  - Is Memory Optimized . : False
+  - Default Collation ... : SQL_Latin1_General_CP1_CI_AS [IgnoreCase, IgnoreKana, IgnoreWidth]
+  - Fulltext Search ..... : Not Enabled
+  - Size (KB) ........... : 6400
+  - Size Detailed ....... : 6,400 KB (Data: 4,096 KB; Log: 2,304 KB)
+  - Recovery Mode ....... : Simple
+  - Owner ............... : sa
+  - AZ Edition .......... : 
+  - AZ Service Objective. : 
+  - AZ Elastic Pool ..... : 
+Server Configuration Settings [sys].[configurations]:
+   * [Boolean] BackupCompressionDefault .................: False
+   * [Int32] MinServerMemory ............................: 4,000
+   * [Int32] MaxServerMemory ............................: 64,000
+   * [Boolean] ShowAdvancedOption .......................: False
+   * [Int32] FillFactor .................................: 0
+   * [Boolean] ClrEnabled ...............................: False
+   * [FileStreamAccessLevels] FileStreamAccessLevel .....: Disabled
+   * [Boolean] ServerTriggerRecursion ...................: True
+   * [Boolean] XpCmdShell ...............................: True
+
+Done:
+ '(local)\ADV_2022' Ver 16.0.4175 examined in 1.13 secs
+ '(local)\DEV_2019' Ver 15.0.4385 examined in 1.13 secs
+ '(local)\DEV2022UTF8' Ver 16.0.4145 examined in 1.13 secs
+ '(local)' Ver 16.0.4145 examined in 1.13 secs
+ '(LocalDB)\LocalDB-v14.0' Ver 14.0.3456 examined in 1.22 secs
+ '(LocalDB)\MSSQLLocalDB' Ver 15.0.4382 examined in 1.55 secs
+ '(local)\DEV_2014_X86' Ver 12.0.6024 examined in 1.83 secs
+ '(local)\DEV_2017' Ver 14.0.3456 examined in 1.85 secs
+ '(local)\DEV_2016' Ver 13.0.6441 examined in 1.85 secs
+ '(LocalDB)\LocalDB-v16.0' Ver 16.0.1000 examined in 1.86 secs
+ '(LocalDB)\LocalDB-v15.0' Ver 15.0.4382 examined in 1.94 secs
+ '(LocalDB)\My-v13.0' Ver 13.0.6300 examined in 2.08 secs
+ '(LocalDB)\LocalDB-v13.0' Ver 13.0.6300 examined in 2.09 secs
+ '(local)\DEV_2014_X64' Ver 12.0.6024 examined in 2.10 secs
+ '(local)\DEV_2008R2_X86' Ver 10.50.6000 examined in 2.24 secs
+ '(local)\DEV_2012_X86' Ver 11.0.7001 examined in 2.29 secs
+ '(local)\DEV_2012_X64' Ver 11.0.7001 examined in 2.34 secs
+ '(local)\ADV_2008R2_X64' Ver 10.50.6000 examined in 2.44 secs
+ '(local)\DEV_2008R2_X64' Ver 10.50.6000 examined in 2.45 secs
+ '(local)\DEV_2008_X64' Ver 10.0.6000 examined in 2.45 secs
+ '(local)\DEV_2008_X86' Ver 10.0.6000 examined in 2.57 secs
+ '(local)\ADV_2005_X86' Ver 9.0.5000 examined in 2.60 secs
+ '(local)\ADV_2008_X86' Ver 10.0.6000 examined in 2.65 secs
+ '(LocalDB)\v11.0' Ver 11.0.7001 examined in 2.68 secs
+ '(LocalDB)\LocalDB-v12.0' Ver 12.0.6024 examined in 2.73 secs
+ '(LocalDB)\LocalDB-v11.0' Ver 11.0.7001 examined in 2.96 secs
+ '192.168.2.45' Ver 12.0.6024 examined in 6.37 secs
+
+Alive Servers: 27. SysAdmins Permissions: 26.
+#1.1 {_3_Exam_Servers} >PASSED< in 00:00:07.1310028 (cpu: 4%, 296.875 = 281.250 [user] + 15.625 [kernel] milliseconds)
+

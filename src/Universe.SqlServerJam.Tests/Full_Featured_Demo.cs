@@ -137,6 +137,7 @@ namespace Universe.SqlServerJam.Tests
                     report.AppendLine("CPU Count ................: " + (man.CpuCount == 0 ? "" : man.CpuCount.ToString("n0")));
                     report.AppendLine("CPU ......................: " + man.CpuName);
                     report.AppendLine("Affinity Cores ...........: " + man.Configuration.AffinityCount);
+                    report.AppendLine("CPU Usage ................: " + man.CpuUsage);
                     report.AppendLine("Physical Memory (MB) .....: " + (man.PhysicalMemoryKb == 0 ? "" : (man.PhysicalMemoryKb / 1024).ToString("n0")));
                     var availableMemoryKb = man.AvailableMemoryKb;
                     report.AppendLine("Available Memory (MB) ....: " + (availableMemoryKb == 0 ? "" : (availableMemoryKb / 1024).ToString("n0")));
@@ -167,6 +168,7 @@ namespace Universe.SqlServerJam.Tests
                         report.AppendLine("Default Data .............: " + paths.DefaultData);
                         report.AppendLine("Default Log ..............: " + paths.DefaultLog);
                         report.AppendLine("Default Backup ...........: " + paths.DefaultBackup);
+
 
                         // DB Options demo
                         var currentDatabase = man.CurrentDatabaseName;
@@ -221,6 +223,14 @@ namespace Universe.SqlServerJam.Tests
                         }
 
                         man.IsFullTextSearchInstalled.ToString();
+
+                        if (SqlCpuUsage.IsSupportedBy(man.ShortServerVersion))
+                        {
+                            var sqlCpuUsage = man.CpuUsage;
+                            Assert.That(sqlCpuUsage.HasValue, Is.True, $"Cpu Usage missing for SQL Server {man.ShortServerVersion}");
+                            Assert.That(sqlCpuUsage.GetValueOrDefault().TotalMilliseconds, Is.Positive, $"Cpu Usage above zero is expected for SQL Server {man.ShortServerVersion}");
+                        }
+
 
                     }
                     catch (Exception ex)

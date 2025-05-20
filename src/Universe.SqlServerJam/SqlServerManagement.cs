@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
@@ -42,6 +43,16 @@ namespace Universe.SqlServerJam
         }
 
         public string ClientDataSource => SqlServerJamConfigurationExtensions.GetClientSizeDataSource(SqlConnection.ConnectionString);
+        public SqlCpuUsage? CpuUsage => GetCpuUsage();
+
+        private SqlCpuUsage? GetCpuUsage()
+        {
+            if (ShortServerVersion.Major < 10) return null;
+            if (ShortServerVersion.Major == 10 && ShortServerVersion.Minor < 50) return null;
+            var sql = "Select Top 1 process_kernel_time_ms KernelMilliseconds, process_user_time_ms UserMilliseconds From sys.dm_os_sys_info";
+            var ret = SqlConnection.QueryFirstOrDefault<SqlCpuUsage>(sql);
+            return ret;
+        }
 
 
         // Actually it is need for WarmUp extension
