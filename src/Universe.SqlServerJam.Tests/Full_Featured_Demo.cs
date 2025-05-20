@@ -188,7 +188,7 @@ namespace Universe.SqlServerJam.Tests
                             x => x.XpCmdShell,
                         };
 
-                        report.AppendLine("Server Configuration Settings [sp_configure]:");
+                        report.AppendLine("Server Configuration Settings [sys].[configurations]:");
                         foreach (var serverOption in serverOptions)
                         {
                             string title = ExpressionExtensions.GetTitle1(serverOption) + " ";
