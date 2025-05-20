@@ -17,6 +17,9 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark;
 [TestFixture]
 public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
 {
+    static int StressCategoriesCount => BuildServerInfo.IsBuildServer ? 1*1000*1000 : 100*1000;
+    static bool KillTempDB = true;
+
     private Action CleanUp;
 
     [Test]
@@ -28,7 +31,7 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
         var management = testCase.Manage();
         var sqlServerCpuCores = management.CpuCount;
         var conMaster = testCase.CreateConnection();
-        string newDbName = $"Test of App1 {Guid.NewGuid():N}";
+        string newDbName = $"Test of Sensors {DateTime.Now:s} {Guid.NewGuid():N}";
         conMaster.Execute($"Create Database [{newDbName}]", commandTimeout: 90);
 
         IDbConnection NewConnection(bool open = true)
@@ -40,7 +43,7 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
 
         CleanUp = () =>
         {
-            ResilientDbKiller.Kill(testCase.ConnectionString, newDbName);
+            if (KillTempDB) ResilientDbKiller.Kill(testCase.ConnectionString, newDbName);
             management.Configuration.AffinityCount = 0;
         };
 
@@ -56,12 +59,12 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
         DataAccess dataAccess = new DataAccess(() => NewConnection(open: true));
         DataSeeder seeder = new DataSeeder(dataAccess);
         Stopwatch startSeedAt = Stopwatch.StartNew();
-        var categoriesCount = BuildServerInfo.IsBuildServer ? 120000 : 20000;
-        seeder.Seed(categoriesCount, timeLimit: TimeSpan.FromSeconds(90));
-        Console.WriteLine($"Stress DB [{newDbName}] is ready. Seed took {startSeedAt.Elapsed.TotalSeconds:n2} seconds");
+        var categoriesCount = StressCategoriesCount;
+        seeder.Seed(categoriesCount);
+        Console.WriteLine($"Stress DB [{newDbName}] is ready{Environment.NewLine}Seed took {startSeedAt.Elapsed.TotalSeconds:n2} seconds");
         StressState.Categories = dataAccess.GetAllCategories().ToArray();
 
-        Console.WriteLine($"DB Size: {dbManagement.Size:n0} KB");
+        Console.WriteLine($"DB Size: {dbManagement.Files.ToSizeString()}");
         Console.WriteLine($"Categories Count: {StressState.Categories.Length:n0}");
 
         StressWorkerReader reader = new StressWorkerReader(dataAccess);
@@ -88,6 +91,7 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
             Console.WriteLine(totalResults);
         }
     }
+
 
     [TearDown]
     public void TearDown()

@@ -29,6 +29,12 @@ Create Table CategorySummary(
   Constraint PK_CategorySummary Primary Key Clustered (Id)
 );
 
+CREATE TYPE CategoryIncrementTableType AS TABLE (
+  Category nvarchar(400) Not Null,
+  Count bigint Not Null,
+  Amount float(53) Not Null
+);
+
 /*
 CREATE NONCLUSTERED INDEX [IX_CategorySummary_Category]
     ON CategorySummary (Category); */

@@ -16,7 +16,24 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
             DataAccess = dataAccess;
         }
 
-        public void Seed(int categoriesCount = 1000, TimeSpan timeLimit = default)
+        public void Seed(int categoriesCount = 1000)
+        {
+            while (categoriesCount > 0)
+            {
+                int partCount = Math.Max(1, Math.Min(1000, categoriesCount));
+                categoriesCount -= partCount;
+                var categoriesBatch = Enumerable.Range(1, partCount)
+                    .Select(x => new DataAccess.CategoryIncrementTableType()
+                    {
+                        Category = GetRandomCategoryName(Rand.Next(350, 400)),
+                        Count = Rand.Next(1, 3),
+                        Amount = Rand.NextDouble() * 123
+                    });
+
+                this.DataAccess.UpdateCategorySummaryBatch(categoriesBatch);
+            }
+        }
+        public void Seed_Prev(int categoriesCount = 1000, TimeSpan timeLimit = default)
         {
             Stopwatch sw = Stopwatch.StartNew();
             for (int i = 0; i < categoriesCount; i++)

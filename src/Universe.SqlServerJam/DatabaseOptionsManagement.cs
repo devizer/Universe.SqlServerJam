@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -238,19 +239,82 @@ WHERE d.name = @name
             }
         }
 
-        // Sum(size) of all files of CURRENT DB :(
-        public long? Size
+        // Sum(size) of all files of the DB
+        public long Size
         {
             get
             {
-                const string sql = "Select Sum(Cast(size as bigint)) From sys.database_files";
+                string sql = $"Select Sum(Cast(size as bigint)) From [{this.DatabaseName}].sys.database_files";
                 return 8L * _ServerManagement.SqlConnection.ExecuteScalar<long>(sql);
-                int size;
-                if (!_ServerManagement.DatabaseSizes.TryGetValue(DatabaseName, out size))
-                    return null;
-                else
-                    return size;
             }
+        }
+
+        public SqlDatabaseFiles Files
+        {
+            get
+            {
+                // size is 32-bit int in pages
+                string sql = $"Select type_desc TypeName, state_desc StateName, name Name, size Size, physical_name PhysicalName, Cast((Case When (is_read_only = 1 or is_media_read_only = 1) Then 1 Else 0 End) as bit) IsReadOnly From [{this.DatabaseName}].sys.database_files";
+                var files = _ServerManagement.SqlConnection.Query<SqlDatabaseFile>(sql).ToList();
+                foreach (var file in files) file.Size *= 8 * 1024;
+                return new SqlDatabaseFiles() { Files = files };
+            }
+        }
+
+        public class SqlDatabaseFiles
+        {
+            public long Size => Files.Count == 0 ? 0 : Files.Sum(x => x.Size);
+            public List<SqlDatabaseFile> Files { get; internal set; } = new List<SqlDatabaseFile>();
+
+            public string ToSizeString()
+            {
+                StringBuilder typesString = new StringBuilder();
+                var types = new[] { SqlDatabaseFileType.Data, SqlDatabaseFileType.Log, SqlDatabaseFileType.FullText, SqlDatabaseFileType.FileStream };
+                foreach (var type in types)
+                {
+                    var files = Files.Where(x => x.Type == type).ToArray();
+                    if (files.Length == 0) continue;
+                    var detailsManyFiles = string.Join(" + ", files.Select(x => $"{x.Size / 1024:n0}").ToArray());
+                    if (files.Length == 1)
+                        typesString
+                            .Append(typesString.Length == 0 ? "" : "; ")
+                            .Append($"{type}: {files.Sum(x => x.Size)/1024:n0} KB");
+                    else
+                        typesString
+                            .Append(typesString.Length == 0 ? "" : ", ")
+                            .Append($"{type}: {files.Sum(x => x.Size):n0} = {detailsManyFiles} KB");
+                }
+
+                return $"{Size / 1024:n0} KB"
+                       + (typesString.Length > 0 ? $" ({typesString})" : "");
+            }
+        }
+
+        public class SqlDatabaseFile
+        {
+            // ROWS | LOG | FILESTREAM | FULLTEXT
+            public string TypeName { get; internal set; }
+            public string StateName { get; internal set; }
+            public string Name { get; internal set; }
+            public long Size { get; internal set; }
+            public string PhysicalName { get; internal set; }
+            public bool IsReadOnly { get; internal set; }
+
+            public SqlDatabaseFileType Type =>
+                "ROWS".Equals(TypeName, StringComparisonExtensions.IgnoreCase) ? SqlDatabaseFileType.Data
+                : "LOG".Equals(TypeName, StringComparisonExtensions.IgnoreCase) ? SqlDatabaseFileType.Log
+                : "FILESTREAM".Equals(TypeName, StringComparisonExtensions.IgnoreCase) ? SqlDatabaseFileType.FileStream
+                : "FULLTEXT".Equals(TypeName, StringComparisonExtensions.IgnoreCase) ? SqlDatabaseFileType.FullText
+                : SqlDatabaseFileType.Unknown;
+        }
+
+        public enum SqlDatabaseFileType
+        {
+            Unknown,
+            Data,
+            Log,
+            FileStream,
+            FullText,
         }
 
         // On Azure it is hardcoded as Checksum, update is not available
@@ -404,6 +468,7 @@ WHERE d.name = @name
             ret.AppendLine($"{pre} - Default Collation ... : {DefaultCollationName} [{comparisionStyle}]");
             ret.AppendLine($"{pre} - Fulltext Search ..... : {(IsFullTextEnabled ? "Enabled" : "Not Enabled")}");
             ret.AppendLine($"{pre} - Size (KB) ........... : {Size}");
+            ret.AppendLine($"{pre} - Size Detailed ....... : {this.Files.ToSizeString()}");
             ret.AppendLine($"{pre} - Recovery Mode ....... : {RecoveryMode}");
             ret.AppendLine($"{pre} - Owner ............... : {OwnerName}");
             ret.AppendLine($"{pre} - AZ Edition .......... : {AzureEdition}");
