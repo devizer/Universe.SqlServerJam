@@ -141,6 +141,30 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
 
             string FirstColumnBorder() => mainTable.LineCount == 0 ? "╶┬╴ " : " │ ";
 
+            string FormatShortCpuUsage(CpuUsage.CpuUsage cpuUsage, double duration)
+            {
+                return (Math.Abs(duration) <= Double.Epsilon)
+                    ? ""
+                    : $"{(100d * cpuUsage.TotalMicroSeconds / duration / 1000000):n1}";
+            }
+
+            string FormatAsPercents(long microseconds, double duration)
+            {
+                var ret = $"{(100d * microseconds / duration / 1000000):n1}%";
+                return $"{ret,-5}";
+
+
+            }
+            
+            string FormatLongCpuUsage(CpuUsage.CpuUsage cpuUsage, double duration)
+            {
+                if (Math.Abs(duration) <= Double.Epsilon) return "";
+                var meaningful = $"user = {FormatAsPercents(cpuUsage.UserUsage.TotalMicroSeconds, duration)} + " +
+                       $"kernel = {FormatAsPercents(cpuUsage.KernelUsage.TotalMicroSeconds, duration)}";
+                return $"{{{meaningful.Trim()}}}";
+            }
+
+
             foreach (var group in groups)
             {
                 var workersOfGroup = WorkerResults.Where(x => x.WorkerGroup.Equals(group, StringComparison.OrdinalIgnoreCase)).ToArray();
@@ -153,10 +177,11 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
                 double sumStdev = WorkerStressResults.GetStdDev(sumActionCount, sumDuration, sumDurationSquared);
                 var stdevString = sumActionCount > 2 ? $" ± {1000 * sumStdev:n3}" : "";
                 var avgString = sumActionCount == 0 ? "" : $" (avg = {(1000 * sumDuration / sumActionCount):n2}{stdevString})";
-                var cpuPercents = 100d * sumCpuUsage.TotalMicroSeconds / sumDuration / 1000000;
+                var cpuPercentsString = FormatShortCpuUsage(sumCpuUsage, sumDuration);
+                var cpuLong = FormatLongCpuUsage(sumCpuUsage, sumDuration);
                 var groupErrorsCount = workersOfGroup.Sum(x => x.UpdateActionErrors.Count);
                 var groupErrorsString = groupErrorsCount == 0 ? "no errors" : $"{groupErrorsCount} {(groupErrorsCount == 1 ? "error" : "errors")}";
-                mainTable.AddRow("", $"«{group}»", $"{FirstColumnBorder()}", $"{sumActionCount:n0}", avgString, " ➛", $" {cpuPercents:n2}% ", sumCpuUsage.ToString(), " " + groupErrorsString);
+                mainTable.AddRow("", $"«{group}»", $"{FirstColumnBorder()}", $"{sumActionCount:n0}", avgString, " ➛", $" {cpuPercentsString}% ", cpuLong, " " + groupErrorsString);
 
                 if (workersOfGroup.Length >= 2)
                 {
@@ -165,10 +190,11 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
                     {
                         var stdevString_ = worker.TotalCount > 2 ? $" ± {1000 * worker.StdDevDuration:n3}" : "";
                         var avgString_ = worker.TotalCount == 0 ? "" : $" (avg = {(1000 * worker.TotalDuration / worker.TotalCount):n2}{stdevString_})";
-                        var cpuPercents_ = 100d * worker.TotalCpuUsage.TotalMicroSeconds / sumDuration / 1000000;
+                        var cpuPercentsString_ = FormatShortCpuUsage(worker.TotalCpuUsage, worker.TotalDuration);
+                        var cpuLong_ = FormatLongCpuUsage(worker.TotalCpuUsage, worker.TotalDuration);
                         var indexString = $"{index:0}{GetOrdinalSuffix(index)}";
                         indexString = indexString.PadLeft(maxGroupNameLength + 2);
-                        mainTable.AddRow("", $"{indexString}", $"{FirstColumnBorder()}", $"{worker.TotalCount:n0}", avgString_, " ➛", $" {cpuPercents_:n2}% ", worker.TotalCpuUsage.ToString(), " " + groupErrorsString);
+                        mainTable.AddRow("", $"{indexString}", $"{FirstColumnBorder()}", $"{worker.TotalCount:n0}", avgString_, " ➛", $" {cpuPercentsString_}% ", cpuLong_, " " + groupErrorsString);
                         index++;
                     }
                 }

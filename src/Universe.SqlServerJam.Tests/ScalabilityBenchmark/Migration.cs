@@ -29,8 +29,18 @@ Create Table CategorySummary(
   Constraint PK_CategorySummary Primary Key Clustered (Id)
 );
 
+/*
 CREATE NONCLUSTERED INDEX [IX_CategorySummary_Category]
-    ON CategorySummary (Category);
+    ON CategorySummary (Category); */
+
+CREATE NONCLUSTERED INDEX [IX_CategorySummary_on_Category_Id_Include_Count_Sum] ON [dbo].[CategorySummary]
+(
+	[Category] ASC,
+	[Id] ASC
+)
+INCLUDE([Count],[Sum]) WITH (SORT_IN_TEMPDB = OFF);
+
+
 ";
             using var conn = NewConnection();
             conn.Execute(sql1);

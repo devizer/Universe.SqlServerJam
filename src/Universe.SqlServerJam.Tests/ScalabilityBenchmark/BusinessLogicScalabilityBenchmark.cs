@@ -43,6 +43,13 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
             management.Configuration.AffinityCount = 0;
         };
 
+        var dbManagement = management.Databases[newDbName];
+        dbManagement.RecoveryMode = DatabaseRecoveryMode.Simple;
+        dbManagement.PageVerify = DatabasePageVerify.None;
+        dbManagement.AutoCreateStatistic = AutoCreateStatisticMode.Incremental;
+        dbManagement.AutoUpdateStatistic = AutoUpdateStatisticMode.Async;
+        dbManagement.IsAutoShrink = false;
+
         Migration migration = new Migration(() => NewConnection());
         migration.Migrate();
         DataAccess dataAccess = new DataAccess(() => NewConnection(open: true));
@@ -52,7 +59,8 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
         seeder.Seed(categoriesCount, timeLimit: TimeSpan.FromSeconds(90));
         Console.WriteLine($"Stress DB [{newDbName}] is ready. Seed took {startSeedAt.Elapsed.TotalSeconds:n2} seconds");
         StressState.Categories = dataAccess.GetAllCategories().ToArray();
-        Console.WriteLine($"DB Size: {management.Databases[newDbName].Size:n0} KB");
+
+        Console.WriteLine($"DB Size: {dbManagement.Size:n0} KB");
         Console.WriteLine($"Categories Count: {StressState.Categories.Length:n0}");
 
         StressWorkerReader reader = new StressWorkerReader(dataAccess);
@@ -64,11 +72,17 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
         preJit.Run();
 
         var sqlCpuName = management.CpuName;
+        Console.WriteLine($"SQL Server {testCase} CPU: '{sqlCpuName}'");
         Console.WriteLine("");
-        for (int sqlCores = 1; sqlCores <= sqlServerCpuCores; sqlCores++)
+        List<int> sqlCoresList = Enumerable.Range(1, sqlServerCpuCores).ToList();
+        sqlCoresList.AddRange(Enumerable.Range(1, sqlServerCpuCores-1).Select(x => sqlServerCpuCores - x));
+        sqlCoresList = Enumerable.Range(1, sqlServerCpuCores).Select(x => sqlServerCpuCores - x + 1).ToList();
+        // sqlCoresList = Enumerable.Repeat(sqlServerCpuCores, 88).ToList();
+        foreach (var sqlCores in sqlCoresList)
+        // for (int sqlCores = 1; sqlCores <= sqlServerCpuCores; sqlCores++)
         {
-            Console.WriteLine($"SQL CPU AFFINITY COUNT is {sqlCores}/{sqlServerCpuCores} on \"{sqlCpuName}\"");
             management.Configuration.AffinityCount = (short)sqlCores;
+            Console.WriteLine($"SQL CPU AFFINITY COUNT is {sqlCores}/{sqlServerCpuCores}. Affinity mask = {management.Configuration.AffinityMask}");
             var stressDuration = TimeSpan.FromSeconds(TestEnvironment.SQL_STRESS_DURATION_SECONDS ?? 2);
             StressOrchestrator stressOrchestrator = new StressOrchestrator() { MaxDuration = stressDuration };
             stressOrchestrator.AddWorker($"Updater", updater);
