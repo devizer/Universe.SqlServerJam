@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Universe.NUnitTests;
+using Universe.StressOrchestration;
 
 namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark;
 
@@ -75,17 +76,13 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
         Console.WriteLine($"SQL Server {testCase} CPU: '{sqlCpuName}'");
         Console.WriteLine("");
         List<int> sqlCoresList = Enumerable.Range(1, sqlServerCpuCores).ToList();
-        sqlCoresList.AddRange(Enumerable.Range(1, sqlServerCpuCores-1).Select(x => sqlServerCpuCores - x));
-        sqlCoresList = Enumerable.Range(1, sqlServerCpuCores).Select(x => sqlServerCpuCores - x + 1).ToList();
-        // sqlCoresList = Enumerable.Repeat(sqlServerCpuCores, 88).ToList();
         foreach (var sqlCores in sqlCoresList)
-        // for (int sqlCores = 1; sqlCores <= sqlServerCpuCores; sqlCores++)
         {
             management.Configuration.AffinityCount = (short)sqlCores;
             Console.WriteLine($"SQL CPU AFFINITY COUNT is {sqlCores}/{sqlServerCpuCores}. Affinity mask = {management.Configuration.AffinityMask}");
             var stressDuration = TimeSpan.FromSeconds(TestEnvironment.SQL_STRESS_DURATION_SECONDS ?? 2);
             StressOrchestrator stressOrchestrator = new StressOrchestrator() { MaxDuration = stressDuration };
-            stressOrchestrator.AddWorker($"Updater", updater);
+            // stressOrchestrator.AddWorker($"Updater", updater);
             stressOrchestrator.AddWorkers("Dashboard", Math.Max(1, sqlServerCpuCores - 1), reader);
             var totalResults = stressOrchestrator.Run();
             Console.WriteLine(totalResults);
