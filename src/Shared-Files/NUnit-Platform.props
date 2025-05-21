@@ -6,13 +6,19 @@
        <!-- Can Upgrade: NNnit=4.3.2, NUnit3TestAdapter=5.0.0 -->
        <PackageReference Include="NUnit" Version="3.14.0" />
        <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
-       <PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
+       <!-- PackageReference Include="NUnit.Analyzers" Version="3.3.0" / -->
        <PackageReference Include="coverlet.collector" Version="3.1.2" />
 
         
         <!-- Needs by NUnitTestsBase.cs -->
         <PackageReference Include="Universe.CpuUsage" Version="2.2.778.893" />
     </ItemGroup>
+
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' or '$(TargetFramework)' == 'net48' " >
+       <PackageReference Update="NUnit" Version="4.3.2" />
+       <PackageReference Update="NUnit3TestAdapter" Version="5.0.0" />
+    </ItemGroup>
+
 
     <ItemGroup>
         <!-- Compile Include="$([System.IO.Path]::GetDirectoryName('$(MSBuildThisFileFullPath)'))\NUnitTestsBase.cs" / -->

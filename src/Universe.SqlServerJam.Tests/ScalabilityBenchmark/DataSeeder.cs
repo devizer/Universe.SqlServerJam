@@ -20,7 +20,7 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
         {
             while (categoriesCount > 0)
             {
-                int partCount = Math.Max(1, Math.Min(1000, categoriesCount));
+                int partCount = Math.Max(1, Math.Min(200, categoriesCount));
                 categoriesCount -= partCount;
                 var categoriesBatch = Enumerable.Range(1, partCount)
                     .Select(x => new DataAccess.CategoryIncrementTableType()

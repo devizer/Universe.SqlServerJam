@@ -42,12 +42,12 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
         var management = testCase.Manage();
         var sqlServerCpuCores = management.CpuCount;
         var conMaster = testCase.CreateConnection();
-        string newDbName = $"Test of Sensors {DateTime.Now:s} {Guid.NewGuid():N}";
+        string newDbName = $"Test of Sensors {DateTime.Now:yyyy-MM-dd HH-mm-ss.ff} {Guid.NewGuid():N}";
         conMaster.Execute($"Create Database [{newDbName}]", commandTimeout: 90);
 
-        IDbConnection NewConnection(bool open = true)
+        IDbConnection NewConnection(bool pooling = true, bool open = true)
         {
-            var ret = testCase.CreateConnection(pooling: true, initialCatalog: newDbName);
+            var ret = testCase.CreateConnection(pooling: pooling, initialCatalog: newDbName);
             if (open) ret.Open();
             return ret;
         }
@@ -68,7 +68,8 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
         Migration migration = new Migration(() => NewConnection());
         migration.Migrate();
         DataAccess dataAccess = new DataAccess(() => NewConnection(open: true));
-        DataSeeder seeder = new DataSeeder(dataAccess);
+        DataAccess dataAccessWithoutPooling = new DataAccess(() => NewConnection(pooling: false, open: true));
+        DataSeeder seeder = new DataSeeder(dataAccessWithoutPooling);
         Stopwatch startSeedAt = Stopwatch.StartNew();
         var categoriesCount = GetStressCategoriesCount();
         seeder.Seed(categoriesCount);
@@ -100,6 +101,7 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
             stressOrchestrator.AddWorkers("Dashboard", Math.Max(1, sqlServerCpuCores - 1), reader);
             var totalResults = stressOrchestrator.Run();
             Console.WriteLine(totalResults);
+            // TestContext.WriteLine(totalResults);
         }
     }
 

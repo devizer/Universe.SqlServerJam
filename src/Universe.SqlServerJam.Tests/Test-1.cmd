@@ -1,2 +1,2 @@
-dotnet test -c Release -f net6.0 --filter  "Name ~ StressScalability & Name ~ 16.0. & Name ~ local & Name !~ DEV2022UTF8"
+dotnet test -v m -c Release -f net8.0 --filter  "Name ~ StressScalability & Name ~ 16.0. & Name ~ local & Name !~ DEV2022UTF8"
 rem dotnet test -c Release -f net6.0 --filter  "Name ~ StressScalability & Name ~ 16.0. & Name ~ %27%28local%29%27"
