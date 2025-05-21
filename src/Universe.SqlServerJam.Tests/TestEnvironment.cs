@@ -13,16 +13,6 @@ namespace Universe.SqlServerJam.Tests
 {
     static class TestEnvironment
     {
-        public static int? SQL_STRESS_DURATION_SECONDS
-        {
-            get
-            {
-                if (int.TryParse(Environment.GetEnvironmentVariable("SQL_STRESS_DURATION_SECONDS"), out var ret))
-                    return ret;
-
-                return null;
-            }
-        }
         private static Lazy<List<SqlServerRef>> _SqlServers = new Lazy<List<SqlServerRef>>(() =>
         {
             SqlJamLog.EnableDebugLog = true;
@@ -118,53 +108,6 @@ namespace Universe.SqlServerJam.Tests
             }
 
             return tmpFile;
-        }
-    }
-
-    public static class BuildServerInfo
-    {
-        public static bool IsBuildServer => BuildServerKey != null;
-        public static string BuildServerKey
-        {
-            get
-            {
-                var names = new[]
-                {
-                    "APPVEYOR",
-                    "bamboo_planKey",
-                    "BITBUCKET_COMMIT",
-                    "BITRISE_IO",
-                    "BUDDY_WORKSPACE_ID",
-                    "BUILDKITE",
-                    "CIRCLECI",
-                    "CIRRUS_CI",
-                    "CODEBUILD_BUILD_ARN",
-                    "DRONE",
-                    "DSARI",
-                    "GITHUB_ACTIONS",
-                    "GITLAB_CI",
-                    "GO_PIPELINE_LABEL",
-                    "HUDSON_URL",
-                    "MAGNUM",
-                    "SAILCI",
-                    "SEMAPHORE",
-                    "SHIPPABLE",
-                    "TDDIUM",
-                    "STRIDER",
-                    "TDDIUM",
-                    "TEAMCITY_VERSION",
-                    "TF_BUILD",
-                    "TRAVIS"
-                };
-                foreach (var name in names)
-                {
-                    var raw = Environment.GetEnvironmentVariable(name);
-                    if (raw != null && !"False".Equals(raw, StringComparison.OrdinalIgnoreCase))
-                        return name;
-                }
-
-                return null;
-            }
         }
     }
 }

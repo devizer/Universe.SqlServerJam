@@ -20,7 +20,8 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
     // 1M - 2 minutes, 2.8Gb + 0.6Gb
     static int GetStressCategoriesCount()
     {
-        if (!BuildServerInfo.IsBuildServer) return 100 * 1000;
+        var envValue = SensorsAppStressSettings.WorkingSetRows;
+        if (!BuildServerInfo.IsBuildServer) return envValue.GetValueOrDefault(100 * 1000);
         bool isDbOnRamDisk = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("RAM_DISK"));
         if (!isDbOnRamDisk) return 1000 * 1000;
         bool isWindows = CrossInfo.ThePlatform == CrossInfo.Platform.Windows;
@@ -93,7 +94,7 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
         {
             management.Configuration.AffinityCount = (short)sqlCores;
             Console.WriteLine($"SQL CPU AFFINITY COUNT is {sqlCores}/{sqlServerCpuCores}. Affinity mask = {management.Configuration.AffinityMask}");
-            var stressDuration = TimeSpan.FromSeconds(TestEnvironment.SQL_STRESS_DURATION_SECONDS ?? 2);
+            var stressDuration = TimeSpan.FromMilliseconds(SensorsAppStressSettings.StressDuration ?? 2000);
             StressOrchestrator stressOrchestrator = new StressOrchestrator() { MaxDuration = stressDuration };
             stressOrchestrator.AddWorker($"Merging", updater);
             stressOrchestrator.AddWorkers("Dashboard", Math.Max(1, sqlServerCpuCores - 1), reader);
