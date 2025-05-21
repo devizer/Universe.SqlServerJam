@@ -123,7 +123,8 @@ namespace Universe.SqlServerJam.Tests
 
     public static class BuildServerInfo
     {
-        public static bool IsBuildServer
+        public static bool IsBuildServer => BuildServerKey != null;
+        public static string BuildServerKey
         {
             get
             {
@@ -155,15 +156,14 @@ namespace Universe.SqlServerJam.Tests
                     "TF_BUILD",
                     "TRAVIS"
                 };
-                bool isBuildServer = false;
                 foreach (var name in names)
                 {
                     var raw = Environment.GetEnvironmentVariable(name);
                     if (raw != null && !"False".Equals(raw, StringComparison.OrdinalIgnoreCase))
-                        isBuildServer = true;
+                        return name;
                 }
 
-                return isBuildServer;
+                return null;
             }
         }
     }

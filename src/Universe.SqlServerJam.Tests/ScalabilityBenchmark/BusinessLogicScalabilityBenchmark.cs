@@ -18,10 +18,16 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark;
 public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
 {
     // 1M - 2 minutes, 2.8Gb + 0.6Gb
-    static int StressCategoriesCount => 
-        BuildServerInfo.IsBuildServer && !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("RAM_DISK"))
-            ? (CrossInfo.ThePlatform == CrossInfo.Platform.Windows ? 1000 : 400) *1000 
-            : 100*1000;
+    static int GetStressCategoriesCount()
+    {
+        if (!BuildServerInfo.IsBuildServer) return 100 * 1000;
+        bool isDbOnRamDisk = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("RAM_DISK"));
+        if (!isDbOnRamDisk) return 1000 * 1000;
+        bool isWindows = CrossInfo.ThePlatform == CrossInfo.Platform.Windows;
+        return isWindows ? 100 * 1000 : 400 * 1000;
+
+
+    }
 
     static bool KillTempDB = true;
 
@@ -64,7 +70,7 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
         DataAccess dataAccess = new DataAccess(() => NewConnection(open: true));
         DataSeeder seeder = new DataSeeder(dataAccess);
         Stopwatch startSeedAt = Stopwatch.StartNew();
-        var categoriesCount = StressCategoriesCount;
+        var categoriesCount = GetStressCategoriesCount();
         seeder.Seed(categoriesCount);
         Console.WriteLine($"Stress DB [{newDbName}] is ready{Environment.NewLine}Seed took {startSeedAt.Elapsed.TotalSeconds:n2} seconds");
         StressState.Categories = dataAccess.GetAllCategories().ToArray();
