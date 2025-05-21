@@ -91,8 +91,11 @@ namespace Universe.SqlServerJam
 
         long CountToMask(short count)
         {
-            short cpuCount = (short) this._ServerManagement.CpuCount;
+            var totalCpuCount = this._ServerManagement.CpuCount;
+            short cpuCount = (short) totalCpuCount;
             if (count == cpuCount) return 0;
+            // if (count == 1) return totalCpuCount > 1 ? 2 : 1;
+
             long ret = 0;
             long scale = 1;
             for (int i = 0; i < count; i++)
@@ -101,6 +104,7 @@ namespace Universe.SqlServerJam
                 scale <<= 1;
             }
 
+            if (count < totalCpuCount) ret <<= 1;
             return ret;
         }
 

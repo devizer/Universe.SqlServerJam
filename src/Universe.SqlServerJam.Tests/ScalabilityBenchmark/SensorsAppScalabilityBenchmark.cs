@@ -15,7 +15,7 @@ using Universe.StressOrchestration;
 namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark;
 
 [TestFixture]
-public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
+public class SensorsAppScalabilityBenchmark : NUnitTestsBase
 {
     // 1M - 2 minutes, 2.8Gb + 0.6Gb
     static int GetStressCategoriesCount()
@@ -25,8 +25,6 @@ public class BusinessLogicScalabilityBenchmark : NUnitTestsBase
         if (!isDbOnRamDisk) return 1000 * 1000;
         bool isWindows = CrossInfo.ThePlatform == CrossInfo.Platform.Windows;
         return isWindows ? 100 * 1000 : 400 * 1000;
-
-
     }
 
     static bool KillTempDB = true;
