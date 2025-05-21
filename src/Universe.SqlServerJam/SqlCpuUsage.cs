@@ -75,6 +75,22 @@ public struct SqlCpuUsage
 
 public static class SqlCpuUsageExtensions
 {
+    public static string Format(this SqlCpuUsage? sqlCpuUsage, double duration)
+    {
+        if (sqlCpuUsage == null || Math.Abs(duration) < Double.Epsilon) return null;
+
+        string FormatAsPercents(long milliseconds) => $"{(100d * milliseconds / duration / 1000):n1}%";
+
+        var meaningful =
+             $"user = {FormatAsPercents(sqlCpuUsage.Value.UserMilliseconds)} + "
+            + $"kernel = {FormatAsPercents(sqlCpuUsage.Value.KernelMilliseconds)}";
+
+        return
+            $"{FormatAsPercents(sqlCpuUsage.Value.TotalMilliseconds)}"
+            + $" ({meaningful.Trim()})";
+
+    }
+
     public static TimeSpan ToTimeSpan(this SqlCpuUsage sqlCpuUsage) =>
         TimeSpan.FromMilliseconds((double)sqlCpuUsage.TotalMilliseconds);
 

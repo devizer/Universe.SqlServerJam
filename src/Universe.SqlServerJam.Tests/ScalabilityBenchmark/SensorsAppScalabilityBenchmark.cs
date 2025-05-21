@@ -97,7 +97,10 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
             StressOrchestrator stressOrchestrator = new StressOrchestrator() { MaxDuration = stressDuration };
             stressOrchestrator.AddWorker($"Merging", updater);
             stressOrchestrator.AddWorkers("Dashboard", Math.Max(1, sqlServerCpuCores - 1), reader);
+            var sqlCpuUsageOnStart = management.CpuUsage;
             var totalResults = stressOrchestrator.Run();
+            var sqlCpuUsage = management.CpuUsage - sqlCpuUsageOnStart;
+            Console.WriteLine($"SQL Server CPU Usage: {sqlCpuUsage.Format(stressOrchestrator.MaxDuration.TotalSeconds)}; {sqlCpuUsage}");
             Console.WriteLine(totalResults);
             // TestContext.WriteLine(totalResults);
         }
