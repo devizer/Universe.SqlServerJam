@@ -8,6 +8,8 @@ namespace Universe.StressOrchestration;
 
 public class TotalStressResult
 {
+    // public TimeSpan ArgumentDuration { get; internal set; } // Includes wait on countdown and join
+
     public TimeSpan TotalDuration { get; internal set; } // Includes wait on countdown and join
     public TimeSpan PayloadDuration => TimeSpan.FromSeconds(WorkerResults.Count == 0 ? 0 : WorkerResults.Max(x => x.TotalDuration));
     public List<WorkerStressResults> WorkerResults { get; internal set; } = new List<WorkerStressResults>();
@@ -60,12 +62,13 @@ public class TotalStressResult
             var countOfGroup = workersOfGroup.Length;
             var sumActionCount = workersOfGroup.Sum(x => x.TotalCount);
             var sumDuration = workersOfGroup.Sum(x => x.TotalDuration);
+            var avgDuration = workersOfGroup.Average(x => x.TotalDuration);
             var sumDurationSquared = workersOfGroup.Sum(x => x.TotalDurationSquared);
             var sumCpuUsage = new CpuUsage.CpuUsage();
             foreach (var w in workersOfGroup) sumCpuUsage += w.TotalCpuUsage;
             double sumStdev = MathUtilities.GetStdDev(sumActionCount, sumDuration, sumDurationSquared);
             var stdevString = sumActionCount > 2 ? $" ± {1000 * sumStdev:n3}" : "";
-            var avgString = sumActionCount == 0 ? "" : $" (avg = {(1000 * sumDuration / sumActionCount):n2}{stdevString})";
+            var avgString = sumActionCount == 0 ? "" : $" (avg = {(1000 * avgDuration / sumActionCount):n2}{stdevString})";
             var cpuPercentsString = FormatShortCpuUsage(sumCpuUsage, sumDuration);
             var cpuLong = FormatLongCpuUsage(sumCpuUsage, sumDuration);
             var groupErrorsCount = workersOfGroup.Sum(x => x.UpdateActionErrors.Count);
