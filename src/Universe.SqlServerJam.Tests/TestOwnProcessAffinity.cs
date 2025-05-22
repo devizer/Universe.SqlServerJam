@@ -21,10 +21,10 @@ public class TestOwnProcessAffinity : NUnitTestsBase
             Process.GetCurrentProcess().ProcessorAffinity = new IntPtr(newA);
             long a = (long)Process.GetCurrentProcess().ProcessorAffinity;
             Console.WriteLine($"Set {newA:x8}: {FormatAffinity(a)}, {a:X8}");
-            newA = newA << 1;
+            newA <<= 1;
         }
 
-
+        Process.GetCurrentProcess().ProcessorAffinity = new IntPtr(originalAffinity);
     }
 
     static string FormatAffinity(long affinity)
