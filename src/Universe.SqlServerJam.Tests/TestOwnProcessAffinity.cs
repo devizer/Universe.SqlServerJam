@@ -31,7 +31,7 @@ public class TestOwnProcessAffinity : NUnitTestsBase
     {
         StringBuilder ret = new StringBuilder();
         var procCount = Math.Min(64, Environment.ProcessorCount);
-        int maxIndex = (procCount % 4 == 0) ? procCount : ((procCount + 3) / 4);
+        int maxIndex = (procCount % 4 == 0) ? procCount : 4*((procCount + 3) / 4);
         for (int i = 0; i < maxIndex; i++)
         {
             bool bit = (affinity & 1) != 0;
