@@ -209,21 +209,6 @@ namespace Universe.SqlServerJam.Tests
                         }
 
 
-                        // if (man.IsAzure && Debugger.IsAttached) Debugger.Break();
-                        if (!man.IsAzure)
-                        {
-                            var prevRecovery = dbOptions.RecoveryMode;
-                            DatabaseRecoveryMode newRecovery =
-                                prevRecovery == DatabaseRecoveryMode.BulkLogged
-                                    ? DatabaseRecoveryMode.Simple
-                                    : DatabaseRecoveryMode.BulkLogged;
-
-                            dbOptions.RecoveryMode = newRecovery;
-                            dbOptions.RecoveryMode = prevRecovery;
-                        }
-
-                        man.IsFullTextSearchInstalled.ToString();
-
                         if (SqlCpuUsage.IsSupportedBy(man.ShortServerVersion))
                         {
                             var sqlCpuUsage = man.CpuUsage;
