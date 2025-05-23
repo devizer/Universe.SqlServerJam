@@ -1,14 +1,10 @@
 ﻿using Dapper;
 using NUnit.Framework;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using Universe.NUnitTests;
 using Universe.StressOrchestration;
 
@@ -28,7 +24,7 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
         return isWindows ? 100 * 1000 : 400 * 1000;
     }
 
-    static bool KillTempDB = true;
+    static bool KillTempDB = false;
 
     private Action CleanUp;
 
@@ -92,7 +88,7 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
         List<int> sqlCoresList = Enumerable.Range(1, sqlServerCpuCores).ToList();
         foreach (var sqlCores in sqlCoresList)
         {
-            management.Configuration.AffinityCount = (short)sqlCores;
+            management.Configuration.AffinityCount = sqlCores;
             Console.WriteLine($"SQL CPU AFFINITY COUNT is {sqlCores}/{sqlServerCpuCores}. Affinity mask = {management.Configuration.AffinityMask}");
             var stressDuration = TimeSpan.FromMilliseconds(SensorsAppStressSettings.StressDuration ?? 2000);
             StressOrchestrator stressOrchestrator = new StressOrchestrator() { MaxDuration = stressDuration };

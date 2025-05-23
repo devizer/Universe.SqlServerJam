@@ -1,0 +1,71 @@
+﻿using System.Text;
+using System;
+
+namespace Universe.SqlServerJam;
+
+public struct AffinityMask
+{
+    public int CpuCount { get; internal set; }
+    public Mode Side { get; internal set; }
+
+    public enum Mode
+    {
+        App,
+        Sql
+    }
+
+    public AffinityMask(int cpuCount, Mode side)
+    {
+        CpuCount = cpuCount;
+        Side = side;
+    }
+
+    public int MaskToCount(long affinityMask)
+    {
+        if (affinityMask == 0 && Side == Mode.Sql) return (short)CpuCount; // only for SQL Server
+        int count = 0;
+        long scale = 1;
+        for (int i = 0; i < 64; i++)
+        {
+            if ((affinityMask & scale) != 0) count++;
+            scale <<= 1;
+        }
+
+        return count;
+    }
+
+    public long CountToMask(int count)
+    {
+        var cpuCount = CpuCount;
+        if (count == cpuCount && Side == Mode.Sql) return 0;
+
+        long ret = 0;
+        long scale = 1;
+        for (int i = 0; i < count; i++)
+        {
+            ret += scale;
+            scale <<= 1;
+        }
+
+        if (count < CpuCount && Side == Mode.Sql) ret <<= 1; // Do not load core=0 on sql?
+        return ret;
+    }
+
+    public static string FormatAffinity(int totalCoreCount, long affinity)
+    {
+        StringBuilder ret = new StringBuilder();
+        // var procCount = Math.Min(64, Environment.ProcessorCount);
+        var procCount = Math.Min(64, totalCoreCount);
+        int maxIndex = (procCount % 4 == 0) ? procCount : 4 * ((procCount + 3) / 4);
+        for (int i = 0; i < maxIndex; i++)
+        {
+            bool bit = (affinity & 1) != 0;
+            affinity >>= 1;
+            ret.Append(bit ? '#' : '-');
+            if (i > 0 && i < maxIndex - 1 && i % 4 == 3) ret.Append(' ');
+        }
+
+        return ret.ToString();
+    }
+
+}

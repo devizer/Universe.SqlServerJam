@@ -25,7 +25,7 @@ public class TestAffinityInLoop : NUnitTestsBase
             for (int i = 1; i <= cpuCount; i++)
             {
                 Console.WriteLine($"Setting AffinityCount={i} of {cpuCount}");
-                manager.Configuration.AffinityCount = (short)i;
+                manager.Configuration.AffinityCount = i;
                 var actualCount = manager.Configuration.AffinityCount;
                 // Console.WriteLine($"Set AffinityCount={i} of {cpuCount}") Stored value = [{actualCount}]");
                 Console.WriteLine($"Stored Count=[{actualCount}] Mask=[{manager.Configuration.AffinityMask}]");

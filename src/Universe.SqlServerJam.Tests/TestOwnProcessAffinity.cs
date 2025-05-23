@@ -13,33 +13,21 @@ public class TestOwnProcessAffinity : NUnitTestsBase
     public void TestOnAllCores()
     {
         long originalAffinity = (long)Process.GetCurrentProcess().ProcessorAffinity;
-        Console.WriteLine($"Current: {FormatAffinity(originalAffinity)}, {originalAffinity:X8}");
+        Console.WriteLine($"Current: {FormatAppAffinityMask(originalAffinity)}, {originalAffinity:X16}");
 
         var newA = 1;
         for (int c = 1; c <= Environment.ProcessorCount; c++)
         {
             Process.GetCurrentProcess().ProcessorAffinity = new IntPtr(newA);
             long a = (long)Process.GetCurrentProcess().ProcessorAffinity;
-            Console.WriteLine($"Set {newA:x8}: {FormatAffinity(a)}, {a:X8}");
+            Console.WriteLine($"Set {newA:x8}: {FormatAppAffinityMask(a)}, {a:X6}");
             newA <<= 1;
         }
 
         Process.GetCurrentProcess().ProcessorAffinity = new IntPtr(originalAffinity);
     }
 
-    static string FormatAffinity(long affinity)
-    {
-        StringBuilder ret = new StringBuilder();
-        var procCount = Math.Min(64, Environment.ProcessorCount);
-        int maxIndex = (procCount % 4 == 0) ? procCount : 4*((procCount + 3) / 4);
-        for (int i = 0; i < maxIndex; i++)
-        {
-            bool bit = (affinity & 1) != 0;
-            affinity >>= 1;
-            ret.Append(bit ? '#' : '-');
-            if (i > 0 && i < maxIndex - 1 && i % 4 == 3) ret.Append(' ');
-        }
+    static string FormatAppAffinityMask(long affinityMask) =>
+        AffinityMask.FormatAffinity(Environment.ProcessorCount, affinityMask);
 
-        return ret.ToString();
-    }
 }

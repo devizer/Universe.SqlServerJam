@@ -69,44 +69,12 @@ namespace Universe.SqlServerJam
         }
 
         // Not for Express and Azure
-        public short AffinityCount
+        public int AffinityCount
         {
-            get => MaskToCount(this.AffinityMask);
-            set => this.AffinityMask = CountToMask(value);
+            get => new AffinityMask(this._ServerManagement.CpuCount, SqlServerJam.AffinityMask.Mode.Sql).MaskToCount(this.AffinityMask);
+            set => this.AffinityMask = new AffinityMask(this._ServerManagement.CpuCount, SqlServerJam.AffinityMask.Mode.Sql).CountToMask(value);
         }
 
-        private short MaskToCount(long affinityMask)
-        {
-            if (affinityMask == 0) return (short)this._ServerManagement.CpuCount;
-            int count = 0;
-            long scale = 1;
-            for (int i = 0; i < 64; i++)
-            {
-                if ((affinityMask & scale) != 0) count++;
-                scale <<= 1;
-            }
-
-            return (short)count;
-        }
-
-        long CountToMask(short count)
-        {
-            var totalCpuCount = this._ServerManagement.CpuCount;
-            short cpuCount = (short) totalCpuCount;
-            if (count == cpuCount) return 0;
-            // if (count == 1) return totalCpuCount > 1 ? 2 : 1;
-
-            long ret = 0;
-            long scale = 1;
-            for (int i = 0; i < count; i++)
-            {
-                ret += scale;
-                scale <<= 1;
-            }
-
-            if (count < totalCpuCount) ret <<= 1;
-            return ret;
-        }
 
         // Not for Express and Azure
         public long AffinityMask

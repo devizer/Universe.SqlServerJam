@@ -1,0 +1,114 @@
+
+#1.1 {StressScalability('(local)' Ver 16.0.4145.4)} @ SensorsAppScalabilityBenchmark starting...
+Stress DB [Test of Sensors 2025-05-23 10-41-37.87 a20a95ed0e63434f939e73354135ad1d] is ready
+Seed took 14.25 seconds
+DB Size: 475,136 KB (Data: 270,336 KB; Log: 204,800 KB)
+Categories Count: 100,000
+SQL Server '(local)' Ver 16.0.4145.4 CPU: 'Intel(R) Core(TM) i5-10310U CPU @ 1.70GHz'
+
+SQL CPU AFFINITY COUNT is 1/8. Affinity mask = 2
+SQL Server CPU Usage: 89.1% (user = 76.6% + kernel = 12.5%); 1.781 = 1.531 (user) + 0.250 (kernel) seconds
+Total Actions: 7,616 in 2.00 seconds
+ «Dashboard»╶┬╴ 6,923 (avg = 0.29 ± 8.981) ➛ 20.7% {user = 18.9% + kernel = 1.9%} no errors
+         1st │    988 (avg = 2.03 ± 7.653) ➛ 18.7% {user = 16.4% + kernel = 2.3%} no errors
+         2nd │    986 (avg = 2.03 ± 9.626) ➛ 24.2% {user = 23.4% + kernel = 0.8%} no errors
+         3rd │    991 (avg = 2.02 ± 9.711) ➛ 18.0% {user = 14.8% + kernel = 3.1%} no errors
+         4th │    991 (avg = 2.02 ± 7.146) ➛ 19.5% {user = 18.0% + kernel = 1.6%} no errors
+         5th │    989 (avg = 2.02 ± 9.603) ➛ 26.5% {user = 24.2% + kernel = 2.3%} no errors
+         6th │    990 (avg = 2.02 ± 9.068) ➛ 20.3% {user = 18.7% + kernel = 1.6%} no errors
+         7th │    988 (avg = 2.02 ± 9.701) ➛ 18.0% {user = 16.4% + kernel = 1.6%} no errors
+ «Merging»   ╵    693 (avg = 2.89 ± 9.189) ➛ 13.3% {user = 11.7% + kernel = 1.6%} no errors
+
+SQL CPU AFFINITY COUNT is 2/8. Affinity mask = 6
+SQL Server CPU Usage: 103.1% (user = 93.0% + kernel = 10.2%); 2.062 = 1.859 (user) + 0.203 (kernel) seconds
+Total Actions: 10,283 in 2.00 seconds
+ «Dashboard»╶┬╴ 9,433 (avg = 0.21 ± 0.685) ➛ 28.6% {user = 26.1% + kernel = 2.5%} no errors
+         1st │  1,347 (avg = 1.49 ± 0.708) ➛ 25.0% {user = 23.4% + kernel = 1.6%} no errors
+         2nd │  1,348 (avg = 1.48 ± 0.695) ➛ 29.7% {user = 26.5% + kernel = 3.1%} no errors
+         3rd │  1,348 (avg = 1.48 ± 0.692) ➛ 33.6% {user = 30.5% + kernel = 3.1%} no errors
+         4th │  1,344 (avg = 1.49 ± 0.693) ➛ 25.8% {user = 25.0% + kernel = 0.8%} no errors
+         5th │  1,348 (avg = 1.48 ± 0.680) ➛ 32.0% {user = 29.7% + kernel = 2.3%} no errors
+         6th │  1,348 (avg = 1.48 ± 0.667) ➛ 23.4% {user = 21.9% + kernel = 1.6%} no errors
+         7th │  1,350 (avg = 1.48 ± 0.659) ➛ 30.5% {user = 25.8% + kernel = 4.7%} no errors
+ «Merging»   ╵    850 (avg = 2.36 ± 0.836) ➛ 18.7% {user = 17.2% + kernel = 1.6%} no errors
+
+SQL CPU AFFINITY COUNT is 3/8. Affinity mask = 14
+SQL Server CPU Usage: 132.8% (user = 116.4% + kernel = 16.4%); 2.656 = 2.328 (user) + 0.328 (kernel) seconds
+Total Actions: 10,758 in 2.00 seconds
+ «Dashboard»╶┬╴ 9,942 (avg = 0.20 ± 1.119) ➛ 34.0% {user = 32.4% + kernel = 1.7%} no errors
+         1st │  1,407 (avg = 1.42 ± 1.321) ➛ 32.8% {user = 32.0% + kernel = 0.8%} no errors
+         2nd │  1,396 (avg = 1.43 ± 1.347) ➛ 31.2% {user = 25.8% + kernel = 5.5%} no errors
+         3rd │  1,417 (avg = 1.41 ± 1.021) ➛ 31.2% {user = 30.5% + kernel = 0.8%} no errors
+         4th │  1,393 (avg = 1.44 ± 1.040) ➛ 30.5% {user = 28.9% + kernel = 1.6%} no errors
+         5th │  1,441 (avg = 1.39 ± 1.009) ➛ 32.8% {user = 32.8% + kernel = 0.0%} no errors
+         6th │  1,446 (avg = 1.38 ± 1.023) ➛ 43.0% {user = 42.2% + kernel = 0.8%} no errors
+         7th │  1,442 (avg = 1.39 ± 1.018) ➛ 36.7% {user = 34.4% + kernel = 2.3%} no errors
+ «Merging»   ╵    816 (avg = 2.45 ± 1.744) ➛ 21.1% {user = 19.5% + kernel = 1.6%} no errors
+
+SQL CPU AFFINITY COUNT is 4/8. Affinity mask = 30
+SQL Server CPU Usage: 142.2% (user = 123.5% + kernel = 18.8%); 2.844 = 2.469 (user) + 0.375 (kernel) seconds
+Total Actions: 12,781 in 2.00 seconds
+ «Dashboard»╶┬╴ 11,947 (avg = 0.17 ± 1.080) ➛ 42.7% {user = 38.9% + kernel = 3.8%} no errors
+         1st │   1,744 (avg = 1.15 ± 0.964) ➛ 42.2% {user = 36.7% + kernel = 5.5%} no errors
+         2nd │   1,685 (avg = 1.19 ± 0.970) ➛ 35.2% {user = 33.6% + kernel = 1.6%} no errors
+         3rd │   1,750 (avg = 1.14 ± 0.888) ➛ 48.4% {user = 44.5% + kernel = 3.9%} no errors
+         4th │   1,698 (avg = 1.18 ± 1.259) ➛ 45.3% {user = 43.0% + kernel = 2.3%} no errors
+         5th │   1,704 (avg = 1.17 ± 0.990) ➛ 40.6% {user = 32.8% + kernel = 7.8%} no errors
+         6th │   1,639 (avg = 1.22 ± 1.306) ➛ 40.6% {user = 39.0% + kernel = 1.6%} no errors
+         7th │   1,727 (avg = 1.16 ± 1.127) ➛ 46.9% {user = 43.0% + kernel = 3.9%} no errors
+ «Merging»   ╵     834 (avg = 2.40 ± 1.258) ➛ 15.6% {user = 15.6% + kernel = 0.0%} no errors
+
+SQL CPU AFFINITY COUNT is 5/8. Affinity mask = 62
+SQL Server CPU Usage: 143.0% (user = 127.4% + kernel = 15.7%); 2.860 = 2.547 (user) + 0.313 (kernel) seconds
+Total Actions: 12,583 in 2.00 seconds
+ «Dashboard»╶┬╴ 11,716 (avg = 0.17 ± 1.098) ➛ 43.1% {user = 39.4% + kernel = 3.7%} no errors
+         1st │   1,656 (avg = 1.21 ± 1.244) ➛ 52.3% {user = 47.6% + kernel = 4.7%} no errors
+         2nd │   1,662 (avg = 1.20 ± 1.180) ➛ 43.0% {user = 39.8% + kernel = 3.1%} no errors
+         3rd │   1,690 (avg = 1.18 ± 0.920) ➛ 36.7% {user = 35.9% + kernel = 0.8%} no errors
+         4th │   1,682 (avg = 1.19 ± 1.044) ➛ 49.2% {user = 44.5% + kernel = 4.7%} no errors
+         5th │   1,701 (avg = 1.18 ± 0.922) ➛ 39.8% {user = 35.2% + kernel = 4.7%} no errors
+         6th │   1,678 (avg = 1.19 ± 1.036) ➛ 41.4% {user = 35.9% + kernel = 5.5%} no errors
+         7th │   1,647 (avg = 1.21 ± 1.291) ➛ 39.1% {user = 36.7% + kernel = 2.3%} no errors
+ «Merging»   ╵     867 (avg = 2.31 ± 1.872) ➛ 23.4% {user = 21.9% + kernel = 1.6%} no errors
+
+SQL CPU AFFINITY COUNT is 6/8. Affinity mask = 126
+SQL Server CPU Usage: 169.6% (user = 150.0% + kernel = 19.6%); 3.391 = 3.000 (user) + 0.391 (kernel) seconds
+Total Actions: 13,630 in 2.00 seconds
+ «Dashboard»╶┬╴ 12,704 (avg = 0.16 ± 0.981) ➛ 46.6% {user = 43.9% + kernel = 2.8%} no errors
+         1st │   1,853 (avg = 1.08 ± 0.856) ➛ 49.2% {user = 45.3% + kernel = 3.9%} no errors
+         2nd │   1,833 (avg = 1.09 ± 0.771) ➛ 46.9% {user = 45.3% + kernel = 1.6%} no errors
+         3rd │   1,795 (avg = 1.11 ± 1.071) ➛ 47.6% {user = 45.3% + kernel = 2.3%} no errors
+         4th │   1,854 (avg = 1.08 ± 0.838) ➛ 39.0% {user = 35.9% + kernel = 3.1%} no errors
+         5th │   1,774 (avg = 1.13 ± 1.072) ➛ 51.6% {user = 50.8% + kernel = 0.8%} no errors
+         6th │   1,829 (avg = 1.09 ± 0.813) ➛ 45.3% {user = 42.2% + kernel = 3.1%} no errors
+         7th │   1,766 (avg = 1.13 ± 1.341) ➛ 46.9% {user = 42.2% + kernel = 4.7%} no errors
+ «Merging»   ╵     926 (avg = 2.16 ± 0.989) ➛ 16.4% {user = 14.8% + kernel = 1.6%} no errors
+
+SQL CPU AFFINITY COUNT is 7/8. Affinity mask = 254
+SQL Server CPU Usage: 179.7% (user = 160.2% + kernel = 19.6%); 3.594 = 3.203 (user) + 0.391 (kernel) seconds
+Total Actions: 14,696 in 2.00 seconds
+ «Dashboard»╶┬╴ 13,676 (avg = 0.15 ± 0.748) ➛ 49.0% {user = 45.7% + kernel = 3.2%} no errors
+         1st │   1,900 (avg = 1.05 ± 0.815) ➛ 44.5% {user = 43.7% + kernel = 0.8%} no errors
+         2nd │   1,969 (avg = 1.02 ± 0.881) ➛ 47.7% {user = 44.5% + kernel = 3.1%} no errors
+         3rd │   1,969 (avg = 1.02 ± 0.676) ➛ 53.9% {user = 48.4% + kernel = 5.5%} no errors
+         4th │   1,996 (avg = 1.00 ± 0.571) ➛ 47.6% {user = 44.5% + kernel = 3.1%} no errors
+         5th │   1,962 (avg = 1.02 ± 0.802) ➛ 49.2% {user = 45.3% + kernel = 3.9%} no errors
+         6th │   1,917 (avg = 1.04 ± 0.795) ➛ 47.6% {user = 45.3% + kernel = 2.3%} no errors
+         7th │   1,963 (avg = 1.02 ± 0.653) ➛ 52.3% {user = 48.4% + kernel = 3.9%} no errors
+ «Merging»   ╵   1,020 (avg = 1.96 ± 0.971) ➛ 25.8% {user = 25.8% + kernel = 0.0%} no errors
+
+SQL CPU AFFINITY COUNT is 8/8. Affinity mask = 0
+SQL Server CPU Usage: 211.7% (user = 189.9% + kernel = 21.9%); 4.234 = 3.797 (user) + 0.437 (kernel) seconds
+Total Actions: 16,830 in 2.00 seconds
+ «Dashboard»╶┬╴ 15,659 (avg = 0.13 ± 0.283) ➛ 59.5% {user = 55.5% + kernel = 4.0%} no errors
+         1st │   2,229 (avg = 0.90 ± 0.295) ➛ 57.0% {user = 52.3% + kernel = 4.7%} no errors
+         2nd │   2,228 (avg = 0.90 ± 0.280) ➛ 60.9% {user = 55.5% + kernel = 5.5%} no errors
+         3rd │   2,231 (avg = 0.90 ± 0.278) ➛ 57.0% {user = 54.7% + kernel = 2.3%} no errors
+         4th │   2,235 (avg = 0.90 ± 0.285) ➛ 63.3% {user = 61.7% + kernel = 1.6%} no errors
+         5th │   2,248 (avg = 0.89 ± 0.285) ➛ 66.4% {user = 64.0% + kernel = 2.3%} no errors
+         6th │   2,229 (avg = 0.90 ± 0.277) ➛ 56.2% {user = 50.8% + kernel = 5.5%} no errors
+         7th │   2,259 (avg = 0.89 ± 0.278) ➛ 55.5% {user = 49.2% + kernel = 6.2%} no errors
+ «Merging»   ╵   1,171 (avg = 1.71 ± 0.551) ➛ 28.9% {user = 25.0% + kernel = 3.9%} no errors
+
+#1.1 {StressScalability('(local)' Ver 16.0.4145.4)} >PASSED< in 00:00:32.3787102 (cpu: 14%, 4,593.750 = 3,750.000 [user] + 843.750 [kernel] milliseconds)
+
