@@ -1159,7 +1159,7 @@ function Try-BuildServerType() {
      "BUILDKITE",
      "CIRCLECI",
      "CIRRUS_CI",
-     "CODEBUILD_BUILD_ARN"
+     "CODEBUILD_BUILD_ARN",
      "DRONE",
      "DSARI",
      "GITHUB_ACTIONS",

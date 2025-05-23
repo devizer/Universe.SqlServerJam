@@ -88,12 +88,27 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
         List<int> sqlCoresList = Enumerable.Range(1, sqlServerCpuCores).ToList();
         foreach (var sqlCores in sqlCoresList)
         {
+            // Adjust App Cores
+            var appCoreCount = Environment.ProcessorCount;
+            if (testCase.ToSqlServerDataSource().IsLocal)
+            {
+                appCoreCount = Environment.ProcessorCount - sqlCores;
+                var lowerAppCores = Math.Max(1, Environment.ProcessorCount * 3 / 4);
+                appCoreCount = Math.Max(lowerAppCores, appCoreCount);
+            }
+
+            var appAffinity = new AffinityMask(Environment.ProcessorCount, AffinityMask.Mode.App);
+            var appAffinityMask = appAffinity.CountToMask(appCoreCount);
+            Process.GetCurrentProcess().ProcessorAffinity = new IntPtr(appAffinityMask);
+            Console.WriteLine($"App Cores: {appCoreCount}/{Environment.ProcessorCount}, {AffinityMask.FormatAffinity(Environment.ProcessorCount, appAffinityMask)}");
+
             management.Configuration.AffinityCount = sqlCores;
-            Console.WriteLine($"SQL CPU AFFINITY COUNT is {sqlCores}/{sqlServerCpuCores}. Affinity mask = {management.Configuration.AffinityMask}");
+            Console.WriteLine($"SQL Cores: {sqlCores}/{sqlServerCpuCores}, {AffinityMask.FormatAffinity(Environment.ProcessorCount, management.Configuration.AffinityMask)}");
             var stressDuration = TimeSpan.FromMilliseconds(SensorsAppStressSettings.StressDuration ?? 2000);
             StressOrchestrator stressOrchestrator = new StressOrchestrator() { MaxDuration = stressDuration };
             stressOrchestrator.AddWorker($"Merging", updater);
-            stressOrchestrator.AddWorkers("Dashboard", Math.Max(1, sqlServerCpuCores - 1), reader);
+            var dashboardWorkersCount = Math.Min(Environment.ProcessorCount, Math.Max(1, sqlCores + 1));
+            stressOrchestrator.AddWorkers("Dashboard", dashboardWorkersCount, reader);
             var sqlCpuUsageOnStart = management.CpuUsage;
             var totalResults = stressOrchestrator.Run();
             var sqlCpuUsage = management.CpuUsage - sqlCpuUsageOnStart;

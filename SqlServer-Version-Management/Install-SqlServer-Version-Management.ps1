@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.103';
+$ModuleVersion = '2.1.104';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -15,7 +15,7 @@ $ModuleFiles = @(
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
 			"",
 			"  # Version below is automatically incremented on build",
-			"  ModuleVersion = `"2.1.103`"",
+			"  ModuleVersion = `"2.1.104`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -26,9 +26,9 @@ $ModuleFiles = @(
 			"  Copyright = '(c) 2010-2025 devizer.'",
 			"",
 			"  Description = @`"",
-			"SQL Server Setup and Version Management Guide: https://github.com/devizer/Universe.SqlServerJam/tree/master/SqlServer-Version-Management",
+			"SQL Server Setup and Version Management Guide: https://devizer.github.io/SqlServer-Version-Management",
 			"",
-			"SQLServer Setup and Management manages Developer, Express, and LocalDB editions.",
+			"It installs Developer, Express, or LocalDB editions.",
 			"The intended use of this project is for Continuous Integration (CI) scenarios, where:",
 			"     1) SQL Server or LocalDB needs to be installed without user interaction.",
 			"     2) SQL Server or LocalDB installation doesn't need to persist across multiple CI runs.",
@@ -1250,7 +1250,7 @@ $ModuleFiles = @(
 			"     `"BUILDKITE`",",
 			"     `"CIRCLECI`",",
 			"     `"CIRRUS_CI`",",
-			"     `"CODEBUILD_BUILD_ARN`"",
+			"     `"CODEBUILD_BUILD_ARN`",",
 			"     `"DRONE`",",
 			"     `"DSARI`",",
 			"     `"GITHUB_ACTIONS`",",

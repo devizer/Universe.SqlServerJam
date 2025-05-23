@@ -40,19 +40,20 @@ public struct AffinityMask
         if (count == cpuCount && Side == Mode.Sql) return 0;
 
         long ret = 0;
-        long scale = 1;
+        long scale = Side == Mode.Sql ? 1 : (1 << count);
         for (int i = 0; i < count; i++)
         {
             ret += scale;
-            scale <<= 1;
+            scale  = Side == Mode.Sql ? scale <<= 1 : scale >>= 1;
         }
 
-        if (count < CpuCount && Side == Mode.Sql) ret <<= 1; // Do not load core=0 on sql?
+        // if (count < CpuCount && Side == Mode.Sql) ret <<= 1; // Do not load core=0 on sql?
         return ret;
     }
 
     public static string FormatAffinity(int totalCoreCount, long affinity)
     {
+        var argAffinity = affinity;
         StringBuilder ret = new StringBuilder();
         // var procCount = Math.Min(64, Environment.ProcessorCount);
         var procCount = Math.Min(64, totalCoreCount);
@@ -61,6 +62,7 @@ public struct AffinityMask
         {
             bool bit = (affinity & 1) != 0;
             affinity >>= 1;
+            if (argAffinity == 0 && i < totalCoreCount) bit = true;
             ret.Append(bit ? '#' : '-');
             if (i > 0 && i < maxIndex - 1 && i % 4 == 3) ret.Append(' ');
         }
