@@ -97,6 +97,10 @@ namespace Universe.SqlServerJam
                 }
             }
 
+            return new SqlServerDataSource()
+            {
+                Original = dataSource,
+            };
             return null;
         }
 

@@ -90,7 +90,7 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
         {
             // Adjust App Cores
             var appCoreCount = Environment.ProcessorCount;
-            if (testCase.ToSqlServerDataSource().IsLocal)
+            if (testCase.ToSqlServerDataSource()?.IsLocal == true)
             {
                 appCoreCount = Environment.ProcessorCount - sqlCores;
                 var lowerAppCores = Math.Max(1, Environment.ProcessorCount * 3 / 4);
