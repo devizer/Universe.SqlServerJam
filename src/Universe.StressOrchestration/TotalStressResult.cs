@@ -27,7 +27,7 @@ public class TotalStressResult
             ? (double?)null
             : 100d * actionsCount / baseLine.GetTotalActionsCount();
 
-        var comparePerCentsString = comparePerCents == null ? "" : $" ({FormatPerCents(comparePerCents)})";
+        var comparePerCentsString = comparePerCents == null ? "" : $" ({FormatRelativePerCents(comparePerCents)})";
         var totalRow = $"Total Actions: {actionsCount:n0}{comparePerCentsString} in {TotalDuration.TotalSeconds:n2} seconds";
 
         ConsoleTable mainTable = new ConsoleTable("●", "C", "*", "-N", "A", "➛", "-%", "%", "!")
@@ -112,18 +112,19 @@ public class TotalStressResult
         return WorkerResults.Count == 0 ? 0 : WorkerResults.Sum(x => x.TotalCount);
     }
 
-    static string FormatPerCents(double? perCents)
+    // 100% - baseline
+    static string FormatRelativePerCents(double? perCents)
     {
         if (perCents == null) return null;
+        var pc = perCents.Value - 100;
         string ret = null;
-        string sign = null;
-        if (Math.Abs(perCents.Value) <= Double.Epsilon) ret = "+0%";
+        if (Math.Abs(pc) <= Double.Epsilon) ret = "+0%";
         else
         {
-            sign = perCents.Value >= 0 ? "+" : "-";
+            var sign = pc >= 0 ? "+" : "-";
+            ret = $"{sign}{pc:n1}%";
         }
 
-        ret = $"{sign}{perCents.Value:n1}%";
         return ret;
     }
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace Universe.SqlServerJam.Tests
@@ -6,7 +7,29 @@ namespace Universe.SqlServerJam.Tests
     // Narayana Pandita’s algorithm that returns indexes only
     public static class SimplePermutations
     {
+        // wrapper
+        public static IEnumerable<IEnumerable<T>> GetAll<T>(this IEnumerable<T> elements) => GetAll(elements, false);
+        public static IEnumerable<IEnumerable<T>> GetAllIsolated<T>(this IEnumerable<T> elements) => GetAll(elements, true);
+        public static IEnumerable<IEnumerable<T>> GetAll<T>(this IEnumerable<T> elements, bool needNewCopy)
+        {
+            var arr = elements.ToArray();
+            var elementsCount = arr.Length;
+            var ret = new T[elementsCount];
+            foreach (var next in GetAll(elementsCount, false))
+            {
+                for(int i=0; i<ret.Length; i++) ret[i] = arr[next[i]];
+                if (needNewCopy)
+                {
+                    T[] copy = new T[ret.Length];
+                    for (int i = 0; i <= ret.Length; i++) copy[i] = ret[i];
+                    yield return copy;
+                }
+                else yield return ret;
+            }
+        }
+
         
+        // core
         public static IEnumerable<int[]> GetAll(int elementsCount) => GetAll(elementsCount, false);
         public static IEnumerable<int[]> GetAllIsolated(int elementsCount) => GetAll(elementsCount, true);
 
@@ -22,6 +45,7 @@ namespace Universe.SqlServerJam.Tests
 
             int[] array = new int[elementsCount];
             for(int i = 0; i < elementsCount; i++) array[i] = i;
+            // first is 0, 1, 2, ... elementsCount
             if (needNewCopy)
             {
                 int[] copy = new int[elementsCount];
@@ -33,6 +57,7 @@ namespace Universe.SqlServerJam.Tests
                 yield return array;
             }
 
+            // next in a loop
             while (NextPermutation(array))
             {
                 if (needNewCopy)
