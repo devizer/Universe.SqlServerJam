@@ -14,15 +14,21 @@ public class TotalStressResult
     public TimeSpan PayloadDuration => TimeSpan.FromSeconds(WorkerResults.Count == 0 ? 0 : WorkerResults.Max(x => x.TotalDuration));
     public List<WorkerStressResults> WorkerResults { get; internal set; } = new List<WorkerStressResults>();
 
-    public override string ToString()
+    public string ToString(TotalStressResult baseLine)
     {
+        bool onlyBaseLine = baseLine == null || this == baseLine;
         string[] groups = WorkerResults.Select(x => x.WorkerGroup).OrderBy(x => x).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
         if (groups.Length == 0) return string.Empty;
         int maxGroupNameLength = groups.Max(x => x.Length);
         StringBuilder ret = new StringBuilder();
 
-        long actionsCount = WorkerResults.Count == 0 ? 0 : WorkerResults.Sum(x => x.TotalCount);
-        var totalRow = $"Total Actions: {actionsCount:n0} in {TotalDuration.TotalSeconds:n2} seconds";
+        long actionsCount = GetTotalActionsCount();
+        double? comparePerCents = onlyBaseLine
+            ? (double?)null
+            : 100d * actionsCount / baseLine.GetTotalActionsCount();
+
+        var comparePerCentsString = comparePerCents == null ? "" : $" ({FormatPerCents(comparePerCents)})";
+        var totalRow = $"Total Actions: {actionsCount:n0}{comparePerCentsString} in {TotalDuration.TotalSeconds:n2} seconds";
 
         ConsoleTable mainTable = new ConsoleTable("●", "C", "*", "-N", "A", "➛", "-%", "%", "!")
         {
@@ -44,7 +50,7 @@ public class TotalStressResult
             var ret = $"{(100d * microseconds / duration / 1000000):n1}%";
             return $"{ret,-5}";
         }
-            
+
         string FormatLongCpuUsage(CpuUsage.CpuUsage cpuUsage, double duration)
         {
             if (Math.Abs(duration) <= Double.Epsilon) return "";
@@ -99,6 +105,31 @@ public class TotalStressResult
 
         var r = string.Join(Environment.NewLine, WorkerResults.Select(x => $" • {x}").ToArray());
         return $"{totalRow}{Environment.NewLine}{mainTable}";
+    }
+
+    public long GetTotalActionsCount()
+    {
+        return WorkerResults.Count == 0 ? 0 : WorkerResults.Sum(x => x.TotalCount);
+    }
+
+    static string FormatPerCents(double? perCents)
+    {
+        if (perCents == null) return null;
+        string ret = null;
+        string sign = null;
+        if (Math.Abs(perCents.Value) <= Double.Epsilon) ret = "+0%";
+        else
+        {
+            sign = perCents.Value >= 0 ? "+" : "-";
+        }
+
+        ret = $"{sign}{perCents.Value:n1}%";
+        return ret;
+    }
+
+    public override string ToString()
+    {
+        return ToString(this);
     }
 
 

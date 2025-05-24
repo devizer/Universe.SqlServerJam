@@ -86,34 +86,42 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
         Console.WriteLine($"SQL Server {testCase} CPU: '{sqlCpuName}'");
         Console.WriteLine("");
         List<int> sqlCoresList = Enumerable.Range(1, sqlServerCpuCores).ToList();
+        TotalStressResult baseLine = null;
         foreach (var sqlCores in sqlCoresList)
         {
             // Adjust App Cores
             var appCoreCount = Environment.ProcessorCount;
             if (testCase.ToSqlServerDataSource()?.IsLocal == true)
             {
+                // 1 => 7
                 appCoreCount = Environment.ProcessorCount - sqlCores;
-                var lowerAppCores = Math.Max(1, Environment.ProcessorCount * 3 / 4);
+                var lowerAppCores = Math.Max(1, Environment.ProcessorCount - Environment.ProcessorCount * 3 / 4);
                 appCoreCount = Math.Max(lowerAppCores, appCoreCount);
             }
 
             var appAffinity = new AffinityMask(Environment.ProcessorCount, AffinityMask.Mode.App);
             var appAffinityMask = appAffinity.CountToMask(appCoreCount);
             Process.GetCurrentProcess().ProcessorAffinity = new IntPtr(appAffinityMask);
-            Console.WriteLine($"App Cores: {appCoreCount}/{Environment.ProcessorCount}, {AffinityMask.FormatAffinity(Environment.ProcessorCount, appAffinityMask)}");
+            Console.WriteLine($"App Cores: {appCoreCount}/{Environment.ProcessorCount}, {AffinityMask.FormatAffinity(Environment.ProcessorCount, appAffinityMask)}, {appAffinityMask:X16}");
 
             management.Configuration.AffinityCount = sqlCores;
-            Console.WriteLine($"SQL Cores: {sqlCores}/{sqlServerCpuCores}, {AffinityMask.FormatAffinity(Environment.ProcessorCount, management.Configuration.AffinityMask)}");
+            Console.WriteLine($"SQL Cores: {sqlCores}/{sqlServerCpuCores}, {AffinityMask.FormatAffinity(Environment.ProcessorCount, management.Configuration.AffinityMask)}, {management.Configuration.AffinityMask:X16}");
+            
             var stressDuration = TimeSpan.FromMilliseconds(SensorsAppStressSettings.StressDuration ?? 2000);
             StressOrchestrator stressOrchestrator = new StressOrchestrator() { MaxDuration = stressDuration };
             stressOrchestrator.AddWorker($"Merging", updater);
-            var dashboardWorkersCount = Math.Min(Environment.ProcessorCount, Math.Max(1, sqlCores + 1));
+            var dashboardWorkersCountMax = Environment.ProcessorCount;
+            // 1: 1; 2: 2, 4: 2, 8: 4
+            var dashboardWorkersCountMin1 = 4;
+            var dashboardWorkersCount = sqlCores + 1;
+            dashboardWorkersCount = Math.Max(dashboardWorkersCountMin1, Math.Min(dashboardWorkersCountMax, dashboardWorkersCount));
             stressOrchestrator.AddWorkers("Dashboard", dashboardWorkersCount, reader);
             var sqlCpuUsageOnStart = management.CpuUsage;
-            var totalResults = stressOrchestrator.Run();
+            TotalStressResult totalResults = stressOrchestrator.Run();
+            baseLine ??= totalResults;
             var sqlCpuUsage = management.CpuUsage - sqlCpuUsageOnStart;
             Console.WriteLine($"SQL Server CPU Usage: {sqlCpuUsage.Format(stressOrchestrator.MaxDuration.TotalSeconds)}; {sqlCpuUsage}");
-            Console.WriteLine(totalResults);
+            Console.WriteLine(totalResults.ToString(baseLine));
             // TestContext.WriteLine(totalResults);
         }
     }

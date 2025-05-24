@@ -40,7 +40,7 @@ public struct AffinityMask
         if (count == cpuCount && Side == Mode.Sql) return 0;
 
         long ret = 0;
-        long scale = Side == Mode.Sql ? 1 : (1 << count);
+        long scale = Side == Mode.Sql ? 1 : (1 << (this.CpuCount - 1));
         for (int i = 0; i < count; i++)
         {
             ret += scale;
