@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System;
+using System.Diagnostics;
 
 namespace Universe.SqlServerJam;
 
@@ -22,7 +23,7 @@ public struct AffinityMask
 
     public int MaskToCount(long affinityMask)
     {
-        if (affinityMask == 0 && Side == Mode.Sql) return (short)CpuCount; // only for SQL Server
+        if (affinityMask == 0 && Side == Mode.Sql) return CpuCount; // only for SQL Server
         int count = 0;
         long scale = 1;
         for (int i = 0; i < 64; i++)
@@ -36,11 +37,12 @@ public struct AffinityMask
 
     public long CountToMask(int count)
     {
+        if (Debugger.IsAttached && Side == Mode.App && count == 48) Debugger.Break();
         var cpuCount = CpuCount;
         if (count == cpuCount && Side == Mode.Sql) return 0;
 
-        long ret = 0;
-        long scale = Side == Mode.Sql ? 1 : (1 << (this.CpuCount - 1));
+        ulong ret = 0;
+        ulong scale = Side == Mode.Sql ? 1UL : 1UL << (this.CpuCount - 1);
         for (int i = 0; i < count; i++)
         {
             ret += scale;
@@ -48,7 +50,7 @@ public struct AffinityMask
         }
 
         // if (count < CpuCount && Side == Mode.Sql) ret <<= 1; // Do not load core=0 on sql?
-        return ret;
+        return (long)ret;
     }
 
     public static string FormatAffinity(int totalCoreCount, long affinity)

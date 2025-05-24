@@ -117,17 +117,19 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
         var sqlCpuName = management.CpuName;
         var sqlCpuCount = management.CpuCount;
         bool isLocalServer = sqlServerRef.ToSqlServerDataSource().IsLocal;
-        var ret = GetStressCases(
-            isLocalServer,
-            sqlCpuCount,
-            Environment.ProcessorCount,
-            new string[] { "Dashboard", "Merging" }
-        );
+        StressPlanBuilder stressPlanBuilder = new StressPlanBuilder()
+        {
+            IsLocalServer = isLocalServer,
+            AppProcessorCount = Environment.ProcessorCount,
+            SqlProcessorCount = sqlCpuCount,
+            Workers = new string[] { "Dashboard", "Merging" }
+        };
 
+        var ret = stressPlanBuilder.GetStressCases();
         return ret;
     }
 
-    List<StressCase> GetStressCases(bool isLocalServer, int sqlProcessorCount, int appProcessorCount, string[] workers)
+    List<StressCase> GetStressCases_KillIt(bool isLocalServer, int sqlProcessorCount, int appProcessorCount, string[] workers)
     {
         List<StressCase> ret = new List<StressCase>();
         for (int sqlCores = 1; sqlCores <= sqlProcessorCount; sqlCores++)
@@ -186,36 +188,7 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
     public void ShowStressCases(SqlServerRef testCase)
     {
         var stressCases = GetStressCases(testCase);
-        var header = new List<List<string>>
-        {
-            new List<string> { "Sql", "Cores" },
-            new List<string> { "Sql", "Affinity" },
-            new List<string> { "Sql", "Affinity" },
-            new List<string> { "App", "Cores" },
-            new List<string> { "App", "Affinity" },
-            new List<string> { "App", "Affinity" },
-            new List<string> { "Dashboard", "Threads" },
-        };
-        var ct = new ConsoleTable(header) { NeedUnicode = true };
-
-        var sqlProcessorCount = testCase.Manage().CpuCount;
-        foreach (var stressCase in stressCases)
-        {
-            ct.AddRow(
-                stressCase.SqlCores,
-                AffinityMask.FormatAffinity(sqlProcessorCount, stressCase.SqlAffinity),
-                stressCase.SqlAffinity.ToString("X16"),
-                stressCase.AppCores,
-                AffinityMask.FormatAffinity(Environment.ProcessorCount, stressCase.AppAffinity),
-                stressCase.AppAffinity.ToString("X16"),
-                stressCase.DashboardThreads.ToString("0")
-            );
-        }
-
-        Console.WriteLine(ct.ToString());
-
-
-
+        Console.WriteLine(stressCases.Format());
     }
 
 
@@ -226,18 +199,4 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
     {
         CleanUp?.Invoke();
     }
-}
-
-internal class StressCase
-{
-    public int SqlCores;
-    public long SqlAffinity;
-    public int DashboardThreads;
-    public int MergeThreads;
-    public long AppCores;
-    public long AppAffinity;
-    public IDictionary<string, int> Workers = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-
-    public int AppProcessorCount; // same for the all
-    public int SqlProcessorCount; // same for the all
 }
