@@ -1,0 +1,139 @@
+#3.1 {ShowStressCases('(local)' Ver 16.0.4175.1)} @ SensorsAppScalabilityBenchmark starting...
+Sql  │Sql      │Sql             │App  │App      │App             │Dashboard
+Cores│Affinity │Affinity        │Cores│Affinity │Affinity        │Threads
+─────┼─────────┼────────────────┼─────┼─────────┼────────────────┼─────────
+1    │#--- ----│0000000000000001│7    │-### ####│00000000000000FE│4
+2    │##-- ----│0000000000000003│6    │--## ####│00000000000000FC│4
+3    │###- ----│0000000000000007│5    │---# ####│00000000000000F8│4
+4    │#### ----│000000000000000F│4    │---- ####│00000000000000F0│5
+5    │#### #---│000000000000001F│4    │---- ####│00000000000000F0│6
+6    │#### ##--│000000000000003F│4    │---- ####│00000000000000F0│7
+7    │#### ###-│000000000000007F│4    │---- ####│00000000000000F0│8
+8    │#### ####│0000000000000000│4    │---- ####│00000000000000F0│8
+8    │#### ####│0000000000000000│8    │#### ####│00000000000000FF│8
+
+#3.1 {ShowStressCases('(local)' Ver 16.0.4175.1)} >PASSED< in 00:00:00.0782518 (cpu: 20%, 15.625 = 15.625 [user] + 0.000 [kernel] milliseconds)
+#3.2 {StressScalability('(local)' Ver 16.0.4175.1)} @ SensorsAppScalabilityBenchmark starting...
+Stress DB [Test of Sensors 2025-05-25 13-53-22.70 6d750c8bde8c46aaa597ec8883f57e46] is ready
+Seed took 0.17 seconds
+DB Size: 16,384 KB (Data: 8,192 KB; Log: 8,192 KB)
+Categories Count: 1,000
+SQL Server '(local)' Ver 16.0.4175.1 CPU: 'Intel(R) Xeon(R) Platinum 8175M CPU @ 2.50GHz'
+App Cores: 7/8, -### ####, 00000000000000FE
+SQL Cores: 1/8, #--- ----, 0000000000000001
+SQL Server CPU Usage: 93.7% (user = 70.3% + kernel = 23.4%); 0.937 = 0.703 (user) + 0.234 (kernel) seconds
+Total Actions: 12,128 in 1.00 seconds
+ «Dashboard»╶┬╴ 10,837 (avg = 0.09 ± 0.526) ➛ 5.5% {user = 3.9%  + kernel = 1.6%} no errors
+         1st │   2,743 (avg = 0.36 ± 0.486) ➛ 9.4% {user = 9.4%  + kernel = 0.0%} no errors
+         2nd │   2,676 (avg = 0.37 ± 0.528) ➛ 9.4% {user = 6.2%  + kernel = 3.1%} no errors
+         3rd │   2,740 (avg = 0.37 ± 0.480) ➛ 1.6% {user = 0.0%  + kernel = 1.6%} no errors
+         4th │   2,678 (avg = 0.37 ± 0.604) ➛ 1.6% {user = 0.0%  + kernel = 1.6%} no errors
+ «Merging»   ╵   1,291 (avg = 0.77 ± 0.774) ➛ 4.7% {user = 4.7%  + kernel = 0.0%} no errors
+
+App Cores: 6/8, --## ####, 00000000000000FC
+SQL Cores: 2/8, ##-- ----, 0000000000000003
+SQL Server CPU Usage: 103.1% (user = 92.1% + kernel = 11.0%); 1.031 = 0.921 (user) + 0.110 (kernel) seconds
+Total Actions: 11,655 (-3.9%) in 1.00 seconds
+ «Dashboard»╶┬╴ 10,379 (avg = 0.10 ± 0.274) ➛  9.0% {user = 5.9%  + kernel = 3.1%} no errors
+         1st │   2,615 (avg = 0.38 ± 0.196) ➛ 12.5% {user = 6.2%  + kernel = 6.2%} no errors
+         2nd │   2,542 (avg = 0.39 ± 0.429) ➛  6.2% {user = 4.7%  + kernel = 1.6%} no errors
+         3rd │   2,610 (avg = 0.38 ± 0.200) ➛  7.8% {user = 6.2%  + kernel = 1.6%} no errors
+         4th │   2,612 (avg = 0.38 ± 0.199) ➛  9.4% {user = 6.2%  + kernel = 3.1%} no errors
+ «Merging»   ╵   1,276 (avg = 0.78 ± 0.966) ➛  6.2% {user = 4.7%  + kernel = 1.6%} no errors
+
+App Cores: 5/8, ---# ####, 00000000000000F8
+SQL Cores: 3/8, ###- ----, 0000000000000007
+SQL Server CPU Usage: 179.7% (user = 142.2% + kernel = 37.5%); 1.797 = 1.422 (user) + 0.375 (kernel) seconds
+Total Actions: 18,688 (+54.1%) in 1.00 seconds
+ «Dashboard»╶┬╴ 17,146 (avg = 0.06 ± 0.367) ➛ 21.5% {user = 18.4% + kernel = 3.1%} no errors
+         1st │   4,294 (avg = 0.23 ± 0.384) ➛ 20.3% {user = 18.7% + kernel = 1.6%} no errors
+         2nd │   4,238 (avg = 0.24 ± 0.389) ➛ 18.7% {user = 17.2% + kernel = 1.6%} no errors
+         3rd │   4,379 (avg = 0.23 ± 0.262) ➛ 28.1% {user = 20.3% + kernel = 7.8%} no errors
+         4th │   4,235 (avg = 0.24 ± 0.416) ➛ 18.7% {user = 17.2% + kernel = 1.6%} no errors
+ «Merging»   ╵   1,542 (avg = 0.65 ± 0.914) ➛ 10.9% {user = 10.9% + kernel = 0.0%} no errors
+
+App Cores: 4/8, ---- ####, 00000000000000F0
+SQL Cores: 4/8, #### ----, 000000000000000F
+SQL Server CPU Usage: 185.9% (user = 159.4% + kernel = 26.5%); 1.859 = 1.594 (user) + 0.265 (kernel) seconds
+Total Actions: 19,853 (+63.7%) in 3.87 seconds
+ «Dashboard»╶┬╴ 18,373 (avg = 0.09 ± 25.952) ➛ 17.3% {user = 14.5% + kernel = 2.8%} no errors
+         1st │   4,217 (avg = 0.24 ± 0.508)  ➛ 21.9% {user = 20.3% + kernel = 1.6%} no errors
+         2nd │   4,213 (avg = 0.24 ± 0.369)  ➛ 37.5% {user = 29.7% + kernel = 7.8%} no errors
+         3rd │   4,294 (avg = 0.23 ± 0.254)  ➛ 34.4% {user = 31.2% + kernel = 3.1%} no errors
+         4th │   1,377 (avg = 2.81 ± 94.788) ➛  3.6% {user = 2.4%  + kernel = 1.2%} no errors
+         5th │   4,272 (avg = 0.23 ± 0.275)  ➛ 28.1% {user = 23.4% + kernel = 4.7%} no errors
+ «Merging»   ╵   1,480 (avg = 0.68 ± 0.880)  ➛  7.8% {user = 4.7%  + kernel = 3.1%} no errors
+
+App Cores: 4/8, ---- ####, 00000000000000F0
+SQL Cores: 5/8, #### #---, 000000000000001F
+SQL Server CPU Usage: 220.4% (user = 176.6% + kernel = 43.8%); 2.204 = 1.766 (user) + 0.438 (kernel) seconds
+Total Actions: 25,668 (+111.6%) in 1.00 seconds
+ «Dashboard»╶┬╴ 24,210 (avg = 0.04 ± 0.503) ➛ 27.6% {user = 23.2% + kernel = 4.4%} no errors
+         1st │   4,082 (avg = 0.24 ± 0.391) ➛ 26.6% {user = 21.9% + kernel = 4.7%} no errors
+         2nd │   4,050 (avg = 0.25 ± 0.535) ➛ 31.2% {user = 26.6% + kernel = 4.7%} no errors
+         3rd │   3,968 (avg = 0.25 ± 0.623) ➛ 23.4% {user = 18.7% + kernel = 4.7%} no errors
+         4th │   4,043 (avg = 0.25 ± 0.522) ➛ 25.0% {user = 20.3% + kernel = 4.7%} no errors
+         5th │   4,115 (avg = 0.24 ± 0.373) ➛ 26.6% {user = 23.4% + kernel = 3.1%} no errors
+         6th │   3,952 (avg = 0.25 ± 0.537) ➛ 32.8% {user = 28.1% + kernel = 4.7%} no errors
+ «Merging»   ╵   1,458 (avg = 0.69 ± 0.994) ➛ 10.9% {user = 10.9% + kernel = 0.0%} no errors
+
+App Cores: 4/8, ---- ####, 00000000000000F0
+SQL Cores: 6/8, #### ##--, 000000000000003F
+SQL Server CPU Usage: 240.5% (user = 193.7% + kernel = 46.8%); 2.405 = 1.937 (user) + 0.468 (kernel) seconds
+Total Actions: 29,898 (+146.5%) in 1.01 seconds
+ «Dashboard»╶┬╴ 28,435 (avg = 0.04 ± 0.322) ➛ 33.0% {user = 28.1% + kernel = 4.9%} no errors
+         1st │   4,061 (avg = 0.25 ± 0.320) ➛ 32.6% {user = 23.3% + kernel = 9.3%} no errors
+         2nd │   4,053 (avg = 0.25 ± 0.272) ➛ 31.2% {user = 26.6% + kernel = 4.7%} no errors
+         3rd │   4,070 (avg = 0.25 ± 0.288) ➛ 37.5% {user = 32.8% + kernel = 4.7%} no errors
+         4th │   4,108 (avg = 0.24 ± 0.245) ➛ 31.2% {user = 26.6% + kernel = 4.7%} no errors
+         5th │   4,103 (avg = 0.25 ± 0.317) ➛ 34.1% {user = 31.0% + kernel = 3.1%} no errors
+         6th │   3,964 (avg = 0.25 ± 0.424) ➛ 31.2% {user = 29.7% + kernel = 1.6%} no errors
+         7th │   4,076 (avg = 0.25 ± 0.359) ➛ 32.8% {user = 26.6% + kernel = 6.2%} no errors
+ «Merging»   ╵   1,463 (avg = 0.68 ± 0.478) ➛  9.4% {user = 9.4%  + kernel = 0.0%} no errors
+
+App Cores: 4/8, ---- ####, 00000000000000F0
+SQL Cores: 7/8, #### ###-, 000000000000007F
+SQL Server CPU Usage: 242.2% (user = 198.4% + kernel = 43.8%); 2.422 = 1.984 (user) + 0.438 (kernel) seconds
+Total Actions: 32,544 (+168.3%) in 1.00 seconds
+ «Dashboard»╶┬╴ 31,085 (avg = 0.03 ± 0.472) ➛ 32.6% {user = 25.0% + kernel = 7.6%}  no errors
+         1st │   3,850 (avg = 0.26 ± 0.482) ➛ 31.2% {user = 25.0% + kernel = 6.2%}  no errors
+         2nd │   3,759 (avg = 0.27 ± 0.703) ➛ 32.8% {user = 25.0% + kernel = 7.8%}  no errors
+         3rd │   4,061 (avg = 0.25 ± 0.249) ➛ 34.4% {user = 20.3% + kernel = 14.1%} no errors
+         4th │   3,893 (avg = 0.26 ± 0.453) ➛ 32.8% {user = 21.9% + kernel = 10.9%} no errors
+         5th │   3,986 (avg = 0.25 ± 0.302) ➛ 35.9% {user = 31.2% + kernel = 4.7%}  no errors
+         6th │   3,745 (avg = 0.27 ± 0.710) ➛ 23.4% {user = 17.2% + kernel = 6.2%}  no errors
+         7th │   3,901 (avg = 0.26 ± 0.337) ➛ 42.2% {user = 32.8% + kernel = 9.4%}  no errors
+         8th │   3,890 (avg = 0.26 ± 0.332) ➛ 28.1% {user = 26.6% + kernel = 1.6%}  no errors
+ «Merging»   ╵   1,459 (avg = 0.69 ± 0.419) ➛  7.8% {user = 7.8%  + kernel = 0.0%}  no errors
+
+App Cores: 4/8, ---- ####, 00000000000000F0
+SQL Cores: 8/8, #### ####, 0000000000000000
+SQL Server CPU Usage: 242.2% (user = 206.3% + kernel = 35.9%); 2.422 = 2.063 (user) + 0.359 (kernel) seconds
+Total Actions: 29,749 (+145.3%) in 1.00 seconds
+ «Dashboard»╶┬╴ 28,408 (avg = 0.04 ± 0.386) ➛ 31.8% {user = 25.0% + kernel = 6.8%}  no errors
+         1st │   3,408 (avg = 0.29 ± 0.532) ➛ 26.6% {user = 21.9% + kernel = 4.7%}  no errors
+         2nd │   3,602 (avg = 0.28 ± 0.309) ➛ 37.5% {user = 34.4% + kernel = 3.1%}  no errors
+         3rd │   3,461 (avg = 0.29 ± 0.466) ➛ 39.1% {user = 34.4% + kernel = 4.7%}  no errors
+         4th │   3,648 (avg = 0.27 ± 0.250) ➛ 26.6% {user = 23.4% + kernel = 3.1%}  no errors
+         5th │   3,596 (avg = 0.28 ± 0.340) ➛ 26.6% {user = 20.3% + kernel = 6.2%}  no errors
+         6th │   3,602 (avg = 0.28 ± 0.325) ➛ 32.8% {user = 18.7% + kernel = 14.1%} no errors
+         7th │   3,506 (avg = 0.29 ± 0.426) ➛ 31.2% {user = 20.3% + kernel = 10.9%} no errors
+         8th │   3,585 (avg = 0.28 ± 0.377) ➛ 34.4% {user = 26.6% + kernel = 7.8%}  no errors
+ «Merging»   ╵   1,341 (avg = 0.75 ± 0.736) ➛  6.2% {user = 4.7%  + kernel = 1.6%}  no errors
+
+App Cores: 8/8, #### ####, 00000000000000FF
+SQL Cores: 8/8, #### ####, 0000000000000000
+SQL Server CPU Usage: 301.5% (user = 251.5% + kernel = 50.0%); 3.015 = 2.515 (user) + 0.500 (kernel) seconds
+Total Actions: 27,644 (+127.9%) in 1.00 seconds
+ «Dashboard»╶┬╴ 26,313 (avg = 0.04 ± 0.362) ➛ 37.1% {user = 31.4% + kernel = 5.7%}  no errors
+         1st │   3,318 (avg = 0.30 ± 0.326) ➛ 32.8% {user = 28.1% + kernel = 4.7%}  no errors
+         2nd │   3,283 (avg = 0.30 ± 0.386) ➛ 39.1% {user = 34.4% + kernel = 4.7%}  no errors
+         3rd │   3,282 (avg = 0.30 ± 0.378) ➛ 39.1% {user = 32.8% + kernel = 6.2%}  no errors
+         4th │   3,233 (avg = 0.31 ± 0.392) ➛ 26.6% {user = 23.4% + kernel = 3.1%}  no errors
+         5th │   3,318 (avg = 0.30 ± 0.292) ➛ 43.7% {user = 39.1% + kernel = 4.7%}  no errors
+         6th │   3,300 (avg = 0.30 ± 0.363) ➛ 40.6% {user = 34.4% + kernel = 6.2%}  no errors
+         7th │   3,288 (avg = 0.30 ± 0.376) ➛ 45.3% {user = 32.8% + kernel = 12.5%} no errors
+         8th │   3,291 (avg = 0.30 ± 0.371) ➛ 29.7% {user = 26.6% + kernel = 3.1%}  no errors
+ «Merging»   ╵   1,331 (avg = 0.75 ± 0.352) ➛ 10.9% {user = 9.4%  + kernel = 1.6%}  no errors
+
+#3.2 {StressScalability('(local)' Ver 16.0.4175.1)} >PASSED< in 00:00:12.9795796 (cpu: 1%, 93.750 = 78.125 [user] + 15.625 [kernel] milliseconds)

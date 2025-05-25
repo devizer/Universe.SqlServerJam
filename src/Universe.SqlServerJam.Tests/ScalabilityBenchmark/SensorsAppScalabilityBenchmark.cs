@@ -25,7 +25,7 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
         return isWindows ? 100 * 1000 : 400 * 1000;
     }
 
-    static bool KillTempDB = false;
+    static bool KillTempDB = true;
 
     private Action CleanUp;
 
