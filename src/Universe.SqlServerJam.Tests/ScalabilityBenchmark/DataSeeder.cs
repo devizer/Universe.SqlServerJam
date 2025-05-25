@@ -19,8 +19,8 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
 
         public void Seed(int categoriesCount = 1000)
         {
-
-            ParallelOptions po = new ParallelOptions() { MaxDegreeOfParallelism = Math.Min(Environment.ProcessorCount, 4) };
+            var maxSeedThreads = 1; // deadlock if 2 or more
+            ParallelOptions po = new ParallelOptions() { MaxDegreeOfParallelism = Math.Min(Environment.ProcessorCount, maxSeedThreads) };
             // while (categoriesCount > 0)
             Parallel.ForEach(SplitByBlocks(categoriesCount, 300), po, partCount =>
             {
