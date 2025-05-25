@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
 {
@@ -18,21 +19,37 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
 
         public void Seed(int categoriesCount = 1000)
         {
-            while (categoriesCount > 0)
+
+            ParallelOptions po = new ParallelOptions() { MaxDegreeOfParallelism = Math.Min(Environment.ProcessorCount, 4) };
+            // while (categoriesCount > 0)
+            Parallel.ForEach(SplitByBlocks(categoriesCount, 300), po, partCount =>
             {
-                int partCount = Math.Max(1, Math.Min(200, categoriesCount));
-                categoriesCount -= partCount;
-                var categoriesBatch = Enumerable.Range(1, partCount)
-                    .Select(x => new DataAccess.CategoryIncrementTableType()
-                    {
-                        Category = GetRandomCategoryName(Rand.Next(350, 400)),
-                        Count = Rand.Next(1, 3),
-                        Amount = Rand.NextDouble() * 123
-                    });
+                DataAccess.CategoryIncrementTableType[] categoriesBatch;
+                object sync = new object();
+
+                // lock (sync)
+                    categoriesBatch = Enumerable.Range(1, partCount)
+                        .Select(x => new DataAccess.CategoryIncrementTableType()
+                        {
+                            Category = Guid.NewGuid() + GetRandomCategoryName(Rand.Next(300, 350)),
+                            Count = Rand.Next(1, 3),
+                            Amount = Rand.NextDouble() * 123
+                        }).ToArray();
 
                 this.DataAccess.UpdateCategorySummaryBatch(categoriesBatch);
+            });
+        }
+
+        static IEnumerable<int> SplitByBlocks(int totalCount, int blockSize)
+        {
+            while (totalCount > 0)
+            {
+                int partCount = Math.Max(1, Math.Min(blockSize, totalCount));
+                totalCount -= partCount;
+                yield return partCount;
             }
         }
+
         public void Seed_Prev(int categoriesCount = 1000, TimeSpan timeLimit = default)
         {
             Stopwatch sw = Stopwatch.StartNew();
@@ -52,7 +69,11 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
         {
             StringBuilder b = new StringBuilder();
             for (int i = 0; i < length; i++)
-                b.Append((char)Rand.Next(65, 65 + 26 - 1));
+            {
+                var ch = (char)( i % 5 == 0 ? Rand.Next(65, 65 + 26 - 1) : (65 + i % 25));
+                b.Append(ch);
+            }
+                
 
             return b.ToString();
         }
