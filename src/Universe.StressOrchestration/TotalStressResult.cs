@@ -121,7 +121,7 @@ public class TotalStressResult
         if (Math.Abs(pc) <= Double.Epsilon) ret = "+0%";
         else
         {
-            var sign = pc >= 0 ? "+" : "-";
+            var sign = pc >= 0 ? "+" : "";
             ret = $"{sign}{pc:n1}%";
         }
 
