@@ -70,10 +70,12 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
         var categoriesCount = GetStressCategoriesCount();
         seeder.Seed(categoriesCount);
         Console.WriteLine($"Stress DB [{newDbName}] is ready{Environment.NewLine}Seed took {startSeedAt.Elapsed.TotalSeconds:n2} seconds");
+        Stopwatch getCategoriesStartAt = Stopwatch.StartNew();
         StressState.Categories = dataAccess.GetAllCategories().ToArray();
+        getCategoriesStartAt.Stop();
 
         Console.WriteLine($"DB Size: {dbManagement.Files.ToSizeString()}");
-        Console.WriteLine($"Categories Count: {StressState.Categories.Length:n0}");
+        Console.WriteLine($"Categories Count: {StressState.Categories.Length:n0}, took {getCategoriesStartAt.Elapsed.TotalSeconds:n2} seconds");
 
         StressWorkerReader reader = new StressWorkerReader(dataAccess);
         StressWorkerUpdater updater = new StressWorkerUpdater(dataAccess);
