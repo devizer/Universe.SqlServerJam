@@ -22,19 +22,21 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
             var maxSeedThreads = 1; // deadlock if 2 or more
             ParallelOptions po = new ParallelOptions() { MaxDegreeOfParallelism = Math.Min(Environment.ProcessorCount, maxSeedThreads) };
             // while (categoriesCount > 0)
-            Parallel.ForEach(SplitByBlocks(categoriesCount, 300), po, partCount =>
+            object sync = new object();
+            Parallel.ForEach(SplitByBlocks(categoriesCount, 1000), po, partCount =>
             {
-                DataAccess.CategoryIncrementTableType[] categoriesBatch;
-                object sync = new object();
 
                 // lock (sync)
-                    categoriesBatch = Enumerable.Range(1, partCount)
+                var categoriesBatch = Enumerable.Range(1, partCount)
                         .Select(x => new DataAccess.CategoryIncrementTableType()
                         {
                             Category = Guid.NewGuid() + GetRandomCategoryName(Rand.Next(300, 350)),
                             Count = Rand.Next(1, 3),
                             Amount = Rand.NextDouble() * 123
-                        }).ToArray();
+                        })
+                        // .ToArray()
+                    ;
+                    
 
                 this.DataAccess.UpdateCategorySummaryBatch(categoriesBatch);
             });
