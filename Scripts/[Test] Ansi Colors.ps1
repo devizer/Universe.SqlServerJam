@@ -1162,6 +1162,22 @@ function Is-Intel-Emulation-Available([int] $bitCount <# 32|64 #> = 64) {
 
 
 
+# Include File: [\Includes\Is-SshClient.ps1]
+function Is-SshClient() {
+  $simpleKeys = @(
+     "SSH_CLIENT",
+     "SSH_CONNECTION",
+     "SSH_TTY"
+     );
+
+  foreach($varName in $simpleKeys) {
+    $val=[Environment]::GetEnvironmentVariable($varName);
+    if ("$val" -ne "" -and $val -ne "False") { return $true; }
+  }
+
+  return $null;
+}
+
 # Include File: [\Includes\Is-Vc-Runtime-Installed.ps1]
 function Is-Vc-Runtime-Installed([int] $major, [string] $arch) {
   $vcList = Get-Installed-VC-Runtimes
