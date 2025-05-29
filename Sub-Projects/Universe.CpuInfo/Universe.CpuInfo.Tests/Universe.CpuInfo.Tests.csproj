@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net35;net462;net8.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+	  <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnit.Analyzers" Version="3.9.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageReference Include="Universe.GenericTreeTable" Version="1.3.19" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Universe.CpuInfo\Universe.CpuInfo.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="NUnit.Framework" />
+  </ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' Or  '$(TargetFramework)' == 'netstandard2.0' ">
+		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.1" />
+		<PackageReference Include="System.Management" Version="8.0.0" />
+	</ItemGroup>
+
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net35' Or '$(TargetFramework)' == 'net40' Or '$(TargetFramework)' == 'net461'  Or '$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net462' ">
+        <Reference Include="System.Management" />
+    </ItemGroup>
+
+
+</Project>

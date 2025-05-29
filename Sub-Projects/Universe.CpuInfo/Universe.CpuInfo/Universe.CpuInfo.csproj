@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\Shared-Files\Net-2x-4x-Support.proj" />
+
+	<PropertyGroup>
+		<TargetFrameworks>net35;net40;net45;net462;netstandard2.0;net6.0;net8.0</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.1" />
+		<PackageReference Include="System.Management" Version="8.0.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="6.0.2" />
+		<PackageReference Include="System.Management" Version="6.0.2" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' Or '$(TargetFramework)' == 'netstandard2.0' ">
+		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="5.0.1" />
+		<PackageReference Include="System.Management" Version="5.0.0" />
+	</ItemGroup>
+
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net35' Or '$(TargetFramework)' == 'net40' Or '$(TargetFramework)' == 'net461'  Or '$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net462' ">
+        <Reference Include="System.Management" />
+    </ItemGroup>
+
+
+</Project>

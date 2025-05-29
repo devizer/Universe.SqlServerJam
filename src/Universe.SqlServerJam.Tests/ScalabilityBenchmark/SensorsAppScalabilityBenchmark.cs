@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using Universe.CpuInfo;
 using Universe.GenericTreeTable;
 using Universe.NUnitTests;
 using Universe.StressOrchestration;
@@ -95,6 +96,8 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
         {
 
             Process.GetCurrentProcess().ProcessorAffinity = new IntPtr(stressCase.AppAffinity);
+            var clockSpeed = CpuClockReader.GetClockSpeed();
+            if (clockSpeed != null) Console.WriteLine($"App {clockSpeed}");
             Console.WriteLine($"App Cores: {stressCase.AppCores}/{Environment.ProcessorCount}, {AffinityMask.FormatAffinity(Environment.ProcessorCount, stressCase.AppAffinity)}, {stressCase.AppAffinity:X16}");
 
             management.Configuration.AffinityCount = stressCase.SqlCores;

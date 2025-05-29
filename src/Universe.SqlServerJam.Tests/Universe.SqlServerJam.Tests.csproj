@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Sub-Projects\Universe.CpuInfo\Universe.CpuInfo\Universe.CpuInfo.csproj" />
     <ProjectReference Include="..\Universe.SqlServerJam\Universe.SqlServerJam.csproj" />
     <ProjectReference Include="..\Universe.StressOrchestration\Universe.StressOrchestration.csproj" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />

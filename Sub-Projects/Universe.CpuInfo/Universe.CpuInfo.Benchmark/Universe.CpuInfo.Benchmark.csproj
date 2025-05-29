@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net48;net8.0</TargetFrameworks>
+    <OutputType>Exe</OutputType>
+	  <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <Configuration>Release</Configuration>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.15.0" />
+    <PackageReference Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.15.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Universe.CpuInfo\Universe.CpuInfo.csproj" />
+  </ItemGroup>
+</Project>

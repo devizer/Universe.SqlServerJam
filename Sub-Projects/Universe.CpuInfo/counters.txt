@@ -1,0 +1,5955 @@
+'.NET CLR Data': 0, 0.0 seconds
+
+'.NET CLR Exceptions': 5, 0.0 seconds
+  * # of Exceps Thrown
+  * # of Exceps Thrown / sec
+  * # of Filters / sec
+  * # of Finallys / sec
+  * Throw To Catch Depth / sec
+
+'.NET CLR Interop': 5, 0.0 seconds
+  * # of CCWs
+  * # of marshalling
+  * # of Stubs
+  * # of TLB exports / sec
+  * # of TLB imports / sec
+
+'.NET CLR Jit': 7, 0.0 seconds
+  * # of IL Bytes Jitted
+  * # of Methods Jitted
+  * % Time in Jit
+  * IL Bytes Jitted / sec
+  * Not Displayed
+  * Standard Jit Failures
+  * Total # of IL Bytes Jitted
+
+'.NET CLR Loading': 16, 0.0 seconds
+  * % Time Loading
+  * Assembly Search Length
+  * Bytes in Loader Heap
+  * Current appdomains
+  * Current Assemblies
+  * Current Classes Loaded
+  * Rate of appdomains
+  * Rate of appdomains unloaded
+  * Rate of Assemblies
+  * Rate of Classes Loaded
+  * Rate of Load Failures
+  * Total # of Load Failures
+  * Total Appdomains
+  * Total appdomains unloaded
+  * Total Assemblies
+  * Total Classes Loaded
+
+'.NET CLR LocksAndThreads': 10, 0.0 seconds
+  * # of current logical Threads
+  * # of current physical Threads
+  * # of current recognized threads
+  * # of total recognized threads
+  * Contention Rate / sec
+  * Current Queue Length
+  * Queue Length / sec
+  * Queue Length Peak
+  * rate of recognized threads / sec
+  * Total # of Contentions
+
+'.NET CLR Memory': 24, 0.0 seconds
+  * # Bytes in all Heaps
+  * # GC Handles
+  * # Gen 0 Collections
+  * # Gen 1 Collections
+  * # Gen 2 Collections
+  * # Induced GC
+  * # of Pinned Objects
+  * # of Sink Blocks in use
+  * # Total committed Bytes
+  * # Total reserved Bytes
+  * % Time in GC
+  * Allocated Bytes/sec
+  * Finalization Survivors
+  * Gen 0 heap size
+  * Gen 0 Promoted Bytes/Sec
+  * Gen 1 heap size
+  * Gen 1 Promoted Bytes/Sec
+  * Gen 2 heap size
+  * Large Object Heap size
+  * Not Displayed
+  * Process ID
+  * Promoted Finalization-Memory from Gen 0
+  * Promoted Memory from Gen 0
+  * Promoted Memory from Gen 1
+
+'.NET CLR Networking': 0, 0.0 seconds
+
+'.NET CLR Networking 4.0.0.0': 0, 0.0 seconds
+
+'.NET CLR Remoting': 7, 0.0 seconds
+  * Channels
+  * Context Proxies
+  * Context-Bound Classes Loaded
+  * Context-Bound Objects Alloc / sec
+  * Contexts
+  * Remote Calls/sec
+  * Total Remote Calls
+
+'.NET CLR Security': 6, 0.0 seconds
+  * # Link Time Checks
+  * % Time in RT checks
+  * % Time Sig. Authenticating
+  * Not Displayed
+  * Stack Walk Depth
+  * Total Runtime Checks
+
+'.NET Data Provider for Oracle': 0, 0.0 seconds
+
+'.NET Data Provider for SqlServer': 14, 0.0 seconds
+  * HardConnectsPerSecond
+  * HardDisconnectsPerSecond
+  * NumberOfActiveConnectionPoolGroups
+  * NumberOfActiveConnectionPools
+  * NumberOfActiveConnections
+  * NumberOfFreeConnections
+  * NumberOfInactiveConnectionPoolGroups
+  * NumberOfInactiveConnectionPools
+  * NumberOfNonPooledConnections
+  * NumberOfPooledConnections
+  * NumberOfReclaimedConnections
+  * NumberOfStasisConnections
+  * SoftConnectsPerSecond
+  * SoftDisconnectsPerSecond
+
+'.NET Memory Cache 4.0': 7, 0.0 seconds
+  * Cache Entries
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cache Hits
+  * Cache Misses
+  * Cache Trims
+  * Cache Turnover Rate
+
+'APP_POOL_WAS': 13, 0.0 seconds
+  * Current Application Pool State
+  * Current Application Pool Uptime
+  * Current Worker Processes
+  * Maximum Worker Processes
+  * Recent Worker Process Failures
+  * Time Since Last Worker Process Failure
+  * Total Application Pool Recycles
+  * Total Application Pool Uptime
+  * Total Worker Process Failures
+  * Total Worker Process Ping Failures
+  * Total Worker Process Shutdown Failures
+  * Total Worker Process Startup Failures
+  * Total Worker Processes Created
+
+'AppV Client Streamed Data Percentage': 0, 0.0 seconds
+
+'ASP.NET': 0, 0.0 seconds
+
+'ASP.NET Applications': 91, 0.0 seconds
+  * % Managed Processor Time (estimated)
+  * % Managed Processor Time Base (estimated)
+  * Anonymous Requests
+  * Anonymous Requests/Sec
+  * Application Lifetime Events
+  * Application Lifetime Events/Sec
+  * Audit Failure Events Raised
+  * Audit Success Events Raised
+  * Cache % Machine Memory Limit Used
+  * Cache % Machine Memory Limit Used Base
+  * Cache % Process Memory Limit Used
+  * Cache % Process Memory Limit Used Base
+  * Cache API Entries
+  * Cache API Hit Ratio
+  * Cache API Hit Ratio Base
+  * Cache API Hits
+  * Cache API Misses
+  * Cache API Trims
+  * Cache API Turnover Rate
+  * Cache Total Entries
+  * Cache Total Hit Ratio
+  * Cache Total Hit Ratio Base
+  * Cache Total Hits
+  * Cache Total Misses
+  * Cache Total Trims
+  * Cache Total Turnover Rate
+  * Compilations Total
+  * Debugging Requests
+  * Error Events Raised
+  * Error Events Raised/Sec
+  * Errors During Compilation
+  * Errors During Execution
+  * Errors During Preprocessing
+  * Errors Total
+  * Errors Total/Sec
+  * Errors Unhandled During Execution
+  * Errors Unhandled During Execution/Sec
+  * Events Raised
+  * Events Raised/Sec
+  * Forms Authentication Failure
+  * Forms Authentication Success
+  * Infrastructure Error Events Raised
+  * Infrastructure Error Events Raised/Sec
+  * Managed Memory Used (estimated)
+  * Membership Authentication Failure
+  * Membership Authentication Success
+  * Output Cache Entries
+  * Output Cache Hit Ratio
+  * Output Cache Hit Ratio Base
+  * Output Cache Hits
+  * Output Cache Misses
+  * Output Cache Trims
+  * Output Cache Turnover Rate
+  * Pipeline Instance Count
+  * Request Bytes In Total
+  * Request Bytes In Total (WebSockets)
+  * Request Bytes Out Total
+  * Request Bytes Out Total (WebSockets)
+  * Request Error Events Raised
+  * Request Error Events Raised/Sec
+  * Request Events Raised
+  * Request Events Raised/Sec
+  * Request Execution Time
+  * Request Wait Time
+  * Requests Disconnected
+  * Requests Executing
+  * Requests Executing (WebSockets)
+  * Requests Failed
+  * Requests Failed (WebSockets)
+  * Requests In Application Queue
+  * Requests Not Authorized
+  * Requests Not Found
+  * Requests Rejected
+  * Requests Succeeded
+  * Requests Succeeded (WebSockets)
+  * Requests Timed Out
+  * Requests Total
+  * Requests Total (WebSockets)
+  * Requests/Sec
+  * Session SQL Server connections total
+  * Session State Server connections total
+  * Sessions Abandoned
+  * Sessions Active
+  * Sessions Timed Out
+  * Sessions Total
+  * Transactions Aborted
+  * Transactions Committed
+  * Transactions Pending
+  * Transactions Total
+  * Transactions/Sec
+  * Viewstate MAC Validation Failure
+
+'ASP.NET Apps v4.0.30319': 91, 0.0 seconds
+  * % Managed Processor Time (estimated)
+  * % Managed Processor Time Base (estimated)
+  * Anonymous Requests
+  * Anonymous Requests/Sec
+  * Application Lifetime Events
+  * Application Lifetime Events/Sec
+  * Audit Failure Events Raised
+  * Audit Success Events Raised
+  * Cache % Machine Memory Limit Used
+  * Cache % Machine Memory Limit Used Base
+  * Cache % Process Memory Limit Used
+  * Cache % Process Memory Limit Used Base
+  * Cache API Entries
+  * Cache API Hit Ratio
+  * Cache API Hit Ratio Base
+  * Cache API Hits
+  * Cache API Misses
+  * Cache API Trims
+  * Cache API Turnover Rate
+  * Cache Total Entries
+  * Cache Total Hit Ratio
+  * Cache Total Hit Ratio Base
+  * Cache Total Hits
+  * Cache Total Misses
+  * Cache Total Trims
+  * Cache Total Turnover Rate
+  * Compilations Total
+  * Debugging Requests
+  * Error Events Raised
+  * Error Events Raised/Sec
+  * Errors During Compilation
+  * Errors During Execution
+  * Errors During Preprocessing
+  * Errors Total
+  * Errors Total/Sec
+  * Errors Unhandled During Execution
+  * Errors Unhandled During Execution/Sec
+  * Events Raised
+  * Events Raised/Sec
+  * Forms Authentication Failure
+  * Forms Authentication Success
+  * Infrastructure Error Events Raised
+  * Infrastructure Error Events Raised/Sec
+  * Managed Memory Used (estimated)
+  * Membership Authentication Failure
+  * Membership Authentication Success
+  * Output Cache Entries
+  * Output Cache Hit Ratio
+  * Output Cache Hit Ratio Base
+  * Output Cache Hits
+  * Output Cache Misses
+  * Output Cache Trims
+  * Output Cache Turnover Rate
+  * Pipeline Instance Count
+  * Request Bytes In Total
+  * Request Bytes In Total (WebSockets)
+  * Request Bytes Out Total
+  * Request Bytes Out Total (WebSockets)
+  * Request Error Events Raised
+  * Request Error Events Raised/Sec
+  * Request Events Raised
+  * Request Events Raised/Sec
+  * Request Execution Time
+  * Request Wait Time
+  * Requests Disconnected
+  * Requests Executing
+  * Requests Executing (WebSockets)
+  * Requests Failed
+  * Requests Failed (WebSockets)
+  * Requests In Application Queue
+  * Requests Not Authorized
+  * Requests Not Found
+  * Requests Rejected
+  * Requests Succeeded
+  * Requests Succeeded (WebSockets)
+  * Requests Timed Out
+  * Requests Total
+  * Requests Total (WebSockets)
+  * Requests/Sec
+  * Session SQL Server connections total
+  * Session State Server connections total
+  * Sessions Abandoned
+  * Sessions Active
+  * Sessions Timed Out
+  * Sessions Total
+  * Transactions Aborted
+  * Transactions Committed
+  * Transactions Pending
+  * Transactions Total
+  * Transactions/Sec
+  * Viewstate MAC Validation Failure
+
+'ASP.NET State Service': 0, 0.0 seconds
+
+'ASP.NET v4.0.30319': 0, 0.0 seconds
+
+'Authorization Manager Applications': 0, 0.0 seconds
+
+'Battery Status': 5, 0.0 seconds
+  * Charge Rate
+  * Discharge Rate
+  * Remaining Capacity
+  * Tag
+  * Voltage
+
+'BITS Net Utilization': 0, 0.0 seconds
+
+'Bluetooth Device': 0, 0.0 seconds
+
+'Bluetooth Radio': 25, 0.0 seconds
+  * ACL flush events/sec
+  * Classic ACL bytes read/sec
+  * Classic ACL bytes written/sec
+  * Classic ACL Connections
+  * Classic ACL write credits
+  * Inquiry Scan Duty Cycle (%)
+  * Inquiry Scan Interval
+  * Inquiry Scan Window
+  * LE ACL bytes read/sec
+  * LE ACL bytes written/sec
+  * LE ACL Connections
+  * LE ACL write credits
+  * LE Scan Duty Cycle (%) - Coded Phy
+  * LE Scan Duty Cycle (%) - Uncoded 1M Phy
+  * LE Scan Interval - Coded Phy
+  * LE Scan Interval - Uncoded 1M Phy
+  * LE Scan Window - Coded Phy
+  * LE Scan Window - Uncoded 1M Phy
+  * Page Scan Duty Cycle (%)
+  * Page Scan Interval
+  * Page Scan Window
+  * SCO bytes read/sec
+  * SCO bytes written/sec
+  * SCO Connections
+  * Sideband SCO Connections
+
+'Browser': 0, 0.0 seconds
+
+'Cache': 0, 0.0 seconds
+
+'Client Side Caching': 0, 0.0 seconds
+
+'Database': 356, 0.0 seconds
+  * B+ Tree Append Splits/sec
+  * B+ Tree Appends/sec
+  * B+ Tree Deletes/sec
+  * B+ Tree Empty Page Merges/sec
+  * B+ Tree Failed Simple Page Cleanup Attempts/sec
+  * B+ Tree Flag Deletes/sec
+  * B+ Tree Inserts/sec
+  * B+ Tree Left Merges/sec
+  * B+ Tree Merges/sec
+  * B+ Tree Move Nexts (Nodes Filtered)/sec
+  * B+ Tree Move Nexts (Non-Visible Nodes Skipped)/sec
+  * B+ Tree Move Nexts/sec
+  * B+ Tree Move Prevs (Nodes Filtered)/sec
+  * B+ Tree Move Prevs (Non-Visible Nodes Skipped)/sec
+  * B+ Tree Move Prevs/sec
+  * B+ Tree Opportune Prereads/sec
+  * B+ Tree Page Moves/sec
+  * B+ Tree Partial Left Merges/sec
+  * B+ Tree Partial Merges/sec
+  * B+ Tree Replaces/sec
+  * B+ Tree Right Hotpoint Splits/sec
+  * B+ Tree Right Merges/sec
+  * B+ Tree Right Splits/sec
+  * B+ Tree Seek Short Circuits/sec
+  * B+ Tree Seeks/sec
+  * B+ Tree Splits/sec
+  * B+ Tree Unnecessary Sibling Latches/sec
+  * B+ Tree Vertical Splits/sec
+  * Database Cache % Available
+  * Database Cache % Available Max
+  * Database Cache % Available Min
+  * Database Cache % Clean
+  * Database Cache % Dehydrated
+  * Database Cache % Fast Latch
+  * Database Cache % Hit
+  * Database Cache % Hit (Unique)
+  * Database Cache % Pinned
+  * Database Cache % Resident
+  * Database Cache % Versioned
+  * Database Cache Lifetime
+  * Database Cache Lifetime (K1)
+  * Database Cache Lifetime (K2)
+  * Database Cache Lifetime (Max)
+  * Database Cache Lifetime (Smooth)
+  * Database Cache Lifetime Estimate Variance
+  * Database Cache Memory Committed
+  * Database Cache Memory Committed (MB)
+  * Database Cache Memory Reserved
+  * Database Cache Memory Reserved (MB)
+  * Database Cache Miss (Attached) Average Latency
+  * Database Cache Misses/sec
+  * Database Cache Requests/sec
+  * Database Cache Requests/sec (Unique)
+  * Database Cache Scan Buckets Scanned/scan
+  * Database Cache Scan Empty Buckets Scanned/scan
+  * Database Cache Scan Entries/scan
+  * Database Cache Scan Found-to-Evict Range
+  * Database Cache Scan ID Range/scan
+  * Database Cache Scan Page Evaluated Out-of-Order/sec
+  * Database Cache Scan Pages Evaluated/sec
+  * Database Cache Scan Pages Moved/sec
+  * Database Cache Scan Time (ms)/scan
+  * Database Cache Size
+  * Database Cache Size (MB)
+  * Database Cache Size Effective
+  * Database Cache Size Effective (MB)
+  * Database Cache Size Max
+  * Database Cache Size Min
+  * Database Cache Size Resident
+  * Database Cache Size Resident (MB)
+  * Database Cache Size Target
+  * Database Cache Size Target (MB)
+  * Database Cache Size Unattached (MB)
+  * Database Cache Size Unused
+  * Database Cache Sizing Duration
+  * Database Cache Super Cold Attempts/sec
+  * Database Cache Super Cold Successes/sec
+  * Database Cache Super Colded Resources
+  * Database Maintenance Duration
+  * Database Maintenance IO Re-Reads/sec
+  * Database Maintenance IO Reads Average Bytes
+  * Database Maintenance IO Reads/sec
+  * Database Maintenance Pages Read
+  * Database Maintenance Pages Read/sec
+  * Database Maintenance Pages with Flag Deleted LVs Reclaimed
+  * Database Maintenance Pages Zeroed
+  * Database Maintenance Pages Zeroed/sec
+  * Database Maintenance Zero Ref Count LVs Deleted
+  * Database Opportune Write Issued (Total)
+  * Database Page Allocation File Extension Stalls/sec
+  * Database Page Bad Latch Hints/sec
+  * Database Page Evictions (k=1)/sec
+  * Database Page Evictions (k=2)/sec
+  * Database Page Evictions (Other)/sec
+  * Database Page Evictions (Preread Untouched)/sec
+  * Database Page Evictions (Scavenging.AvailPool)/sec
+  * Database Page Evictions (Scavenging.Shrink)/sec
+  * Database Page Evictions (Scavenging.SuperCold.Ext)/sec
+  * Database Page Evictions (Scavenging.SuperCold.Int)/sec
+  * Database Page Evictions/sec
+  * Database Page Fast Latches/sec
+  * Database Page Fault Stalls/sec
+  * Database Page Faults/sec
+  * Database Page History % Hit
+  * Database Page History Records
+  * Database Page Latch Conflicts/sec
+  * Database Page Latch Stalls/sec
+  * Database Page Latches/sec
+  * Database Page Preread Stalls/sec
+  * Database Pages Coalesced Read/sec
+  * Database Pages Coalesced Written/sec
+  * Database Pages Colded (Ext)/sec
+  * Database Pages Colded (Int)/sec
+  * Database Pages Dehydrated/sec
+  * Database Pages Dirtied (Repeatedly)/sec
+  * Database Pages Dirtied/sec
+  * Database Pages Flushed (Checkpoint Foreground)/sec
+  * Database Pages Flushed (Checkpoint)/sec
+  * Database Pages Flushed (Context Flush)/sec
+  * Database Pages Flushed (Filthy Foreground)/sec
+  * Database Pages Flushed (Scavenging.AvailPool)/sec
+  * Database Pages Flushed (Scavenging.Shrink)/sec
+  * Database Pages Flushed (Scavenging.SuperCold.Ext)/sec
+  * Database Pages Flushed (Scavenging.SuperCold.Int)/sec
+  * Database Pages Flushed Opportunely Clean/sec
+  * Database Pages Flushed Opportunely/sec
+  * Database Pages Non-Resident Evicted (Normally)/sec
+  * Database Pages Non-Resident Hard Faulted In Latency (us)/sec
+  * Database Pages Non-Resident Re-read/sec
+  * Database Pages Non-Resident Reclaimed (Failed)/sec
+  * Database Pages Non-Resident Reclaimed (Hard Faulted)/sec
+  * Database Pages Non-Resident Reclaimed (Soft Faulted)/sec
+  * Database Pages Non-Resident Trimmed by OS/sec
+  * Database Pages Preread (Unnecessary)/sec
+  * Database Pages Preread/sec
+  * Database Pages Read Async/sec
+  * Database Pages Read Sync/sec
+  * Database Pages Rehydrated/sec
+  * Database Pages Repeatedly Read/sec
+  * Database Pages Repeatedly Written/sec
+  * Database Pages Transferred/sec
+  * Database Pages Version Copied/sec
+  * Database Pages Versioned/sec
+  * Database Pages Written/sec
+  * Database Tasks Average Log Bytes
+  * Database Tasks Log Bytes/sec
+  * Database Tasks Log Records/sec
+  * Database Tasks Pages Dirtied/sec
+  * Database Tasks Pages Preread/sec
+  * Database Tasks Pages Re-Dirtied/sec
+  * Database Tasks Pages Read/sec
+  * Database Tasks Pages Referenced/sec
+  * Decryption average latency (us)
+  * Decryption Bytes/sec
+  * Decryption Ops/sec
+  * Defragmentation Tasks
+  * Defragmentation Tasks Completed/sec
+  * Defragmentation Tasks Pending
+  * Defragmentation Tasks Postponed
+  * Defragmentation Tasks Scheduled/sec
+  * Encryption average latency (us)
+  * Encryption Bytes/sec
+  * Encryption Ops/sec
+  * False Index Column Updates/sec
+  * False Tuple Index Column Updates/sec
+  * FCB Allocations Wait For Version Cleanup/sec
+  * FCB Async Purge Failures/sec
+  * FCB Async Purge/sec
+  * FCB Async Scan/sec
+  * FCB Attached RCEs
+  * FCB Cache % Hit
+  * FCB Cache Allocated
+  * FCB Cache Allocated/sec
+  * FCB Cache Available
+  * FCB Cache Maximum
+  * FCB Cache Preferred
+  * FCB Cache Stalls/sec
+  * FCB Purge On Cursor Close/sec
+  * FCB Sync Purge Stalls/sec
+  * FCB Sync Purge/sec
+  * FlushFileBuffers Average Latency
+  * FlushFileBuffers ops/sec
+  * Heap Allocations
+  * Heap Allocs/sec
+  * Heap Bytes Allocated
+  * Heap Frees/sec
+  * I/O Database Reads (Attached) Async Pending
+  * I/O Database Reads (Attached) Average Bytes
+  * I/O Database Reads (Attached) Average Latency
+  * I/O Database Reads (Attached) In Heap
+  * I/O Database Reads (Attached)/sec
+  * I/O Database Reads (Recovery) Async Pending
+  * I/O Database Reads (Recovery) Average Bytes
+  * I/O Database Reads (Recovery) Average Latency
+  * I/O Database Reads (Recovery) In Heap
+  * I/O Database Reads (Recovery)/sec
+  * I/O Database Reads Async Pending
+  * I/O Database Reads Average Bytes
+  * I/O Database Reads Average Latency
+  * I/O Database Reads In Heap
+  * I/O Database Reads/sec
+  * I/O Database Writes (Attached) Async Pending
+  * I/O Database Writes (Attached) Average Bytes
+  * I/O Database Writes (Attached) Average Latency
+  * I/O Database Writes (Attached) In Heap
+  * I/O Database Writes (Attached)/sec
+  * I/O Database Writes (Recovery) Async Pending
+  * I/O Database Writes (Recovery) Average Bytes
+  * I/O Database Writes (Recovery) Average Latency
+  * I/O Database Writes (Recovery) In Heap
+  * I/O Database Writes (Recovery)/sec
+  * I/O Database Writes Async Pending
+  * I/O Database Writes Average Bytes
+  * I/O Database Writes Average Latency
+  * I/O Database Writes In Heap
+  * I/O Database Writes/sec
+  * I/O Flush Map Writes Average Bytes
+  * I/O Flush Map Writes Average Latency
+  * I/O Flush Map Writes/sec
+  * I/O Log Reads Async Pending
+  * I/O Log Reads Average Bytes
+  * I/O Log Reads Average Latency
+  * I/O Log Reads In Heap
+  * I/O Log Reads/sec
+  * I/O Log Writes Async Pending
+  * I/O Log Writes Average Bytes
+  * I/O Log Writes Average Latency
+  * I/O Log Writes In Heap
+  * I/O Log Writes/sec
+  * I/O Snapshot Reads Async Pending
+  * I/O Snapshot Reads Average Bytes
+  * I/O Snapshot Reads Average Latency
+  * I/O Snapshot Reads In Heap
+  * I/O Snapshot Reads/sec
+  * I/O Snapshot Writes Async Pending
+  * I/O Snapshot Writes Average Bytes
+  * I/O Snapshot Writes Average Latency
+  * I/O Snapshot Writes In Heap
+  * I/O Snapshot Writes/sec
+  * Log Buffer Bytes Committed
+  * Log Buffer Bytes Free
+  * Log Buffer Bytes Used
+  * Log Buffer Capacity Writes/sec
+  * Log Buffer Commit Writes/sec
+  * Log Buffer Writes Blocked/sec
+  * Log Buffer Writes Skipped/sec
+  * Log Bytes Generated/sec
+  * Log Bytes Wasted/sec
+  * Log Bytes Write/sec
+  * Log Checkpoint Depth
+  * Log Checkpoint Maintenance Outstanding IO Max
+  * Log Full Segment Writes/sec
+  * Log Generation Checkpoint Depth
+  * Log Partial Segment Writes/sec
+  * Log Record Stalls/sec
+  * Log Records/sec
+  * Log Threads Waiting
+  * Log Writes/sec
+  * Long-Value Maximum LID
+  * No name
+  * Online Defrag Data Moves/sec
+  * Online Defrag Log Bytes/sec
+  * Online Defrag Pages Dirtied/sec
+  * Online Defrag Pages Freed/sec
+  * Online Defrag Pages Moved/sec
+  * Online Defrag Pages Preread/sec
+  * Online Defrag Pages Read/sec
+  * Page Bytes Committed
+  * Page Bytes Reserved
+  * Pages Not Trimmed Unaligned/sec
+  * Pages Reorganized (Dehydrate Buffer)/sec
+  * Pages Reorganized (Free Space Request)/sec
+  * Pages Reorganized (Other)/sec
+  * Pages Reorganized (Page Move Logging)/sec
+  * Pages Trimmed/sec
+  * Program Marker
+  * Record Deletes/sec
+  * Record Escrow-Updates/sec
+  * Record Inserts/sec
+  * Record Intrinsic Long-Values Updated/sec
+  * Record Replaces/sec
+  * Record Separated Long-Values Added/sec
+  * Record Separated Long-Values All Forced/sec
+  * Record Separated Long-Values Dereference All/sec
+  * Record Separated Long-Values Forced/sec
+  * Record Separated Long-Values Reference All/sec
+  * Record Unnecessary Replaces/sec
+  * Recovery Long Stalls for Read-only Transactions/sec
+  * Recovery Stalls for Read-only Transactions (ms)/sec
+  * Recovery Stalls for Read-only Transactions/sec
+  * Recovery Throttles For IO Smoothing Time (ms)/sec
+  * Recovery Throttles For IO Smoothing/sec
+  * Resource Manager FCB Allocated
+  * Resource Manager FCB Allocated Used
+  * Resource Manager FCB Quota
+  * Resource Manager FUCB Allocated
+  * Resource Manager FUCB Allocated Used
+  * Resource Manager FUCB Quota
+  * Resource Manager IDB Allocated
+  * Resource Manager IDB Allocated Used
+  * Resource Manager IDB Quota
+  * Resource Manager TDB Allocated
+  * Resource Manager TDB Allocated Used
+  * Resource Manager TDB Quota
+  * Secondary Index Deletes/sec
+  * Secondary Index Inserts/sec
+  * Separated Long-Value Chunk Appends/sec
+  * Separated Long-Value Chunk Copies/sec
+  * Separated Long-Value Chunk Deletes/sec
+  * Separated Long-Value Chunk Replaces/sec
+  * Separated Long-Value Chunk Retrieves/sec
+  * Separated Long-Value Chunk Seeks/sec
+  * Separated Long-Value Copies/sec
+  * Separated Long-Value Creates/sec
+  * Separated Long-Value Deletes/sec
+  * Separated Long-Value Retrieves/sec
+  * Separated Long-Value Seeks/sec
+  * Separated Long-Value Updates/sec
+  * Sessions % Used
+  * Sessions In Use
+  * Streaming Backup Pages Read/sec
+  * System Read Only Transaction Commits to Level 0/sec
+  * System Read Only Transaction Rollbacks to Level 0/sec
+  * System Read/Write Transaction Commits to Level 0 (Durable)/sec
+  * System Read/Write Transaction Commits to Level 0 (Lazy)/sec
+  * System Read/Write Transaction Rollbacks to Level 0/sec
+  * System Transaction Commits to Level 0/sec
+  * System Transaction Rollbacks to Level 0/sec
+  * Table Closes/sec
+  * Table Open Cache % Hit
+  * Table Open Cache Hits/sec
+  * Table Open Cache Misses/sec
+  * Table Open Pages Preread/sec
+  * Table Open Pages Read/sec
+  * Table Opens/sec
+  * Tables Open
+  * Threads Blocked
+  * Threads Blocked/sec
+  * User Read Only Transaction Commits to Level 0/sec
+  * User Read Only Transaction Rollbacks to Level 0/sec
+  * User Read/Write Transaction Commits to Level 0 (Durable)/sec
+  * User Read/Write Transaction Commits to Level 0 (Lazy)/sec
+  * User Read/Write Transaction Rollbacks to Level 0/sec
+  * User Transaction Commits to Level 0/sec
+  * User Transaction Rollbacks to Level 0/sec
+  * User Wait All Transaction Commits/sec
+  * User Wait Last Transaction Commits/sec
+  * VER Bucket Allocations Wait For Version Cleanup/sec
+  * Version Buckets Allocated
+  * Version Buckets Allocated for Deletes
+  * Version Store Average RCE Bookmark Length
+  * Version Store Cleanup Tasks Asynchronously Dispatched/sec
+  * Version Store Cleanup Tasks Discarded/sec
+  * Version Store Cleanup Tasks Failures/sec
+  * Version Store Cleanup Tasks Synchronously Dispatched/sec
+  * Version Store Unnecessary Calls/sec
+
+'Database ==> Databases': 37, 0.0 seconds
+  * Database Cache % Hit (Unique)
+  * Database Cache Requests/sec (Unique)
+  * Database Cache Size (MB)
+  * I/O Database Async Read Pending
+  * I/O Database Meted Outstanding Max
+  * I/O Database Meted Queue Depth
+  * I/O Database Reads (Maintenance) 50th Pct Latency (us)
+  * I/O Database Reads (Maintenance) 90th Pct Latency (us)
+  * I/O Database Reads (Maintenance) 99th Pct Latency (us)
+  * I/O Database Reads (Maintenance) Max Pct Latency (us)
+  * I/O Database Reads (Maintenance) Mean Latency (us)
+  * I/O Database Reads (Maintenance) Total IO
+  * I/O Database Reads (Transactional) 50th Pct Latency (us)
+  * I/O Database Reads (Transactional) 90th Pct Latency (us)
+  * I/O Database Reads (Transactional) 99th Pct Latency (us)
+  * I/O Database Reads (Transactional) Max Pct Latency (us)
+  * I/O Database Reads (Transactional) Mean Latency (us)
+  * I/O Database Reads (Transactional) Total IO
+  * I/O Database Reads Average Bytes
+  * I/O Database Reads Average Latency
+  * I/O Database Reads/sec
+  * I/O Database Writes (Maintenance) 50th Pct Latency (us)
+  * I/O Database Writes (Maintenance) 90th Pct Latency (us)
+  * I/O Database Writes (Maintenance) 99th Pct Latency (us)
+  * I/O Database Writes (Maintenance) Max Pct Latency (us)
+  * I/O Database Writes (Maintenance) Mean Latency (us)
+  * I/O Database Writes (Maintenance) Total IO
+  * I/O Database Writes (Transactional) 50th Pct Latency (us)
+  * I/O Database Writes (Transactional) 90th Pct Latency (us)
+  * I/O Database Writes (Transactional) 99th Pct Latency (us)
+  * I/O Database Writes (Transactional) Max Pct Latency (us)
+  * I/O Database Writes (Transactional) Mean Latency (us)
+  * I/O Database Writes (Transactional) Total IO
+  * I/O Database Writes Average Bytes
+  * I/O Database Writes Average Latency
+  * I/O Database Writes/sec
+  * No name
+
+'Database ==> Instances': 319, 0.0 seconds
+  * B+ Tree Append Splits/sec
+  * B+ Tree Appends/sec
+  * B+ Tree Deletes/sec
+  * B+ Tree Empty Page Merges/sec
+  * B+ Tree Failed Simple Page Cleanup Attempts/sec
+  * B+ Tree Flag Deletes/sec
+  * B+ Tree Inserts/sec
+  * B+ Tree Left Merges/sec
+  * B+ Tree Merges/sec
+  * B+ Tree Move Nexts (Nodes Filtered)/sec
+  * B+ Tree Move Nexts (Non-Visible Nodes Skipped)/sec
+  * B+ Tree Move Nexts/sec
+  * B+ Tree Move Prevs (Nodes Filtered)/sec
+  * B+ Tree Move Prevs (Non-Visible Nodes Skipped)/sec
+  * B+ Tree Move Prevs/sec
+  * B+ Tree Opportune Prereads/sec
+  * B+ Tree Page Moves/sec
+  * B+ Tree Partial Left Merges/sec
+  * B+ Tree Partial Merges/sec
+  * B+ Tree Replaces/sec
+  * B+ Tree Right Hotpoint Splits/sec
+  * B+ Tree Right Merges/sec
+  * B+ Tree Right Splits/sec
+  * B+ Tree Seek Short Circuits/sec
+  * B+ Tree Seeks/sec
+  * B+ Tree Splits/sec
+  * B+ Tree Unnecessary Sibling Latches/sec
+  * B+ Tree Vertical Splits/sec
+  * Compressed Bytes/sec
+  * Compression average latency (us)
+  * Compression Ops/sec
+  * Compression ratio
+  * Cpu Xpress9 Decompressed Bytes/sec
+  * Cpu Xpress9 Decompression average latency (us)
+  * Cpu Xpress9 Decompression Ops/sec
+  * Database Cache % Hit
+  * Database Cache % Hit (Unique)
+  * Database Cache Miss (Attached) Average Latency
+  * Database Cache Misses/sec
+  * Database Cache Requests/sec
+  * Database Cache Requests/sec (Unique)
+  * Database Cache Size (MB)
+  * Database Cache Size Unused
+  * Database Maintenance Duration
+  * Database Maintenance IO Re-Reads/sec
+  * Database Maintenance IO Reads Average Bytes
+  * Database Maintenance IO Reads/sec
+  * Database Maintenance Pages Checked for Divergences
+  * Database Maintenance Pages Checked for Divergences/sec
+  * Database Maintenance Pages Read
+  * Database Maintenance Pages Read/sec
+  * Database Maintenance Pages Skipped by Recovery
+  * Database Maintenance Pages Skipped by Recovery/sec
+  * Database Maintenance Pages with Flag Deleted LVs Reclaimed
+  * Database Maintenance Pages Zeroed
+  * Database Maintenance Pages Zeroed/sec
+  * Database Maintenance Throttle Setting
+  * Database Maintenance Zero Ref Count LVs Deleted
+  * Database Oldest Transaction
+  * Database Page Allocation File Extension Stalls/sec
+  * Database Page Evictions (k=1)/sec
+  * Database Page Evictions (k=2)/sec
+  * Database Page Evictions (Other)/sec
+  * Database Page Evictions (Scavenging.AvailPool)/sec
+  * Database Page Evictions (Scavenging.Shrink)/sec
+  * Database Page Preread Stalls/sec
+  * Database Pages Coalesced Read/sec
+  * Database Pages Coalesced Written/sec
+  * Database Pages Colded (Ext)/sec
+  * Database Pages Colded (Int)/sec
+  * Database Pages Dehydrated/sec
+  * Database Pages Dirtied (Repeatedly)/sec
+  * Database Pages Dirtied/sec
+  * Database Pages Flushed (Checkpoint Foreground)/sec
+  * Database Pages Flushed (Checkpoint)/sec
+  * Database Pages Flushed (Context Flush)/sec
+  * Database Pages Flushed (Filthy Foreground)/sec
+  * Database Pages Flushed (Scavenging.AvailPool)/sec
+  * Database Pages Flushed (Scavenging.Shrink)/sec
+  * Database Pages Flushed Opportunely Clean/sec
+  * Database Pages Flushed Opportunely/sec
+  * Database Pages Preread (Unnecessary)/sec
+  * Database Pages Preread Untouched/sec
+  * Database Pages Preread/sec
+  * Database Pages Read Async/sec
+  * Database Pages Read Sync/sec
+  * Database Pages Rehydrated/sec
+  * Database Pages Repeatedly Read/sec
+  * Database Pages Repeatedly Written/sec
+  * Database Pages Transferred/sec
+  * Database Pages Version Copied/sec
+  * Database Pages Versioned/sec
+  * Database Pages Written/sec
+  * Database Tasks Average Log Bytes
+  * Database Tasks Log Bytes/sec
+  * Database Tasks Log Records/sec
+  * Database Tasks Pages Dirtied/sec
+  * Database Tasks Pages Preread/sec
+  * Database Tasks Pages Re-Dirtied/sec
+  * Database Tasks Pages Read/sec
+  * Database Tasks Pages Referenced/sec
+  * Decompressed Bytes/sec
+  * Decompression average latency (us)
+  * Decompression Ops/sec
+  * Decryption average latency (us)
+  * Decryption Bytes/sec
+  * Decryption Ops/sec
+  * Defragmentation Tasks
+  * Defragmentation Tasks Completed/sec
+  * Defragmentation Tasks Pending
+  * Defragmentation Tasks Postponed
+  * Defragmentation Tasks Scheduled/sec
+  * Encryption average latency (us)
+  * Encryption Bytes/sec
+  * Encryption Ops/sec
+  * False Index Column Updates/sec
+  * False Tuple Index Column Updates/sec
+  * FCB Allocations Wait For Version Cleanup/sec
+  * FCB Async Purge/sec
+  * FCB Async Scan/sec
+  * FCB Async Threshold Purge Failures/sec
+  * FCB Attached RCEs
+  * FCB Cache % Hit
+  * FCB Cache Allocated
+  * FCB Cache Allocated/sec
+  * FCB Cache Allocation Average Latency (ms)
+  * FCB Cache Allocations Failed
+  * FCB Cache Available
+  * FCB Cache Maximum
+  * FCB Cache Preferred
+  * FCB Cache Stalls/sec
+  * FCB Purge On Cursor Close/sec
+  * FCB Sync Purge Stalls/sec
+  * FCB Sync Purge/sec
+  * Flush Map % Dirty
+  * Flush Map Pages Written Async/sec
+  * Flush Map Pages Written Sync/sec
+  * FlushFileBuffers Average Latency
+  * FlushFileBuffers ops/sec
+  * I/O Database Reads (Attached) Async Pending
+  * I/O Database Reads (Attached) Average Bytes
+  * I/O Database Reads (Attached) Average Latency
+  * I/O Database Reads (Attached) In Heap
+  * I/O Database Reads (Attached)/sec
+  * I/O Database Reads (Recovery) Async Pending
+  * I/O Database Reads (Recovery) Average Bytes
+  * I/O Database Reads (Recovery) Average Latency
+  * I/O Database Reads (Recovery) In Heap
+  * I/O Database Reads (Recovery)/sec
+  * I/O Database Reads Async Pending
+  * I/O Database Reads Average Bytes
+  * I/O Database Reads Average Latency
+  * I/O Database Reads In Heap
+  * I/O Database Reads/sec
+  * I/O Database Writes (Attached) Async Pending
+  * I/O Database Writes (Attached) Average Bytes
+  * I/O Database Writes (Attached) Average Latency
+  * I/O Database Writes (Attached) In Heap
+  * I/O Database Writes (Attached)/sec
+  * I/O Database Writes (Recovery) Async Pending
+  * I/O Database Writes (Recovery) Average Bytes
+  * I/O Database Writes (Recovery) Average Latency
+  * I/O Database Writes (Recovery) In Heap
+  * I/O Database Writes (Recovery)/sec
+  * I/O Database Writes Async Pending
+  * I/O Database Writes Average Bytes
+  * I/O Database Writes Average Latency
+  * I/O Database Writes In Heap
+  * I/O Database Writes/sec
+  * I/O Flush Map Writes Average Bytes
+  * I/O Flush Map Writes Average Latency
+  * I/O Flush Map Writes/sec
+  * I/O Log Reads Async Pending
+  * I/O Log Reads Average Bytes
+  * I/O Log Reads Average Latency
+  * I/O Log Reads In Heap
+  * I/O Log Reads/sec
+  * I/O Log Writes Async Pending
+  * I/O Log Writes Average Bytes
+  * I/O Log Writes Average Latency
+  * I/O Log Writes In Heap
+  * I/O Log Writes/sec
+  * I/O Snapshot Reads Async Pending
+  * I/O Snapshot Reads Average Bytes
+  * I/O Snapshot Reads Average Latency
+  * I/O Snapshot Reads In Heap
+  * I/O Snapshot Reads/sec
+  * I/O Snapshot Writes Async Pending
+  * I/O Snapshot Writes Average Bytes
+  * I/O Snapshot Writes Average Latency
+  * I/O Snapshot Writes In Heap
+  * I/O Snapshot Writes/sec
+  * Instance Status
+  * Log Buffer Bytes Committed
+  * Log Buffer Bytes Free
+  * Log Buffer Bytes Used
+  * Log Buffer Capacity Writes/sec
+  * Log Buffer Commit Writes/sec
+  * Log Buffer Size
+  * Log Buffer Writes Blocked/sec
+  * Log Buffer Writes Skipped/sec
+  * Log Bytes Generated/sec
+  * Log Bytes Wasted/sec
+  * Log Bytes Write/sec
+  * Log Checkpoint Depth
+  * Log Checkpoint Depth as a % of Target
+  * Log Checkpoint Maintenance Outstanding IO Max
+  * Log File Current Generation
+  * Log File Size
+  * Log Files Generated
+  * Log Files Generated Prematurely
+  * Log Full Segment Writes/sec
+  * Log Generation Checkpoint Depth
+  * Log Generation Checkpoint Depth Max
+  * Log Generation Checkpoint Depth Target
+  * Log Generation Database Consistency Depth
+  * Log Generation Loss Resiliency Depth
+  * Log Partial Segment Writes/sec
+  * Log Record Stalls/sec
+  * Log Records/sec
+  * Log Threads Waiting
+  * Log Writes/sec
+  * Long-Value Maximum LID
+  * New Pages/sec
+  * No name
+  * Online Defrag Data Moves/sec
+  * Online Defrag Log Bytes/sec
+  * Online Defrag Pages Dirtied/sec
+  * Online Defrag Pages Freed/sec
+  * Online Defrag Pages Moved/sec
+  * Online Defrag Pages Preread/sec
+  * Online Defrag Pages Read/sec
+  * Pages Not Trimmed Unaligned/sec
+  * Pages Reorganized (Dehydrate Buffer)/sec
+  * Pages Reorganized (Free Space Request)/sec
+  * Pages Reorganized (Other)/sec
+  * Pages Reorganized (Page Move Logging)/sec
+  * Pages Trimmed/sec
+  * Record Deletes/sec
+  * Record Escrow-Updates/sec
+  * Record Inserts/sec
+  * Record Intrinsic Long-Values Updated/sec
+  * Record Replaces/sec
+  * Record Separated Long-Values Added/sec
+  * Record Separated Long-Values All Forced/sec
+  * Record Separated Long-Values Dereference All/sec
+  * Record Separated Long-Values Forced/sec
+  * Record Separated Long-Values Reference All/sec
+  * Record Unnecessary Replaces/sec
+  * Recovery Long Stalls for Read-only Transactions/sec
+  * Recovery Stalls for Read-only Transactions (ms)/sec
+  * Recovery Stalls for Read-only Transactions/sec
+  * Recovery Throttles For IO Smoothing Time (ms)/sec
+  * Recovery Throttles For IO Smoothing/sec
+  * Secondary Index Deletes/sec
+  * Secondary Index Inserts/sec
+  * Separated Long-Value Chunk Appends/sec
+  * Separated Long-Value Chunk Copies/sec
+  * Separated Long-Value Chunk Deletes/sec
+  * Separated Long-Value Chunk Replaces/sec
+  * Separated Long-Value Chunk Retrieves/sec
+  * Separated Long-Value Chunk Seeks/sec
+  * Separated Long-Value Copies/sec
+  * Separated Long-Value Creates/sec
+  * Separated Long-Value Deletes/sec
+  * Separated Long-Value Retrieves/sec
+  * Separated Long-Value Seeks/sec
+  * Separated Long-Value Updates/sec
+  * Sessions % Used
+  * Sessions In Use
+  * Space Trees Deleted Freed Extents/sec
+  * Space Trees Deleted Freed Pages/sec
+  * Space Trees Deleted/sec
+  * Streaming Backup Pages Read/sec
+  * System Read Only Transaction Commits to Level 0/sec
+  * System Read Only Transaction Rollbacks to Level 0/sec
+  * System Read/Write Transaction Commits to Level 0 (Durable)/sec
+  * System Read/Write Transaction Commits to Level 0 (Lazy)/sec
+  * System Read/Write Transaction Rollbacks to Level 0/sec
+  * System Transaction Commits to Level 0/sec
+  * System Transaction Rollbacks to Level 0/sec
+  * Table Closes/sec
+  * Table Open Cache % Hit
+  * Table Open Cache Hits/sec
+  * Table Open Cache Misses/sec
+  * Table Open Pages Preread/sec
+  * Table Open Pages Read/sec
+  * Table Opens/sec
+  * Tables Open
+  * User Read Only Transaction Commits to Level 0/sec
+  * User Read Only Transaction Rollbacks to Level 0/sec
+  * User Read/Write Transaction Commits to Level 0 (Durable)/sec
+  * User Read/Write Transaction Commits to Level 0 (Lazy)/sec
+  * User Read/Write Transaction Rollbacks to Level 0/sec
+  * User Transaction Commits to Level 0/sec
+  * User Transaction Rollbacks to Level 0/sec
+  * User Wait All Transaction Commits/sec
+  * User Wait Last Transaction Commits/sec
+  * VER Bucket Allocations Wait For Version Cleanup/sec
+  * Version buckets allocated
+  * Version buckets allocated for deletes
+  * Version store average RCE bookmark length
+  * Version store cleanup tasks asynchronously dispatched/sec
+  * Version store cleanup tasks discarded/sec
+  * Version store cleanup tasks failures/sec
+  * Version store cleanup tasks synchronously dispatched/sec
+  * Version store unnecessary calls/sec
+  * Xpress10 Corsica Compressed Bytes/sec
+  * Xpress10 Corsica Compression average latency (us)
+  * Xpress10 Corsica Compression hardware average latency (us)
+  * Xpress10 Corsica Compression Ops/sec
+  * Xpress10 Corsica Compression ratio
+  * Xpress10 Corsica Decompressed Bytes/sec
+  * Xpress10 Corsica Decompression average latency (us)
+  * Xpress10 Corsica Decompression hardware average latency (us)
+  * Xpress10 Corsica Decompression Ops/sec
+  * Xpress10 Software Decompressed Bytes/sec
+  * Xpress10 Software Decompression average latency (us)
+  * Xpress10 Software Decompression Ops/sec
+
+'Database ==> TableClasses': 110, 0.0 seconds
+  * B+ Tree Append Splits/sec
+  * B+ Tree Appends/sec
+  * B+ Tree Deletes/sec
+  * B+ Tree Empty Page Merges/sec
+  * B+ Tree Failed Simple Page Cleanup Attempts/sec
+  * B+ Tree Flag Deletes/sec
+  * B+ Tree Inserts/sec
+  * B+ Tree Left Merges/sec
+  * B+ Tree Merges/sec
+  * B+ Tree Move Nexts (Nodes Filtered)/sec
+  * B+ Tree Move Nexts (Non-Visible Nodes Skipped)/sec
+  * B+ Tree Move Nexts/sec
+  * B+ Tree Move Prevs (Nodes Filtered)/sec
+  * B+ Tree Move Prevs (Non-Visible Nodes Skipped)/sec
+  * B+ Tree Move Prevs/sec
+  * B+ Tree Opportune Prereads/sec
+  * B+ Tree Page Moves/sec
+  * B+ Tree Partial Left Merges/sec
+  * B+ Tree Partial Merges/sec
+  * B+ Tree Replaces/sec
+  * B+ Tree Right Hotpoint Splits/sec
+  * B+ Tree Right Merges/sec
+  * B+ Tree Right Splits/sec
+  * B+ Tree Seek Short Circuits/sec
+  * B+ Tree Seeks/sec
+  * B+ Tree Splits/sec
+  * B+ Tree Unnecessary Sibling Latches/sec
+  * B+ Tree Vertical Splits/sec
+  * Database Cache % Hit
+  * Database Cache % Hit (Unique)
+  * Database Cache Miss (Attached) Average Latency
+  * Database Cache Misses/sec
+  * Database Cache Requests/sec
+  * Database Cache Requests/sec (Unique)
+  * Database Cache Size
+  * Database Cache Size (MB)
+  * Database Cache Size Unused
+  * Database Page Evictions (k=1)/sec
+  * Database Page Evictions (k=2)/sec
+  * Database Page Evictions (Other)/sec
+  * Database Page Evictions (Scavenging.AvailPool)/sec
+  * Database Page Evictions (Scavenging.Shrink)/sec
+  * Database Page Preread Stalls/sec
+  * Database Pages Coalesced Read/sec
+  * Database Pages Coalesced Written/sec
+  * Database Pages Colded (Ext)/sec
+  * Database Pages Colded (Int)/sec
+  * Database Pages Dehydrated/sec
+  * Database Pages Dirtied (Repeatedly)/sec
+  * Database Pages Dirtied/sec
+  * Database Pages Flushed (Checkpoint Foreground)/sec
+  * Database Pages Flushed (Checkpoint)/sec
+  * Database Pages Flushed (Context Flush)/sec
+  * Database Pages Flushed (Filthy Foreground)/sec
+  * Database Pages Flushed (Scavenging.AvailPool)/sec
+  * Database Pages Flushed (Scavenging.Shrink)/sec
+  * Database Pages Flushed Opportunely Clean/sec
+  * Database Pages Flushed Opportunely/sec
+  * Database Pages Preread (Unnecessary)/sec
+  * Database Pages Preread Untouched/sec
+  * Database Pages Preread/sec
+  * Database Pages Read Async/sec
+  * Database Pages Read Sync/sec
+  * Database Pages Rehydrated/sec
+  * Database Pages Repeatedly Read/sec
+  * Database Pages Repeatedly Written/sec
+  * Database Pages Transferred/sec
+  * Database Pages Version Copied/sec
+  * Database Pages Versioned/sec
+  * Database Pages Written/sec
+  * Decryption average latency (us)
+  * Decryption Bytes/sec
+  * Decryption Ops/sec
+  * Encryption average latency (us)
+  * Encryption Bytes/sec
+  * Encryption Ops/sec
+  * False Index Column Updates/sec
+  * False Tuple Index Column Updates/sec
+  * FCB Async Purge/sec
+  * FCB Async Scan/sec
+  * FCB Async Threshold Purge Failures/sec
+  * Long-Value Maximum LID
+  * No name
+  * Record Deletes/sec
+  * Record Escrow-Updates/sec
+  * Record Inserts/sec
+  * Record Intrinsic Long-Values Updated/sec
+  * Record Replaces/sec
+  * Record Separated Long-Values Added/sec
+  * Record Separated Long-Values All Forced/sec
+  * Record Separated Long-Values Dereference All/sec
+  * Record Separated Long-Values Forced/sec
+  * Record Separated Long-Values Reference All/sec
+  * Record Unnecessary Replaces/sec
+  * Secondary Index Deletes/sec
+  * Secondary Index Inserts/sec
+  * Separated Long-Value Chunk Appends/sec
+  * Separated Long-Value Chunk Copies/sec
+  * Separated Long-Value Chunk Deletes/sec
+  * Separated Long-Value Chunk Replaces/sec
+  * Separated Long-Value Chunk Retrieves/sec
+  * Separated Long-Value Chunk Seeks/sec
+  * Separated Long-Value Copies/sec
+  * Separated Long-Value Creates/sec
+  * Separated Long-Value Deletes/sec
+  * Separated Long-Value Retrieves/sec
+  * Separated Long-Value Seeks/sec
+  * Separated Long-Value Updates/sec
+  * Table Open Pages Preread/sec
+  * Table Open Pages Read/sec
+
+'DC Locator (Client)': 19, 0.0 seconds
+  * Flags: DS Required (W2K+) Requests/sec
+  * Flags: DS Required (WS2008+) Requests/sec
+  * Flags: DS Required (WS2012 R2+) Requests/sec
+  * Flags: DS Required (WS2012+) Requests/sec
+  * Flags: DS Required (WS2016+) Requests/sec
+  * Flags: Force Rediscovery Requests/sec
+  * Flags: GC Required Requests/sec
+  * Flags: KDC Required Requests/sec
+  * Flags: KeyList Support Required Requests/sec
+  * Flags: PDC Required Requests/sec
+  * Flags: Time Server Required Requests/sec
+  * Flags: TryNextClosestSite Requests/sec
+  * Flags: Writable Required Requests/sec
+  * Requests: Average Failure Latency (secs)
+  * Requests: Average Success Latency (secs)
+  * Requests: Failures/sec
+  * Requests: Successes/sec
+  * Requests: Total Active
+  * Site Name Queries/sec
+
+'DC Locator (DC)': 0, 0.0 seconds
+
+'DC Locator (Netlogon)': 0, 0.0 seconds
+
+'Distributed Transaction Coordinator': 0, 0.0 seconds
+
+'DNS64 Global': 6, 0.0 seconds
+  * AAAA - Synthesized records
+  * AAAA queries - Failed
+  * AAAA queries - Successful
+  * IP6.ARPA queries - Matched
+  * Other queries - Failed
+  * Other queries - Successful
+
+'Energy Meter': 0, 0.0 seconds
+
+'Event Log': 0, 0.0 seconds
+
+'Event Log Subscriptions': 2, 0.0 seconds
+  * Event filter operations/sec
+  * Events/sec
+
+'Event Tracing for Windows': 0, 0.0 seconds
+
+'Event Tracing for Windows Session': 5, 0.0 seconds
+  * Buffer Memory Usage -- Non-Paged Pool
+  * Buffer Memory Usage -- Paged Pool
+  * Events Logged per sec
+  * Events Lost
+  * Number of Real-Time Consumers
+
+'FileSystem Disk Activity': 0, 0.0 seconds
+
+'Generic IKEv1, AuthIP, and IKEv2': 0, 0.0 seconds
+
+'GPU Adapter Memory': 3, 0.0 seconds
+  * Dedicated Usage
+  * Shared Usage
+  * Total Committed
+
+'GPU Engine': 2, 0.4 seconds
+  * Running Time
+  * Utilization Percentage
+
+'GPU Local Adapter Memory': 1, 0.0 seconds
+  * Local Usage
+
+'GPU Non Local Adapter Memory': 1, 0.0 seconds
+  * Non Local Usage
+
+'GPU Process Memory': 5, 0.0 seconds
+  * Dedicated Usage
+  * Local Usage
+  * Non Local Usage
+  * Shared Usage
+  * Total Committed
+
+'HTTP Service': 0, 0.0 seconds
+
+'HTTP Service Request Queues': 6, 0.0 seconds
+  * ArrivalRate
+  * CacheHitRate
+  * CurrentQueueSize
+  * MaxQueueItemAge
+  * RejectedRequests
+  * RejectionRate
+
+'HTTP Service Url Groups': 9, 0.0 seconds
+  * AllRequests
+  * BytesReceivedRate
+  * BytesSentRate
+  * BytesTransferredRate
+  * ConnectionAttempts
+  * CurrentConnections
+  * GetRequests
+  * HeadRequests
+  * MaxConnections
+
+'Hyper-V Dynamic Memory Integration Service': 0, 0.0 seconds
+
+'Hyper-V Hypervisor': 0, 0.0 seconds
+
+'Hyper-V Hypervisor Logical Processor': 0, 0.0 seconds
+
+'Hyper-V Hypervisor Root Partition': 0, 0.0 seconds
+
+'Hyper-V Hypervisor Root Virtual Processor': 0, 0.0 seconds
+
+'Hyper-V Virtual Machine Bus Pipes': 0, 0.0 seconds
+
+'Hyper-V Virtual Machine Bus Provider Pipes': 0, 0.0 seconds
+
+'ICMP': 0, 0.0 seconds
+
+'ICMPv6': 0, 0.0 seconds
+
+'IPHTTPS Global': 10, 0.0 seconds
+  * Drops - Neighbor resolution timeouts
+  * Errors - Authentication Errors
+  * Errors - Receive errors on the server
+  * Errors - Transmit errors on the server
+  * In - Total bytes received
+  * In - Total packets received
+  * Out - Total bytes forwarded
+  * Out - Total bytes sent
+  * Out - Total packets sent
+  * Sessions - Total sessions
+
+'IPHTTPS Session': 0, 0.0 seconds
+
+'IPsec AuthIP IPv4': 0, 0.0 seconds
+
+'IPsec AuthIP IPv6': 0, 0.0 seconds
+
+'IPsec Connections': 0, 0.0 seconds
+
+'IPsec DoS Protection': 0, 0.0 seconds
+
+'IPsec Driver': 0, 0.0 seconds
+
+'IPsec IKEv1 IPv4': 0, 0.0 seconds
+
+'IPsec IKEv1 IPv6': 0, 0.0 seconds
+
+'IPsec IKEv2 IPv4': 0, 0.0 seconds
+
+'IPsec IKEv2 IPv6': 0, 0.0 seconds
+
+'IPv4': 0, 0.0 seconds
+
+'IPv6': 0, 0.0 seconds
+
+'Job Object': 0, 0.0 seconds
+
+'Job Object Details': 0, 0.0 seconds
+
+'KPSSVC': 0, 0.0 seconds
+
+'Ldap Client': 25, 0.0 seconds
+  * Binds: Digest Binds/sec
+  * Binds: Negotiate Binds/sec
+  * Binds: NTLM Binds/sec
+  * Binds: Simple Binds/sec
+  * Binds: Total Binds/sec
+  * Connections: New Connections/sec
+  * Connections: New TCP Connections/sec
+  * Connections: New TLS Connections/sec
+  * Connections: New UDP Connections/sec
+  * Connections: Open Connections
+  * Operations: Abandons/sec
+  * Operations: Adds/sec
+  * Operations: Deletes/sec
+  * Operations: Modify/sec
+  * Requests: New Requests/sec
+  * Requests: Request Count
+  * Responses: Average Response Time
+  * Responses: Failure Polling Responses/sec
+  * Responses: Failure Responses/sec
+  * Responses: Pending Responses
+  * Responses: Successful Polling Responses/sec
+  * Responses: Successful Responses/sec
+  * Searches: Base Searches/sec
+  * Searches: Onelevel Searches/sec
+  * Searches: Subtree Searches/sec
+
+'LogicalDisk': 23, 0.0 seconds
+  * % Disk Read Time
+  * % Disk Time
+  * % Disk Write Time
+  * % Free Space
+  * % Idle Time
+  * Avg. Disk Bytes/Read
+  * Avg. Disk Bytes/Transfer
+  * Avg. Disk Bytes/Write
+  * Avg. Disk Queue Length
+  * Avg. Disk Read Queue Length
+  * Avg. Disk sec/Read
+  * Avg. Disk sec/Transfer
+  * Avg. Disk sec/Write
+  * Avg. Disk Write Queue Length
+  * Current Disk Queue Length
+  * Disk Bytes/sec
+  * Disk Read Bytes/sec
+  * Disk Reads/sec
+  * Disk Transfers/sec
+  * Disk Write Bytes/sec
+  * Disk Writes/sec
+  * Free Megabytes
+  * Split IO/Sec
+
+'LSA Lookups': 0, 0.0 seconds
+
+'Memory': 0, 0.0 seconds
+
+'Microsoft Winsock BSP': 0, 0.0 seconds
+
+'MSDTC Bridge 3.0.0.0': 0, 0.0 seconds
+
+'MSDTC Bridge 4.0.0.0': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Access Methods': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Backup Device': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Broker Activation': 6, 0.0 seconds
+  * Stored Procedures Invoked/sec
+  * Task Limit Reached
+  * Task Limit Reached/sec
+  * Tasks Aborted/sec
+  * Tasks Running
+  * Tasks Started/sec
+
+'MSSQL$ADV_2008R2_X64:Broker Statistics': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Broker TO Statistics': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Broker/DBM Transport': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Buffer Manager': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Buffer Node': 9, 0.0 seconds
+  * Database pages
+  * Foreign pages
+  * Free pages
+  * Local node page lookups/sec
+  * Page life expectancy
+  * Remote node page lookups/sec
+  * Stolen pages
+  * Target pages
+  * Total pages
+
+'MSSQL$ADV_2008R2_X64:Buffer Partition': 3, 0.0 seconds
+  * Free list empty/sec
+  * Free list requests/sec
+  * Free pages
+
+'MSSQL$ADV_2008R2_X64:Catalog Metadata': 4, 0.0 seconds
+  * Cache Entries Count
+  * Cache Entries Pinned Count
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+
+'MSSQL$ADV_2008R2_X64:CLR': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Cursor Manager by Type': 9, 0.0 seconds
+  * Active cursors
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cached Cursor Counts
+  * Cursor Cache Use Counts/sec
+  * Cursor memory usage
+  * Cursor Requests/sec
+  * Cursor worktable usage
+  * Number of active cursor plans
+
+'MSSQL$ADV_2008R2_X64:Cursor Manager Total': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Database Mirroring': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Databases': 26, 0.0 seconds
+  * Active Transactions
+  * Backup/Restore Throughput/sec
+  * Bulk Copy Rows/sec
+  * Bulk Copy Throughput/sec
+  * Commit table entries
+  * Data File(s) Size (KB)
+  * DBCC Logical Scan Bytes/sec
+  * Log Bytes Flushed/sec
+  * Log Cache Hit Ratio
+  * Log Cache Hit Ratio Base
+  * Log Cache Reads/sec
+  * Log File(s) Size (KB)
+  * Log File(s) Used Size (KB)
+  * Log Flush Wait Time
+  * Log Flush Waits/sec
+  * Log Flushes/sec
+  * Log Growths
+  * Log Shrinks
+  * Log Truncations
+  * Percent Log Used
+  * Repl. Pending Xacts
+  * Repl. Trans. Rate
+  * Shrink Data Movement Bytes/sec
+  * Tracked transactions/sec
+  * Transactions/sec
+  * Write Transactions/sec
+
+'MSSQL$ADV_2008R2_X64:Deprecated Features': 1, 0.0 seconds
+  * Usage
+
+'MSSQL$ADV_2008R2_X64:Exec Statistics': 4, 0.0 seconds
+  * Distributed Query
+  * DTC calls
+  * Extended Procedures
+  * OLEDB calls
+
+'MSSQL$ADV_2008R2_X64:General Statistics': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Latches': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Locks': 8, 0.0 seconds
+  * Average Wait Time (ms)
+  * Average Wait Time Base
+  * Lock Requests/sec
+  * Lock Timeouts (timeout > 0)/sec
+  * Lock Timeouts/sec
+  * Lock Wait Time (ms)
+  * Lock Waits/sec
+  * Number of Deadlocks/sec
+
+'MSSQL$ADV_2008R2_X64:Memory Manager': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Plan Cache': 5, 0.0 seconds
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cache Object Counts
+  * Cache Objects in use
+  * Cache Pages
+
+'MSSQL$ADV_2008R2_X64:Replication Agents': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Replication Dist.': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Replication Logreader': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Replication Merge': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Replication Snapshot': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Resource Pool Stats': 15, 0.0 seconds
+  * Active memory grant amount (KB)
+  * Active memory grants count
+  * Cache memory target (KB)
+  * Compile memory target (KB)
+  * CPU control effect %
+  * CPU usage %
+  * CPU usage % base
+  * CPU usage target %
+  * Max memory (KB)
+  * Memory grant timeouts/sec
+  * Memory grants/sec
+  * Pending memory grants count
+  * Query exec memory target (KB)
+  * Target memory (KB)
+  * Used memory (KB)
+
+'MSSQL$ADV_2008R2_X64:SQL Errors': 1, 0.0 seconds
+  * Errors/sec
+
+'MSSQL$ADV_2008R2_X64:SQL Statistics': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:Transactions': 0, 0.0 seconds
+
+'MSSQL$ADV_2008R2_X64:User Settable': 1, 0.0 seconds
+  * Query
+
+'MSSQL$ADV_2008R2_X64:Wait Statistics': 12, 0.0 seconds
+  * Lock waits
+  * Log buffer waits
+  * Log write waits
+  * Memory grant queue waits
+  * Network IO waits
+  * Non-Page latch waits
+  * Page IO latch waits
+  * Page latch waits
+  * Thread-safe memory objects waits
+  * Transaction ownership waits
+  * Wait for the worker
+  * Workspace synchronization waits
+
+'MSSQL$ADV_2008R2_X64:Workload Group Stats': 12, 0.0 seconds
+  * Active parallel threads
+  * Active requests
+  * Blocked tasks
+  * CPU usage %
+  * CPU usage % base
+  * Max request cpu time (ms)
+  * Max request memory grant (KB)
+  * Query optimizations/sec
+  * Queued requests
+  * Reduced memory grants/sec
+  * Requests completed/sec
+  * Suboptimal plans/sec
+
+'MSSQL$ADV_2022:Access Methods': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Advanced Analytics': 1, 0.0 seconds
+  * Predictions/sec
+
+'MSSQL$ADV_2022:Availability Group': 1, 0.0 seconds
+  * Active Hadr Threads
+
+'MSSQL$ADV_2022:Availability Replica': 9, 0.0 seconds
+  * Bytes Received from Replica/sec
+  * Bytes Sent to Replica/sec
+  * Bytes Sent to Transport/sec
+  * Flow Control Time (ms/sec)
+  * Flow Control/sec
+  * Receives from Replica/sec
+  * Resent Messages/sec
+  * Sends to Replica/sec
+  * Sends to Transport/sec
+
+'MSSQL$ADV_2022:Backup Device': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Batch Resp Statistics': 17, 0.0 seconds
+  * Batches >=000000ms & <000001ms
+  * Batches >=000001ms & <000002ms
+  * Batches >=000002ms & <000005ms
+  * Batches >=000005ms & <000010ms
+  * Batches >=000010ms & <000020ms
+  * Batches >=000020ms & <000050ms
+  * Batches >=000050ms & <000100ms
+  * Batches >=000100ms & <000200ms
+  * Batches >=000200ms & <000500ms
+  * Batches >=000500ms & <001000ms
+  * Batches >=001000ms & <002000ms
+  * Batches >=002000ms & <005000ms
+  * Batches >=005000ms & <010000ms
+  * Batches >=010000ms & <020000ms
+  * Batches >=020000ms & <050000ms
+  * Batches >=050000ms & <100000ms
+  * Batches >=100000ms
+
+'MSSQL$ADV_2022:Broker Activation': 6, 0.0 seconds
+  * Stored Procedures Invoked/sec
+  * Task Limit Reached
+  * Task Limit Reached/sec
+  * Tasks Aborted/sec
+  * Tasks Running
+  * Tasks Started/sec
+
+'MSSQL$ADV_2022:Broker Statistics': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Broker TO Statistics': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Broker/DBM Transport': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Buffer Manager': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Buffer Node': 4, 0.0 seconds
+  * Database pages
+  * Local node page lookups/sec
+  * Page life expectancy
+  * Remote node page lookups/sec
+
+'MSSQL$ADV_2022:Catalog Metadata': 4, 0.0 seconds
+  * Cache Entries Count
+  * Cache Entries Pinned Count
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+
+'MSSQL$ADV_2022:CLR': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Columnstore': 12, 0.0 seconds
+  * Delta Rowgroups Closed
+  * Delta Rowgroups Compressed
+  * Delta Rowgroups Created
+  * Segment Cache Hit Ratio
+  * Segment Cache Hit Ratio Base
+  * Segment Reads/Sec
+  * Total Delete Buffers Migrated
+  * Total Merge Policy Evaluations
+  * Total Rowgroups Compressed
+  * Total Rowgroups Fit For Merge
+  * Total Rowgroups Merge Compressed
+  * Total Source Rowgroups Merged
+
+'MSSQL$ADV_2022:Cursor Manager by Type': 9, 0.0 seconds
+  * Active cursors
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cached Cursor Counts
+  * Cursor Cache Use Counts/sec
+  * Cursor memory usage
+  * Cursor Requests/sec
+  * Cursor worktable usage
+  * Number of active cursor plans
+
+'MSSQL$ADV_2022:Cursor Manager Total': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Database Mirroring': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Database Replica': 24, 0.0 seconds
+  * Database Flow Control Delay
+  * Database Flow Controls/sec
+  * File Bytes Received/sec
+  * Group Commit Time
+  * Group Commits/Sec
+  * Log Apply Pending Queue
+  * Log Apply Ready Queue
+  * Log Bytes Compressed/sec
+  * Log Bytes Decompressed/sec
+  * Log Bytes Received/sec
+  * Log Compression Cache hits/sec
+  * Log Compression Cache misses/sec
+  * Log Compressions/sec
+  * Log Decompressions/sec
+  * Log remaining for undo
+  * Log Send Queue
+  * Mirrored Write Transactions/sec
+  * Recovery Queue
+  * Redo blocked/sec
+  * Redo Bytes Remaining
+  * Redone Bytes/sec
+  * Redones/sec
+  * Total Log requiring undo
+  * Transaction Delay
+
+'MSSQL$ADV_2022:Databases': 64, 0.0 seconds
+  * Active parallel redo threads
+  * Active Transactions
+  * Avg Dist From EOL/LP Request
+  * Backup/Restore Throughput/sec
+  * Bulk Copy Rows/sec
+  * Bulk Copy Throughput/sec
+  * Commit table entries
+  * Data File(s) Size (KB)
+  * DBCC Logical Scan Bytes/sec
+  * Group Commit Time/sec
+  * Log Bytes Flushed/sec
+  * Log Cache Hit Ratio
+  * Log Cache Hit Ratio Base
+  * Log Cache Reads/sec
+  * Log File(s) Size (KB)
+  * Log File(s) Used Size (KB)
+  * Log Flush Wait Time
+  * Log Flush Waits/sec
+  * Log Flush Write Time (ms)
+  * Log Flushes/sec
+  * Log Growths
+  * Log Pool Cache Misses/sec
+  * Log Pool Disk Reads/sec
+  * Log Pool Hash Deletes/sec
+  * Log Pool Hash Inserts/sec
+  * Log Pool Invalid Hash Entry/sec
+  * Log Pool Log Scan Pushes/sec
+  * Log Pool LogWriter Pushes/sec
+  * Log Pool Push Empty FreePool/sec
+  * Log Pool Push Low Memory/sec
+  * Log Pool Push No Free Buffer/sec
+  * Log Pool Req. Behind Trunc/sec
+  * Log Pool Requests Base
+  * Log Pool Requests Old VLF/sec
+  * Log Pool Requests/sec
+  * Log Pool Total Active Log Size
+  * Log Pool Total Shared Pool Size
+  * Log Shrinks
+  * Log Truncations
+  * Percent Log Used
+  * PVS in-row diff generated/sec
+  * PVS in-row diff retrieved/sec
+  * PVS off-row pages allocated/sec
+  * PVS off-row pages deleted/sec
+  * PVS off-row record generated/sec
+  * PVS off-row record retrieved/sec
+  * Repl. Pending Xacts
+  * Repl. Trans. Rate
+  * Shrink Data Movement Bytes/sec
+  * Tail Log Cache Deletes/sec
+  * Tail Log Cache Misses/sec
+  * TLC LogWriter Pushes/sec
+  * TLC Req. Behind Trunc/sec
+  * Tracked transactions/sec
+  * Transactions/sec
+  * WPR add lsn bucket miss
+  * WPR bucket swaps
+  * WPR stale check bucket miss
+  * Write Transactions/sec
+  * XTP Controller DLC Latency Base
+  * XTP Controller DLC Latency/Fetch
+  * XTP Controller DLC Peak Latency
+  * XTP Controller Log Processed/sec
+  * XTP Memory Used (KB)
+
+'MSSQL$ADV_2022:Deprecated Features': 1, 0.0 seconds
+  * Usage
+
+'MSSQL$ADV_2022:Exec Statistics': 4, 0.0 seconds
+  * Distributed Query
+  * DTC calls
+  * Extended Procedures
+  * OLEDB calls
+
+'MSSQL$ADV_2022:External Scripts': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:FileTable': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:General Statistics': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:HTTP Storage': 25, 0.0 seconds
+  * Avg. Bytes/Read
+  * Avg. Bytes/Read BASE
+  * Avg. Bytes/Transfer
+  * Avg. Bytes/Transfer BASE
+  * Avg. Bytes/Write
+  * Avg. Bytes/Write BASE
+  * Avg. microsec/Read
+  * Avg. microsec/Read BASE
+  * Avg. microsec/Read Comp
+  * Avg. microsec/Read Comp BASE
+  * Avg. microsec/Transfer
+  * Avg. microsec/Transfer BASE
+  * Avg. microsec/Write
+  * Avg. microsec/Write BASE
+  * Avg. microsec/Write Comp
+  * Avg. microsec/Write Comp BASE
+  * HTTP Storage IO failed/sec
+  * HTTP Storage IO retry/sec
+  * Outstanding HTTP Storage IO
+  * Read Bytes/Sec
+  * Reads/Sec
+  * Total Bytes/Sec
+  * Transfers/Sec
+  * Write Bytes/Sec
+  * Writes/Sec
+
+'MSSQL$ADV_2022:JSON Doc Stats': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Latches': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Locks': 8, 0.0 seconds
+  * Average Wait Time (ms)
+  * Average Wait Time Base
+  * Lock Requests/sec
+  * Lock Timeouts (timeout > 0)/sec
+  * Lock Timeouts/sec
+  * Lock Wait Time (ms)
+  * Lock Waits/sec
+  * Number of Deadlocks/sec
+
+'MSSQL$ADV_2022:LogPool FreePool': 2, 0.0 seconds
+  * Free Buffer Refills/sec
+  * Free List Length
+
+'MSSQL$ADV_2022:Memory Broker Clerks': 6, 0.0 seconds
+  * Internal benefit
+  * Memory broker clerk size
+  * Periodic evictions (pages)
+  * Pressure evictions (pages/sec)
+  * Simulation benefit
+  * Simulation size
+
+'MSSQL$ADV_2022:Memory Manager': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Memory Node': 7, 0.0 seconds
+  * Database Node Memory (KB)
+  * Decommit Node Memory (KB)/sec
+  * Foreign Node Memory (KB)
+  * Free Node Memory (KB)
+  * Stolen Node Memory (KB)
+  * Target Node Memory (KB)
+  * Total Node Memory (KB)
+
+'MSSQL$ADV_2022:Plan Cache': 5, 0.0 seconds
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cache Object Counts
+  * Cache Objects in use
+  * Cache Pages
+
+'MSSQL$ADV_2022:Query Store': 4, 0.0 seconds
+  * Query Store CPU usage
+  * Query Store logical reads
+  * Query Store logical writes
+  * Query Store physical reads
+
+'MSSQL$ADV_2022:Replication Agents': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Replication Dist.': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Replication Logreader': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Replication Merge': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Replication Snapshot': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Resource Pool Stats': 30, 0.0 seconds
+  * Active memory grant amount (KB)
+  * Active memory grants count
+  * Avg Disk Read IO (ms)
+  * Avg Disk Read IO (ms) Base
+  * Avg Disk Write IO (ms)
+  * Avg Disk Write IO (ms) Base
+  * Cache memory target (KB)
+  * Compile memory target (KB)
+  * CPU control effect %
+  * CPU delayed %
+  * CPU delayed % base
+  * CPU effective %
+  * CPU effective % base
+  * CPU usage %
+  * CPU usage % base
+  * CPU usage target %
+  * CPU violated %
+  * Disk Read Bytes/sec
+  * Disk Read IO Throttled/sec
+  * Disk Read IO/sec
+  * Disk Write Bytes/sec
+  * Disk Write IO Throttled/sec
+  * Disk Write IO/sec
+  * Max memory (KB)
+  * Memory grant timeouts/sec
+  * Memory grants/sec
+  * Pending memory grants count
+  * Query exec memory target (KB)
+  * Target memory (KB)
+  * Used memory (KB)
+
+'MSSQL$ADV_2022:SQL Errors': 1, 0.0 seconds
+  * Errors/sec
+
+'MSSQL$ADV_2022:SQL Statistics': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:TailLogCache': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:Transactions': 0, 0.0 seconds
+
+'MSSQL$ADV_2022:User Settable': 1, 0.0 seconds
+  * Query
+
+'MSSQL$ADV_2022:Wait Statistics': 12, 0.0 seconds
+  * Lock waits
+  * Log buffer waits
+  * Log write waits
+  * Memory grant queue waits
+  * Network IO waits
+  * Non-Page latch waits
+  * Page IO latch waits
+  * Page latch waits
+  * Thread-safe memory objects waits
+  * Transaction ownership waits
+  * Wait for the worker
+  * Workspace synchronization waits
+
+'MSSQL$ADV_2022:Workload Group Stats': 17, 0.0 seconds
+  * Active parallel threads
+  * Active requests
+  * Blocked tasks
+  * CPU delayed %
+  * CPU delayed % base
+  * CPU effective %
+  * CPU effective % base
+  * CPU usage %
+  * CPU usage % base
+  * CPU violated %
+  * Max request cpu time (ms)
+  * Max request memory grant (KB)
+  * Query optimizations/sec
+  * Queued requests
+  * Reduced memory grants/sec
+  * Requests completed/sec
+  * Suboptimal plans/sec
+
+'MSSQL$DEV_2008_X64:Access Methods': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Backup Device': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Broker Activation': 6, 0.0 seconds
+  * Stored Procedures Invoked/sec
+  * Task Limit Reached
+  * Task Limit Reached/sec
+  * Tasks Aborted/sec
+  * Tasks Running
+  * Tasks Started/sec
+
+'MSSQL$DEV_2008_X64:Broker Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Broker TO Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Broker/DBM Transport': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Buffer Manager': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Buffer Node': 9, 0.0 seconds
+  * Database pages
+  * Foreign pages
+  * Free pages
+  * Local node page lookups/sec
+  * Page life expectancy
+  * Remote node page lookups/sec
+  * Stolen pages
+  * Target pages
+  * Total pages
+
+'MSSQL$DEV_2008_X64:Buffer Partition': 3, 0.0 seconds
+  * Free list empty/sec
+  * Free list requests/sec
+  * Free pages
+
+'MSSQL$DEV_2008_X64:Catalog Metadata': 4, 0.0 seconds
+  * Cache Entries Count
+  * Cache Entries Pinned Count
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+
+'MSSQL$DEV_2008_X64:CLR': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Cursor Manager by Type': 9, 0.0 seconds
+  * Active cursors
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cached Cursor Counts
+  * Cursor Cache Use Counts/sec
+  * Cursor memory usage
+  * Cursor Requests/sec
+  * Cursor worktable usage
+  * Number of active cursor plans
+
+'MSSQL$DEV_2008_X64:Cursor Manager Total': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Database Mirroring': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Databases': 26, 0.0 seconds
+  * Active Transactions
+  * Backup/Restore Throughput/sec
+  * Bulk Copy Rows/sec
+  * Bulk Copy Throughput/sec
+  * Commit table entries
+  * Data File(s) Size (KB)
+  * DBCC Logical Scan Bytes/sec
+  * Log Bytes Flushed/sec
+  * Log Cache Hit Ratio
+  * Log Cache Hit Ratio Base
+  * Log Cache Reads/sec
+  * Log File(s) Size (KB)
+  * Log File(s) Used Size (KB)
+  * Log Flush Wait Time
+  * Log Flush Waits/sec
+  * Log Flushes/sec
+  * Log Growths
+  * Log Shrinks
+  * Log Truncations
+  * Percent Log Used
+  * Repl. Pending Xacts
+  * Repl. Trans. Rate
+  * Shrink Data Movement Bytes/sec
+  * Tracked transactions/sec
+  * Transactions/sec
+  * Write Transactions/sec
+
+'MSSQL$DEV_2008_X64:Deprecated Features': 1, 0.0 seconds
+  * Usage
+
+'MSSQL$DEV_2008_X64:Exec Statistics': 4, 0.0 seconds
+  * Distributed Query
+  * DTC calls
+  * Extended Procedures
+  * OLEDB calls
+
+'MSSQL$DEV_2008_X64:General Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Latches': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Locks': 8, 0.0 seconds
+  * Average Wait Time (ms)
+  * Average Wait Time Base
+  * Lock Requests/sec
+  * Lock Timeouts (timeout > 0)/sec
+  * Lock Timeouts/sec
+  * Lock Wait Time (ms)
+  * Lock Waits/sec
+  * Number of Deadlocks/sec
+
+'MSSQL$DEV_2008_X64:Memory Manager': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Plan Cache': 5, 0.0 seconds
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cache Object Counts
+  * Cache Objects in use
+  * Cache Pages
+
+'MSSQL$DEV_2008_X64:Replication Agents': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Replication Dist.': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Replication Logreader': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Replication Merge': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Replication Snapshot': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Resource Pool Stats': 15, 0.0 seconds
+  * Active memory grant amount (KB)
+  * Active memory grants count
+  * Cache memory target (KB)
+  * Compile memory target (KB)
+  * CPU control effect %
+  * CPU usage %
+  * CPU usage % base
+  * CPU usage target %
+  * Max memory (KB)
+  * Memory grant timeouts/sec
+  * Memory grants/sec
+  * Pending memory grants count
+  * Query exec memory target (KB)
+  * Target memory (KB)
+  * Used memory (KB)
+
+'MSSQL$DEV_2008_X64:SQL Errors': 1, 0.0 seconds
+  * Errors/sec
+
+'MSSQL$DEV_2008_X64:SQL Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:Transactions': 0, 0.0 seconds
+
+'MSSQL$DEV_2008_X64:User Settable': 1, 0.0 seconds
+  * Query
+
+'MSSQL$DEV_2008_X64:Wait Statistics': 12, 0.0 seconds
+  * Lock waits
+  * Log buffer waits
+  * Log write waits
+  * Memory grant queue waits
+  * Network IO waits
+  * Non-Page latch waits
+  * Page IO latch waits
+  * Page latch waits
+  * Thread-safe memory objects waits
+  * Transaction ownership waits
+  * Wait for the worker
+  * Workspace synchronization waits
+
+'MSSQL$DEV_2008_X64:Workload Group Stats': 12, 0.0 seconds
+  * Active parallel threads
+  * Active requests
+  * Blocked tasks
+  * CPU usage %
+  * CPU usage % base
+  * Max request cpu time (ms)
+  * Max request memory grant (KB)
+  * Query optimizations/sec
+  * Queued requests
+  * Reduced memory grants/sec
+  * Requests completed/sec
+  * Suboptimal plans/sec
+
+'MSSQL$DEV_2008R2_X64:Access Methods': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Backup Device': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Broker Activation': 6, 0.0 seconds
+  * Stored Procedures Invoked/sec
+  * Task Limit Reached
+  * Task Limit Reached/sec
+  * Tasks Aborted/sec
+  * Tasks Running
+  * Tasks Started/sec
+
+'MSSQL$DEV_2008R2_X64:Broker Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Broker TO Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Broker/DBM Transport': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Buffer Manager': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Buffer Node': 9, 0.0 seconds
+  * Database pages
+  * Foreign pages
+  * Free pages
+  * Local node page lookups/sec
+  * Page life expectancy
+  * Remote node page lookups/sec
+  * Stolen pages
+  * Target pages
+  * Total pages
+
+'MSSQL$DEV_2008R2_X64:Buffer Partition': 3, 0.0 seconds
+  * Free list empty/sec
+  * Free list requests/sec
+  * Free pages
+
+'MSSQL$DEV_2008R2_X64:Catalog Metadata': 4, 0.0 seconds
+  * Cache Entries Count
+  * Cache Entries Pinned Count
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+
+'MSSQL$DEV_2008R2_X64:CLR': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Cursor Manager by Type': 9, 0.0 seconds
+  * Active cursors
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cached Cursor Counts
+  * Cursor Cache Use Counts/sec
+  * Cursor memory usage
+  * Cursor Requests/sec
+  * Cursor worktable usage
+  * Number of active cursor plans
+
+'MSSQL$DEV_2008R2_X64:Cursor Manager Total': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Database Mirroring': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Databases': 26, 0.0 seconds
+  * Active Transactions
+  * Backup/Restore Throughput/sec
+  * Bulk Copy Rows/sec
+  * Bulk Copy Throughput/sec
+  * Commit table entries
+  * Data File(s) Size (KB)
+  * DBCC Logical Scan Bytes/sec
+  * Log Bytes Flushed/sec
+  * Log Cache Hit Ratio
+  * Log Cache Hit Ratio Base
+  * Log Cache Reads/sec
+  * Log File(s) Size (KB)
+  * Log File(s) Used Size (KB)
+  * Log Flush Wait Time
+  * Log Flush Waits/sec
+  * Log Flushes/sec
+  * Log Growths
+  * Log Shrinks
+  * Log Truncations
+  * Percent Log Used
+  * Repl. Pending Xacts
+  * Repl. Trans. Rate
+  * Shrink Data Movement Bytes/sec
+  * Tracked transactions/sec
+  * Transactions/sec
+  * Write Transactions/sec
+
+'MSSQL$DEV_2008R2_X64:Deprecated Features': 1, 0.0 seconds
+  * Usage
+
+'MSSQL$DEV_2008R2_X64:Exec Statistics': 4, 0.0 seconds
+  * Distributed Query
+  * DTC calls
+  * Extended Procedures
+  * OLEDB calls
+
+'MSSQL$DEV_2008R2_X64:General Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Latches': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Locks': 8, 0.0 seconds
+  * Average Wait Time (ms)
+  * Average Wait Time Base
+  * Lock Requests/sec
+  * Lock Timeouts (timeout > 0)/sec
+  * Lock Timeouts/sec
+  * Lock Wait Time (ms)
+  * Lock Waits/sec
+  * Number of Deadlocks/sec
+
+'MSSQL$DEV_2008R2_X64:Memory Manager': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Plan Cache': 5, 0.0 seconds
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cache Object Counts
+  * Cache Objects in use
+  * Cache Pages
+
+'MSSQL$DEV_2008R2_X64:Replication Agents': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Replication Dist.': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Replication Logreader': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Replication Merge': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Replication Snapshot': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Resource Pool Stats': 15, 0.0 seconds
+  * Active memory grant amount (KB)
+  * Active memory grants count
+  * Cache memory target (KB)
+  * Compile memory target (KB)
+  * CPU control effect %
+  * CPU usage %
+  * CPU usage % base
+  * CPU usage target %
+  * Max memory (KB)
+  * Memory grant timeouts/sec
+  * Memory grants/sec
+  * Pending memory grants count
+  * Query exec memory target (KB)
+  * Target memory (KB)
+  * Used memory (KB)
+
+'MSSQL$DEV_2008R2_X64:SQL Errors': 1, 0.0 seconds
+  * Errors/sec
+
+'MSSQL$DEV_2008R2_X64:SQL Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:Transactions': 0, 0.0 seconds
+
+'MSSQL$DEV_2008R2_X64:User Settable': 1, 0.0 seconds
+  * Query
+
+'MSSQL$DEV_2008R2_X64:Wait Statistics': 12, 0.0 seconds
+  * Lock waits
+  * Log buffer waits
+  * Log write waits
+  * Memory grant queue waits
+  * Network IO waits
+  * Non-Page latch waits
+  * Page IO latch waits
+  * Page latch waits
+  * Thread-safe memory objects waits
+  * Transaction ownership waits
+  * Wait for the worker
+  * Workspace synchronization waits
+
+'MSSQL$DEV_2008R2_X64:Workload Group Stats': 12, 0.0 seconds
+  * Active parallel threads
+  * Active requests
+  * Blocked tasks
+  * CPU usage %
+  * CPU usage % base
+  * Max request cpu time (ms)
+  * Max request memory grant (KB)
+  * Query optimizations/sec
+  * Queued requests
+  * Reduced memory grants/sec
+  * Requests completed/sec
+  * Suboptimal plans/sec
+
+'MSSQL$DEV_2012_X64:Access Methods': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Availability Replica': 9, 0.0 seconds
+  * Bytes Received from Replica/sec
+  * Bytes Sent to Replica/sec
+  * Bytes Sent to Transport/sec
+  * Flow Control Time (ms/sec)
+  * Flow Control/sec
+  * Receives from Replica/sec
+  * Resent Messages/sec
+  * Sends to Replica/sec
+  * Sends to Transport/sec
+
+'MSSQL$DEV_2012_X64:Backup Device': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Batch Resp Statistics': 17, 0.0 seconds
+  * Batches >=000000ms & <000001ms
+  * Batches >=000001ms & <000002ms
+  * Batches >=000002ms & <000005ms
+  * Batches >=000005ms & <000010ms
+  * Batches >=000010ms & <000020ms
+  * Batches >=000020ms & <000050ms
+  * Batches >=000050ms & <000100ms
+  * Batches >=000100ms & <000200ms
+  * Batches >=000200ms & <000500ms
+  * Batches >=000500ms & <001000ms
+  * Batches >=001000ms & <002000ms
+  * Batches >=002000ms & <005000ms
+  * Batches >=005000ms & <010000ms
+  * Batches >=010000ms & <020000ms
+  * Batches >=020000ms & <050000ms
+  * Batches >=050000ms & <100000ms
+  * Batches >=100000ms
+
+'MSSQL$DEV_2012_X64:Broker Activation': 6, 0.0 seconds
+  * Stored Procedures Invoked/sec
+  * Task Limit Reached
+  * Task Limit Reached/sec
+  * Tasks Aborted/sec
+  * Tasks Running
+  * Tasks Started/sec
+
+'MSSQL$DEV_2012_X64:Broker Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Broker TO Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Broker/DBM Transport': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Buffer Manager': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Buffer Node': 4, 0.0 seconds
+  * Database pages
+  * Local node page lookups/sec
+  * Page life expectancy
+  * Remote node page lookups/sec
+
+'MSSQL$DEV_2012_X64:Catalog Metadata': 4, 0.0 seconds
+  * Cache Entries Count
+  * Cache Entries Pinned Count
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+
+'MSSQL$DEV_2012_X64:CLR': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Cursor Manager by Type': 9, 0.0 seconds
+  * Active cursors
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cached Cursor Counts
+  * Cursor Cache Use Counts/sec
+  * Cursor memory usage
+  * Cursor Requests/sec
+  * Cursor worktable usage
+  * Number of active cursor plans
+
+'MSSQL$DEV_2012_X64:Cursor Manager Total': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Database Mirroring': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Database Replica': 22, 0.0 seconds
+  * Database Flow Control Delay
+  * Database Flow Controls/sec
+  * File Bytes Received/sec
+  * Group Commit Time
+  * Group Commits/Sec
+  * Log Bytes Compressed/sec
+  * Log Bytes Decompressed/sec
+  * Log Bytes Received/sec
+  * Log Compression Cache hits/sec
+  * Log Compression Cache misses/sec
+  * Log Compressions/sec
+  * Log Decompressions/sec
+  * Log remaining for undo
+  * Log Send Queue
+  * Mirrored Write Transactions/sec
+  * Recovery Queue
+  * Redo blocked/sec
+  * Redo Bytes Remaining
+  * Redone Bytes/sec
+  * Redones/sec
+  * Total Log requiring undo
+  * Transaction Delay
+
+'MSSQL$DEV_2012_X64:Databases': 30, 0.0 seconds
+  * Active Transactions
+  * Backup/Restore Throughput/sec
+  * Bulk Copy Rows/sec
+  * Bulk Copy Throughput/sec
+  * Commit table entries
+  * Data File(s) Size (KB)
+  * DBCC Logical Scan Bytes/sec
+  * Log Bytes Flushed/sec
+  * Log Cache Hit Ratio
+  * Log Cache Hit Ratio Base
+  * Log Cache Reads/sec
+  * Log File(s) Size (KB)
+  * Log File(s) Used Size (KB)
+  * Log Flush Wait Time
+  * Log Flush Waits/sec
+  * Log Flush Write Time (ms)
+  * Log Flushes/sec
+  * Log Growths
+  * Log Pool Cache Misses/sec
+  * Log Pool Disk Reads/sec
+  * Log Pool Requests/sec
+  * Log Shrinks
+  * Log Truncations
+  * Percent Log Used
+  * Repl. Pending Xacts
+  * Repl. Trans. Rate
+  * Shrink Data Movement Bytes/sec
+  * Tracked transactions/sec
+  * Transactions/sec
+  * Write Transactions/sec
+
+'MSSQL$DEV_2012_X64:Deprecated Features': 1, 0.0 seconds
+  * Usage
+
+'MSSQL$DEV_2012_X64:Exec Statistics': 4, 0.0 seconds
+  * Distributed Query
+  * DTC calls
+  * Extended Procedures
+  * OLEDB calls
+
+'MSSQL$DEV_2012_X64:FileTable': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:General Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Latches': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Locks': 8, 0.0 seconds
+  * Average Wait Time (ms)
+  * Average Wait Time Base
+  * Lock Requests/sec
+  * Lock Timeouts (timeout > 0)/sec
+  * Lock Timeouts/sec
+  * Lock Wait Time (ms)
+  * Lock Waits/sec
+  * Number of Deadlocks/sec
+
+'MSSQL$DEV_2012_X64:Memory Broker Clerks': 6, 0.0 seconds
+  * Internal benefit
+  * Memory broker clerk size
+  * Periodic evictions (pages)
+  * Pressure evictions (pages/sec)
+  * Simulation benefit
+  * Simulation size
+
+'MSSQL$DEV_2012_X64:Memory Manager': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Memory Node': 6, 0.0 seconds
+  * Database Node Memory (KB)
+  * Foreign Node Memory (KB)
+  * Free Node Memory (KB)
+  * Stolen Node Memory (KB)
+  * Target Node Memory (KB)
+  * Total Node Memory (KB)
+
+'MSSQL$DEV_2012_X64:Plan Cache': 5, 0.0 seconds
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cache Object Counts
+  * Cache Objects in use
+  * Cache Pages
+
+'MSSQL$DEV_2012_X64:Query Execution': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Replication Agents': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Replication Dist.': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Replication Logreader': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Replication Merge': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Replication Snapshot': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Resource Pool Stats': 15, 0.0 seconds
+  * Active memory grant amount (KB)
+  * Active memory grants count
+  * Cache memory target (KB)
+  * Compile memory target (KB)
+  * CPU control effect %
+  * CPU usage %
+  * CPU usage % base
+  * CPU usage target %
+  * Max memory (KB)
+  * Memory grant timeouts/sec
+  * Memory grants/sec
+  * Pending memory grants count
+  * Query exec memory target (KB)
+  * Target memory (KB)
+  * Used memory (KB)
+
+'MSSQL$DEV_2012_X64:SQL Errors': 1, 0.0 seconds
+  * Errors/sec
+
+'MSSQL$DEV_2012_X64:SQL Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:Transactions': 0, 0.0 seconds
+
+'MSSQL$DEV_2012_X64:User Settable': 1, 0.0 seconds
+  * Query
+
+'MSSQL$DEV_2012_X64:Wait Statistics': 12, 0.0 seconds
+  * Lock waits
+  * Log buffer waits
+  * Log write waits
+  * Memory grant queue waits
+  * Network IO waits
+  * Non-Page latch waits
+  * Page IO latch waits
+  * Page latch waits
+  * Thread-safe memory objects waits
+  * Transaction ownership waits
+  * Wait for the worker
+  * Workspace synchronization waits
+
+'MSSQL$DEV_2012_X64:Workload Group Stats': 12, 0.0 seconds
+  * Active parallel threads
+  * Active requests
+  * Blocked tasks
+  * CPU usage %
+  * CPU usage % base
+  * Max request cpu time (ms)
+  * Max request memory grant (KB)
+  * Query optimizations/sec
+  * Queued requests
+  * Reduced memory grants/sec
+  * Requests completed/sec
+  * Suboptimal plans/sec
+
+'MSSQL$DEV_2014_X64:Access Methods': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Availability Replica': 9, 0.0 seconds
+  * Bytes Received from Replica/sec
+  * Bytes Sent to Replica/sec
+  * Bytes Sent to Transport/sec
+  * Flow Control Time (ms/sec)
+  * Flow Control/sec
+  * Receives from Replica/sec
+  * Resent Messages/sec
+  * Sends to Replica/sec
+  * Sends to Transport/sec
+
+'MSSQL$DEV_2014_X64:Backup Device': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Batch Resp Statistics': 17, 0.0 seconds
+  * Batches >=000000ms & <000001ms
+  * Batches >=000001ms & <000002ms
+  * Batches >=000002ms & <000005ms
+  * Batches >=000005ms & <000010ms
+  * Batches >=000010ms & <000020ms
+  * Batches >=000020ms & <000050ms
+  * Batches >=000050ms & <000100ms
+  * Batches >=000100ms & <000200ms
+  * Batches >=000200ms & <000500ms
+  * Batches >=000500ms & <001000ms
+  * Batches >=001000ms & <002000ms
+  * Batches >=002000ms & <005000ms
+  * Batches >=005000ms & <010000ms
+  * Batches >=010000ms & <020000ms
+  * Batches >=020000ms & <050000ms
+  * Batches >=050000ms & <100000ms
+  * Batches >=100000ms
+
+'MSSQL$DEV_2014_X64:Broker Activation': 6, 0.0 seconds
+  * Stored Procedures Invoked/sec
+  * Task Limit Reached
+  * Task Limit Reached/sec
+  * Tasks Aborted/sec
+  * Tasks Running
+  * Tasks Started/sec
+
+'MSSQL$DEV_2014_X64:Broker Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Broker TO Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Broker/DBM Transport': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Buffer Manager': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Buffer Node': 4, 0.0 seconds
+  * Database pages
+  * Local node page lookups/sec
+  * Page life expectancy
+  * Remote node page lookups/sec
+
+'MSSQL$DEV_2014_X64:Catalog Metadata': 4, 0.0 seconds
+  * Cache Entries Count
+  * Cache Entries Pinned Count
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+
+'MSSQL$DEV_2014_X64:CLR': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Cursor Manager by Type': 9, 0.0 seconds
+  * Active cursors
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cached Cursor Counts
+  * Cursor Cache Use Counts/sec
+  * Cursor memory usage
+  * Cursor Requests/sec
+  * Cursor worktable usage
+  * Number of active cursor plans
+
+'MSSQL$DEV_2014_X64:Cursor Manager Total': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Database Mirroring': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Database Replica': 22, 0.0 seconds
+  * Database Flow Control Delay
+  * Database Flow Controls/sec
+  * File Bytes Received/sec
+  * Group Commit Time
+  * Group Commits/Sec
+  * Log Bytes Compressed/sec
+  * Log Bytes Decompressed/sec
+  * Log Bytes Received/sec
+  * Log Compression Cache hits/sec
+  * Log Compression Cache misses/sec
+  * Log Compressions/sec
+  * Log Decompressions/sec
+  * Log remaining for undo
+  * Log Send Queue
+  * Mirrored Write Transactions/sec
+  * Recovery Queue
+  * Redo blocked/sec
+  * Redo Bytes Remaining
+  * Redone Bytes/sec
+  * Redones/sec
+  * Total Log requiring undo
+  * Transaction Delay
+
+'MSSQL$DEV_2014_X64:Databases': 32, 0.0 seconds
+  * Active Transactions
+  * Backup/Restore Throughput/sec
+  * Bulk Copy Rows/sec
+  * Bulk Copy Throughput/sec
+  * Commit table entries
+  * Data File(s) Size (KB)
+  * DBCC Logical Scan Bytes/sec
+  * Group Commit Time/sec
+  * Log Bytes Flushed/sec
+  * Log Cache Hit Ratio
+  * Log Cache Hit Ratio Base
+  * Log Cache Reads/sec
+  * Log File(s) Size (KB)
+  * Log File(s) Used Size (KB)
+  * Log Flush Wait Time
+  * Log Flush Waits/sec
+  * Log Flush Write Time (ms)
+  * Log Flushes/sec
+  * Log Growths
+  * Log Pool Cache Misses/sec
+  * Log Pool Disk Reads/sec
+  * Log Pool Requests/sec
+  * Log Shrinks
+  * Log Truncations
+  * Percent Log Used
+  * Repl. Pending Xacts
+  * Repl. Trans. Rate
+  * Shrink Data Movement Bytes/sec
+  * Tracked transactions/sec
+  * Transactions/sec
+  * Write Transactions/sec
+  * XTP Memory Used (KB)
+
+'MSSQL$DEV_2014_X64:Deprecated Features': 1, 0.0 seconds
+  * Usage
+
+'MSSQL$DEV_2014_X64:Exec Statistics': 4, 0.0 seconds
+  * Distributed Query
+  * DTC calls
+  * Extended Procedures
+  * OLEDB calls
+
+'MSSQL$DEV_2014_X64:FileTable': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:General Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:HTTP Storage': 20, 0.0 seconds
+  * Avg. Bytes/Read
+  * Avg. Bytes/Read BASE
+  * Avg. Bytes/Transfer
+  * Avg. Bytes/Transfer BASE
+  * Avg. Bytes/Write
+  * Avg. Bytes/Write BASE
+  * Avg. microsec/Read
+  * Avg. microsec/Read BASE
+  * Avg. microsec/Transfer
+  * Avg. microsec/Transfer BASE
+  * Avg. microsec/Write
+  * Avg. microsec/Write BASE
+  * HTTP Storage IO retry/sec
+  * Outstanding HTTP Storage IO
+  * Read Bytes/Sec
+  * Reads/Sec
+  * Total Bytes/Sec
+  * Transfers/Sec
+  * Write Bytes/Sec
+  * Writes/Sec
+
+'MSSQL$DEV_2014_X64:Latches': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Locks': 8, 0.0 seconds
+  * Average Wait Time (ms)
+  * Average Wait Time Base
+  * Lock Requests/sec
+  * Lock Timeouts (timeout > 0)/sec
+  * Lock Timeouts/sec
+  * Lock Wait Time (ms)
+  * Lock Waits/sec
+  * Number of Deadlocks/sec
+
+'MSSQL$DEV_2014_X64:Memory Broker Clerks': 6, 0.0 seconds
+  * Internal benefit
+  * Memory broker clerk size
+  * Periodic evictions (pages)
+  * Pressure evictions (pages/sec)
+  * Simulation benefit
+  * Simulation size
+
+'MSSQL$DEV_2014_X64:Memory Manager': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Memory Node': 6, 0.0 seconds
+  * Database Node Memory (KB)
+  * Foreign Node Memory (KB)
+  * Free Node Memory (KB)
+  * Stolen Node Memory (KB)
+  * Target Node Memory (KB)
+  * Total Node Memory (KB)
+
+'MSSQL$DEV_2014_X64:Plan Cache': 5, 0.0 seconds
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cache Object Counts
+  * Cache Objects in use
+  * Cache Pages
+
+'MSSQL$DEV_2014_X64:Replication Agents': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Replication Dist.': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Replication Logreader': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Replication Merge': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Replication Snapshot': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Resource Pool Stats': 25, 0.0 seconds
+  * Active memory grant amount (KB)
+  * Active memory grants count
+  * Avg Disk Read IO (ms)
+  * Avg Disk Read IO (ms) Base
+  * Avg Disk Write IO (ms)
+  * Avg Disk Write IO (ms) Base
+  * Cache memory target (KB)
+  * Compile memory target (KB)
+  * CPU control effect %
+  * CPU usage %
+  * CPU usage % base
+  * CPU usage target %
+  * Disk Read Bytes/sec
+  * Disk Read IO Throttled/sec
+  * Disk Read IO/sec
+  * Disk Write Bytes/sec
+  * Disk Write IO Throttled/sec
+  * Disk Write IO/sec
+  * Max memory (KB)
+  * Memory grant timeouts/sec
+  * Memory grants/sec
+  * Pending memory grants count
+  * Query exec memory target (KB)
+  * Target memory (KB)
+  * Used memory (KB)
+
+'MSSQL$DEV_2014_X64:SQL Errors': 1, 0.0 seconds
+  * Errors/sec
+
+'MSSQL$DEV_2014_X64:SQL Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:Transactions': 0, 0.0 seconds
+
+'MSSQL$DEV_2014_X64:User Settable': 1, 0.0 seconds
+  * Query
+
+'MSSQL$DEV_2014_X64:Wait Statistics': 12, 0.0 seconds
+  * Lock waits
+  * Log buffer waits
+  * Log write waits
+  * Memory grant queue waits
+  * Network IO waits
+  * Non-Page latch waits
+  * Page IO latch waits
+  * Page latch waits
+  * Thread-safe memory objects waits
+  * Transaction ownership waits
+  * Wait for the worker
+  * Workspace synchronization waits
+
+'MSSQL$DEV_2014_X64:Workload Group Stats': 12, 0.0 seconds
+  * Active parallel threads
+  * Active requests
+  * Blocked tasks
+  * CPU usage %
+  * CPU usage % base
+  * Max request cpu time (ms)
+  * Max request memory grant (KB)
+  * Query optimizations/sec
+  * Queued requests
+  * Reduced memory grants/sec
+  * Requests completed/sec
+  * Suboptimal plans/sec
+
+'MSSQL$DEV_2016:Access Methods': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Availability Replica': 9, 0.0 seconds
+  * Bytes Received from Replica/sec
+  * Bytes Sent to Replica/sec
+  * Bytes Sent to Transport/sec
+  * Flow Control Time (ms/sec)
+  * Flow Control/sec
+  * Receives from Replica/sec
+  * Resent Messages/sec
+  * Sends to Replica/sec
+  * Sends to Transport/sec
+
+'MSSQL$DEV_2016:Backup Device': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Batch Resp Statistics': 17, 0.0 seconds
+  * Batches >=000000ms & <000001ms
+  * Batches >=000001ms & <000002ms
+  * Batches >=000002ms & <000005ms
+  * Batches >=000005ms & <000010ms
+  * Batches >=000010ms & <000020ms
+  * Batches >=000020ms & <000050ms
+  * Batches >=000050ms & <000100ms
+  * Batches >=000100ms & <000200ms
+  * Batches >=000200ms & <000500ms
+  * Batches >=000500ms & <001000ms
+  * Batches >=001000ms & <002000ms
+  * Batches >=002000ms & <005000ms
+  * Batches >=005000ms & <010000ms
+  * Batches >=010000ms & <020000ms
+  * Batches >=020000ms & <050000ms
+  * Batches >=050000ms & <100000ms
+  * Batches >=100000ms
+
+'MSSQL$DEV_2016:Broker Activation': 6, 0.0 seconds
+  * Stored Procedures Invoked/sec
+  * Task Limit Reached
+  * Task Limit Reached/sec
+  * Tasks Aborted/sec
+  * Tasks Running
+  * Tasks Started/sec
+
+'MSSQL$DEV_2016:Broker Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Broker TO Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Broker/DBM Transport': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Buffer Manager': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Buffer Node': 4, 0.0 seconds
+  * Database pages
+  * Local node page lookups/sec
+  * Page life expectancy
+  * Remote node page lookups/sec
+
+'MSSQL$DEV_2016:Catalog Metadata': 4, 0.0 seconds
+  * Cache Entries Count
+  * Cache Entries Pinned Count
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+
+'MSSQL$DEV_2016:CLR': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Columnstore': 12, 0.0 seconds
+  * Delta Rowgroups Closed
+  * Delta Rowgroups Compressed
+  * Delta Rowgroups Created
+  * Segment Cache Hit Ratio
+  * Segment Cache Hit Ratio Base
+  * Segment Reads/Sec
+  * Total Delete Buffers Migrated
+  * Total Merge Policy Evaluations
+  * Total Rowgroups Compressed
+  * Total Rowgroups Fit For Merge
+  * Total Rowgroups Merge Compressed
+  * Total Source Rowgroups Merged
+
+'MSSQL$DEV_2016:Cursor Manager by Type': 9, 0.0 seconds
+  * Active cursors
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cached Cursor Counts
+  * Cursor Cache Use Counts/sec
+  * Cursor memory usage
+  * Cursor Requests/sec
+  * Cursor worktable usage
+  * Number of active cursor plans
+
+'MSSQL$DEV_2016:Cursor Manager Total': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Database Mirroring': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Database Replica': 24, 0.0 seconds
+  * Database Flow Control Delay
+  * Database Flow Controls/sec
+  * File Bytes Received/sec
+  * Group Commit Time
+  * Group Commits/Sec
+  * Log Apply Pending Queue
+  * Log Apply Ready Queue
+  * Log Bytes Compressed/sec
+  * Log Bytes Decompressed/sec
+  * Log Bytes Received/sec
+  * Log Compression Cache hits/sec
+  * Log Compression Cache misses/sec
+  * Log Compressions/sec
+  * Log Decompressions/sec
+  * Log remaining for undo
+  * Log Send Queue
+  * Mirrored Write Transactions/sec
+  * Recovery Queue
+  * Redo blocked/sec
+  * Redo Bytes Remaining
+  * Redone Bytes/sec
+  * Redones/sec
+  * Total Log requiring undo
+  * Transaction Delay
+
+'MSSQL$DEV_2016:Databases': 50, 0.0 seconds
+  * Active Transactions
+  * Avg Dist From EOL/LP Request
+  * Backup/Restore Throughput/sec
+  * Bulk Copy Rows/sec
+  * Bulk Copy Throughput/sec
+  * Commit table entries
+  * Data File(s) Size (KB)
+  * DBCC Logical Scan Bytes/sec
+  * Group Commit Time/sec
+  * Log Bytes Flushed/sec
+  * Log Cache Hit Ratio
+  * Log Cache Hit Ratio Base
+  * Log Cache Reads/sec
+  * Log File(s) Size (KB)
+  * Log File(s) Used Size (KB)
+  * Log Flush Wait Time
+  * Log Flush Waits/sec
+  * Log Flush Write Time (ms)
+  * Log Flushes/sec
+  * Log Growths
+  * Log Pool Cache Misses/sec
+  * Log Pool Disk Reads/sec
+  * Log Pool Hash Deletes/sec
+  * Log Pool Hash Inserts/sec
+  * Log Pool Invalid Hash Entry/sec
+  * Log Pool Log Scan Pushes/sec
+  * Log Pool LogWriter Pushes/sec
+  * Log Pool Push Empty FreePool/sec
+  * Log Pool Push Low Memory/sec
+  * Log Pool Push No Free Buffer/sec
+  * Log Pool Req. Behind Trunc/sec
+  * Log Pool Requests Base
+  * Log Pool Requests Old VLF/sec
+  * Log Pool Requests/sec
+  * Log Pool Total Active Log Size
+  * Log Pool Total Shared Pool Size
+  * Log Shrinks
+  * Log Truncations
+  * Percent Log Used
+  * Repl. Pending Xacts
+  * Repl. Trans. Rate
+  * Shrink Data Movement Bytes/sec
+  * Tracked transactions/sec
+  * Transactions/sec
+  * Write Transactions/sec
+  * XTP Controller DLC Latency Base
+  * XTP Controller DLC Latency/Fetch
+  * XTP Controller DLC Peak Latency
+  * XTP Controller Log Processed/sec
+  * XTP Memory Used (KB)
+
+'MSSQL$DEV_2016:Deprecated Features': 1, 0.1 seconds
+  * Usage
+
+'MSSQL$DEV_2016:Exec Statistics': 4, 0.0 seconds
+  * Distributed Query
+  * DTC calls
+  * Extended Procedures
+  * OLEDB calls
+
+'MSSQL$DEV_2016:External Scripts': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:FileTable': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:General Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:HTTP Storage': 25, 0.0 seconds
+  * Avg. Bytes/Read
+  * Avg. Bytes/Read BASE
+  * Avg. Bytes/Transfer
+  * Avg. Bytes/Transfer BASE
+  * Avg. Bytes/Write
+  * Avg. Bytes/Write BASE
+  * Avg. microsec/Read
+  * Avg. microsec/Read BASE
+  * Avg. microsec/Read Comp
+  * Avg. microsec/Read Comp BASE
+  * Avg. microsec/Transfer
+  * Avg. microsec/Transfer BASE
+  * Avg. microsec/Write
+  * Avg. microsec/Write BASE
+  * Avg. microsec/Write Comp
+  * Avg. microsec/Write Comp BASE
+  * HTTP Storage IO failed/sec
+  * HTTP Storage IO retry/sec
+  * Outstanding HTTP Storage IO
+  * Read Bytes/Sec
+  * Reads/Sec
+  * Total Bytes/Sec
+  * Transfers/Sec
+  * Write Bytes/Sec
+  * Writes/Sec
+
+'MSSQL$DEV_2016:Latches': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Locks': 8, 0.0 seconds
+  * Average Wait Time (ms)
+  * Average Wait Time Base
+  * Lock Requests/sec
+  * Lock Timeouts (timeout > 0)/sec
+  * Lock Timeouts/sec
+  * Lock Wait Time (ms)
+  * Lock Waits/sec
+  * Number of Deadlocks/sec
+
+'MSSQL$DEV_2016:LogPool FreePool': 2, 0.0 seconds
+  * Free Buffer Refills/sec
+  * Free List Length
+
+'MSSQL$DEV_2016:Memory Broker Clerks': 6, 0.0 seconds
+  * Internal benefit
+  * Memory broker clerk size
+  * Periodic evictions (pages)
+  * Pressure evictions (pages/sec)
+  * Simulation benefit
+  * Simulation size
+
+'MSSQL$DEV_2016:Memory Manager': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Memory Node': 6, 0.0 seconds
+  * Database Node Memory (KB)
+  * Foreign Node Memory (KB)
+  * Free Node Memory (KB)
+  * Stolen Node Memory (KB)
+  * Target Node Memory (KB)
+  * Total Node Memory (KB)
+
+'MSSQL$DEV_2016:Plan Cache': 5, 0.0 seconds
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cache Object Counts
+  * Cache Objects in use
+  * Cache Pages
+
+'MSSQL$DEV_2016:Query Store': 4, 0.0 seconds
+  * Query Store CPU usage
+  * Query Store logical reads
+  * Query Store logical writes
+  * Query Store physical reads
+
+'MSSQL$DEV_2016:Replication Agents': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Replication Dist.': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Replication Logreader': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Replication Merge': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Replication Snapshot': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Resource Pool Stats': 30, 0.0 seconds
+  * Active memory grant amount (KB)
+  * Active memory grants count
+  * Avg Disk Read IO (ms)
+  * Avg Disk Read IO (ms) Base
+  * Avg Disk Write IO (ms)
+  * Avg Disk Write IO (ms) Base
+  * Cache memory target (KB)
+  * Compile memory target (KB)
+  * CPU control effect %
+  * CPU delayed %
+  * CPU delayed % base
+  * CPU effective %
+  * CPU effective % base
+  * CPU usage %
+  * CPU usage % base
+  * CPU usage target %
+  * CPU violated %
+  * Disk Read Bytes/sec
+  * Disk Read IO Throttled/sec
+  * Disk Read IO/sec
+  * Disk Write Bytes/sec
+  * Disk Write IO Throttled/sec
+  * Disk Write IO/sec
+  * Max memory (KB)
+  * Memory grant timeouts/sec
+  * Memory grants/sec
+  * Pending memory grants count
+  * Query exec memory target (KB)
+  * Target memory (KB)
+  * Used memory (KB)
+
+'MSSQL$DEV_2016:SQL Errors': 1, 0.0 seconds
+  * Errors/sec
+
+'MSSQL$DEV_2016:SQL Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:Transactions': 0, 0.0 seconds
+
+'MSSQL$DEV_2016:User Settable': 1, 0.0 seconds
+  * Query
+
+'MSSQL$DEV_2016:Wait Statistics': 12, 0.0 seconds
+  * Lock waits
+  * Log buffer waits
+  * Log write waits
+  * Memory grant queue waits
+  * Network IO waits
+  * Non-Page latch waits
+  * Page IO latch waits
+  * Page latch waits
+  * Thread-safe memory objects waits
+  * Transaction ownership waits
+  * Wait for the worker
+  * Workspace synchronization waits
+
+'MSSQL$DEV_2016:Workload Group Stats': 17, 0.0 seconds
+  * Active parallel threads
+  * Active requests
+  * Blocked tasks
+  * CPU delayed %
+  * CPU delayed % base
+  * CPU effective %
+  * CPU effective % base
+  * CPU usage %
+  * CPU usage % base
+  * CPU violated %
+  * Max request cpu time (ms)
+  * Max request memory grant (KB)
+  * Query optimizations/sec
+  * Queued requests
+  * Reduced memory grants/sec
+  * Requests completed/sec
+  * Suboptimal plans/sec
+
+'MSSQL$DEV_2017:Access Methods': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Advanced Analytics': 1, 0.0 seconds
+  * Predictions/sec
+
+'MSSQL$DEV_2017:Availability Replica': 9, 0.0 seconds
+  * Bytes Received from Replica/sec
+  * Bytes Sent to Replica/sec
+  * Bytes Sent to Transport/sec
+  * Flow Control Time (ms/sec)
+  * Flow Control/sec
+  * Receives from Replica/sec
+  * Resent Messages/sec
+  * Sends to Replica/sec
+  * Sends to Transport/sec
+
+'MSSQL$DEV_2017:Backup Device': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Batch Resp Statistics': 17, 0.0 seconds
+  * Batches >=000000ms & <000001ms
+  * Batches >=000001ms & <000002ms
+  * Batches >=000002ms & <000005ms
+  * Batches >=000005ms & <000010ms
+  * Batches >=000010ms & <000020ms
+  * Batches >=000020ms & <000050ms
+  * Batches >=000050ms & <000100ms
+  * Batches >=000100ms & <000200ms
+  * Batches >=000200ms & <000500ms
+  * Batches >=000500ms & <001000ms
+  * Batches >=001000ms & <002000ms
+  * Batches >=002000ms & <005000ms
+  * Batches >=005000ms & <010000ms
+  * Batches >=010000ms & <020000ms
+  * Batches >=020000ms & <050000ms
+  * Batches >=050000ms & <100000ms
+  * Batches >=100000ms
+
+'MSSQL$DEV_2017:Broker Activation': 6, 0.0 seconds
+  * Stored Procedures Invoked/sec
+  * Task Limit Reached
+  * Task Limit Reached/sec
+  * Tasks Aborted/sec
+  * Tasks Running
+  * Tasks Started/sec
+
+'MSSQL$DEV_2017:Broker Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Broker TO Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Broker/DBM Transport': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Buffer Manager': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Buffer Node': 4, 0.0 seconds
+  * Database pages
+  * Local node page lookups/sec
+  * Page life expectancy
+  * Remote node page lookups/sec
+
+'MSSQL$DEV_2017:Catalog Metadata': 4, 0.0 seconds
+  * Cache Entries Count
+  * Cache Entries Pinned Count
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+
+'MSSQL$DEV_2017:CLR': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Columnstore': 12, 0.0 seconds
+  * Delta Rowgroups Closed
+  * Delta Rowgroups Compressed
+  * Delta Rowgroups Created
+  * Segment Cache Hit Ratio
+  * Segment Cache Hit Ratio Base
+  * Segment Reads/Sec
+  * Total Delete Buffers Migrated
+  * Total Merge Policy Evaluations
+  * Total Rowgroups Compressed
+  * Total Rowgroups Fit For Merge
+  * Total Rowgroups Merge Compressed
+  * Total Source Rowgroups Merged
+
+'MSSQL$DEV_2017:Cursor Manager by Type': 9, 0.0 seconds
+  * Active cursors
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cached Cursor Counts
+  * Cursor Cache Use Counts/sec
+  * Cursor memory usage
+  * Cursor Requests/sec
+  * Cursor worktable usage
+  * Number of active cursor plans
+
+'MSSQL$DEV_2017:Cursor Manager Total': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Database Mirroring': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Database Replica': 24, 0.0 seconds
+  * Database Flow Control Delay
+  * Database Flow Controls/sec
+  * File Bytes Received/sec
+  * Group Commit Time
+  * Group Commits/Sec
+  * Log Apply Pending Queue
+  * Log Apply Ready Queue
+  * Log Bytes Compressed/sec
+  * Log Bytes Decompressed/sec
+  * Log Bytes Received/sec
+  * Log Compression Cache hits/sec
+  * Log Compression Cache misses/sec
+  * Log Compressions/sec
+  * Log Decompressions/sec
+  * Log remaining for undo
+  * Log Send Queue
+  * Mirrored Write Transactions/sec
+  * Recovery Queue
+  * Redo blocked/sec
+  * Redo Bytes Remaining
+  * Redone Bytes/sec
+  * Redones/sec
+  * Total Log requiring undo
+  * Transaction Delay
+
+'MSSQL$DEV_2017:Databases': 50, 0.0 seconds
+  * Active Transactions
+  * Avg Dist From EOL/LP Request
+  * Backup/Restore Throughput/sec
+  * Bulk Copy Rows/sec
+  * Bulk Copy Throughput/sec
+  * Commit table entries
+  * Data File(s) Size (KB)
+  * DBCC Logical Scan Bytes/sec
+  * Group Commit Time/sec
+  * Log Bytes Flushed/sec
+  * Log Cache Hit Ratio
+  * Log Cache Hit Ratio Base
+  * Log Cache Reads/sec
+  * Log File(s) Size (KB)
+  * Log File(s) Used Size (KB)
+  * Log Flush Wait Time
+  * Log Flush Waits/sec
+  * Log Flush Write Time (ms)
+  * Log Flushes/sec
+  * Log Growths
+  * Log Pool Cache Misses/sec
+  * Log Pool Disk Reads/sec
+  * Log Pool Hash Deletes/sec
+  * Log Pool Hash Inserts/sec
+  * Log Pool Invalid Hash Entry/sec
+  * Log Pool Log Scan Pushes/sec
+  * Log Pool LogWriter Pushes/sec
+  * Log Pool Push Empty FreePool/sec
+  * Log Pool Push Low Memory/sec
+  * Log Pool Push No Free Buffer/sec
+  * Log Pool Req. Behind Trunc/sec
+  * Log Pool Requests Base
+  * Log Pool Requests Old VLF/sec
+  * Log Pool Requests/sec
+  * Log Pool Total Active Log Size
+  * Log Pool Total Shared Pool Size
+  * Log Shrinks
+  * Log Truncations
+  * Percent Log Used
+  * Repl. Pending Xacts
+  * Repl. Trans. Rate
+  * Shrink Data Movement Bytes/sec
+  * Tracked transactions/sec
+  * Transactions/sec
+  * Write Transactions/sec
+  * XTP Controller DLC Latency Base
+  * XTP Controller DLC Latency/Fetch
+  * XTP Controller DLC Peak Latency
+  * XTP Controller Log Processed/sec
+  * XTP Memory Used (KB)
+
+'MSSQL$DEV_2017:Deprecated Features': 1, 0.0 seconds
+  * Usage
+
+'MSSQL$DEV_2017:Exec Statistics': 4, 0.0 seconds
+  * Distributed Query
+  * DTC calls
+  * Extended Procedures
+  * OLEDB calls
+
+'MSSQL$DEV_2017:External Scripts': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:FileTable': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:General Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:HTTP Storage': 25, 0.0 seconds
+  * Avg. Bytes/Read
+  * Avg. Bytes/Read BASE
+  * Avg. Bytes/Transfer
+  * Avg. Bytes/Transfer BASE
+  * Avg. Bytes/Write
+  * Avg. Bytes/Write BASE
+  * Avg. microsec/Read
+  * Avg. microsec/Read BASE
+  * Avg. microsec/Read Comp
+  * Avg. microsec/Read Comp BASE
+  * Avg. microsec/Transfer
+  * Avg. microsec/Transfer BASE
+  * Avg. microsec/Write
+  * Avg. microsec/Write BASE
+  * Avg. microsec/Write Comp
+  * Avg. microsec/Write Comp BASE
+  * HTTP Storage IO failed/sec
+  * HTTP Storage IO retry/sec
+  * Outstanding HTTP Storage IO
+  * Read Bytes/Sec
+  * Reads/Sec
+  * Total Bytes/Sec
+  * Transfers/Sec
+  * Write Bytes/Sec
+  * Writes/Sec
+
+'MSSQL$DEV_2017:Latches': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Locks': 8, 0.0 seconds
+  * Average Wait Time (ms)
+  * Average Wait Time Base
+  * Lock Requests/sec
+  * Lock Timeouts (timeout > 0)/sec
+  * Lock Timeouts/sec
+  * Lock Wait Time (ms)
+  * Lock Waits/sec
+  * Number of Deadlocks/sec
+
+'MSSQL$DEV_2017:LogPool FreePool': 2, 0.0 seconds
+  * Free Buffer Refills/sec
+  * Free List Length
+
+'MSSQL$DEV_2017:Memory Broker Clerks': 6, 0.0 seconds
+  * Internal benefit
+  * Memory broker clerk size
+  * Periodic evictions (pages)
+  * Pressure evictions (pages/sec)
+  * Simulation benefit
+  * Simulation size
+
+'MSSQL$DEV_2017:Memory Manager': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Memory Node': 6, 0.0 seconds
+  * Database Node Memory (KB)
+  * Foreign Node Memory (KB)
+  * Free Node Memory (KB)
+  * Stolen Node Memory (KB)
+  * Target Node Memory (KB)
+  * Total Node Memory (KB)
+
+'MSSQL$DEV_2017:Plan Cache': 5, 0.0 seconds
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cache Object Counts
+  * Cache Objects in use
+  * Cache Pages
+
+'MSSQL$DEV_2017:Query Store': 4, 0.0 seconds
+  * Query Store CPU usage
+  * Query Store logical reads
+  * Query Store logical writes
+  * Query Store physical reads
+
+'MSSQL$DEV_2017:Replication Agents': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Replication Dist.': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Replication Logreader': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Replication Merge': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Replication Snapshot': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Resource Pool Stats': 30, 0.0 seconds
+  * Active memory grant amount (KB)
+  * Active memory grants count
+  * Avg Disk Read IO (ms)
+  * Avg Disk Read IO (ms) Base
+  * Avg Disk Write IO (ms)
+  * Avg Disk Write IO (ms) Base
+  * Cache memory target (KB)
+  * Compile memory target (KB)
+  * CPU control effect %
+  * CPU delayed %
+  * CPU delayed % base
+  * CPU effective %
+  * CPU effective % base
+  * CPU usage %
+  * CPU usage % base
+  * CPU usage target %
+  * CPU violated %
+  * Disk Read Bytes/sec
+  * Disk Read IO Throttled/sec
+  * Disk Read IO/sec
+  * Disk Write Bytes/sec
+  * Disk Write IO Throttled/sec
+  * Disk Write IO/sec
+  * Max memory (KB)
+  * Memory grant timeouts/sec
+  * Memory grants/sec
+  * Pending memory grants count
+  * Query exec memory target (KB)
+  * Target memory (KB)
+  * Used memory (KB)
+
+'MSSQL$DEV_2017:SQL Errors': 1, 0.0 seconds
+  * Errors/sec
+
+'MSSQL$DEV_2017:SQL Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:Transactions': 0, 0.0 seconds
+
+'MSSQL$DEV_2017:User Settable': 1, 0.0 seconds
+  * Query
+
+'MSSQL$DEV_2017:Wait Statistics': 12, 0.0 seconds
+  * Lock waits
+  * Log buffer waits
+  * Log write waits
+  * Memory grant queue waits
+  * Network IO waits
+  * Non-Page latch waits
+  * Page IO latch waits
+  * Page latch waits
+  * Thread-safe memory objects waits
+  * Transaction ownership waits
+  * Wait for the worker
+  * Workspace synchronization waits
+
+'MSSQL$DEV_2017:Workload Group Stats': 17, 0.0 seconds
+  * Active parallel threads
+  * Active requests
+  * Blocked tasks
+  * CPU delayed %
+  * CPU delayed % base
+  * CPU effective %
+  * CPU effective % base
+  * CPU usage %
+  * CPU usage % base
+  * CPU violated %
+  * Max request cpu time (ms)
+  * Max request memory grant (KB)
+  * Query optimizations/sec
+  * Queued requests
+  * Reduced memory grants/sec
+  * Requests completed/sec
+  * Suboptimal plans/sec
+
+'MSSQL$DEV_2019:Access Methods': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Advanced Analytics': 1, 0.0 seconds
+  * Predictions/sec
+
+'MSSQL$DEV_2019:Availability Group': 1, 0.0 seconds
+  * Active Hadr Threads
+
+'MSSQL$DEV_2019:Availability Replica': 9, 0.0 seconds
+  * Bytes Received from Replica/sec
+  * Bytes Sent to Replica/sec
+  * Bytes Sent to Transport/sec
+  * Flow Control Time (ms/sec)
+  * Flow Control/sec
+  * Receives from Replica/sec
+  * Resent Messages/sec
+  * Sends to Replica/sec
+  * Sends to Transport/sec
+
+'MSSQL$DEV_2019:Backup Device': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Batch Resp Statistics': 17, 0.0 seconds
+  * Batches >=000000ms & <000001ms
+  * Batches >=000001ms & <000002ms
+  * Batches >=000002ms & <000005ms
+  * Batches >=000005ms & <000010ms
+  * Batches >=000010ms & <000020ms
+  * Batches >=000020ms & <000050ms
+  * Batches >=000050ms & <000100ms
+  * Batches >=000100ms & <000200ms
+  * Batches >=000200ms & <000500ms
+  * Batches >=000500ms & <001000ms
+  * Batches >=001000ms & <002000ms
+  * Batches >=002000ms & <005000ms
+  * Batches >=005000ms & <010000ms
+  * Batches >=010000ms & <020000ms
+  * Batches >=020000ms & <050000ms
+  * Batches >=050000ms & <100000ms
+  * Batches >=100000ms
+
+'MSSQL$DEV_2019:Broker Activation': 6, 0.0 seconds
+  * Stored Procedures Invoked/sec
+  * Task Limit Reached
+  * Task Limit Reached/sec
+  * Tasks Aborted/sec
+  * Tasks Running
+  * Tasks Started/sec
+
+'MSSQL$DEV_2019:Broker Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Broker TO Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Broker/DBM Transport': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Buffer Manager': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Buffer Node': 4, 0.0 seconds
+  * Database pages
+  * Local node page lookups/sec
+  * Page life expectancy
+  * Remote node page lookups/sec
+
+'MSSQL$DEV_2019:Catalog Metadata': 4, 0.0 seconds
+  * Cache Entries Count
+  * Cache Entries Pinned Count
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+
+'MSSQL$DEV_2019:CLR': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Columnstore': 12, 0.0 seconds
+  * Delta Rowgroups Closed
+  * Delta Rowgroups Compressed
+  * Delta Rowgroups Created
+  * Segment Cache Hit Ratio
+  * Segment Cache Hit Ratio Base
+  * Segment Reads/Sec
+  * Total Delete Buffers Migrated
+  * Total Merge Policy Evaluations
+  * Total Rowgroups Compressed
+  * Total Rowgroups Fit For Merge
+  * Total Rowgroups Merge Compressed
+  * Total Source Rowgroups Merged
+
+'MSSQL$DEV_2019:Cursor Manager by Type': 9, 0.0 seconds
+  * Active cursors
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cached Cursor Counts
+  * Cursor Cache Use Counts/sec
+  * Cursor memory usage
+  * Cursor Requests/sec
+  * Cursor worktable usage
+  * Number of active cursor plans
+
+'MSSQL$DEV_2019:Cursor Manager Total': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Database Mirroring': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Database Replica': 24, 0.0 seconds
+  * Database Flow Control Delay
+  * Database Flow Controls/sec
+  * File Bytes Received/sec
+  * Group Commit Time
+  * Group Commits/Sec
+  * Log Apply Pending Queue
+  * Log Apply Ready Queue
+  * Log Bytes Compressed/sec
+  * Log Bytes Decompressed/sec
+  * Log Bytes Received/sec
+  * Log Compression Cache hits/sec
+  * Log Compression Cache misses/sec
+  * Log Compressions/sec
+  * Log Decompressions/sec
+  * Log remaining for undo
+  * Log Send Queue
+  * Mirrored Write Transactions/sec
+  * Recovery Queue
+  * Redo blocked/sec
+  * Redo Bytes Remaining
+  * Redone Bytes/sec
+  * Redones/sec
+  * Total Log requiring undo
+  * Transaction Delay
+
+'MSSQL$DEV_2019:Databases': 60, 0.0 seconds
+  * Active parallel redo threads
+  * Active Transactions
+  * Avg Dist From EOL/LP Request
+  * Backup/Restore Throughput/sec
+  * Bulk Copy Rows/sec
+  * Bulk Copy Throughput/sec
+  * Commit table entries
+  * Data File(s) Size (KB)
+  * DBCC Logical Scan Bytes/sec
+  * Group Commit Time/sec
+  * Log Bytes Flushed/sec
+  * Log Cache Hit Ratio
+  * Log Cache Hit Ratio Base
+  * Log Cache Reads/sec
+  * Log File(s) Size (KB)
+  * Log File(s) Used Size (KB)
+  * Log Flush Wait Time
+  * Log Flush Waits/sec
+  * Log Flush Write Time (ms)
+  * Log Flushes/sec
+  * Log Growths
+  * Log Pool Cache Misses/sec
+  * Log Pool Disk Reads/sec
+  * Log Pool Hash Deletes/sec
+  * Log Pool Hash Inserts/sec
+  * Log Pool Invalid Hash Entry/sec
+  * Log Pool Log Scan Pushes/sec
+  * Log Pool LogWriter Pushes/sec
+  * Log Pool Push Empty FreePool/sec
+  * Log Pool Push Low Memory/sec
+  * Log Pool Push No Free Buffer/sec
+  * Log Pool Req. Behind Trunc/sec
+  * Log Pool Requests Base
+  * Log Pool Requests Old VLF/sec
+  * Log Pool Requests/sec
+  * Log Pool Total Active Log Size
+  * Log Pool Total Shared Pool Size
+  * Log Shrinks
+  * Log Truncations
+  * Percent Log Used
+  * PVS in-row diff generated/sec
+  * PVS in-row diff retrieved/sec
+  * PVS off-row pages allocated/sec
+  * PVS off-row pages deleted/sec
+  * PVS off-row record generated/sec
+  * PVS off-row record retrieved/sec
+  * Repl. Pending Xacts
+  * Repl. Trans. Rate
+  * Shrink Data Movement Bytes/sec
+  * Tracked transactions/sec
+  * Transactions/sec
+  * WPR add lsn bucket miss
+  * WPR bucket swaps
+  * WPR stale check bucket miss
+  * Write Transactions/sec
+  * XTP Controller DLC Latency Base
+  * XTP Controller DLC Latency/Fetch
+  * XTP Controller DLC Peak Latency
+  * XTP Controller Log Processed/sec
+  * XTP Memory Used (KB)
+
+'MSSQL$DEV_2019:Deprecated Features': 1, 0.0 seconds
+  * Usage
+
+'MSSQL$DEV_2019:Exec Statistics': 4, 0.0 seconds
+  * Distributed Query
+  * DTC calls
+  * Extended Procedures
+  * OLEDB calls
+
+'MSSQL$DEV_2019:External Scripts': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:FileTable': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:General Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:HTTP Storage': 25, 0.0 seconds
+  * Avg. Bytes/Read
+  * Avg. Bytes/Read BASE
+  * Avg. Bytes/Transfer
+  * Avg. Bytes/Transfer BASE
+  * Avg. Bytes/Write
+  * Avg. Bytes/Write BASE
+  * Avg. microsec/Read
+  * Avg. microsec/Read BASE
+  * Avg. microsec/Read Comp
+  * Avg. microsec/Read Comp BASE
+  * Avg. microsec/Transfer
+  * Avg. microsec/Transfer BASE
+  * Avg. microsec/Write
+  * Avg. microsec/Write BASE
+  * Avg. microsec/Write Comp
+  * Avg. microsec/Write Comp BASE
+  * HTTP Storage IO failed/sec
+  * HTTP Storage IO retry/sec
+  * Outstanding HTTP Storage IO
+  * Read Bytes/Sec
+  * Reads/Sec
+  * Total Bytes/Sec
+  * Transfers/Sec
+  * Write Bytes/Sec
+  * Writes/Sec
+
+'MSSQL$DEV_2019:Latches': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Locks': 8, 0.0 seconds
+  * Average Wait Time (ms)
+  * Average Wait Time Base
+  * Lock Requests/sec
+  * Lock Timeouts (timeout > 0)/sec
+  * Lock Timeouts/sec
+  * Lock Wait Time (ms)
+  * Lock Waits/sec
+  * Number of Deadlocks/sec
+
+'MSSQL$DEV_2019:LogPool FreePool': 2, 0.0 seconds
+  * Free Buffer Refills/sec
+  * Free List Length
+
+'MSSQL$DEV_2019:Memory Broker Clerks': 6, 0.0 seconds
+  * Internal benefit
+  * Memory broker clerk size
+  * Periodic evictions (pages)
+  * Pressure evictions (pages/sec)
+  * Simulation benefit
+  * Simulation size
+
+'MSSQL$DEV_2019:Memory Manager': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Memory Node': 6, 0.0 seconds
+  * Database Node Memory (KB)
+  * Foreign Node Memory (KB)
+  * Free Node Memory (KB)
+  * Stolen Node Memory (KB)
+  * Target Node Memory (KB)
+  * Total Node Memory (KB)
+
+'MSSQL$DEV_2019:Plan Cache': 5, 0.0 seconds
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cache Object Counts
+  * Cache Objects in use
+  * Cache Pages
+
+'MSSQL$DEV_2019:Query Store': 4, 0.0 seconds
+  * Query Store CPU usage
+  * Query Store logical reads
+  * Query Store logical writes
+  * Query Store physical reads
+
+'MSSQL$DEV_2019:Replication Agents': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Replication Dist.': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Replication Logreader': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Replication Merge': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Replication Snapshot': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Resource Pool Stats': 30, 0.0 seconds
+  * Active memory grant amount (KB)
+  * Active memory grants count
+  * Avg Disk Read IO (ms)
+  * Avg Disk Read IO (ms) Base
+  * Avg Disk Write IO (ms)
+  * Avg Disk Write IO (ms) Base
+  * Cache memory target (KB)
+  * Compile memory target (KB)
+  * CPU control effect %
+  * CPU delayed %
+  * CPU delayed % base
+  * CPU effective %
+  * CPU effective % base
+  * CPU usage %
+  * CPU usage % base
+  * CPU usage target %
+  * CPU violated %
+  * Disk Read Bytes/sec
+  * Disk Read IO Throttled/sec
+  * Disk Read IO/sec
+  * Disk Write Bytes/sec
+  * Disk Write IO Throttled/sec
+  * Disk Write IO/sec
+  * Max memory (KB)
+  * Memory grant timeouts/sec
+  * Memory grants/sec
+  * Pending memory grants count
+  * Query exec memory target (KB)
+  * Target memory (KB)
+  * Used memory (KB)
+
+'MSSQL$DEV_2019:SQL Errors': 1, 0.0 seconds
+  * Errors/sec
+
+'MSSQL$DEV_2019:SQL Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:Transactions': 0, 0.0 seconds
+
+'MSSQL$DEV_2019:User Settable': 1, 0.0 seconds
+  * Query
+
+'MSSQL$DEV_2019:Wait Statistics': 12, 0.0 seconds
+  * Lock waits
+  * Log buffer waits
+  * Log write waits
+  * Memory grant queue waits
+  * Network IO waits
+  * Non-Page latch waits
+  * Page IO latch waits
+  * Page latch waits
+  * Thread-safe memory objects waits
+  * Transaction ownership waits
+  * Wait for the worker
+  * Workspace synchronization waits
+
+'MSSQL$DEV_2019:Workload Group Stats': 17, 0.0 seconds
+  * Active parallel threads
+  * Active requests
+  * Blocked tasks
+  * CPU delayed %
+  * CPU delayed % base
+  * CPU effective %
+  * CPU effective % base
+  * CPU usage %
+  * CPU usage % base
+  * CPU violated %
+  * Max request cpu time (ms)
+  * Max request memory grant (KB)
+  * Query optimizations/sec
+  * Queued requests
+  * Reduced memory grants/sec
+  * Requests completed/sec
+  * Suboptimal plans/sec
+
+'MSSQL$DEV2022UTF8:Access Methods': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Advanced Analytics': 1, 0.0 seconds
+  * Predictions/sec
+
+'MSSQL$DEV2022UTF8:Availability Group': 1, 0.0 seconds
+  * Active Hadr Threads
+
+'MSSQL$DEV2022UTF8:Availability Replica': 9, 0.0 seconds
+  * Bytes Received from Replica/sec
+  * Bytes Sent to Replica/sec
+  * Bytes Sent to Transport/sec
+  * Flow Control Time (ms/sec)
+  * Flow Control/sec
+  * Receives from Replica/sec
+  * Resent Messages/sec
+  * Sends to Replica/sec
+  * Sends to Transport/sec
+
+'MSSQL$DEV2022UTF8:Backup Device': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Batch Resp Statistics': 17, 0.0 seconds
+  * Batches >=000000ms & <000001ms
+  * Batches >=000001ms & <000002ms
+  * Batches >=000002ms & <000005ms
+  * Batches >=000005ms & <000010ms
+  * Batches >=000010ms & <000020ms
+  * Batches >=000020ms & <000050ms
+  * Batches >=000050ms & <000100ms
+  * Batches >=000100ms & <000200ms
+  * Batches >=000200ms & <000500ms
+  * Batches >=000500ms & <001000ms
+  * Batches >=001000ms & <002000ms
+  * Batches >=002000ms & <005000ms
+  * Batches >=005000ms & <010000ms
+  * Batches >=010000ms & <020000ms
+  * Batches >=020000ms & <050000ms
+  * Batches >=050000ms & <100000ms
+  * Batches >=100000ms
+
+'MSSQL$DEV2022UTF8:Broker Activation': 6, 0.0 seconds
+  * Stored Procedures Invoked/sec
+  * Task Limit Reached
+  * Task Limit Reached/sec
+  * Tasks Aborted/sec
+  * Tasks Running
+  * Tasks Started/sec
+
+'MSSQL$DEV2022UTF8:Broker Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Broker TO Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Broker/DBM Transport': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Buffer Manager': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Buffer Node': 4, 0.0 seconds
+  * Database pages
+  * Local node page lookups/sec
+  * Page life expectancy
+  * Remote node page lookups/sec
+
+'MSSQL$DEV2022UTF8:Catalog Metadata': 4, 0.0 seconds
+  * Cache Entries Count
+  * Cache Entries Pinned Count
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+
+'MSSQL$DEV2022UTF8:CLR': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Columnstore': 12, 0.0 seconds
+  * Delta Rowgroups Closed
+  * Delta Rowgroups Compressed
+  * Delta Rowgroups Created
+  * Segment Cache Hit Ratio
+  * Segment Cache Hit Ratio Base
+  * Segment Reads/Sec
+  * Total Delete Buffers Migrated
+  * Total Merge Policy Evaluations
+  * Total Rowgroups Compressed
+  * Total Rowgroups Fit For Merge
+  * Total Rowgroups Merge Compressed
+  * Total Source Rowgroups Merged
+
+'MSSQL$DEV2022UTF8:Cursor Manager by Type': 9, 0.0 seconds
+  * Active cursors
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cached Cursor Counts
+  * Cursor Cache Use Counts/sec
+  * Cursor memory usage
+  * Cursor Requests/sec
+  * Cursor worktable usage
+  * Number of active cursor plans
+
+'MSSQL$DEV2022UTF8:Cursor Manager Total': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Database Mirroring': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Database Replica': 24, 0.0 seconds
+  * Database Flow Control Delay
+  * Database Flow Controls/sec
+  * File Bytes Received/sec
+  * Group Commit Time
+  * Group Commits/Sec
+  * Log Apply Pending Queue
+  * Log Apply Ready Queue
+  * Log Bytes Compressed/sec
+  * Log Bytes Decompressed/sec
+  * Log Bytes Received/sec
+  * Log Compression Cache hits/sec
+  * Log Compression Cache misses/sec
+  * Log Compressions/sec
+  * Log Decompressions/sec
+  * Log remaining for undo
+  * Log Send Queue
+  * Mirrored Write Transactions/sec
+  * Recovery Queue
+  * Redo blocked/sec
+  * Redo Bytes Remaining
+  * Redone Bytes/sec
+  * Redones/sec
+  * Total Log requiring undo
+  * Transaction Delay
+
+'MSSQL$DEV2022UTF8:Databases': 64, 0.0 seconds
+  * Active parallel redo threads
+  * Active Transactions
+  * Avg Dist From EOL/LP Request
+  * Backup/Restore Throughput/sec
+  * Bulk Copy Rows/sec
+  * Bulk Copy Throughput/sec
+  * Commit table entries
+  * Data File(s) Size (KB)
+  * DBCC Logical Scan Bytes/sec
+  * Group Commit Time/sec
+  * Log Bytes Flushed/sec
+  * Log Cache Hit Ratio
+  * Log Cache Hit Ratio Base
+  * Log Cache Reads/sec
+  * Log File(s) Size (KB)
+  * Log File(s) Used Size (KB)
+  * Log Flush Wait Time
+  * Log Flush Waits/sec
+  * Log Flush Write Time (ms)
+  * Log Flushes/sec
+  * Log Growths
+  * Log Pool Cache Misses/sec
+  * Log Pool Disk Reads/sec
+  * Log Pool Hash Deletes/sec
+  * Log Pool Hash Inserts/sec
+  * Log Pool Invalid Hash Entry/sec
+  * Log Pool Log Scan Pushes/sec
+  * Log Pool LogWriter Pushes/sec
+  * Log Pool Push Empty FreePool/sec
+  * Log Pool Push Low Memory/sec
+  * Log Pool Push No Free Buffer/sec
+  * Log Pool Req. Behind Trunc/sec
+  * Log Pool Requests Base
+  * Log Pool Requests Old VLF/sec
+  * Log Pool Requests/sec
+  * Log Pool Total Active Log Size
+  * Log Pool Total Shared Pool Size
+  * Log Shrinks
+  * Log Truncations
+  * Percent Log Used
+  * PVS in-row diff generated/sec
+  * PVS in-row diff retrieved/sec
+  * PVS off-row pages allocated/sec
+  * PVS off-row pages deleted/sec
+  * PVS off-row record generated/sec
+  * PVS off-row record retrieved/sec
+  * Repl. Pending Xacts
+  * Repl. Trans. Rate
+  * Shrink Data Movement Bytes/sec
+  * Tail Log Cache Deletes/sec
+  * Tail Log Cache Misses/sec
+  * TLC LogWriter Pushes/sec
+  * TLC Req. Behind Trunc/sec
+  * Tracked transactions/sec
+  * Transactions/sec
+  * WPR add lsn bucket miss
+  * WPR bucket swaps
+  * WPR stale check bucket miss
+  * Write Transactions/sec
+  * XTP Controller DLC Latency Base
+  * XTP Controller DLC Latency/Fetch
+  * XTP Controller DLC Peak Latency
+  * XTP Controller Log Processed/sec
+  * XTP Memory Used (KB)
+
+'MSSQL$DEV2022UTF8:Deprecated Features': 1, 0.0 seconds
+  * Usage
+
+'MSSQL$DEV2022UTF8:Exec Statistics': 4, 0.0 seconds
+  * Distributed Query
+  * DTC calls
+  * Extended Procedures
+  * OLEDB calls
+
+'MSSQL$DEV2022UTF8:External Scripts': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:FileTable': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:General Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:HTTP Storage': 25, 0.0 seconds
+  * Avg. Bytes/Read
+  * Avg. Bytes/Read BASE
+  * Avg. Bytes/Transfer
+  * Avg. Bytes/Transfer BASE
+  * Avg. Bytes/Write
+  * Avg. Bytes/Write BASE
+  * Avg. microsec/Read
+  * Avg. microsec/Read BASE
+  * Avg. microsec/Read Comp
+  * Avg. microsec/Read Comp BASE
+  * Avg. microsec/Transfer
+  * Avg. microsec/Transfer BASE
+  * Avg. microsec/Write
+  * Avg. microsec/Write BASE
+  * Avg. microsec/Write Comp
+  * Avg. microsec/Write Comp BASE
+  * HTTP Storage IO failed/sec
+  * HTTP Storage IO retry/sec
+  * Outstanding HTTP Storage IO
+  * Read Bytes/Sec
+  * Reads/Sec
+  * Total Bytes/Sec
+  * Transfers/Sec
+  * Write Bytes/Sec
+  * Writes/Sec
+
+'MSSQL$DEV2022UTF8:JSON Doc Stats': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Latches': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Locks': 8, 0.0 seconds
+  * Average Wait Time (ms)
+  * Average Wait Time Base
+  * Lock Requests/sec
+  * Lock Timeouts (timeout > 0)/sec
+  * Lock Timeouts/sec
+  * Lock Wait Time (ms)
+  * Lock Waits/sec
+  * Number of Deadlocks/sec
+
+'MSSQL$DEV2022UTF8:LogPool FreePool': 2, 0.0 seconds
+  * Free Buffer Refills/sec
+  * Free List Length
+
+'MSSQL$DEV2022UTF8:Memory Broker Clerks': 6, 0.0 seconds
+  * Internal benefit
+  * Memory broker clerk size
+  * Periodic evictions (pages)
+  * Pressure evictions (pages/sec)
+  * Simulation benefit
+  * Simulation size
+
+'MSSQL$DEV2022UTF8:Memory Manager': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Memory Node': 7, 0.0 seconds
+  * Database Node Memory (KB)
+  * Decommit Node Memory (KB)/sec
+  * Foreign Node Memory (KB)
+  * Free Node Memory (KB)
+  * Stolen Node Memory (KB)
+  * Target Node Memory (KB)
+  * Total Node Memory (KB)
+
+'MSSQL$DEV2022UTF8:Plan Cache': 5, 0.0 seconds
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cache Object Counts
+  * Cache Objects in use
+  * Cache Pages
+
+'MSSQL$DEV2022UTF8:Query Store': 4, 0.0 seconds
+  * Query Store CPU usage
+  * Query Store logical reads
+  * Query Store logical writes
+  * Query Store physical reads
+
+'MSSQL$DEV2022UTF8:Replication Agents': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Replication Dist.': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Replication Logreader': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Replication Merge': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Replication Snapshot': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Resource Pool Stats': 30, 0.0 seconds
+  * Active memory grant amount (KB)
+  * Active memory grants count
+  * Avg Disk Read IO (ms)
+  * Avg Disk Read IO (ms) Base
+  * Avg Disk Write IO (ms)
+  * Avg Disk Write IO (ms) Base
+  * Cache memory target (KB)
+  * Compile memory target (KB)
+  * CPU control effect %
+  * CPU delayed %
+  * CPU delayed % base
+  * CPU effective %
+  * CPU effective % base
+  * CPU usage %
+  * CPU usage % base
+  * CPU usage target %
+  * CPU violated %
+  * Disk Read Bytes/sec
+  * Disk Read IO Throttled/sec
+  * Disk Read IO/sec
+  * Disk Write Bytes/sec
+  * Disk Write IO Throttled/sec
+  * Disk Write IO/sec
+  * Max memory (KB)
+  * Memory grant timeouts/sec
+  * Memory grants/sec
+  * Pending memory grants count
+  * Query exec memory target (KB)
+  * Target memory (KB)
+  * Used memory (KB)
+
+'MSSQL$DEV2022UTF8:SQL Errors': 1, 0.0 seconds
+  * Errors/sec
+
+'MSSQL$DEV2022UTF8:SQL Statistics': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:TailLogCache': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:Transactions': 0, 0.0 seconds
+
+'MSSQL$DEV2022UTF8:User Settable': 1, 0.0 seconds
+  * Query
+
+'MSSQL$DEV2022UTF8:Wait Statistics': 12, 0.0 seconds
+  * Lock waits
+  * Log buffer waits
+  * Log write waits
+  * Memory grant queue waits
+  * Network IO waits
+  * Non-Page latch waits
+  * Page IO latch waits
+  * Page latch waits
+  * Thread-safe memory objects waits
+  * Transaction ownership waits
+  * Wait for the worker
+  * Workspace synchronization waits
+
+'MSSQL$DEV2022UTF8:Workload Group Stats': 17, 0.0 seconds
+  * Active parallel threads
+  * Active requests
+  * Blocked tasks
+  * CPU delayed %
+  * CPU delayed % base
+  * CPU effective %
+  * CPU effective % base
+  * CPU usage %
+  * CPU usage % base
+  * CPU violated %
+  * Max request cpu time (ms)
+  * Max request memory grant (KB)
+  * Query optimizations/sec
+  * Queued requests
+  * Reduced memory grants/sec
+  * Requests completed/sec
+  * Suboptimal plans/sec
+
+'NBT Connection': 3, 0.0 seconds
+  * Bytes Received/sec
+  * Bytes Sent/sec
+  * Bytes Total/sec
+
+'Netlogon': 0, 0.0 seconds
+
+'Network Adapter': 22, 0.0 seconds
+  * Bytes Received/sec
+  * Bytes Sent/sec
+  * Bytes Total/sec
+  * Current Bandwidth
+  * Offloaded Connections
+  * Output Queue Length
+  * Packets Outbound Discarded
+  * Packets Outbound Errors
+  * Packets Received Discarded
+  * Packets Received Errors
+  * Packets Received Non-Unicast/sec
+  * Packets Received Unicast/sec
+  * Packets Received Unknown
+  * Packets Received/sec
+  * Packets Sent Non-Unicast/sec
+  * Packets Sent Unicast/sec
+  * Packets Sent/sec
+  * Packets/sec
+  * TCP Active RSC Connections
+  * TCP RSC Average Packet Size
+  * TCP RSC Coalesced Packets/sec
+  * TCP RSC Exceptions/sec
+
+'Network Interface': 22, 0.0 seconds
+  * Bytes Received/sec
+  * Bytes Sent/sec
+  * Bytes Total/sec
+  * Current Bandwidth
+  * Offloaded Connections
+  * Output Queue Length
+  * Packets Outbound Discarded
+  * Packets Outbound Errors
+  * Packets Received Discarded
+  * Packets Received Errors
+  * Packets Received Non-Unicast/sec
+  * Packets Received Unicast/sec
+  * Packets Received Unknown
+  * Packets Received/sec
+  * Packets Sent Non-Unicast/sec
+  * Packets Sent Unicast/sec
+  * Packets Sent/sec
+  * Packets/sec
+  * TCP Active RSC Connections
+  * TCP RSC Average Packet Size
+  * TCP RSC Coalesced Packets/sec
+  * TCP RSC Exceptions/sec
+
+'Network QoS Policy': 0, 0.0 seconds
+
+'NUMA Node Memory': 4, 0.0 seconds
+  * Available MBytes
+  * Free & Zero Page List MBytes
+  * Standby List MBytes
+  * Total MBytes
+
+'NVIDIA GPU': 22, 0.3 seconds
+  * % Bus Usage
+  * % Cooler rate
+  * % FB Usage
+  * % GPU Memory Usage
+  * % GPU Usage
+  * % Video Decoder Usage
+  * % Video Encoder Usage
+  * % Video Usage
+  * Available Memory MB
+  * Core Clock MHz
+  * Fan Speed
+  * Memory Clock MHz
+  * PCI-E current speed to GPU Mbps
+  * PCI-E current width to GPU
+  * PCI-E downstream width to GPU
+  * Power Consumption mW
+  * Temperature C
+  * Total Memory MB
+  * Video Encoder Average FPS
+  * Video Encoder Average Latency (ms)
+  * Video Encoder Sessions
+  * Virtual Memory MB
+
+'NVIDIA GPU Encoder Sessions': 0, 0.0 seconds
+
+'NVIDIA GPU Utilization': 0, 0.0 seconds
+
+'Objects': 0, 0.0 seconds
+
+'Offline Files': 0, 0.0 seconds
+
+'Pacer Flow': 0, 0.0 seconds
+
+'Pacer Pipe': 17, 0.0 seconds
+  * Average packets in netcard
+  * Average packets in sequencer
+  * Average packets in shaper
+  * Flow mods rejected
+  * Flows closed
+  * Flows modified
+  * Flows opened
+  * Flows rejected
+  * Max packets in netcard
+  * Max packets in sequencer
+  * Max packets in shaper
+  * Max simultaneous flows
+  * Nonconforming packets scheduled
+  * Nonconforming packets scheduled/sec
+  * Nonconforming packets transmitted
+  * Nonconforming packets transmitted/sec
+  * Out of packets
+
+'PacketDirect EC Utilization': 0, 0.0 seconds
+
+'PacketDirect Queue Depth': 0, 0.0 seconds
+
+'PacketDirect Receive Counters': 0, 0.0 seconds
+
+'PacketDirect Receive Filters': 0, 0.0 seconds
+
+'PacketDirect Transmit Counters': 0, 0.0 seconds
+
+'Paging File': 2, 0.0 seconds
+  * % Usage
+  * % Usage Peak
+
+'Per Processor Network Activity Cycles': 13, 0.0 seconds
+  * Build Scatter Gather Cycles/sec
+  * Interrupt Cycles/sec
+  * Interrupt DPC Cycles/sec
+  * Interrupt DPC Latency Cycles/sec
+  * Miniport Return Packet Cycles/sec
+  * Miniport RSS Indirection Table Change Cycles
+  * Miniport Send Cycles/sec
+  * NDIS Receive Indication Cycles/sec
+  * NDIS Return Packet Cycles/sec
+  * NDIS Send Complete Cycles/sec
+  * NDIS Send Cycles/sec
+  * Stack Receive Indication Cycles/sec
+  * Stack Send Complete Cycles/sec
+
+'Per Processor Network Interface Card Activity': 21, 0.0 seconds
+  * Build Scatter Gather List Calls/sec
+  * DPCs Deferred/sec
+  * DPCs Queued on Other CPUs/sec
+  * DPCs Queued/sec
+  * Interrupts/sec
+  * Low Resource Receive Indications/sec
+  * Low Resource Received Packets/sec
+  * Packets Coalesced/sec
+  * Receive Indications/sec
+  * Received Packets/sec
+  * Return Packet Calls/sec
+  * Returned Packets/sec
+  * RSS Indirection Table Change Calls/sec
+  * Send Complete Calls/sec
+  * Send Request Calls/sec
+  * Sent Complete Packets/sec
+  * Sent Packets/sec
+  * Tcp Offload Receive bytes/sec
+  * Tcp Offload Receive Indications/sec
+  * Tcp Offload Send bytes/sec
+  * Tcp Offload Send Request Calls/sec
+
+'Physical Network Interface Card Activity': 4, 0.0 seconds
+  * % Time Suspended (Instantaneous)
+  * % Time Suspended (Lifetime)
+  * Device Power State
+  * Low Power Transitions (Lifetime)
+
+'PhysicalDisk': 21, 0.0 seconds
+  * % Disk Read Time
+  * % Disk Time
+  * % Disk Write Time
+  * % Idle Time
+  * Avg. Disk Bytes/Read
+  * Avg. Disk Bytes/Transfer
+  * Avg. Disk Bytes/Write
+  * Avg. Disk Queue Length
+  * Avg. Disk Read Queue Length
+  * Avg. Disk sec/Read
+  * Avg. Disk sec/Transfer
+  * Avg. Disk sec/Write
+  * Avg. Disk Write Queue Length
+  * Current Disk Queue Length
+  * Disk Bytes/sec
+  * Disk Read Bytes/sec
+  * Disk Reads/sec
+  * Disk Transfers/sec
+  * Disk Write Bytes/sec
+  * Disk Writes/sec
+  * Split IO/Sec
+
+'Power Meter': 2, 0.0 seconds
+  * Power
+  * Power Budget
+
+'PowerShell Workflow': 0, 0.0 seconds
+
+'Print Queue': 13, 0.0 seconds
+  * Add Network Printer Calls
+  * Bytes Printed/sec
+  * Enumerate Network Printer Calls
+  * Job Errors
+  * Jobs
+  * Jobs Spooling
+  * Max Jobs Spooling
+  * Max References
+  * Not Ready Errors
+  * Out of Paper Errors
+  * References
+  * Total Jobs Printed
+  * Total Pages Printed
+
+'Process': 28, 3.7 seconds
+  * % Privileged Time
+  * % Processor Time
+  * % User Time
+  * Creating Process ID
+  * Elapsed Time
+  * Handle Count
+  * ID Process
+  * IO Data Bytes/sec
+  * IO Data Operations/sec
+  * IO Other Bytes/sec
+  * IO Other Operations/sec
+  * IO Read Bytes/sec
+  * IO Read Operations/sec
+  * IO Write Bytes/sec
+  * IO Write Operations/sec
+  * Page Faults/sec
+  * Page File Bytes
+  * Page File Bytes Peak
+  * Pool Nonpaged Bytes
+  * Pool Paged Bytes
+  * Priority Base
+  * Private Bytes
+  * Thread Count
+  * Virtual Bytes
+  * Virtual Bytes Peak
+  * Working Set
+  * Working Set - Private
+  * Working Set Peak
+
+'Process V2': 28, 1.6 seconds
+  * % Privileged Time
+  * % Processor Time
+  * % User Time
+  * Creating Process ID
+  * Elapsed Time
+  * Handle Count
+  * IO Data Bytes/sec
+  * IO Data Operations/sec
+  * IO Other Bytes/sec
+  * IO Other Operations/sec
+  * IO Read Bytes/sec
+  * IO Read Operations/sec
+  * IO Write Bytes/sec
+  * IO Write Operations/sec
+  * Page Faults/sec
+  * Page File Bytes
+  * Page File Bytes Peak
+  * Pool Nonpaged Bytes
+  * Pool Paged Bytes
+  * Priority Base
+  * Private Bytes
+  * Process ID
+  * Thread Count
+  * Virtual Bytes
+  * Virtual Bytes Peak
+  * Working Set
+  * Working Set - Private
+  * Working Set Peak
+
+'Processor': 15, 0.0 seconds
+  * % C1 Time
+  * % C2 Time
+  * % C3 Time
+  * % DPC Time
+  * % Idle Time
+  * % Interrupt Time
+  * % Privileged Time
+  * % Processor Time
+  * % User Time
+  * C1 Transitions/sec
+  * C2 Transitions/sec
+  * C3 Transitions/sec
+  * DPC Rate
+  * DPCs Queued/sec
+  * Interrupts/sec
+
+'Processor Information': 28, 0.0 seconds
+  * % C1 Time
+  * % C2 Time
+  * % C3 Time
+  * % DPC Time
+  * % Idle Time
+  * % Interrupt Time
+  * % of Maximum Frequency
+  * % Performance Limit
+  * % Priority Time
+  * % Privileged Time
+  * % Privileged Utility
+  * % Processor Performance
+  * % Processor Time
+  * % Processor Utility
+  * % User Time
+  * Average Idle Time
+  * C1 Transitions/sec
+  * C2 Transitions/sec
+  * C3 Transitions/sec
+  * Clock Interrupts/sec
+  * DPC Rate
+  * DPCs Queued/sec
+  * Idle Break Events/sec
+  * Interrupts/sec
+  * Parking Status
+  * Performance Limit Flags
+  * Processor Frequency
+  * Processor State Flags
+
+'Processor Performance': 3, 0.0 seconds
+  * % of Maximum Frequency
+  * Processor Frequency
+  * Processor State Flags
+
+'QUIC Performance Diagnostics': 0, 0.0 seconds
+
+'RAS': 0, 0.0 seconds
+
+'RAS Port': 17, 0.0 seconds
+  * Alignment Errors
+  * Buffer Overrun Errors
+  * Bytes Received
+  * Bytes Received/Sec
+  * Bytes Transmitted
+  * Bytes Transmitted/Sec
+  * CRC Errors
+  * Frames Received
+  * Frames Received/Sec
+  * Frames Transmitted
+  * Frames Transmitted/Sec
+  * Percent Compression In
+  * Percent Compression Out
+  * Serial Overrun Errors
+  * Timeout Errors
+  * Total Errors
+  * Total Errors/Sec
+
+'RAS Total': 0, 0.0 seconds
+
+'Redirector': 0, 0.0 seconds
+
+'ReFS': 0, 0.0 seconds
+
+'Remote Desktop Connection Broker Redirector Counterset': 0, 0.0 seconds
+
+'RemoteFX Graphics': 0, 0.0 seconds
+
+'RemoteFX Network': 0, 0.0 seconds
+
+'Security Per-Process Statistics': 2, 0.0 seconds
+  * Context Handles
+  * Credential Handles
+
+'Security System-Wide Statistics': 0, 0.0 seconds
+
+'Server': 0, 0.0 seconds
+
+'Server Work Queues': 17, 0.0 seconds
+  * Active Threads
+  * Available Threads
+  * Available Work Items
+  * Borrowed Work Items
+  * Bytes Received/sec
+  * Bytes Sent/sec
+  * Bytes Transferred/sec
+  * Context Blocks Queued/sec
+  * Current Clients
+  * Queue Length
+  * Read Bytes/sec
+  * Read Operations/sec
+  * Total Bytes/sec
+  * Total Operations/sec
+  * Work Item Shortages
+  * Write Bytes/sec
+  * Write Operations/sec
+
+'ServiceModelEndpoint 3.0.0.0': 0, 0.0 seconds
+
+'ServiceModelEndpoint 4.0.0.0': 0, 0.0 seconds
+
+'ServiceModelOperation 3.0.0.0': 0, 0.0 seconds
+
+'ServiceModelOperation 4.0.0.0': 0, 0.0 seconds
+
+'ServiceModelService 3.0.0.0': 0, 0.0 seconds
+
+'ServiceModelService 4.0.0.0': 35, 0.0 seconds
+  * Calls
+  * Calls Duration
+  * Calls Failed
+  * Calls Failed Per Second
+  * Calls Faulted
+  * Calls Faulted Per Second
+  * Calls Outstanding
+  * Calls Per Second
+  * Instances
+  * Instances Created Per Second
+  * Percent Of Max Concurrent Calls
+  * Percent Of Max Concurrent Instances
+  * Percent Of Max Concurrent Sessions
+  * Queued Messages Dropped
+  * Queued Messages Dropped Per Second
+  * Queued Messages Rejected
+  * Queued Messages Rejected Per Second
+  * Queued Poison Messages
+  * Queued Poison Messages Per Second
+  * Reliable Messaging Messages Dropped
+  * Reliable Messaging Messages Dropped Per Second
+  * Reliable Messaging Sessions Faulted
+  * Reliable Messaging Sessions Faulted Per Second
+  * Security Calls Not Authorized
+  * Security Calls Not Authorized Per Second
+  * Security Validation and Authentication Failures
+  * Security Validation and Authentication Failures Per Second
+  * Transacted Operations Aborted
+  * Transacted Operations Aborted Per Second
+  * Transacted Operations Committed
+  * Transacted Operations Committed Per Second
+  * Transacted Operations In Doubt
+  * Transacted Operations In Doubt Per Second
+  * Transactions Flowed
+  * Transactions Flowed Per Second
+
+'SMB Client Shares': 27, 0.0 seconds
+  * Avg. Bytes/Read
+  * Avg. Bytes/Write
+  * Avg. Data Bytes/Request
+  * Avg. Data Queue Length
+  * Avg. Read Queue Length
+  * Avg. sec/Data Request
+  * Avg. sec/Read
+  * Avg. sec/Write
+  * Avg. Write Queue Length
+  * Compressed Bytes Sent/sec
+  * Compressed Requests/sec
+  * Compressed Responses/sec
+  * Credit Stalls/sec
+  * Current Data Queue Length
+  * Data Bytes/sec
+  * Data Requests/sec
+  * Metadata Requests/sec
+  * Read Bytes transmitted via SMB Direct/sec
+  * Read Bytes/sec
+  * Read Requests transmitted via SMB Direct/sec
+  * Read Requests/sec
+  * Turbo I/O Reads/sec
+  * Turbo I/O Writes/sec
+  * Write Bytes transmitted via SMB Direct/sec
+  * Write Bytes/sec
+  * Write Requests transmitted via SMB Direct/sec
+  * Write Requests/sec
+
+'SMB Direct Connection': 0, 0.0 seconds
+
+'SMB Server': 0, 0.0 seconds
+
+'SMB Server Sessions': 0, 0.0 seconds
+
+'SMB Server Shares': 48, 0.0 seconds
+  * % Persistent Handles
+  * % Resilient Handles
+  * Avg. Bytes/Read
+  * Avg. Bytes/Write
+  * Avg. Data Bytes/Request
+  * Avg. Data Queue Length
+  * Avg. Read Queue Length
+  * Avg. sec/Data Request
+  * Avg. sec/Read
+  * Avg. sec/Request
+  * Avg. sec/Write
+  * Avg. Write Queue Length
+  * Bytes Compressed/sec
+  * Compressed Requests/sec
+  * Compressed Responses/sec
+  * Current Bypass Open File Count
+  * Current Data Queue Length
+  * Current Durable Open File Count
+  * Current Open File Count
+  * Current Pending Requests
+  * Data Bytes/sec
+  * Data Requests/sec
+  * Files Opened/sec
+  * Metadata Requests/sec
+  * Read Bytes transmitted ByPassCSV/sec
+  * Read Bytes transmitted via SMB Direct/sec
+  * Read Bytes/sec
+  * Read Requests transmitted via BypassCSV/sec
+  * Read Requests transmitted via SMB Direct/sec
+  * Read Requests/sec
+  * Received Bytes/sec
+  * Requests/sec
+  * Sent Bytes/sec
+  * Total Durable Handle Reopen Count
+  * Total Failed Durable Handle Reopen Count
+  * Total Failed Persistent Handle Reopen Count
+  * Total Failed Resilient Handle Reopen Count
+  * Total File Open Count
+  * Total Persistent Handle Reopen Count
+  * Total Resilient Handle Reopen Count
+  * Transferred Bytes/sec
+  * Tree Connect Count
+  * Write Bytes transmitted ByPassCSV/sec
+  * Write Bytes transmitted via SMB Direct/sec
+  * Write Bytes/sec
+  * Write Requests transmitted via BypassCSV/sec
+  * Write Requests transmitted via SMB Direct/sec
+  * Write Requests/sec
+
+'SMSvcHost 3.0.0.0': 0, 0.0 seconds
+
+'SMSvcHost 4.0.0.0': 0, 0.0 seconds
+
+'SQL Server 2016 XTP Cursors': 12, 0.0 seconds
+  * Cursor deletes/sec
+  * Cursor inserts/sec
+  * Cursor scans started/sec
+  * Cursor unique violations/sec
+  * Cursor updates/sec
+  * Cursor write conflicts/sec
+  * Dusty corner scan retries/sec (user-issued)
+  * Expired rows removed/sec
+  * Expired rows touched/sec
+  * Rows returned/sec
+  * Rows touched/sec
+  * Tentatively-deleted rows touched/sec
+
+'SQL Server 2016 XTP Databases': 0, 0.0 seconds
+
+'SQL Server 2016 XTP Garbage Collection': 13, 0.0 seconds
+  * Dusty corner scan retries/sec (GC-issued)
+  * Main GC work items/sec
+  * Parallel GC work item/sec
+  * Rows processed/sec
+  * Rows processed/sec (first in bucket and removed)
+  * Rows processed/sec (first in bucket)
+  * Rows processed/sec (marked for unlink)
+  * Rows processed/sec (no sweep needed)
+  * Sweep expired rows removed/sec
+  * Sweep expired rows touched/sec
+  * Sweep expiring rows touched/sec
+  * Sweep rows touched/sec
+  * Sweep scans started/sec
+
+'SQL Server 2016 XTP IO Governor': 6, 0.0 seconds
+  * Insufficient Credits Waits/sec
+  * Io Issued/sec
+  * Log Blocks/sec
+  * Missed Credit Slots
+  * Stale Rate Object Waits/sec
+  * Total Rate Objects Published
+
+'SQL Server 2016 XTP Phantom Processor': 6, 0.0 seconds
+  * Dusty corner scan retries/sec (Phantom-issued)
+  * Phantom expired rows removed/sec
+  * Phantom expired rows touched/sec
+  * Phantom expiring rows touched/sec
+  * Phantom rows touched/sec
+  * Phantom scans started/sec
+
+'SQL Server 2016 XTP Storage': 8, 0.0 seconds
+  * Checkpoints Closed
+  * Checkpoints Completed
+  * Core Merges Completed
+  * Merge Policy Evaluations
+  * Merge Requests Outstanding
+  * Merges Abandoned
+  * Merges Installed
+  * Total Files Merged
+
+'SQL Server 2016 XTP Transaction Log': 2, 0.0 seconds
+  * Log bytes written/sec
+  * Log records written/sec
+
+'SQL Server 2016 XTP Transactions': 10, 0.0 seconds
+  * Cascading aborts/sec
+  * Commit dependencies taken/sec
+  * Read-only transactions prepared/sec
+  * Save point refreshes/sec
+  * Save point rollbacks/sec
+  * Save points created/sec
+  * Transaction validation failures/sec
+  * Transactions aborted by user/sec
+  * Transactions aborted/sec
+  * Transactions created/sec
+
+'SQL Server 2017 XTP Cursors': 12, 0.0 seconds
+  * Cursor deletes/sec
+  * Cursor inserts/sec
+  * Cursor scans started/sec
+  * Cursor unique violations/sec
+  * Cursor updates/sec
+  * Cursor write conflicts/sec
+  * Dusty corner scan retries/sec (user-issued)
+  * Expired rows removed/sec
+  * Expired rows touched/sec
+  * Rows returned/sec
+  * Rows touched/sec
+  * Tentatively-deleted rows touched/sec
+
+'SQL Server 2017 XTP Databases': 0, 0.0 seconds
+
+'SQL Server 2017 XTP Garbage Collection': 13, 0.0 seconds
+  * Dusty corner scan retries/sec (GC-issued)
+  * Main GC work items/sec
+  * Parallel GC work item/sec
+  * Rows processed/sec
+  * Rows processed/sec (first in bucket and removed)
+  * Rows processed/sec (first in bucket)
+  * Rows processed/sec (marked for unlink)
+  * Rows processed/sec (no sweep needed)
+  * Sweep expired rows removed/sec
+  * Sweep expired rows touched/sec
+  * Sweep expiring rows touched/sec
+  * Sweep rows touched/sec
+  * Sweep scans started/sec
+
+'SQL Server 2017 XTP IO Governor': 6, 0.0 seconds
+  * Insufficient Credits Waits/sec
+  * Io Issued/sec
+  * Log Blocks/sec
+  * Missed Credit Slots
+  * Stale Rate Object Waits/sec
+  * Total Rate Objects Published
+
+'SQL Server 2017 XTP Phantom Processor': 6, 0.0 seconds
+  * Dusty corner scan retries/sec (Phantom-issued)
+  * Phantom expired rows removed/sec
+  * Phantom expired rows touched/sec
+  * Phantom expiring rows touched/sec
+  * Phantom rows touched/sec
+  * Phantom scans started/sec
+
+'SQL Server 2017 XTP Storage': 8, 0.0 seconds
+  * Checkpoints Closed
+  * Checkpoints Completed
+  * Core Merges Completed
+  * Merge Policy Evaluations
+  * Merge Requests Outstanding
+  * Merges Abandoned
+  * Merges Installed
+  * Total Files Merged
+
+'SQL Server 2017 XTP Transaction Log': 2, 0.0 seconds
+  * Log bytes written/sec
+  * Log records written/sec
+
+'SQL Server 2017 XTP Transactions': 10, 0.0 seconds
+  * Cascading aborts/sec
+  * Commit dependencies taken/sec
+  * Read-only transactions prepared/sec
+  * Save point refreshes/sec
+  * Save point rollbacks/sec
+  * Save points created/sec
+  * Transaction validation failures/sec
+  * Transactions aborted by user/sec
+  * Transactions aborted/sec
+  * Transactions created/sec
+
+'SQL Server 2022 XTP Cursors': 12, 0.0 seconds
+  * Cursor deletes/sec
+  * Cursor inserts/sec
+  * Cursor scans started/sec
+  * Cursor unique violations/sec
+  * Cursor updates/sec
+  * Cursor write conflicts/sec
+  * Dusty corner scan retries/sec (user-issued)
+  * Expired rows removed/sec
+  * Expired rows touched/sec
+  * Rows returned/sec
+  * Rows touched/sec
+  * Tentatively-deleted rows touched/sec
+
+'SQL Server 2022 XTP Databases': 0, 0.0 seconds
+
+'SQL Server 2022 XTP Garbage Collection': 13, 0.0 seconds
+  * Dusty corner scan retries/sec (GC-issued)
+  * Main GC work items/sec
+  * Parallel GC work item/sec
+  * Rows processed/sec
+  * Rows processed/sec (first in bucket and removed)
+  * Rows processed/sec (first in bucket)
+  * Rows processed/sec (marked for unlink)
+  * Rows processed/sec (no sweep needed)
+  * Sweep expired rows removed/sec
+  * Sweep expired rows touched/sec
+  * Sweep expiring rows touched/sec
+  * Sweep rows touched/sec
+  * Sweep scans started/sec
+
+'SQL Server 2022 XTP IO Governor': 6, 0.0 seconds
+  * Insufficient Credits Waits/sec
+  * Io Issued/sec
+  * Log Blocks/sec
+  * Missed Credit Slots
+  * Stale Rate Object Waits/sec
+  * Total Rate Objects Published
+
+'SQL Server 2022 XTP Phantom Processor': 6, 0.0 seconds
+  * Dusty corner scan retries/sec (Phantom-issued)
+  * Phantom expired rows removed/sec
+  * Phantom expired rows touched/sec
+  * Phantom expiring rows touched/sec
+  * Phantom rows touched/sec
+  * Phantom scans started/sec
+
+'SQL Server 2022 XTP Storage': 8, 0.0 seconds
+  * Checkpoints Closed
+  * Checkpoints Completed
+  * Core Merges Completed
+  * Merge Policy Evaluations
+  * Merge Requests Outstanding
+  * Merges Abandoned
+  * Merges Installed
+  * Total Files Merged
+
+'SQL Server 2022 XTP Transaction Log': 2, 0.0 seconds
+  * Log bytes written/sec
+  * Log records written/sec
+
+'SQL Server 2022 XTP Transactions': 10, 0.0 seconds
+  * Cascading aborts/sec
+  * Commit dependencies taken/sec
+  * Read-only transactions prepared/sec
+  * Save point refreshes/sec
+  * Save point rollbacks/sec
+  * Save points created/sec
+  * Transaction validation failures/sec
+  * Transactions aborted by user/sec
+  * Transactions aborted/sec
+  * Transactions created/sec
+
+'SQLAgent:Alerts': 0, 0.0 seconds
+
+'SQLAgent:Jobs': 0, 0.0 seconds
+
+'SQLAgent:JobSteps': 0, 0.0 seconds
+
+'SQLAgent:Statistics': 0, 0.0 seconds
+
+'SQLAgent:SystemJobs': 0, 0.0 seconds
+
+'SQLAgent$ADV_2008R2_X64:Alerts': 0, 0.0 seconds
+
+'SQLAgent$ADV_2008R2_X64:Jobs': 0, 0.0 seconds
+
+'SQLAgent$ADV_2008R2_X64:JobSteps': 0, 0.0 seconds
+
+'SQLAgent$ADV_2008R2_X64:Statistics': 0, 0.0 seconds
+
+'SQLAgent$ADV_2022:Alerts': 0, 0.0 seconds
+
+'SQLAgent$ADV_2022:Jobs': 0, 0.0 seconds
+
+'SQLAgent$ADV_2022:JobSteps': 0, 0.0 seconds
+
+'SQLAgent$ADV_2022:Statistics': 0, 0.0 seconds
+
+'SQLAgent$ADV_2022:SystemJobs': 0, 0.0 seconds
+
+'SQLAgent$DEV_2008_X64:Alerts': 0, 0.0 seconds
+
+'SQLAgent$DEV_2008_X64:Jobs': 0, 0.0 seconds
+
+'SQLAgent$DEV_2008_X64:JobSteps': 0, 0.0 seconds
+
+'SQLAgent$DEV_2008_X64:Statistics': 0, 0.0 seconds
+
+'SQLAgent$DEV_2008R2_X64:Alerts': 0, 0.0 seconds
+
+'SQLAgent$DEV_2008R2_X64:Jobs': 0, 0.0 seconds
+
+'SQLAgent$DEV_2008R2_X64:JobSteps': 0, 0.0 seconds
+
+'SQLAgent$DEV_2008R2_X64:Statistics': 0, 0.0 seconds
+
+'SQLAgent$DEV_2012_X64:Alerts': 0, 0.0 seconds
+
+'SQLAgent$DEV_2012_X64:Jobs': 0, 0.0 seconds
+
+'SQLAgent$DEV_2012_X64:JobSteps': 0, 0.0 seconds
+
+'SQLAgent$DEV_2012_X64:Statistics': 0, 0.0 seconds
+
+'SQLAgent$DEV_2014_X64:Alerts': 0, 0.0 seconds
+
+'SQLAgent$DEV_2014_X64:Jobs': 0, 0.0 seconds
+
+'SQLAgent$DEV_2014_X64:JobSteps': 0, 0.0 seconds
+
+'SQLAgent$DEV_2014_X64:Statistics': 0, 0.0 seconds
+
+'SQLAgent$DEV_2014_X64:SystemJobs': 0, 0.0 seconds
+
+'SQLAgent$DEV_2016:Alerts': 0, 0.0 seconds
+
+'SQLAgent$DEV_2016:Jobs': 0, 0.0 seconds
+
+'SQLAgent$DEV_2016:JobSteps': 0, 0.0 seconds
+
+'SQLAgent$DEV_2016:Statistics': 0, 0.0 seconds
+
+'SQLAgent$DEV_2016:SystemJobs': 0, 0.0 seconds
+
+'SQLAgent$DEV_2017:Alerts': 0, 0.0 seconds
+
+'SQLAgent$DEV_2017:Jobs': 0, 0.0 seconds
+
+'SQLAgent$DEV_2017:JobSteps': 0, 0.0 seconds
+
+'SQLAgent$DEV_2017:Statistics': 0, 0.0 seconds
+
+'SQLAgent$DEV_2017:SystemJobs': 0, 0.0 seconds
+
+'SQLAgent$DEV_2019:Alerts': 0, 0.0 seconds
+
+'SQLAgent$DEV_2019:Jobs': 0, 0.0 seconds
+
+'SQLAgent$DEV_2019:JobSteps': 0, 0.0 seconds
+
+'SQLAgent$DEV_2019:Statistics': 0, 0.0 seconds
+
+'SQLAgent$DEV_2019:SystemJobs': 0, 0.0 seconds
+
+'SQLAgent$DEV2022UTF8:Alerts': 0, 0.0 seconds
+
+'SQLAgent$DEV2022UTF8:Jobs': 0, 0.0 seconds
+
+'SQLAgent$DEV2022UTF8:JobSteps': 0, 0.0 seconds
+
+'SQLAgent$DEV2022UTF8:Statistics': 0, 0.0 seconds
+
+'SQLAgent$DEV2022UTF8:SystemJobs': 0, 0.0 seconds
+
+'SQLServer:Access Methods': 0, 0.0 seconds
+
+'SQLServer:Advanced Analytics': 1, 0.0 seconds
+  * Predictions/sec
+
+'SQLServer:Availability Group': 1, 0.0 seconds
+  * Active Hadr Threads
+
+'SQLServer:Availability Replica': 9, 0.0 seconds
+  * Bytes Received from Replica/sec
+  * Bytes Sent to Replica/sec
+  * Bytes Sent to Transport/sec
+  * Flow Control Time (ms/sec)
+  * Flow Control/sec
+  * Receives from Replica/sec
+  * Resent Messages/sec
+  * Sends to Replica/sec
+  * Sends to Transport/sec
+
+'SQLServer:Backup Device': 0, 0.0 seconds
+
+'SQLServer:Batch Resp Statistics': 17, 0.0 seconds
+  * Batches >=000000ms & <000001ms
+  * Batches >=000001ms & <000002ms
+  * Batches >=000002ms & <000005ms
+  * Batches >=000005ms & <000010ms
+  * Batches >=000010ms & <000020ms
+  * Batches >=000020ms & <000050ms
+  * Batches >=000050ms & <000100ms
+  * Batches >=000100ms & <000200ms
+  * Batches >=000200ms & <000500ms
+  * Batches >=000500ms & <001000ms
+  * Batches >=001000ms & <002000ms
+  * Batches >=002000ms & <005000ms
+  * Batches >=005000ms & <010000ms
+  * Batches >=010000ms & <020000ms
+  * Batches >=020000ms & <050000ms
+  * Batches >=050000ms & <100000ms
+  * Batches >=100000ms
+
+'SQLServer:Broker Activation': 6, 0.0 seconds
+  * Stored Procedures Invoked/sec
+  * Task Limit Reached
+  * Task Limit Reached/sec
+  * Tasks Aborted/sec
+  * Tasks Running
+  * Tasks Started/sec
+
+'SQLServer:Broker Statistics': 0, 0.0 seconds
+
+'SQLServer:Broker TO Statistics': 0, 0.0 seconds
+
+'SQLServer:Broker/DBM Transport': 0, 0.0 seconds
+
+'SQLServer:Buffer Manager': 0, 0.0 seconds
+
+'SQLServer:Buffer Node': 4, 0.0 seconds
+  * Database pages
+  * Local node page lookups/sec
+  * Page life expectancy
+  * Remote node page lookups/sec
+
+'SQLServer:Catalog Metadata': 4, 0.0 seconds
+  * Cache Entries Count
+  * Cache Entries Pinned Count
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+
+'SQLServer:CLR': 0, 0.0 seconds
+
+'SQLServer:Columnstore': 12, 0.0 seconds
+  * Delta Rowgroups Closed
+  * Delta Rowgroups Compressed
+  * Delta Rowgroups Created
+  * Segment Cache Hit Ratio
+  * Segment Cache Hit Ratio Base
+  * Segment Reads/Sec
+  * Total Delete Buffers Migrated
+  * Total Merge Policy Evaluations
+  * Total Rowgroups Compressed
+  * Total Rowgroups Fit For Merge
+  * Total Rowgroups Merge Compressed
+  * Total Source Rowgroups Merged
+
+'SQLServer:Cursor Manager by Type': 9, 0.0 seconds
+  * Active cursors
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cached Cursor Counts
+  * Cursor Cache Use Counts/sec
+  * Cursor memory usage
+  * Cursor Requests/sec
+  * Cursor worktable usage
+  * Number of active cursor plans
+
+'SQLServer:Cursor Manager Total': 0, 0.0 seconds
+
+'SQLServer:Database Mirroring': 0, 0.0 seconds
+
+'SQLServer:Database Replica': 24, 0.0 seconds
+  * Database Flow Control Delay
+  * Database Flow Controls/sec
+  * File Bytes Received/sec
+  * Group Commit Time
+  * Group Commits/Sec
+  * Log Apply Pending Queue
+  * Log Apply Ready Queue
+  * Log Bytes Compressed/sec
+  * Log Bytes Decompressed/sec
+  * Log Bytes Received/sec
+  * Log Compression Cache hits/sec
+  * Log Compression Cache misses/sec
+  * Log Compressions/sec
+  * Log Decompressions/sec
+  * Log remaining for undo
+  * Log Send Queue
+  * Mirrored Write Transactions/sec
+  * Recovery Queue
+  * Redo blocked/sec
+  * Redo Bytes Remaining
+  * Redone Bytes/sec
+  * Redones/sec
+  * Total Log requiring undo
+  * Transaction Delay
+
+'SQLServer:Databases': 64, 0.0 seconds
+  * Active parallel redo threads
+  * Active Transactions
+  * Avg Dist From EOL/LP Request
+  * Backup/Restore Throughput/sec
+  * Bulk Copy Rows/sec
+  * Bulk Copy Throughput/sec
+  * Commit table entries
+  * Data File(s) Size (KB)
+  * DBCC Logical Scan Bytes/sec
+  * Group Commit Time/sec
+  * Log Bytes Flushed/sec
+  * Log Cache Hit Ratio
+  * Log Cache Hit Ratio Base
+  * Log Cache Reads/sec
+  * Log File(s) Size (KB)
+  * Log File(s) Used Size (KB)
+  * Log Flush Wait Time
+  * Log Flush Waits/sec
+  * Log Flush Write Time (ms)
+  * Log Flushes/sec
+  * Log Growths
+  * Log Pool Cache Misses/sec
+  * Log Pool Disk Reads/sec
+  * Log Pool Hash Deletes/sec
+  * Log Pool Hash Inserts/sec
+  * Log Pool Invalid Hash Entry/sec
+  * Log Pool Log Scan Pushes/sec
+  * Log Pool LogWriter Pushes/sec
+  * Log Pool Push Empty FreePool/sec
+  * Log Pool Push Low Memory/sec
+  * Log Pool Push No Free Buffer/sec
+  * Log Pool Req. Behind Trunc/sec
+  * Log Pool Requests Base
+  * Log Pool Requests Old VLF/sec
+  * Log Pool Requests/sec
+  * Log Pool Total Active Log Size
+  * Log Pool Total Shared Pool Size
+  * Log Shrinks
+  * Log Truncations
+  * Percent Log Used
+  * PVS in-row diff generated/sec
+  * PVS in-row diff retrieved/sec
+  * PVS off-row pages allocated/sec
+  * PVS off-row pages deleted/sec
+  * PVS off-row record generated/sec
+  * PVS off-row record retrieved/sec
+  * Repl. Pending Xacts
+  * Repl. Trans. Rate
+  * Shrink Data Movement Bytes/sec
+  * Tail Log Cache Deletes/sec
+  * Tail Log Cache Misses/sec
+  * TLC LogWriter Pushes/sec
+  * TLC Req. Behind Trunc/sec
+  * Tracked transactions/sec
+  * Transactions/sec
+  * WPR add lsn bucket miss
+  * WPR bucket swaps
+  * WPR stale check bucket miss
+  * Write Transactions/sec
+  * XTP Controller DLC Latency Base
+  * XTP Controller DLC Latency/Fetch
+  * XTP Controller DLC Peak Latency
+  * XTP Controller Log Processed/sec
+  * XTP Memory Used (KB)
+
+'SQLServer:Deprecated Features': 1, 0.0 seconds
+  * Usage
+
+'SQLServer:Exec Statistics': 4, 0.0 seconds
+  * Distributed Query
+  * DTC calls
+  * Extended Procedures
+  * OLEDB calls
+
+'SQLServer:External Scripts': 0, 0.0 seconds
+
+'SQLServer:FileTable': 0, 0.0 seconds
+
+'SQLServer:General Statistics': 0, 0.0 seconds
+
+'SQLServer:HTTP Storage': 25, 0.0 seconds
+  * Avg. Bytes/Read
+  * Avg. Bytes/Read BASE
+  * Avg. Bytes/Transfer
+  * Avg. Bytes/Transfer BASE
+  * Avg. Bytes/Write
+  * Avg. Bytes/Write BASE
+  * Avg. microsec/Read
+  * Avg. microsec/Read BASE
+  * Avg. microsec/Read Comp
+  * Avg. microsec/Read Comp BASE
+  * Avg. microsec/Transfer
+  * Avg. microsec/Transfer BASE
+  * Avg. microsec/Write
+  * Avg. microsec/Write BASE
+  * Avg. microsec/Write Comp
+  * Avg. microsec/Write Comp BASE
+  * HTTP Storage IO failed/sec
+  * HTTP Storage IO retry/sec
+  * Outstanding HTTP Storage IO
+  * Read Bytes/Sec
+  * Reads/Sec
+  * Total Bytes/Sec
+  * Transfers/Sec
+  * Write Bytes/Sec
+  * Writes/Sec
+
+'SQLServer:JSON Doc Stats': 0, 0.0 seconds
+
+'SQLServer:Latches': 0, 0.0 seconds
+
+'SQLServer:Locks': 8, 0.0 seconds
+  * Average Wait Time (ms)
+  * Average Wait Time Base
+  * Lock Requests/sec
+  * Lock Timeouts (timeout > 0)/sec
+  * Lock Timeouts/sec
+  * Lock Wait Time (ms)
+  * Lock Waits/sec
+  * Number of Deadlocks/sec
+
+'SQLServer:LogPool FreePool': 2, 0.0 seconds
+  * Free Buffer Refills/sec
+  * Free List Length
+
+'SQLServer:Memory Broker Clerks': 6, 0.0 seconds
+  * Internal benefit
+  * Memory broker clerk size
+  * Periodic evictions (pages)
+  * Pressure evictions (pages/sec)
+  * Simulation benefit
+  * Simulation size
+
+'SQLServer:Memory Manager': 0, 0.0 seconds
+
+'SQLServer:Memory Node': 7, 0.0 seconds
+  * Database Node Memory (KB)
+  * Decommit Node Memory (KB)/sec
+  * Foreign Node Memory (KB)
+  * Free Node Memory (KB)
+  * Stolen Node Memory (KB)
+  * Target Node Memory (KB)
+  * Total Node Memory (KB)
+
+'SQLServer:Plan Cache': 5, 0.0 seconds
+  * Cache Hit Ratio
+  * Cache Hit Ratio Base
+  * Cache Object Counts
+  * Cache Objects in use
+  * Cache Pages
+
+'SQLServer:Query Store': 4, 0.0 seconds
+  * Query Store CPU usage
+  * Query Store logical reads
+  * Query Store logical writes
+  * Query Store physical reads
+
+'SQLServer:Replication Agents': 0, 0.0 seconds
+
+'SQLServer:Replication Dist.': 0, 0.0 seconds
+
+'SQLServer:Replication Logreader': 0, 0.0 seconds
+
+'SQLServer:Replication Merge': 0, 0.0 seconds
+
+'SQLServer:Replication Snapshot': 0, 0.0 seconds
+
+'SQLServer:Resource Pool Stats': 30, 0.0 seconds
+  * Active memory grant amount (KB)
+  * Active memory grants count
+  * Avg Disk Read IO (ms)
+  * Avg Disk Read IO (ms) Base
+  * Avg Disk Write IO (ms)
+  * Avg Disk Write IO (ms) Base
+  * Cache memory target (KB)
+  * Compile memory target (KB)
+  * CPU control effect %
+  * CPU delayed %
+  * CPU delayed % base
+  * CPU effective %
+  * CPU effective % base
+  * CPU usage %
+  * CPU usage % base
+  * CPU usage target %
+  * CPU violated %
+  * Disk Read Bytes/sec
+  * Disk Read IO Throttled/sec
+  * Disk Read IO/sec
+  * Disk Write Bytes/sec
+  * Disk Write IO Throttled/sec
+  * Disk Write IO/sec
+  * Max memory (KB)
+  * Memory grant timeouts/sec
+  * Memory grants/sec
+  * Pending memory grants count
+  * Query exec memory target (KB)
+  * Target memory (KB)
+  * Used memory (KB)
+
+'SQLServer:SQL Errors': 1, 0.0 seconds
+  * Errors/sec
+
+'SQLServer:SQL Statistics': 0, 0.0 seconds
+
+'SQLServer:TailLogCache': 0, 0.0 seconds
+
+'SQLServer:Transactions': 0, 0.0 seconds
+
+'SQLServer:User Settable': 1, 0.0 seconds
+  * Query
+
+'SQLServer:Wait Statistics': 12, 0.0 seconds
+  * Lock waits
+  * Log buffer waits
+  * Log write waits
+  * Memory grant queue waits
+  * Network IO waits
+  * Non-Page latch waits
+  * Page IO latch waits
+  * Page latch waits
+  * Thread-safe memory objects waits
+  * Transaction ownership waits
+  * Wait for the worker
+  * Workspace synchronization waits
+
+'SQLServer:Workload Group Stats': 17, 0.0 seconds
+  * Active parallel threads
+  * Active requests
+  * Blocked tasks
+  * CPU delayed %
+  * CPU delayed % base
+  * CPU effective %
+  * CPU effective % base
+  * CPU usage %
+  * CPU usage % base
+  * CPU violated %
+  * Max request cpu time (ms)
+  * Max request memory grant (KB)
+  * Query optimizations/sec
+  * Queued requests
+  * Reduced memory grants/sec
+  * Requests completed/sec
+  * Suboptimal plans/sec
+
+'Storage Management WSP Spaces Runtime': 0, 0.0 seconds
+
+'Storage Spaces Drt': 0, 0.0 seconds
+
+'Storage Spaces Tier': 0, 0.0 seconds
+
+'Storage Spaces Virtual Disk': 0, 0.0 seconds
+
+'Storage Spaces Write Cache': 0, 0.0 seconds
+
+'Synchronization': 42, 0.0 seconds
+  * Exec. Resource Acquires AcqExclLite/sec
+  * Exec. Resource Acquires AcqShrdLite/sec
+  * Exec. Resource Acquires AcqShrdStarveExcl/sec
+  * Exec. Resource Acquires AcqShrdWaitForExcl/sec
+  * Exec. Resource Attempts AcqExclLite/sec
+  * Exec. Resource Attempts AcqShrdLite/sec
+  * Exec. Resource Attempts AcqShrdStarveExcl/sec
+  * Exec. Resource Attempts AcqShrdWaitForExcl/sec
+  * Exec. Resource Boost Excl. Owner/sec
+  * Exec. Resource Boost Shared Owners/sec
+  * Exec. Resource Contention AcqExclLite/sec
+  * Exec. Resource Contention AcqShrdLite/sec
+  * Exec. Resource Contention AcqShrdStarveExcl/sec
+  * Exec. Resource Contention AcqShrdWaitForExcl/sec
+  * Exec. Resource no-Waits AcqExclLite/sec
+  * Exec. Resource no-Waits AcqShrdLite/sec
+  * Exec. Resource no-Waits AcqShrdStarveExcl/sec
+  * Exec. Resource no-Waits AcqShrdWaitForExcl/sec
+  * Exec. Resource Recursive Excl. Acquires AcqExclLite/sec
+  * Exec. Resource Recursive Excl. Acquires AcqShrdLite/sec
+  * Exec. Resource Recursive Excl. Acquires AcqShrdStarveExcl/sec
+  * Exec. Resource Recursive Excl. Acquires AcqShrdWaitForExcl/sec
+  * Exec. Resource Recursive Sh. Acquires AcqShrdLite/sec
+  * Exec. Resource Recursive Sh. Acquires AcqShrdStarveExcl/sec
+  * Exec. Resource Recursive Sh. Acquires AcqShrdWaitForExcl/sec
+  * Exec. Resource Set Owner Pointer Exclusive/sec
+  * Exec. Resource Set Owner Pointer Shared (Existing Owner)/sec
+  * Exec. Resource Set Owner Pointer Shared (New Owner)/sec
+  * Exec. Resource Total Acquires/sec
+  * Exec. Resource Total Contentions/sec
+  * Exec. Resource Total Conv. Exclusive To Shared/sec
+  * Exec. Resource Total Delete/sec
+  * Exec. Resource Total Exclusive Releases/sec
+  * Exec. Resource Total Initialize/sec
+  * Exec. Resource Total Re-Initialize/sec
+  * Exec. Resource Total Shared Releases/sec
+  * IPI Send Broadcast Requests/sec
+  * IPI Send Routine Requests/sec
+  * IPI Send Software Interrupts/sec
+  * Spinlock Acquires/sec
+  * Spinlock Contentions/sec
+  * Spinlock Spins/sec
+
+'SynchronizationNuma': 42, 0.0 seconds
+  * Exec. Resource Acquires AcqExclLite/sec
+  * Exec. Resource Acquires AcqShrdLite/sec
+  * Exec. Resource Acquires AcqShrdStarveExcl/sec
+  * Exec. Resource Acquires AcqShrdWaitForExcl/sec
+  * Exec. Resource Attempts AcqExclLite/sec
+  * Exec. Resource Attempts AcqShrdLite/sec
+  * Exec. Resource Attempts AcqShrdStarveExcl/sec
+  * Exec. Resource Attempts AcqShrdWaitForExcl/sec
+  * Exec. Resource Boost Excl. Owner/sec
+  * Exec. Resource Boost Shared Owners/sec
+  * Exec. Resource Contention AcqExclLite/sec
+  * Exec. Resource Contention AcqShrdLite/sec
+  * Exec. Resource Contention AcqShrdStarveExcl/sec
+  * Exec. Resource Contention AcqShrdWaitForExcl/sec
+  * Exec. Resource no-Waits AcqExclLite/sec
+  * Exec. Resource no-Waits AcqShrdLite/sec
+  * Exec. Resource no-Waits AcqShrdStarveExcl/sec
+  * Exec. Resource no-Waits AcqShrdWaitForExcl/sec
+  * Exec. Resource Recursive Excl. Acquires AcqExclLite/sec
+  * Exec. Resource Recursive Excl. Acquires AcqShrdLite/sec
+  * Exec. Resource Recursive Excl. Acquires AcqShrdStarveExcl/sec
+  * Exec. Resource Recursive Excl. Acquires AcqShrdWaitForExcl/sec
+  * Exec. Resource Recursive Sh. Acquires AcqShrdLite/sec
+  * Exec. Resource Recursive Sh. Acquires AcqShrdStarveExcl/sec
+  * Exec. Resource Recursive Sh. Acquires AcqShrdWaitForExcl/sec
+  * Exec. Resource Set Owner Pointer Exclusive/sec
+  * Exec. Resource Set Owner Pointer Shared (Existing Owner)/sec
+  * Exec. Resource Set Owner Pointer Shared (New Owner)/sec
+  * Exec. Resource Total Acquires/sec
+  * Exec. Resource Total Contentions/sec
+  * Exec. Resource Total Conv. Exclusive To Shared/sec
+  * Exec. Resource Total Delete/sec
+  * Exec. Resource Total Exclusive Releases/sec
+  * Exec. Resource Total Initialize/sec
+  * Exec. Resource Total Re-Initialize/sec
+  * Exec. Resource Total Shared Releases/sec
+  * IPI Send Broadcast Requests/sec
+  * IPI Send Routine Requests/sec
+  * IPI Send Software Interrupts/sec
+  * Spinlock Acquires/sec
+  * Spinlock Contentions/sec
+  * Spinlock Spins/sec
+
+'System': 0, 0.0 seconds
+
+'TCPIP Performance Diagnostics': 0, 0.0 seconds
+
+'TCPIP Performance Diagnostics (Per-CPU)': 1, 0.0 seconds
+  * TCP current connections
+
+'TCPv4': 0, 0.0 seconds
+
+'TCPv6': 0, 0.0 seconds
+
+'Telephony': 0, 0.0 seconds
+
+'Teredo Client': 11, 0.0 seconds
+  * In - Teredo Bubble
+  * In - Teredo Data
+  * In - Teredo Data Kernel Mode
+  * In - Teredo Data User Mode
+  * In - Teredo Invalid
+  * In - Teredo Router Advertisement
+  * Out - Teredo Bubble
+  * Out - Teredo Data
+  * Out - Teredo Data Kernel Mode
+  * Out - Teredo Data User Mode
+  * Out - Teredo Router Solicitation
+
+'Teredo Relay': 22, 0.0 seconds
+  * In - Teredo Relay Error Packets: Destination Error
+  * In - Teredo Relay Error Packets: Header Error
+  * In - Teredo Relay Error Packets: Source Error
+  * In - Teredo Relay Error Packets: Total
+  * In - Teredo Relay Success Packets: Bubbles
+  * In - Teredo Relay Success Packets: Data Packets
+  * In - Teredo Relay Success Packets: Data Packets Kernel Mode
+  * In - Teredo Relay Success Packets: Data Packets User Mode
+  * In - Teredo Relay Success Packets: Total
+  * In - Teredo Relay Total Packets: Success + Error
+  * In - Teredo Relay Total Packets: Success + Error / sec
+  * Out - Teredo Relay Error Packets
+  * Out - Teredo Relay Error Packets: Destination Error
+  * Out - Teredo Relay Error Packets: Header Error
+  * Out - Teredo Relay Error Packets: Source Error
+  * Out - Teredo Relay Success Packets
+  * Out - Teredo Relay Success Packets: Bubbles
+  * Out - Teredo Relay Success Packets: Data Packets
+  * Out - Teredo Relay Success Packets: Data Packets Kernel Mode
+  * Out - Teredo Relay Success Packets: Data Packets User Mode
+  * Out - Teredo Relay Total Packets: Success + Error
+  * Out - Teredo Relay Total Packets: Success + Error / sec
+
+'Teredo Server': 14, 0.0 seconds
+  * In - Teredo Server Error Packets: Authentication Error
+  * In - Teredo Server Error Packets: Destination Error
+  * In - Teredo Server Error Packets: Header Error
+  * In - Teredo Server Error Packets: Source Error
+  * In - Teredo Server Error Packets: Total
+  * In - Teredo Server Success Packets: Bubbles
+  * In - Teredo Server Success Packets: Echo
+  * In - Teredo Server Success Packets: RS-Primary
+  * In - Teredo Server Success Packets: RS-Secondary
+  * In - Teredo Server Success Packets: Total
+  * In - Teredo Server Total Packets: Success + Error
+  * In - Teredo Server Total Packets: Success + Error / sec
+  * Out - Teredo Server: RA-Primary
+  * Out - Teredo Server: RA-Secondary 
+
+'Terminal Services': 0, 0.0 seconds
+
+'Terminal Services Session': 15, 0.1 seconds
+  * % Privileged Time
+  * % Processor Time
+  * % User Time
+  * Handle Count
+  * Page Faults/sec
+  * Page File Bytes
+  * Page File Bytes Peak
+  * Pool Nonpaged Bytes
+  * Pool Paged Bytes
+  * Private Bytes
+  * Thread Count
+  * Virtual Bytes
+  * Virtual Bytes Peak
+  * Working Set
+  * Working Set Peak
+
+'Thermal Zone Information': 4, 0.0 seconds
+  * % Passive Limit
+  * High Precision Temperature
+  * Temperature
+  * Throttle Reasons
+
+'Thread': 12, 152.8 seconds
+  * % Privileged Time
+  * % Processor Time
+  * % User Time
+  * Context Switches/sec
+  * Elapsed Time
+  * ID Process
+  * ID Thread
+  * Priority Base
+  * Priority Current
+  * Start Address
+  * Thread State
+  * Thread Wait Reason
+
+'UDPv4': 0, 0.0 seconds
+
+'UDPv6': 0, 0.0 seconds
+
+'USB': 0, 0.0 seconds
+
+'User Input Delay per Process': 1, 0.1 seconds
+  * Max Input Delay
+
+'User Input Delay per Session': 1, 0.0 seconds
+  * Max Input Delay
+
+'W3SVC_W3WP': 0, 0.0 seconds
+
+'WAS_W3WP': 0, 0.0 seconds
+
+'Web Service': 86, 0.3 seconds
+  * Anonymous Users/sec
+  * Bytes Received/sec
+  * Bytes Sent/sec
+  * Bytes Total/sec
+  * CGI Requests/sec
+  * Connection Attempts/sec
+  * Copy Requests/sec
+  * Current Anonymous Users
+  * Current Blocked Async I/O Requests
+  * Current blocked bandwidth bytes.
+  * Current CAL count for authenticated users
+  * Current CAL count for SSL connections
+  * Current CGI Requests
+  * Current Connections
+  * Current ISAPI Extension Requests
+  * Current NonAnonymous Users
+  * Delete Requests/sec
+  * Files Received/sec
+  * Files Sent/sec
+  * Files/sec
+  * Get Requests/sec
+  * Head Requests/sec
+  * ISAPI Extension Requests/sec
+  * Lock Requests/sec
+  * Locked Errors/sec
+  * Logon Attempts/sec
+  * Maximum Anonymous Users
+  * Maximum CAL count for authenticated users
+  * Maximum CAL count for SSL connections
+  * Maximum CGI Requests
+  * Maximum Connections
+  * Maximum ISAPI Extension Requests
+  * Maximum NonAnonymous Users
+  * Measured Async I/O Bandwidth Usage
+  * Mkcol Requests/sec
+  * Move Requests/sec
+  * NonAnonymous Users/sec
+  * Not Found Errors/sec
+  * Options Requests/sec
+  * Other Request Methods/sec
+  * Post Requests/sec
+  * Propfind Requests/sec
+  * Proppatch Requests/sec
+  * Put Requests/sec
+  * Search Requests/sec
+  * Service Uptime
+  * Total Allowed Async I/O Requests
+  * Total Anonymous Users
+  * Total Blocked Async I/O Requests
+  * Total blocked bandwidth bytes.
+  * Total Bytes Received
+  * Total Bytes Sent
+  * Total Bytes Transferred
+  * Total CGI Requests
+  * Total Connection Attempts (all instances)
+  * Total Copy Requests
+  * Total count of failed CAL requests for authenticated users
+  * Total count of failed CAL requests for SSL connections
+  * Total Delete Requests
+  * Total Files Received
+  * Total Files Sent
+  * Total Files Transferred
+  * Total Get Requests
+  * Total Head Requests
+  * Total ISAPI Extension Requests
+  * Total Lock Requests
+  * Total Locked Errors
+  * Total Logon Attempts
+  * Total Method Requests
+  * Total Method Requests/sec
+  * Total Mkcol Requests
+  * Total Move Requests
+  * Total NonAnonymous Users
+  * Total Not Found Errors
+  * Total Options Requests
+  * Total Other Request Methods
+  * Total Post Requests
+  * Total Propfind Requests
+  * Total Proppatch Requests
+  * Total Put Requests
+  * Total Rejected Async I/O Requests
+  * Total Search Requests
+  * Total Trace Requests
+  * Total Unlock Requests
+  * Trace Requests/sec
+  * Unlock Requests/sec
+
+'Web Service Cache': 0, 0.0 seconds
+
+'WF (System.Workflow) 4.0.0.0': 0, 0.0 seconds
+
+'WFP': 0, 0.0 seconds
+
+'WFP Classify': 0, 0.0 seconds
+
+'WFP Reauthorization': 0, 0.0 seconds
+
+'WFPv4': 0, 0.0 seconds
+
+'WFPv6': 0, 0.0 seconds
+
+'Windows Media Player Metadata': 0, 0.0 seconds
+
+'Windows Time Service': 0, 0.0 seconds
+
+'Windows Workflow Foundation': 0, 0.0 seconds
+
+'WinNAT': 0, 0.0 seconds
+
+'WinNAT ICMP': 0, 0.0 seconds
+
+'WinNAT Instance': 0, 0.0 seconds
+
+'WinNAT TCP': 0, 0.0 seconds
+
+'WinNAT UDP': 0, 0.0 seconds
+
+'WMI Objects': 0, 0.0 seconds
+
+'WorkflowServiceHost 4.0.0.0': 0, 0.0 seconds
+
+'WSMan Quota Statistics': 7, 0.0 seconds
+  * Active Operations
+  * Active Shells
+  * Active Users
+  * Process ID
+  * System Quota Violations/Second
+  * Total Requests/Second
+  * User Quota Violations/Second
+
+'XHCI CommonBuffer': 0, 0.0 seconds
+
+'XHCI Interrupter': 0, 0.0 seconds
+
+'XHCI TransferRing': 0, 0.0 seconds
+
+'XTP Cursors': 12, 0.0 seconds
+  * Cursor deletes/sec
+  * Cursor inserts/sec
+  * Cursor scans started/sec
+  * Cursor unique violations/sec
+  * Cursor updates/sec
+  * Cursor write conflicts/sec
+  * Dusty corner scan retries/sec (user-issued)
+  * Expired rows removed/sec
+  * Expired rows touched/sec
+  * Rows returned/sec
+  * Rows touched/sec
+  * Tentatively-deleted rows touched/sec
+
+'XTP Garbage Collection': 13, 0.0 seconds
+  * Dusty corner scan retries/sec (GC-issued)
+  * Main GC work items/sec
+  * Parallel GC work item/sec
+  * Rows processed/sec
+  * Rows processed/sec (first in bucket and removed)
+  * Rows processed/sec (first in bucket)
+  * Rows processed/sec (marked for unlink)
+  * Rows processed/sec (no sweep needed)
+  * Sweep expired rows removed/sec
+  * Sweep expired rows touched/sec
+  * Sweep expiring rows touched/sec
+  * Sweep rows touched/sec
+  * Sweep scans started/sec
+
+'XTP Phantom Processor': 6, 0.0 seconds
+  * Dusty corner scan retries/sec (Phantom-issued)
+  * Phantom expired rows removed/sec
+  * Phantom expired rows touched/sec
+  * Phantom expiring rows touched/sec
+  * Phantom rows touched/sec
+  * Phantom scans started/sec
+
+'XTP Storage': 8, 0.0 seconds
+  * Checkpoints Closed
+  * Checkpoints Completed
+  * Core Merges Completed
+  * Merge Policy Evaluations
+  * Merge Requests Outstanding
+  * Merges Abandoned
+  * Merges Installed
+  * Total Files Merged
+
+'XTP Transaction Log': 2, 0.0 seconds
+  * Log bytes written/sec
+  * Log records written/sec
+
+'XTP Transactions': 10, 0.0 seconds
+  * Cascading aborts/sec
+  * Commit dependencies taken/sec
+  * Read-only transactions prepared/sec
+  * Save point refreshes/sec
+  * Save point rollbacks/sec
+  * Save points created/sec
+  * Transaction validation failures/sec
+  * Transactions aborted by user/sec
+  * Transactions aborted/sec
+  * Transactions created/sec
+
