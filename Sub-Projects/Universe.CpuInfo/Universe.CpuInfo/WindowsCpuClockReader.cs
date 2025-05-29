@@ -35,7 +35,7 @@ public class WindowsCpuClockReader
 
         _TheState = new Lazy<State>(() =>
         {
-            Console.WriteLine($"VER: {typeof(PerformanceCounter).Assembly.GetName().Version}");
+            // Console.WriteLine($"VER: {typeof(PerformanceCounter).Assembly.GetName().Version}");
             var processorPerformance = new PerformanceCounter("Processor Information", "% Processor Performance", "_Total", true);
             processorPerformance.NextValue();
             return new State()
