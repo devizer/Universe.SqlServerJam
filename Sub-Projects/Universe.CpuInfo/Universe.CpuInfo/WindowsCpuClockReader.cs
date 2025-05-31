@@ -81,7 +81,8 @@ public class WindowsCpuClockReader
 
     double GetMaxClockSpeed()
     {
-        foreach (ManagementObject obj in new ManagementObjectSearcher("SELECT MaxClockSpeed FROM Win32_Processor").Get())
+        using var searcher = new ManagementObjectSearcher("SELECT MaxClockSpeed FROM Win32_Processor");
+        foreach (ManagementObject obj in searcher.Get())
         {
             double maxSpeed = Convert.ToDouble(obj["MaxClockSpeed"]) / 1d;
             return maxSpeed;
