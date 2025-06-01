@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Universe.CpuInfo.Tests", "U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Universe.CpuInfo.Benchmark", "Universe.CpuInfo.Benchmark\Universe.CpuInfo.Benchmark.csproj", "{383A63C4-8E66-41C2-9E80-30F4F1E70E52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Universe.CpuInfo.Demo", "Universe.CpuInfo.Demo\Universe.CpuInfo.Demo.csproj", "{B0C2A015-8FB6-4FCB-8982-42A3C6F25382}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Universe.CpuInfo.Demo", "Universe.CpuInfo.Demo\Universe.CpuInfo.Demo.csproj", "{B0C2A015-8FB6-4FCB-8982-42A3C6F25382}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Universe.CpuInfo.CLI", "Universe.CpuInfo.CLI\Universe.CpuInfo.CLI.csproj", "{2704311F-F624-43DB-AA4E-B5B0DAB8D4FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{B0C2A015-8FB6-4FCB-8982-42A3C6F25382}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0C2A015-8FB6-4FCB-8982-42A3C6F25382}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0C2A015-8FB6-4FCB-8982-42A3C6F25382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2704311F-F624-43DB-AA4E-B5B0DAB8D4FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2704311F-F624-43DB-AA4E-B5B0DAB8D4FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2704311F-F624-43DB-AA4E-B5B0DAB8D4FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2704311F-F624-43DB-AA4E-B5B0DAB8D4FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
