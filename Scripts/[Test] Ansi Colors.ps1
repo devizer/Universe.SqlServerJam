@@ -683,6 +683,8 @@ function ExtractArchiveBy7zMini([string] $fromArchive, [string] $toDirectory) {
   $mini7z = "$(Get-Mini7z-Exe-FullPath-for-Windows)"
   # "-o`"$plainFolder`""
   $commandLine=@("x", "-y", "`"$fromArchive`"")
+  $singleCore7z=@(); $memInfo = Get-Memory-Info; $procCount = ([Environment]::ProcessorCount); if ($memInfo -and ($memInfo.Free) -and ($memInfo.Free -lt (640*$procCount))) { $singleCore7z=@("-mmt=1") }
+  $commandLine += $singleCore7z
   Troubleshoot-Info "fromArchive: '$fromArchive'; commandLine: '$commandLine'"
   # ok on pwsh and powersheel
   & "$mini7z" @commandLine
@@ -694,8 +696,13 @@ function ExtractArchiveByDefault7zFull([string] $fromArchive, [string] $toDirect
   New-Item -Path "$($toDirectory)" -ItemType Directory -Force -EA SilentlyContinue | Out-Null
   # pushd "$($toDirectory)"
   $full7zExe = "$(Get-Full7z-Exe-FullPath-for-Windows)"
+
+  $commandLine = @("$extractCommand", "-y", "-o`"$($toDirectory)`"", "`"$fromArchive`"")
+  $singleCore7z=@(); $memInfo = Get-Memory-Info; $procCount = ([Environment]::ProcessorCount); if ($memInfo -and ($memInfo.Free) -and ($memInfo.Free -lt (640*$procCount))) { $singleCore7z=@("-mmt=1") }
+  $commandLine += $singleCore7z
+  
   Troubleshoot-Info "`"$fromArchive`" $([char]8594) " -Highlight "`"$($toDirectory)`"" " by `"$full7zExe`""
-  & "$full7zExe" @("$extractCommand", "-y", "-o`"$($toDirectory)`"", "`"$fromArchive`"")
+  & "$full7zExe" $commandLine
   $isExtractOk = $?;
   return $isExtractOk;
 }
