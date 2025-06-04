@@ -23,6 +23,7 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
             ParallelOptions po = new ParallelOptions() { MaxDegreeOfParallelism = Math.Min(Environment.ProcessorCount, maxSeedThreads) };
             // while (categoriesCount > 0)
             object sync = new object();
+            Stopwatch sw = Stopwatch.StartNew();
             Parallel.ForEach(SplitByBlocks(categoriesCount, 1000), po, partCount =>
             {
 
@@ -36,6 +37,8 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
                         })
                         // .ToArray()
                     ;
+
+                Console.WriteLine($"{sw.Elapsed.TotalSeconds:n1} Seeding {partCount:n0} categories of {categoriesCount:n0} total");
                     
 
                 this.DataAccess.UpdateCategorySummaryBatch(categoriesBatch);

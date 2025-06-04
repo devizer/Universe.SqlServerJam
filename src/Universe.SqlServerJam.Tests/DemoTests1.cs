@@ -16,13 +16,14 @@ namespace Universe.SqlServerJam.Tests
 
         [Test]
         [TestCaseSource(nameof(GetEnabledServers))]
-        public void Demo1(SqlServerRef testCase)
+        public void TestResetDefaultFillFactor(SqlServerRef testCase)
         {
             if (!testCase.IsNotAzure()) return;
 
+            IDbConnection cnn = testCase.CreateConnection(pooling: false, timeout: 30);
+
             // TEST RESTART for fill factor
             // IDbConnection cnn = new SqlConnection(testCase.ConnectionString);
-            IDbConnection cnn = testCase.CreateConnection(pooling: false, timeout: 30);
             int targetFillFactor = 73;
             if (cnn.Manage().Configuration.FillFactor != targetFillFactor && testCase.CanStartStopService)
             {
@@ -34,6 +35,18 @@ namespace Universe.SqlServerJam.Tests
                 Assert.That(cnn.Manage().Configuration.FillFactor, Is.EqualTo(targetFillFactor), () => "FillFactor does not match");
             }
             Console.WriteLine($"FillFactor: {cnn.Manage().Configuration.FillFactor}");
+
+        }
+
+
+
+        [Test]
+        [TestCaseSource(nameof(GetEnabledServers))]
+        public void Demo1(SqlServerRef testCase)
+        {
+            if (!testCase.IsNotAzure()) return;
+
+            IDbConnection cnn = testCase.CreateConnection(pooling: false, timeout: 30);
 
             string newDbName = $"Test DB {Guid.NewGuid():N}";
             cnn = testCase.CreateConnection(pooling: true, timeout: 30);
