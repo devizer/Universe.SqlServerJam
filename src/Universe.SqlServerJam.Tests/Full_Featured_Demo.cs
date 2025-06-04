@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -59,6 +60,7 @@ namespace Universe.SqlServerJam.Tests
         public void _7_Exam_Backup_Meta()
         {
             if (CrossInfo.ThePlatform != CrossInfo.Platform.Windows) return;
+            Console.WriteLine($"Backup is [{TestEnvironment.DbForTestsBak}]. Exists: {File.Exists(TestEnvironment.DbForTestsBak)}");
             var list = SqlServers.OrderByVersionDesc().Where(x => x.IsNotDisabled).ToList();
             foreach (var sqlRef in list)
             {
