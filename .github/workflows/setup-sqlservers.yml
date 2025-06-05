@@ -133,7 +133,7 @@ jobs:
            '2008-x86 Core'
         ]
 
-    runs-on: windows-2022
+    runs-on: windows-2025
 
     env:
       PS1_TROUBLE_SHOOT: On
@@ -246,6 +246,18 @@ jobs:
         & cmd.exe /c "set|sort"
 
 
+    - name: 'TLS 1.1 Force'
+      if: ${{ false }}
+      run: |
+          New-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client" -Force
+          New-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server" -Force
+
+          New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client" -Name "Enabled" -Value 1 -PropertyType "DWord" -Force
+          New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client" -Name "DisabledByDefault" -Value 0 -PropertyType "DWord" -Force
+
+          New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server" -Name "Enabled" -Value 1 -PropertyType "DWord" -Force
+          New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server" -Name "DisabledByDefault" -Value 0 -PropertyType "DWord" -Force
+
      
     - name: SETUP Sql Server
       env:
@@ -272,7 +284,15 @@ jobs:
               if ("${{ matrix.SqlServers }}" -match "LocalDB") { $tryList = @("FIRST and Single"); }
               foreach($t in $tryList) {
                 Say "SETUP $t"
-                Setup-SqlServers -SqlServers "${{ matrix.SqlServers }}" "Collation=French_CI_AI" "Startup=Automatic" "InstallTo=D:\SQL" "EmptyKey=" "Password=Meaga`$tr0ng" "/SQLUSERDBDIR=D:\DB-{InstanceName}-Data" "/SQLUSERDBLOGDIR=D:\SQL-LOGS-{InstanceName}" "/SQLBACKUPDIR=C:\Backups-for-{InstanceName}"
+                Setup-SqlServers -SqlServers "${{ matrix.SqlServers }}" `
+                      "Collation=French_CI_AI" `
+                      "Startup=Automatic" `
+                      "InstallTo=D:\SQL" `
+                      "EmptyKey=" `
+                      "Password=Meaga`$tr0ng" `
+                      "/SQLUSERDBDIR=D:\DB-{InstanceName}-Data" `
+                      "/SQLUSERDBLOGDIR=D:\SQL-LOGS-{InstanceName}" `
+                      "/SQLBACKUPDIR=C:\Backups-for-{InstanceName}"
               }
 
               Write-Line "Starting SQL Server(s)"
