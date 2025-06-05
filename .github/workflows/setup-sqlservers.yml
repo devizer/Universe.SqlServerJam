@@ -223,11 +223,11 @@ jobs:
     - name: .NET 6
       run: |
            & taskkill /T /F /IM dotnet.exe
-           $ErrorActionPreference="Stop"
-           pushd "$($Env:UserProfile)"
+           # $ErrorActionPreference="Stop"
+           cd "$($Env:UserProfile)"
            Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
            ./dotnet-install.ps1 -InstallDir "C:\Program Files\dotnet" -Channel "6.0";
-           popd
+           "Done"
 
     - name: Show Env
       run: |
