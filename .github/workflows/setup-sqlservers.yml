@@ -226,8 +226,8 @@ jobs:
            # $ErrorActionPreference="Stop"
            cd "$($Env:UserProfile)"
            Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-           ./dotnet-install.ps1 -InstallDir "C:\Program Files\dotnet" -Channel "6.0";
-           "Done"
+           ./dotnet-install.ps1 -InstallDir "C:\Program Files\dotnet" -Channel "6.0" -Runtime aspnetcore
+           exit 0
 
     - name: Show Env
       run: |
