@@ -38,7 +38,7 @@ namespace Universe.SqlServerJam.Tests.ScalabilityBenchmark
                         // .ToArray()
                     ;
 
-                Console.WriteLine($"{sw.Elapsed.TotalSeconds:n1} Seeding {partCount:n0} categories of {categoriesCount:n0} total");
+                // Console.WriteLine($"{sw.Elapsed.TotalSeconds:n1} Seeding {partCount:n0} categories of {categoriesCount:n0} total");
                     
 
                 this.DataAccess.UpdateCategorySummaryBatch(categoriesBatch);
