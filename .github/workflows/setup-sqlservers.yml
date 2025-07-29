@@ -306,11 +306,11 @@ jobs:
                 Setup-SqlServers -SqlServers "${{ matrix.SqlServers }}" `
                       "Collation=French_CI_AI" `
                       "Startup=Automatic" `
-                      "InstallTo=D:\SQL" `
+                      "InstallTo=$($installToDisk)\SQL" `
                       "EmptyKey=" `
                       "Password=Meaga`$tr0ng" `
-                      "/SQLUSERDBDIR=D:\DB-{InstanceName}-Data" `
-                      "/SQLUSERDBLOGDIR=D:\SQL-LOGS-{InstanceName}" `
+                      "/SQLUSERDBDIR=$($installToDisk)\DB-{InstanceName}-Data" `
+                      "/SQLUSERDBLOGDIR=$($installToDisk)\SQL-LOGS-{InstanceName}" `
                       "/SQLBACKUPDIR=C:\Backups-for-{InstanceName}"
               }
 
