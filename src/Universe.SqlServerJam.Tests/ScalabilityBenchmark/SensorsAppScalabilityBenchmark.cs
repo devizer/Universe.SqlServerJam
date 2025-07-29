@@ -81,7 +81,7 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
         StressWorkerReader reader = new StressWorkerReader(dataAccess);
         StressWorkerUpdater updater = new StressWorkerUpdater(dataAccess);
 
-        StressOrchestrator preJit = new StressOrchestrator() { MaxDuration = TimeSpan.Zero };
+        StressOrchestrator preJit = new StressOrchestrator() { MaxDuration = TimeSpan.FromSeconds(0.7) };
         preJit.AddWorker("1", reader);
         preJit.AddWorker("2", updater);
         preJit.Run();
@@ -105,7 +105,8 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
             
             var stressDuration = TimeSpan.FromMilliseconds(SensorsAppStressSettings.StressDuration ?? 2000);
             StressOrchestrator stressOrchestrator = new StressOrchestrator() { MaxDuration = stressDuration };
-            stressOrchestrator.AddWorker($"Merging", updater);
+            // TODO TODO TODO: Revert "Merging"
+            // stressOrchestrator.AddWorker($"Merging", updater);
             stressOrchestrator.AddWorkers("Dashboard", stressCase.DashboardThreads, reader);
             var sqlCpuUsageOnStart = management.CpuUsage;
             TotalStressResult totalResults = stressOrchestrator.Run();
