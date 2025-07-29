@@ -296,6 +296,11 @@ jobs:
               & setx.exe SQLSERVERS_SETUP_FOLDER "$ENV:SQLSERVERS_SETUP_FOLDER"
               $tryList = @("FIRST", "SECOND")
               if ("${{ matrix.SqlServers }}" -match "LocalDB") { $tryList = @("FIRST and Single"); }
+              Say "DISKS"
+              Select-WMI-Objects "Win32_LogicalDisk" | Out-Host
+              $diskD = Select-WMI-Objects "Win32_LogicalDisk" | ? { $_.DeviceId -eq "D:" } | Select -First 1
+              $installToDisk = if ($null -eq ($diskD)) { "C:" } else { "D:" }
+              Write-Host "installToDisk = [$installToDisk]"
               foreach($t in $tryList) {
                 Say "SETUP $t"
                 Setup-SqlServers -SqlServers "${{ matrix.SqlServers }}" `
@@ -363,7 +368,7 @@ jobs:
       run: |
        Publish-SQLServer-SetupLogs "C:\Temp\SQL Server Setup Logs"
 
-    - name: Upload artifacts
+    - name: Upload SQL Server Setup Logs artifacts
       uses: actions/upload-artifact@v4
       if: always()
       with:
