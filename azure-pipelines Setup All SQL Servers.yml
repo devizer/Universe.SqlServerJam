@@ -107,16 +107,8 @@ jobs:
         IMAGE: 'windows-2019'
         TEST_SQL_VERSIONS: '2008-x64'
         TEST_SQL_UPDATES: False
-      '2008-x64 on Server2022':
-        IMAGE: 'windows-2022'
-        TEST_SQL_VERSIONS: '2008-x64'
-        TEST_SQL_UPDATES: False
       '2008-x86 on Server2019':
         IMAGE: 'windows-2019'
-        TEST_SQL_VERSIONS: '2008-x86'
-        TEST_SQL_UPDATES: False
-      '2008-x86 on Server2022':
-        IMAGE: 'windows-2022'
         TEST_SQL_VERSIONS: '2008-x86'
         TEST_SQL_UPDATES: False
 
