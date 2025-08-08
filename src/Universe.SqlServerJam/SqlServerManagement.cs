@@ -33,26 +33,12 @@ namespace Universe.SqlServerJam
         public long CommittedMemoryKb => this.SystemInfo.GetCommittedMemoryKb();
         public string CpuName => _CpuName.Value;
 
-        private static string NormalizeCpuName(string[] arr)
-        {
-            string ret;
-            ret = string.Join(" ", arr).Trim();
-            ret = ret.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ");
-            while (ret.IndexOf("  ", StringComparison.Ordinal) >= 0) ret = ret.Replace("  ", " ");
-            return ret.Trim();
-        }
+        public string ClientDataSource => _ClientDataSource.Value;
+        private readonly Lazy<string> _ClientDataSource;
 
-        public string ClientDataSource => SqlServerJamConfigurationExtensions.GetClientSizeDataSource(SqlConnection.ConnectionString);
+        private string GetClientDataSource() => SqlServerJamConfigurationExtensions.GetClientSizeDataSource(SqlConnection.ConnectionString);
         public SqlCpuUsage? CpuUsage => GetCpuUsage();
 
-        private SqlCpuUsage? GetCpuUsage()
-        {
-            if (ShortServerVersion.Major < 10) return null;
-            if (ShortServerVersion.Major == 10 && ShortServerVersion.Minor < 50) return null;
-            var sql = "Select Top 1 process_kernel_time_ms KernelMilliseconds, process_user_time_ms UserMilliseconds From sys.dm_os_sys_info";
-            var ret = SqlConnection.QueryFirstOrDefault<SqlCpuUsage>(sql);
-            return ret;
-        }
 
 
         // Actually it is need for WarmUp extension
@@ -71,6 +57,7 @@ namespace Universe.SqlServerJam
             _ProductVersion = new Lazy<Version>(() => ResilientVersionParser.Parse(this.ProductVersionRaw));
             _SqlServerSysInfo = new Lazy<SqlServerSysInfo>(() => new SqlServerSysInfo(this));
             _CpuName = new Lazy<string>(GetCpuName);
+            _ClientDataSource = new Lazy<string>(GetClientDataSource);
 
             Databases = new DatabaseSelector(this);
 
@@ -287,8 +274,8 @@ namespace Universe.SqlServerJam
             {
                 using var act = SqlJamLog.LogAction(action1Title);
                 var cpuNameRaw = SqlConnection.ExecuteScalar<string>(SqlGetCpuNameByRegistry, null, commandTimeout: CommandTimeout);
-                ret = NormalizeCpuName(new string[] { cpuNameRaw, });
-                if (!string.IsNullOrEmpty(ret?.Trim())) return ret;
+                ret = NormalizeCpuName(new string[] { cpuNameRaw, })?.Trim();
+                if (!string.IsNullOrEmpty(ret)) return ret;
             }
             catch (Exception ex)
             {
@@ -500,6 +487,27 @@ select
 
             public DatabaseOptionsManagement this[string databaseName] => new DatabaseOptionsManagement(Owner, databaseName);
         }
+
+        private SqlCpuUsage? GetCpuUsage()
+        {
+            if (ShortServerVersion.Major < 10) return null;
+            if (ShortServerVersion.Major == 10 && ShortServerVersion.Minor < 50) return null;
+            var sql = "Select Top 1 process_kernel_time_ms KernelMilliseconds, process_user_time_ms UserMilliseconds From sys.dm_os_sys_info";
+            var ret = SqlConnection.QueryFirstOrDefault<SqlCpuUsage>(sql);
+            return ret;
+        }
+
+        private static string NormalizeCpuName(string[] arr)
+        {
+            string ret;
+            ret = string.Join(" ", arr).Trim();
+            ret = ret.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ");
+            while (ret.IndexOf("  ", StringComparison.Ordinal) >= 0) ret = ret.Replace("  ", " ");
+            return ret.Trim();
+        }
+
+
+
 
         private const string SqlGetHostPlatform = @"
 If Exists (Select 1 From sys.all_objects Where name = 'dm_os_host_info' and type = 'V' and is_ms_shipped = 1)
