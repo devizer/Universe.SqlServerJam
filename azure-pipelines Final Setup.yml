@@ -30,9 +30,9 @@ jobs:
   strategy:
     maxParallel: 10
     matrix:
-      '#01 [2022 Developer Update]':
+      '#01 [2025 Developer Update]':
              IMAGE: 'windows-2019'
-             SQL_SERVERS: '2022 Developer Update'
+             SQL_SERVERS: '2025 Developer Update'
       '#02 [2025 LocalDB]':
              IMAGE: 'windows-2019'
              SQL_SERVERS: '2022 Developer Update'
