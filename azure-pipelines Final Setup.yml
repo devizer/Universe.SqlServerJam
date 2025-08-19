@@ -333,7 +333,7 @@ jobs:
 - job: 'Combine'
   condition: succeededOrFailed()
   pool:
-    vmImage: 'windows-2022'
+    vmImage: 'windows-2019'
   timeoutInMinutes: 30
   dependsOn:
     - Install
