@@ -138,7 +138,7 @@ jobs:
 
         ]
 
-    runs-on: windows-2025
+    runs-on: windows-2022
 
     env:
       PS1_TROUBLE_SHOOT: On
