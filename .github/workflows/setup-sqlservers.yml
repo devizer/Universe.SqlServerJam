@@ -436,22 +436,22 @@ jobs:
         cd C:\Pre-Build\Universe.SqlInsights.SqlServerStorage.Tests
         dotnet test Universe.SqlInsights.SqlServerStorage.Tests.dll
 
-    - name: SHOW System Views Report
+    - name: SHOW Administrative Views
       run: |
-        $ENV:SQL_SYSTEM_VIEWS_SUMMARY_1_Cpu_Title="CPU"
-        $ENV:SQL_SYSTEM_VIEWS_SUMMARY_1_Cpu_Kind="String"
-        $ENV:SQL_SYSTEM_VIEWS_SUMMARY_1_Cpu_Value="$(Get-Cpu-Name)"
-        $ENV:SQL_SYSTEM_VIEWS_SUMMARY_1_Cpu_Position="Header"
+        $ENV:SQL_ADMINISTRATIVE_VIEWS_SUMMARY_1_Cpu_Title="CPU"
+        $ENV:SQL_ADMINISTRATIVE_VIEWS_SUMMARY_1_Cpu_Kind="String"
+        $ENV:SQL_ADMINISTRATIVE_VIEWS_SUMMARY_1_Cpu_Value="$(Get-Cpu-Name)"
+        $ENV:SQL_ADMINISTRATIVE_VIEWS_SUMMARY_1_Cpu_Position="Header"
   
-        Try-And-Retry "Git Clone Sql Server System Views" { & git clone https://github.com/devizer/Universe.SqlServer.SystemViews C:\Temp\SystemViews }
-        Say "Building Sql Server System Views CLI"
-        cd C:\Temp\SystemViews
+        Try-And-Retry "Git Clone Sql Server Administrative Views" { & git clone https://github.com/devizer/Universe.SqlServer.AdministrativeViews C:\Temp\AdministrativeViews }
+        Say "Building Sql Server Administrative Views CLI"
+        cd C:\Temp\AdministrativeViews
         git reset --hard
         git clean -xfd
         Measure-Action "Build" { & dotnet build -v:m -c Release -f net6.0 }
-        cd Universe.SqlServer.SystemViews.CLI
+        cd Universe.SqlServer.AdministrativeViews.CLI
         Measure-Action "Build CLI Release" { & dotnet build -v:m -c Release -f net6.0 }
-        Measure-Action "Produce System Views Report" { & dotnet run -f net6.0 --no-build --no-launch-profile -c Release -- -all -av -o "C:\Artifacts\System Views Reports\{InstanceName}" }
+        Measure-Action "Produce Administrative Views" { & dotnet run -f net6.0 --no-build --no-launch-profile -c Release -- -all -av -o "C:\Artifacts\Administrative Views Reports\{InstanceName}" }
         Say "Done"
 
     - name: New SHOW SQL Servers
