@@ -446,6 +446,8 @@ jobs:
         & dotnet tool install --global SqlServer.AdministrativeViews
         & SqlServer.AdministrativeViews -h
         & SqlServer.AdministrativeViews -all -o "C:\Administrative Views\{InstanceName}" -av
+        if (-not $?) { throw "Fail" }
+        ls "C:\Administrative Views" | ft -AutoSize | Out-String -Width 1234 | Out-Host
 
     - name: SHOW Administrative Views by Source
       run: |
