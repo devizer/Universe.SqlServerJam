@@ -436,7 +436,18 @@ jobs:
         cd C:\Pre-Build\Universe.SqlInsights.SqlServerStorage.Tests
         dotnet test Universe.SqlInsights.SqlServerStorage.Tests.dll
 
-    - name: SHOW Administrative Views
+    - name: SHOW Administrative Views by Tool
+      run: |
+        $ENV:SQL_ADMINISTRATIVE_VIEWS_SUMMARY_1_Cpu_Title="CPU"
+        $ENV:SQL_ADMINISTRATIVE_VIEWS_SUMMARY_1_Cpu_Kind="String"
+        $ENV:SQL_ADMINISTRATIVE_VIEWS_SUMMARY_1_Cpu_Value="$(Get-Cpu-Name)"
+        $ENV:SQL_ADMINISTRATIVE_VIEWS_SUMMARY_1_Cpu_Position="Header"
+
+        & dotnet tool install --global SqlServer.AdministrativeViews
+        & SqlServer.AdministrativeViews -h
+        & SqlServer.AdministrativeViews -all -o "C:\Administrative Views\{InstanceName}" -av
+
+    - name: SHOW Administrative Views by Source
       run: |
         $ENV:SQL_ADMINISTRATIVE_VIEWS_SUMMARY_1_Cpu_Title="CPU"
         $ENV:SQL_ADMINISTRATIVE_VIEWS_SUMMARY_1_Cpu_Kind="String"
