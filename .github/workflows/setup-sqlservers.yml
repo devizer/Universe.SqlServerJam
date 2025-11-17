@@ -39,6 +39,13 @@ jobs:
         pushd ~/Universe.SqlServerJam-Sources/src/Universe.SqlServerJam.Tests
         time try-and-retry dotnet publish -c Release -o "$bindir/Universe.SqlServerJam.Tests" -f net6.0 -v:m
         popd
+
+        Say "Build fx-dependent [https://github.com/devizer/Universe.SqlServer.AdministrativeViews]"
+        try-and-retry git clone https://github.com/devizer/Universe.SqlServer.AdministrativeViews ~/Universe.SqlServer.AdministrativeViews-Sources
+        pushd ~/Universe.SqlServer.AdministrativeViews-Sources/Universe.SqlServer.AdministrativeViews.CLI
+        time try-and-retry dotnet publish -c Release -o "$bindir/Universe.SqlServer.AdministrativeViews.CLI" -f net6.0 -v:m
+        popd
+
         ls -lah "$bindir"
         echo "bindir=[$bindir]"
 
@@ -455,16 +462,11 @@ jobs:
         $ENV:SQL_ADMINISTRATIVE_VIEWS_SUMMARY_1_Cpu_Kind="String"
         $ENV:SQL_ADMINISTRATIVE_VIEWS_SUMMARY_1_Cpu_Value="$(Get-Cpu-Name)"
         $ENV:SQL_ADMINISTRATIVE_VIEWS_SUMMARY_1_Cpu_Position="Header"
-  
-        Try-And-Retry "Git Clone Sql Server Administrative Views" { & git clone https://github.com/devizer/Universe.SqlServer.AdministrativeViews C:\Temp\AdministrativeViews }
-        Say "Building Sql Server Administrative Views CLI"
-        cd C:\Temp\AdministrativeViews
-        git reset --hard
-        git clean -xfd
-        Measure-Action "Build" { & dotnet build -v:m -c Release -f net6.0 }
-        cd Universe.SqlServer.AdministrativeViews.CLI
-        Measure-Action "Build CLI Release" { & dotnet build -v:m -c Release -f net6.0 }
-        Measure-Action "Produce Administrative Views" { & dotnet run -f net6.0 --no-build --no-launch-profile -c Release -- -all -av -o "C:\Artifacts\Administrative Views Reports\{InstanceName}" }
+
+        cd C:\Pre-Build\Universe.SqlServer.AdministrativeViews.CLI
+        & dotnet Universe.SqlServer.AdministrativeViews.CLI.dll -h
+        & dotnet Universe.SqlServer.AdministrativeViews.CLI.dll -all -av -o "C:\Artifacts\Administrative Views Reports\{InstanceName}"
+
         Say "Done"
 
     - name: New SHOW SQL Servers
