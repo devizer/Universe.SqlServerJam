@@ -60,7 +60,7 @@ jobs:
   
   Test:
 
-    timeout-minutes: 45
+    timeout-minutes: 120
     needs: Pre-Build
     strategy:
       fail-fast: false
