@@ -374,6 +374,9 @@ jobs:
                 Write-Host "$((Get-Memory-Info).Description)"
               }
 
+              Say "Installed Versions"
+              @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | ft -AutoSize | Out-String -Width 1234 | Out-Host
+              Say "Query Versions"
               @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | Populate-Local-SqlServer-Version | Select -Property Instance, Version | ft -AutoSize | Out-String -Width 1234 | Out-Host
 
 
@@ -381,6 +384,14 @@ jobs:
       if: always()
       run: |
        Publish-SQLServer-SetupLogs "C:\Temp\SQL Server Setup Logs"
+
+    - name: Show SQL Servers
+      if: always()
+      run: |
+       Say "Installed Versions"
+       @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | ft -AutoSize | Out-String -Width 1234 | Out-Host
+       Say "Query Versions"
+       @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | Populate-Local-SqlServer-Version | Select -Property Instance, Version | ft -AutoSize | Out-String -Width 1234 | Out-Host
 
     - name: Upload SQL Server Setup Logs artifacts
       uses: actions/upload-artifact@v4
