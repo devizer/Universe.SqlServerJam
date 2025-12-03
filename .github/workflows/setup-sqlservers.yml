@@ -374,6 +374,8 @@ jobs:
                 Write-Host "$((Get-Memory-Info).Description)"
               }
 
+              @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | Populate-Local-SqlServer-Version | Select -Property Instance, Version | ft -AutoSize | Out-String -Width 1234 | Out-Host
+
 
     - name: Pack SQL Server Setup Logs
       if: always()
