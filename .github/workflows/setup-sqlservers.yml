@@ -379,6 +379,8 @@ jobs:
               Say "Query Versions"
               @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | Populate-Local-SqlServer-Version | Select -Property Instance, Version | ft -AutoSize | Out-String -Width 1234 | Out-Host
 
+              @("$ENV:SQLSERVERS_MEDIA_FOLDER", "$ENV:SQLSERVERS_SETUP_FOLDER") | ? { "$_" } | % { Write-Host "Removing $_"; Remove-Item -Path "$_" -Recurse -Force -EA SilentlyContinue; }
+
 
     - name: Pack SQL Server Setup Logs
       if: always()
@@ -392,6 +394,7 @@ jobs:
        @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | ft -AutoSize | Out-String -Width 1234 | Out-Host
        Say "Query Versions"
        @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | Populate-Local-SqlServer-Version | Select -Property Instance, Version | ft -AutoSize | Out-String -Width 1234 | Out-Host
+
 
     - name: Upload SQL Server Setup Logs artifacts
       uses: actions/upload-artifact@v4
