@@ -1375,6 +1375,7 @@ function Query-VSWhere-as-Text([string[]] $arguments) {
 function Query-VSWhere-as-JSON([string[]] $arguments) {
   if (-not $arguments) { $arguments = @() }
   $arguments += @("-format", "json")
+  # Troubleshoot-Info "Arguments [" -Highlight "$arguments" "]"
   $jsonString = Query-VSWhere-as-Text @($arguments)
   $json = $jsonString | ConvertFrom-Json
   $ret = @();
@@ -1411,10 +1412,10 @@ function Get-VS-Edition-Order([string] $edition) {
   if ($edition) { $o[$edition] } 
 }
 
-function Find-VisualStudio-MSBuild([string] $year = "latest", [string] $edition = "any", [string] $arch = "best" <# x86|x64|arm64|best #>) {
+function Find-VisualStudio-MSBuild([string] $year = "latest", [string] $edition = "any", [string] $arch = "best" <# x86|x64|arm64|best #>, [bool] $allowPrerelease = $false, [string[]] $arguments = @("-products", "*", "-all", "-prerelease")) {
   # currentArch: x86|arm64|x64
   $currentArch = Get-CPU-Architecture-Suffix-for-Windows
-  $vsList = @(@(Query-VSWhere-as-JSON "-products", "*", "-all") | Select-Object -Property Year, Edition, Version, InstallationVersion, DisplayName, ProductId, InstallationPath)
+  $vsList = @(@(Query-VSWhere-as-JSON $arguments) | Select-Object -Property Year, Edition, Version, InstallationVersion, DisplayName, ProductId, InstallationPath, IsPreRelease)
   foreach($vs in $vsList) {
     $isYear = if (($vs.Year -eq $year) -or $year -eq "latest" -or (-not $year)) { $true }
     $isEdition = if (($vs.Edition -eq $edition) -or $edition -eq "any" -or (-not $edition)) { $true }
@@ -1439,6 +1440,7 @@ function Find-VisualStudio-MSBuild([string] $year = "latest", [string] $edition 
     }
     foreach($candidate in $candidates) { 
       $msbuildPath = Combine-Path ($candidate.Path) "msbuild.exe"
+      if ((-not $allowPrerelease) -and ($vs.isPrerelease)) { continue }
       $isMsBuildExists = [System.IO.File]::Exists($msbuildPath);
       if (-not $isMsBuildExists) { continue; }
       return $msbuildPath
@@ -1446,7 +1448,7 @@ function Find-VisualStudio-MSBuild([string] $year = "latest", [string] $edition 
   }
 }
 
-function Demo-Find-VisualStudio-MSBuild() { 
+function Demo-Find-VisualStudio-MSBuild([bool] $allowPrerelease) { 
   $jit = Find-VisualStudio-MSBuild
   $archList = "best arm64 x64 x86".Split(" ")
   $years = "2017 2019 2022 2026 latest".Split(" ")
@@ -1454,14 +1456,14 @@ function Demo-Find-VisualStudio-MSBuild() {
   foreach($year in $years) { foreach($edition in $editions) {
     Write-Host "'$($year)' `"$($edition)`""
     foreach($arch in $archList) {
-       $msbuild = Find-VisualStudio-MSBuild $year $edition $arch
+       $msbuild = Find-VisualStudio-MSBuild $year $edition $arch -allowPreRelease $allowPrerelease
        if ($msbuild) { $msbuild = "`"$msbuild`"" }
        Write-Host ("       {0,-6} | {1}" -f "$($arch)", $msbuild)
     }
   }}
 }
 
-function Demo-Query-VSWhere() {
+function Demo-Query-VSWhere()) {
   Say "vswhere as Text"
   Query-VSWhere-as-Text "-nologo" | Out-Host
   Say "vswhere as json"
@@ -1470,6 +1472,8 @@ function Demo-Query-VSWhere() {
   @(Query-VSWhere-as-JSON "-all") | Select-Object -Property Year, Edition, Version, InstallationVersion, DisplayName, ProductId, InstallationPath | ft -autosize | Out-Host
   Say "vswhere as json [-products * -all] plus format"
   @(Query-VSWhere-as-JSON "-products", "*", "-all") | Select-Object -Property Year, Edition, Version, InstallationVersion, DisplayName, ProductId, InstallationPath | ft -autosize | Out-Host
+  Say "vswhere as json [-products * -all -prerelease] plus format"
+  @(Query-VSWhere-as-JSON "-products", "*", "-all", "-prerelease") | Select-Object -Property Year, Edition, Version, InstallationVersion, DisplayName, ProductId, InstallationPath | ft -autosize | Out-Host
 }
 
 # Demo-Find-VisualStudio-MSBuild
