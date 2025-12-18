@@ -1704,6 +1704,7 @@ function Build-VisualStudio-Setup-Arguments([string] $type, [string] $nickname) 
    $cacheArgs = @();
    $cacheFolder = "$ENV:VS_SETUP_CACHE_FOLDER"
    if ($cacheFolder) { $cacheArgs = @("--path", "cache=`"$cacheFolder`"") }
+   $installFolderArgs = if ("$ENV:VS_SETUP_INSTALL_FOLDER") { @("--path", "install=`"$($ENV:VS_SETUP_INSTALL_FOLDER)`"") } Else { @() }
    $removeNonEnglish = @("cs-CZ de-DE es-ES fr-FR it-IT ja-JP ko-KR pl-PL pt-BR ru-RU tr-TR zh-CN zh-TW".Split(" ") | % { "--removeProductLang $_" }) -join " "
    $addEnglish = "--addProductLang en-US"
    # NET Core SDK: "Microsoft.NetCore.Component.SDK"
@@ -1737,6 +1738,7 @@ function Build-VisualStudio-Setup-Arguments([string] $type, [string] $nickname) 
       $list = "$componentsArg $quietArg --includeRecommended --includeOptional --wait --force --norestart $addEnglish $removeNonEnglish"
       $arguments = @($list.Split(" ") | ? { "$_" -ne "" })
       $arguments += $cacheArgs
+      $arguments += $installFolderArgs
       $arguments = $nicknameArgs + $arguments
       return $arguments;
    }
@@ -1745,6 +1747,7 @@ function Build-VisualStudio-Setup-Arguments([string] $type, [string] $nickname) 
       $list = "--includeRecommended --includeOptional $componentsArg $quietArg --wait --force --norestart $addEnglish $removeNonEnglish"
       $arguments = @($list.Split(" ") | ? { "$_" -ne "" })
       $arguments += $cacheArgs
+      $arguments += $installFolderArgs
       $arguments = $nicknameArgs + $arguments
       # Write-Host $arguments
       return $arguments;
