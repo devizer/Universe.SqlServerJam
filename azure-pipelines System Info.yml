@@ -20,12 +20,12 @@ jobs:
         IMAGE: 'windows-2019'
       'Windows 2022':
         IMAGE: 'windows-2022'
+      'Windows 2025':
+        IMAGE: 'windows-2025'
       'Ubuntu 24.04':
         IMAGE: 'ubuntu-24.04'
       'Ubuntu 22.04':
         IMAGE: 'ubuntu-22.04'
-      'Ubuntu 20.04':
-        IMAGE: 'ubuntu-20.04'
       'MacOS 15':
         IMAGE: 'macos-15'
       'MacOS 14':
