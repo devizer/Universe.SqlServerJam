@@ -16,8 +16,6 @@ jobs:
   strategy:
     maxParallel: 9
     matrix:
-      'Windows 2019':
-        IMAGE: 'windows-2019'
       'Windows 2022':
         IMAGE: 'windows-2022'
       'Windows 2025':
@@ -30,15 +28,13 @@ jobs:
         IMAGE: 'macos-15'
       'MacOS 14':
         IMAGE: 'macos-14'
-      'MacOS 13':
-        IMAGE: 'macos-13'
 
   steps:
 
   - bash: 'script=https://devizer.github.io/devops-library/Standalone-Bootstrap.sh; file=$(basename "$script"); cmd="curl -kfsSL -o /tmp/$file $script"; $cmd || $cmd || $cmd || echo "ERROR"; bash $file'
     displayName: 'Bootstrap'
   
-  - bash: 'printenv | sort'
+  - bash: 'Say "CPU: $(Get-CpuName)"; printenv | sort'
     displayName: 'Environment'
 
   - bash: |
