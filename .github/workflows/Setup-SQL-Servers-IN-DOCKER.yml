@@ -21,12 +21,33 @@ jobs:
   Setup:
 
     timeout-minutes: 150
-    runs-on: windows-2025
+    runs-on: ${{ matrix.OS }}
     strategy:
       fail-fast: false
       matrix:
-        TAG: [ ltsc2025, ltsc2022, ltsc2019, ltsc2016 ]
-        ISOLATION: [ process, hyperv ]
+         include:
+             - TAG: ltsc2025
+               ISOLATION: process
+               OS: windows-2025
+             - TAG: ltsc2025
+               ISOLATION: hyperv
+               OS: windows-2025
+
+             - TAG: ltsc2022
+               ISOLATION: process
+               OS: windows-2022
+             - TAG: ltsc2022
+               ISOLATION: hyperv
+               OS: windows-2022
+
+             - TAG: ltsc2019
+               ISOLATION: hyperv
+               OS: windows-2025
+
+             - TAG: ltsc2016
+               ISOLATION: hyperv
+               OS: windows-2025
+      
 
 
     env:
