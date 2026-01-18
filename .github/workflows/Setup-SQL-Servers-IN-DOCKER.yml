@@ -176,7 +176,7 @@ jobs:
           echo "SQL: '$sql'"
           $mnt="type=bind,source=$(Get-Location),target=C:\App"
           echo "--mount parameter is: [$mnt]"
-          & docker run --rm "--isolation=${{ matrix.ISOLATION }}" --mount "$mnt" -e SQL="$SQL" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" ${{ env.THEIMAGE }}:${{ matrix.TAG }} powershell -c "
+          & docker run --rm --memory 4g --cpus 3 "--isolation=${{ matrix.ISOLATION }}" --mount "$mnt" -e SQL="$SQL" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" ${{ env.THEIMAGE }}:${{ matrix.TAG }} powershell -c "
             . C:\App\Install-SqlServer-Version-Management.ps1
             `$ENV:TF_BUILD='True'
             Write-Host Installing `$ENV:SQL
