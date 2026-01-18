@@ -77,7 +77,7 @@
         [array]::Reverse($SqlServers)
 
         & curl -o Install-SqlServer-Version-Management.ps1 -kfsSL "https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1"
-        foreach($vc in "vcredist2005_x64.exe", "vcredist2005_x86.exe", "vcredist2008_x86.exe", "vcredist2008_x86.exe") {
+        foreach($vc in "vcredist2005_x64.exe", "vcredist2005_x86.exe", "vcredist2008_x86.exe", "vcredist2008_x64.exe") {
           $vcUrl="https://github.com/devizer/glist/blob/master/bin/vcredist/$vc"
           Download-File-FailFree-and-Cached "$vc" "$vcUrl"
         }
@@ -93,10 +93,10 @@
             Write-Host Installing `$ENV:SQL
             cd C:\App
             # VC runtime 2005 and 2008
-            & vcredist2005_x64.exe /q
-            & vcredist2008_x64.exe /qn /norestart
-            & vcredist2005_x86.exe /q
-            & vcredist2008_x86.exe /qn /norestart
+            & .\vcredist2005_x64.exe /q
+            & .\vcredist2008_x64.exe /qn /norestart
+            & .\vcredist2005_x86.exe /q
+            & .\vcredist2008_x86.exe /qn /norestart
 
             Setup-SqlServers `"`$ENV:SQL`"
             Publish-SQLServer-SetupLogs `"C:\App\Setup Logs of `$ENV:SQL`"
