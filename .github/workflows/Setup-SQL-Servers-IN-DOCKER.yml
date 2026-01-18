@@ -95,7 +95,7 @@ jobs:
       run: |
           $ENV:ISOLATION="${{ matrix.ISOLATION }}"
           $env:TAG="${{ matrix.TAG }}"
-          . "SQL-Server-in-Windows-Container\Setup-SQL-Server-Array.ps1"
+          . ".\SQL-Server-in-Windows-Container\Setup-SQL-Server-Array.ps1"
 
 
 
