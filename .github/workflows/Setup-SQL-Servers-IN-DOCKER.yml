@@ -169,7 +169,7 @@ jobs:
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: 'Summary ${{ matrix.SqlServers }}'
+        name: 'Summary ${{ matrix.TAG }}'
         path: |
           C:\Artifacts
 
