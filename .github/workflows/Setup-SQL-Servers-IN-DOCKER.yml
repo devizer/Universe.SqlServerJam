@@ -1,4 +1,4 @@
-name: Docker SQL Servcer Setup
+name: Docker SQL Server Setup
 
 env:
   DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
@@ -178,7 +178,7 @@ jobs:
           
   Combine:
     runs-on: windows-latest
-    needs: Test
+    needs: Setup
     if: always()
     timeout-minutes: 15
     steps:
