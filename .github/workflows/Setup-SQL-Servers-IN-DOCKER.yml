@@ -40,6 +40,9 @@ jobs:
       run: 'Write-Host "Total Modules: $((get-module -ListAvailable).Count)"'
 
     - name: Bootstrap
+      uses: devizer/devops-library@main
+
+    - name: Bootstrap
       shell: bash
       run: |
          set -eu;
