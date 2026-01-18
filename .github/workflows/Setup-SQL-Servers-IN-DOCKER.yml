@@ -182,7 +182,7 @@ jobs:
             Write-Host Installing `$ENV:SQL
             Setup-SqlServers "`$ENV:SQL"
 
-          "
+          " | tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/Setup $sql.txt"
           Write-Host " "
           Write-Host "---------------------------------"
           Write-Host " "
