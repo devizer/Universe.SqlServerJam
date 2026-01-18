@@ -153,6 +153,7 @@ jobs:
           echo "SQL: '$sql'"
           & docker run --rm -v "$PWD:C:\App" -e SQL="$SQL" ${{ env.THEIMAGE }}:${{ matrix.TAG }} powershell -c "
             . C:\Apps\Install-SqlServer-Version-Management.ps1
+            `$ENV:TF_BUILD='True'
             Write-Host Installing `$SQL
 
           "
