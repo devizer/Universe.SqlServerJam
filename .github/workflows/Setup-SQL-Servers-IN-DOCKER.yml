@@ -169,6 +169,8 @@ jobs:
            '2005-x86 Core'
 
         );
+        
+        [array]::Reverse($SqlServers)
 
         & curl -o Install-SqlServer-Version-Management.ps1 -kfsSL "https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1"
         ls Install-SqlServer-Version-Management.ps1
