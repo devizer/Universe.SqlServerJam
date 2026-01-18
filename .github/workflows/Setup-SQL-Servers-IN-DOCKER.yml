@@ -174,7 +174,7 @@ jobs:
         ls Install-SqlServer-Version-Management.ps1
         foreach($sql in $SqlServers) {
           echo "SQL: '$sql'"
-          & docker run --rm "--isolation=${{ matrix.ISOLATION }}" --mount type=bind,source="$(Get-Location)",target="C:\App" -e SQL="$SQL" ${{ env.THEIMAGE }}:${{ matrix.TAG }} powershell -c "
+          & docker run --rm "--isolation=${{ matrix.ISOLATION }}" --mount "type=bind,source=$(Get-Location),target=C:\App" -e SQL="$SQL" ${{ env.THEIMAGE }}:${{ matrix.TAG }} powershell -c "
             . C:\Apps\Install-SqlServer-Version-Management.ps1
             `$ENV:TF_BUILD='True'
             Write-Host Installing `$ENV:SQL
