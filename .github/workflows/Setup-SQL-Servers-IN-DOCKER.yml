@@ -1,4 +1,4 @@
-name: Test SQL Servers Matrix
+name: Docker SQL Servcer Setup
 
 env:
   DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
@@ -20,7 +20,7 @@ jobs:
 
   Setup:
 
-    timeout-minutes: 120
+    timeout-minutes: 150
     needs: Pre-Build
     strategy:
       fail-fast: false
