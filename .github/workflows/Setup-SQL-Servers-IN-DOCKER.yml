@@ -2,7 +2,7 @@ name: Docker SQL Server Setup
 
 env:
   DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
-  THEIMAGE: 'mcr.microsoft.com/windows/servercore'
+  THEIMAGE: 'devizervlad/iis-net4x-net35'
 
 on:
   workflow_dispatch:
