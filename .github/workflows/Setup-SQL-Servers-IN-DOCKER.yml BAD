@@ -21,12 +21,13 @@ jobs:
   Setup:
 
     timeout-minutes: 150
-    runs-on: windows-2025
+    needs: Pre-Build
     strategy:
       fail-fast: false
       matrix:
         TAG: [ ltsc2025, ltsc2022, ltsc2019, ltsc2016 ]
 
+    runs-on: windows-2025
 
     env:
       PS1_TROUBLE_SHOOT: On
@@ -70,7 +71,7 @@ jobs:
 
     - name: "Pull ${{ matrix.TAG }}"
       shell: bash
-      run: 'try-and-retry docker pull ${{ env.THEIMAGE }}:${{ matrix.TAG }}'
+      run: 'try-and-retry docker pull ${{ env.BASEIMAGE }}:${{ matrix.TAG }}'
 
     - name: Test ALL
       shell: pwsh
@@ -155,7 +156,7 @@ jobs:
         & curl -o Install-SqlServer-Version-Management.ps1 -kfsSL "https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1"
         foreach($sql in $SqlServers) {
           echo "SQL: '$sql'"
-          & docker run --rm -v $PWD:C:\App -e SQL="$SQL" ${{ env.THEIMAGE }}:${{ matrix.TAG }} powershell -c "
+          & docker run --rm -v $PWD:C:\App -e SQL="$SQL" ${{ env.BASEIMAGE }}:${{ matrix.TAG }} powershell -c "
             . C:\Apps\Install-SqlServer-Version-Management.ps1
             Write-Host Installing `$SQL
 
