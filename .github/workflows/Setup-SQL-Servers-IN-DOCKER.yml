@@ -171,12 +171,13 @@ jobs:
         );
 
         & curl -o Install-SqlServer-Version-Management.ps1 -kfsSL "https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1"
+        ls Install-SqlServer-Version-Management.ps1
         foreach($sql in $SqlServers) {
           echo "SQL: '$sql'"
-          & docker run --rm "--isolation=${{ matrix.ISOLATION }}" -v "$($PWD):C:\App" -e SQL="$SQL" ${{ env.THEIMAGE }}:${{ matrix.TAG }} powershell -c "
+          & docker run --rm "--isolation=${{ matrix.ISOLATION }}" --mount type=bind,source="$(Get-Location)",target="C:\App" -e SQL="$SQL" ${{ env.THEIMAGE }}:${{ matrix.TAG }} powershell -c "
             . C:\Apps\Install-SqlServer-Version-Management.ps1
             `$ENV:TF_BUILD='True'
-            Write-Host Installing `$SQL
+            Write-Host Installing `$ENV:SQL
 
           "
         }
