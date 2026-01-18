@@ -20,7 +20,7 @@ jobs:
 
   Setup:
 
-    timeout-minutes: 150
+    timeout-minutes: 360
     runs-on: ${{ matrix.OS }}
     strategy:
       fail-fast: false
