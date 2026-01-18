@@ -177,7 +177,7 @@ jobs:
           $mnt="type=bind,source=$(Get-Location),target=C:\App"
           echo "--mount parameter is: [$mnt]"
           & docker run --rm "--isolation=${{ matrix.ISOLATION }}" --mount "$mnt" -e SQL="$SQL" ${{ env.THEIMAGE }}:${{ matrix.TAG }} powershell -c "
-            . C:\Apps\Install-SqlServer-Version-Management.ps1
+            . C:\App\Install-SqlServer-Version-Management.ps1
             `$ENV:TF_BUILD='True'
             Write-Host Installing `$ENV:SQL
 
