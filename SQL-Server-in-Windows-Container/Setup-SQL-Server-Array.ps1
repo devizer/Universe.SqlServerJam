@@ -82,7 +82,7 @@
           echo "SQL: '$sql'"
           $mnt="type=bind,source=$(Get-Location),target=C:\App"
           echo "--mount parameter is: [$mnt]"
-          & docker run --rm --memory 4g --cpus 3 "--isolation=$ENV:ISOLATION" --mount "$mnt" -e SQL="$sql" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" "$($env:THEIMAGE):$($env:TAG)" powershell -c "
+          & docker run --rm --memory 4g --cpus 3 "--isolation=$ENV:ISOLATION" --mount "$mnt" -e SQL="$sql" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" --entrypoint powershell "$($env:THEIMAGE):$($env:TAG)" -Command "
             . C:\App\Install-SqlServer-Version-Management.ps1
             `$ENV:TF_BUILD='True'
             Write-Host Installing `$ENV:SQL
