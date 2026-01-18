@@ -1,0 +1,198 @@
+name: Test SQL Servers Matrix
+
+env:
+  DEBUG_CLEAN_UP_MY_TEMP_FOLDERS_AND_FILES_ON_EXIT: '1'
+  THEIMAGE: 'mcr.microsoft.com/windows/servercore'
+
+on:
+  workflow_dispatch:
+  push:
+      branches: [ "master" ]
+  schedule:
+      - cron: "15 4 * * *"
+
+defaults:
+  run:
+    shell: powershell
+
+
+jobs:
+
+  Setup:
+
+    timeout-minutes: 120
+    needs: Pre-Build
+    strategy:
+      fail-fast: false
+      matrix:
+        TAG: [ ltsc2025, ltsc2022, ltsc2019, ltsc2016 ]
+
+    runs-on: windows-2025
+
+    env:
+      PS1_TROUBLE_SHOOT: On
+      SQLSERVERS_MEDIA_FOLDER: 'C:\Sql-Media'
+      SQLSERVERS_SETUP_FOLDER: 'C:\Sql-Setup'
+      DEBUG_LOG_FOLDER: 'C:\Artifacts'
+
+    steps:
+    - name: Total Modules
+      if: ${{ false }}
+      run: 'Write-Host "Total Modules: $((get-module -ListAvailable).Count)"'
+
+    - name: Bootstrap
+      shell: bash
+      run: |
+         set -eu;
+         nohup powershell -c "\$PSVersionTable" &
+         wait
+         # time powershell -c "Install-Module -Name SqlServer-Version-Management -Force"
+         nohup powershell -c "Install-Module -Name SqlServer-Version-Management -Force" &
+         # nohup cmd.exe /c "start https://devizer.github.io" &
+         ls -la "/c/Program Files/Google/Chrome/Application/chrome.exe"
+         nohup "/c/Program Files/Google/Chrome/Application/chrome.exe" --headless --disable-gpu https://devizer.github.io &
+         echo FIRST; jobs
+         sleep 3
+         echo SECOND; jobs
+         # find "/c/Program Files" -name chrome.exe
+
+    
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 888888
+
+    - name: Download Pre-Build artifacts
+      uses: actions/download-artifact@v4
+      with:
+         path: 'C:\Pre-Build'
+         merge-multiple: true # just one artifact
+         name: Binaries
+
+    - name: "Pull ${{ matrix.TAG }}"
+      shell: bash
+      run: 'try-and-retry docker pull ${{ env.BASEIMAGE }}:${{ matrix.TAG }}'
+
+    - name: Test ALL
+      shell: pwsh
+      run: |
+
+        $SqlServers = @(
+           '2025 Developer',
+           '2025 Core',
+           '2025 LocalDB',
+           '2022 Developer Update',
+           '2022 Developer',
+           '2022 Advanced Update',
+           '2022 Advanced',
+           '2022 Core Update',
+           '2022 Core',
+           '2022 LocalDB',
+           '2019 Developer Update',
+           '2019 Developer',
+           '2019 Advanced Update',
+           '2019 Advanced',
+           '2019 Core Update',
+           '2019 Core',
+           '2019 LocalDB',
+           '2017 Developer Update',
+           '2017 Developer',
+           '2017 Advanced Update',
+           '2017 Advanced',
+           '2017 Core Update',
+           '2017 Core',
+           '2017 LocalDB',
+           '2016 Developer Update',
+           '2016 Developer',
+           '2016 Advanced Update',
+           '2016 Advanced',
+           '2016 Core Update',
+           '2016 Core',
+           '2016 LocalDB',
+           '2014-x64 Developer',
+           '2014-x64 Advanced',
+           '2014-x64 Core',
+           '2014-x64 LocalDB',
+           '2014-x86 Developer', 
+           '2014-x86 Advanced',
+           '2014-x86 Core',
+           '2012-x64 Developer',
+           '2012-x64 Advanced',
+           '2012-x64 Core',
+           '2012-x86 Developer',
+           '2012-x86 Advanced',
+           '2012-x86 Core',
+           '2012-x64 LocalDB',
+           
+           '2008R2-x64 Developer',
+           '2008R2-x64 Advanced Update',
+           '2008R2-x64 Advanced',
+           '2008R2-x64 Core Update',
+           '2008R2-x64 Core',
+           '2008R2-x86 Developer',
+           '2008R2-x86 Advanced Update',
+           '2008R2-x86 Advanced',
+           '2008R2-x86 Core Update',
+           '2008R2-x86 Core',
+           '2008-x64 Developer Update',
+           '2008-x64 Developer',
+           '2008-x64 Advanced Update',
+           '2008-x64 Advanced',
+           '2008-x64 Core Update',
+           '2008-x64 Core',
+           '2008-x86 Developer Update',
+           '2008-x86 Developer',
+           '2008-x86 Advanced Update',
+           '2008-x86 Advanced',
+           '2008-x86 Core Update',
+           '2008-x86 Core',
+
+           '2005-x86 Advanced Update',
+           '2005-x86 Advanced',
+           '2005-x86 Core'
+
+        );
+
+        & curl -o Install-SqlServer-Version-Management.ps1 -kfsSL "https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1"
+        foreach($sql in $SqlServers) {
+          echo "SQL: '$sql'"
+          & docker run --rm -v $PWD:C:\App -e SQL="$SQL" ${{ env.BASEIMAGE }}:${{ matrix.TAG }} powershell -c "
+            . C:\Apps\Install-SqlServer-Version-Management.ps1
+            Write-Host Installing `$SQL
+
+          "
+        }
+
+
+
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: 'Summary ${{ matrix.SqlServers }}'
+        path: |
+          C:\Artifacts
+
+
+          
+  Combine:
+    runs-on: windows-latest
+    needs: Test
+    if: always()
+    timeout-minutes: 15
+    steps:
+
+    - name: Download all workflow run artifacts
+      uses: actions/download-artifact@v4
+      with:
+         path: 'C:\Artifacts'
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: 'Combined SQL Server Setup Summary'
+        path: |
+          C:\Artifacts
+
