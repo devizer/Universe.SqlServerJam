@@ -183,9 +183,9 @@ jobs:
             Setup-SqlServers "`$ENV:SQL"
 
           "
-          Write-Host ""
-          Write-Host ""
-          Write-Host ""
+          Write-Host " "
+          Write-Host "---------------------------------"
+          Write-Host " "
         }
 
 
