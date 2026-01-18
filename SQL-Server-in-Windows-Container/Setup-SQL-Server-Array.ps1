@@ -86,6 +86,7 @@
             . C:\App\Install-SqlServer-Version-Management.ps1
             `$ENV:TF_BUILD='True'
             Write-Host Installing `$ENV:SQL
+            # TODO: VC runtime 2005 abd 2008
             Setup-SqlServers "`$ENV:SQL"
             Publish-SQLServer-SetupLogs "C:\App\Setup Logs of `$ENV:SQL"
 
