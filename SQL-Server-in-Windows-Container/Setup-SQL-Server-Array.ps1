@@ -93,10 +93,10 @@
             Write-Host Installing `$ENV:SQL
             cd C:\App
             # VC runtime 2005 and 2008
-            vcredist2005_x64.exe /q
-            vcredist2008_x64.exe /qn /norestart
-            vcredist2005_x86.exe /q
-            vcredist2008_x86.exe /qn /norestart
+            & vcredist2005_x64.exe /q
+            & vcredist2008_x64.exe /qn /norestart
+            & vcredist2005_x86.exe /q
+            & vcredist2008_x86.exe /qn /norestart
 
             Setup-SqlServers `"`$ENV:SQL`"
             Publish-SQLServer-SetupLogs `"C:\App\Setup Logs of `$ENV:SQL`"
