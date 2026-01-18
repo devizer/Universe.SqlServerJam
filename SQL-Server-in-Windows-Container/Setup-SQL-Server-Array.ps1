@@ -87,8 +87,8 @@
             `$ENV:TF_BUILD='True'
             Write-Host Installing `$ENV:SQL
             # TODO: VC runtime 2005 abd 2008
-            Setup-SqlServers "`$ENV:SQL"
-            Publish-SQLServer-SetupLogs "C:\App\Setup Logs of `$ENV:SQL"
+            Setup-SqlServers `"`$ENV:SQL`"
+            Publish-SQLServer-SetupLogs `"C:\App\Setup Logs of `$ENV:SQL`"
 
           " | tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/Setup $sql.txt"
           Write-Host " "
