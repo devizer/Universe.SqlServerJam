@@ -99,7 +99,14 @@
             & .\vcredist2005_x86.exe /q
             & .\vcredist2008_x86.exe /qn /norestart
 
-            Setup-SqlServers `"`$ENV:SQL`"
+Write-Host fix 64
+cd $env:systemroot\system32
+& lodctr /R
+Write-Host Fix 32
+cd $env:systemroot\syswow64
+& lodctr /R
+
+            if (`"`$ENV:SQL`" -match 2005) { Setup-SqlServers `"`$ENV:SQL`" } Else { Setup-SqlServers `"`$ENV:SQL`" /SkipRules=PerfMonCounterCheck }
             Publish-SQLServer-SetupLogs `"C:\App\Setup Logs of `$ENV:SQL`"
 
           " | tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/OUTPUT $sql.txt"
