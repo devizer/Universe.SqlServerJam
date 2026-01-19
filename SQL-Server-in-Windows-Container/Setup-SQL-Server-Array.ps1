@@ -102,7 +102,7 @@
             Setup-SqlServers `"`$ENV:SQL`"
             Publish-SQLServer-SetupLogs `"C:\App\Setup Logs of `$ENV:SQL`"
 
-          " | tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/Setup $sql.txt"
+          " | tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/OUTPUT $sql.txt" | tee-object "OUTPUT $sql.txt"
           Write-Host " "
           Write-Host "---------------------------------"
           Write-Host " "

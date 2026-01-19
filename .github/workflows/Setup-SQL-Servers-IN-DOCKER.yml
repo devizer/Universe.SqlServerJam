@@ -103,8 +103,19 @@ jobs:
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: 'Summary ${{ matrix.TAG }} ${{ matrix.ISOLATION }} ${{ matrix.OS }}'
-        path: "${{ github.workspace }}"
+        name: 'Artifacts ${{ matrix.TAG }} ${{ matrix.ISOLATION }} ${{ matrix.OS }}'
+        path: "${{ env.SYSTEM_ARTIFACTSDIRECTORY }}"
+        overwrite: true
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: 'Workplace ${{ matrix.TAG }} ${{ matrix.ISOLATION }} ${{ matrix.OS }}'
+        path: |
+          ${{ github.workspace }}/**
+          !${{ github.workspace }}/**/*.exe
+        # path: "${{ github.workspace }}"
         overwrite: true
         
 
