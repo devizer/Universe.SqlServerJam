@@ -75,7 +75,7 @@
         );
         
         [array]::Reverse($SqlServers)
-
+        cd SQL-Server-in-Windows-Container
         & curl -o Install-SqlServer-Version-Management.ps1 -kfsSL "https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1"
         foreach($vc in "vcredist2005_x64.exe", "vcredist2005_x86.exe", "vcredist2008_x86.exe", "vcredist2008_x64.exe") {
           $vcUrl="https://github.com/devizer/glist/blob/master/bin/vcredist/$vc"
@@ -88,37 +88,9 @@
           echo "SQL: '$sql'"
           $mnt="type=bind,source=$(Get-Location),target=C:\App"
           echo "--mount parameter is: [$mnt]"
-          & docker run --rm --memory 4g --cpus 3 "--isolation=$ENV:ISOLATION" --mount "$mnt" -e SQL="$sql" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" --entrypoint powershell "$($env:THEIMAGE):$($env:TAG)" -Command "
-            . C:\App\Install-SqlServer-Version-Management.ps1
-            `$ENV:TF_BUILD='True'
-            Write-Host Installing `$ENV:SQL
-            cd C:\App
-            # VC runtime 2005 and 2008
-            & .\vcredist2005_x64.exe /q
-            & .\vcredist2008_x64.exe /qn /norestart
-            & .\vcredist2005_x86.exe /q
-            & .\vcredist2008_x86.exe /qn /norestart
-
-Write-Host fix 64
-cd $env:systemroot\system32
-& lodctr /R
-Write-Host ' '
-Write-Host Fix 32
-cd $env:systemroot\syswow64
-& lodctr /R
-Write-Host ' '
-Write-Host starting winmgmt
-start-service winmgmt
-Write-Host Start RPC
-Start-Service -Name "RpcSs"
-
-
-            if (`"`$ENV:SQL`" -match 2005) { Setup-SqlServers `"`$ENV:SQL`" }
-            elseif (`"`$ENV:SQL`" -match 2008 -or `"`$ENV:SQL`" -match 2012) { Setup-SqlServers `"`$ENV:SQL`" /SkipRules=PerfMonCounterNotCorruptedCheck } 
-            Else { Setup-SqlServers `"`$ENV:SQL`" /SkipRules=PerfMonCounterCheck }
-            Publish-SQLServer-SetupLogs `"C:\App\Setup Logs of `$ENV:SQL`"
-
-          " | tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/OUTPUT $sql.txt"
+          & docker run --rm --memory 4g --cpus 3 "--isolation=$ENV:ISOLATION" --mount "$mnt" -e SQL="$sql" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" `
+            --workdir=C:\App --entrypoint powershell "$($env:THEIMAGE):$($env:TAG)" -Command ". \Setup-SQL-Server-in-Container.ps1" |
+            tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/OUTPUT $sql.txt"
           Write-Host " "
           Write-Host "---------------------------------"
           Write-Host " "
