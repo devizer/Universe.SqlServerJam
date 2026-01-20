@@ -75,14 +75,18 @@
         );
         
         [array]::Reverse($SqlServers)
+
+        $ErrorActionPreference = 'Continue' 
         cd SQL-Server-in-Windows-Container
+
         & curl -o Install-SqlServer-Version-Management.ps1 -kfsSL "https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1"
+        ls
+        
         foreach($vc in "vcredist2005_x64.exe", "vcredist2005_x86.exe", "vcredist2008_x86.exe", "vcredist2008_x64.exe") {
           $vcUrl="https://github.com/devizer/glist/blob/master/bin/vcredist/$vc"
           $vcUrl="https://raw.githubusercontent.com/devizer/glist/master/bin/vcredist/$vc"
           Download-File-FailFree-and-Cached "$vc" "$vcUrl"
         }
-        ls Install-SqlServer-Version-Management.ps1
         ls "vcredist*"
         foreach($sql in $SqlServers) {
           echo "SQL: '$sql'"
