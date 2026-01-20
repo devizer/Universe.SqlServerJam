@@ -109,6 +109,9 @@ cd $env:systemroot\syswow64
 Write-Host ' '
 Write-Host starting winmgmt
 start-service winmgmt
+Write-Host Start RPC
+Start-Service -Name "RpcSs"
+
 
             if (`"`$ENV:SQL`" -match 2005) { Setup-SqlServers `"`$ENV:SQL`" }
             elseif (`"`$ENV:SQL`" -match 2008 -or `"`$ENV:SQL`" -match 2012) { Setup-SqlServers `"`$ENV:SQL`" /SkipRules=PerfMonCounterNotCorruptedCheck } 
