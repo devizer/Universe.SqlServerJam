@@ -1,5 +1,7 @@
 cd C:\App
+pushd .
 . .\Install-SqlServer-Version-Management.ps1
+popd
 $ENV:TF_BUILD='True'
 Write-Host Installing $ENV:SQL
 & .\vcredist2005_x64.exe /q
