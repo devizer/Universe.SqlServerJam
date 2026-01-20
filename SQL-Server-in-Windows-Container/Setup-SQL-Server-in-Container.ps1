@@ -38,14 +38,14 @@ Setup-SqlServers "$ENV:SQL"
 
 Publish-SQLServer-SetupLogs "C:\App\Setup Logs of $ENV:SQL"
 
-Say "SQL Server Instances"
+Say "List SQL Server Instances"
 Find-Local-SqlServers | 
      Format-Table -AutoSize | 
      Out-String -Width 1234 | 
      Out-Host
 
 
-Say -TextYellow "Query SQL Servers"
+Say "Query SQL Servers"
 Find-Local-SqlServers | Populate-Local-SqlServer-Version |
      Format-Table -AutoSize | 
      Out-String -Width 1234 | 
