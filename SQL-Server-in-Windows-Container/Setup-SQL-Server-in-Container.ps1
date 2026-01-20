@@ -4,7 +4,7 @@ pushd .
 popd
 $ENV:TF_BUILD='True'
 
-function SKIP_SKIP_SKIP() {
+function DO_NOT_SKIP() {
 
 Write-Host Installing $ENV:SQL
 & .\vcredist2005_x64.exe /q
@@ -22,6 +22,9 @@ cd $env:systemroot\syswow64
 Write-Host ' '
 
 }
+
+DO_NOT_SKIP
+
 
 Say starting winmgmt
 start-service winmgmt
