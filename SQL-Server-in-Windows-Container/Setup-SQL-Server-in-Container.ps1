@@ -18,10 +18,10 @@ cd $env:systemroot\syswow64
 & lodctr /R
 Write-Host ' '
 
-Write-Host starting winmgmt
+Say starting winmgmt
 start-service winmgmt
 
-Write-Host Start RPC
+Say Start RPC
 Start-Service -Name "RpcSs"
 
 
@@ -31,15 +31,17 @@ Else { Setup-SqlServers "$ENV:SQL" /SkipRules=PerfMonCounterCheck }
 
 Publish-SQLServer-SetupLogs "C:\App\Setup Logs of $ENV:SQL"
 
-Write-Line -TextYellow "SQL Server Instances"
+Say "SQL Server Instances"
 Find-Local-SqlServers | 
      Format-Table -AutoSize | 
      Out-String -Width 1234 | 
      Out-Host
 
 
-Write-Line -TextYellow "Query SQL Servers"
+Say -TextYellow "Query SQL Servers"
 Find-Local-SqlServers | Populate-Local-SqlServer-Version |
      Format-Table -AutoSize | 
      Out-String -Width 1234 | 
      Out-Host
+
+Say "Finish: $ENV:SQL"
