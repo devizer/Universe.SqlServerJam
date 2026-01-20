@@ -85,7 +85,7 @@
         foreach($vc in "vcredist2005_x64.exe", "vcredist2005_x86.exe", "vcredist2008_x86.exe", "vcredist2008_x64.exe") {
           $vcUrl="https://github.com/devizer/glist/blob/master/bin/vcredist/$vc"
           $vcUrl="https://raw.githubusercontent.com/devizer/glist/master/bin/vcredist/$vc"
-          Download-File-FailFree-and-Cached "$vc" "$vcUrl"
+          Download-File-FailFree-and-Cached ".\$vc" "$vcUrl"
         }
         ls "vcredist*"
         foreach($sql in $SqlServers) {
