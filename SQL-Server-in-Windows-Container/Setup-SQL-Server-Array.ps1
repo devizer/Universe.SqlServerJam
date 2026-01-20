@@ -102,11 +102,15 @@
 Write-Host fix 64
 cd $env:systemroot\system32
 & lodctr /R
+WriteHost ' '
 Write-Host Fix 32
 cd $env:systemroot\syswow64
 & lodctr /R
+WriteHost ' '
 
-            if (`"`$ENV:SQL`" -match 2005) { Setup-SqlServers `"`$ENV:SQL`" } Else { Setup-SqlServers `"`$ENV:SQL`" /SkipRules=PerfMonCounterCheck }
+            if (`"`$ENV:SQL`" -match 2005) { Setup-SqlServers `"`$ENV:SQL`" }
+            elseif (`"`$ENV:SQL`" -match 2008 -or `"`$ENV:SQL`" -match 2012) { Setup-SqlServers `"`$ENV:SQL`" /SkipRules=PerfMonCounterNotCorruptedCheck } 
+            Else { Setup-SqlServers `"`$ENV:SQL`" /SkipRules=PerfMonCounterCheck }
             Publish-SQLServer-SetupLogs `"C:\App\Setup Logs of `$ENV:SQL`"
 
           " | tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/OUTPUT $sql.txt"
