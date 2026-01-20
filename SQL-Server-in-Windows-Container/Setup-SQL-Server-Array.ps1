@@ -102,11 +102,11 @@
 Write-Host fix 64
 cd $env:systemroot\system32
 & lodctr /R
-WriteHost ' '
+Write-Host ' '
 Write-Host Fix 32
 cd $env:systemroot\syswow64
 & lodctr /R
-WriteHost ' '
+Write-Host ' '
 Write-Host starting winmgmt
 start-service winmgmt
 
