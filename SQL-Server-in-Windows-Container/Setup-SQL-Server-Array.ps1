@@ -38,6 +38,7 @@
            '2014-x86 Developer', 
            '2014-x86 Advanced',
            '2014-x86 Core',
+#>
            '2012-x64 Developer',
            '2012-x64 Advanced',
            '2012-x64 Core',
@@ -45,7 +46,6 @@
            '2012-x86 Advanced',
            '2012-x86 Core',
            '2012-x64 LocalDB',
-#>
            
            '2008R2-x64 Developer',
            '2008R2-x64 Advanced Update',
@@ -82,14 +82,14 @@
         cd SQL-Server-in-Windows-Container
 
         & curl -o Install-SqlServer-Version-Management.ps1 -kfsSL "https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1"
-        ls
+        # ls
         
         foreach($vc in "vcredist2005_x64.exe", "vcredist2005_x86.exe", "vcredist2008_x86.exe", "vcredist2008_x64.exe") {
           $vcUrl="https://github.com/devizer/glist/blob/master/bin/vcredist/$vc"
           $vcUrl="https://raw.githubusercontent.com/devizer/glist/master/bin/vcredist/$vc"
           Download-File-FailFree-and-Cached "$(Get-Location)\$vc" "$vcUrl"
         }
-        ls "vcredist*"
+        # ls "vcredist*"
         New-item C:\SQL -ItemType Directory -Force -EA SilentlyContinue | Out-Null
         foreach($sql in $SqlServers) {
           echo "SQL: '$sql'"

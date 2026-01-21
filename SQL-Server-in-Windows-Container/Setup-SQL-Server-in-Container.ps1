@@ -8,14 +8,12 @@ function DO_NOT_SKIP() {
 
 pushd .
 Write-Host Installing $ENV:SQL
-Write-Host fix 64
+Write-Host Fix Performance Counter 64bit
 cd $env:systemroot\system32
 & lodctr /R
-Write-Host ' '
-Write-Host Fix 32
+Write-Host Fix Performace Counters 32bit
 cd $env:systemroot\syswow64
 & lodctr /R
-Write-Host ' '
 popd
 
 }
@@ -23,10 +21,10 @@ popd
 DO_NOT_SKIP
 
 
-Say starting winmgmt
+Say Starting winmgmt
 start-service winmgmt
 
-Say Start RPC
+Say Starting RPC
 Start-Service -Name "RpcSs"
 
 <#
@@ -54,7 +52,7 @@ Else { Setup-SqlServers "$ENV:SQL" /SkipRules=PerfMonCounterCheck }
 
 # Setup-SqlServers "$ENV:SQL"
 
-Publish-SQLServer-SetupLogs "C:\App\Setup Logs of $ENV:SQL"
+Publish-SQLServer-SetupLogs "C:\App\SQL Setup Logs\Setup of $ENV:SQL"
 
 Say "List SQL Server Instances"
 Find-Local-SqlServers | 
