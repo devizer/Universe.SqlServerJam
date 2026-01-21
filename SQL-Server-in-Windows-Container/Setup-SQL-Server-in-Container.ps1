@@ -6,11 +6,11 @@ $ENV:TF_BUILD='True'
 
 function DO_NOT_SKIP() {
 
-# Write-Host Installing $ENV:SQL
-# & .\vcredist2005_x64.exe /q
-# & .\vcredist2008_x64.exe /qn /norestart
-# & .\vcredist2005_x86.exe /q
-# & .\vcredist2008_x86.exe /qn /norestart
+Write-Host Installing $ENV:SQL
+& .\vcredist2005_x64.exe /q
+& .\vcredist2008_x64.exe /qn /norestart
+& .\vcredist2005_x86.exe /q
+& .\vcredist2008_x86.exe /qn /norestart
 
 Write-Host fix 64
 cd $env:systemroot\system32

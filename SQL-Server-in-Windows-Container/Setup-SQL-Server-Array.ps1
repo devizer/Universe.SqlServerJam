@@ -94,11 +94,16 @@
           Remove-Item -Path "C:\SQL\*" -Recurse -Force
           $mnt="type=bind,source=$(Get-Location),target=C:\App"
           echo "--mount parameter is: [$mnt]"
-          & docker run --rm --memory 4g --cpus 3 "--isolation=$ENV:ISOLATION" --mount "$mnt" --mount type=bind,source=C:\SQL,target=C:\SQL -e SQL="$sql" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" `
-            --workdir=C:\App --entrypoint powershell "$($env:THEIMAGE):$($env:TAG)" -Command ". .\Setup-SQL-Server-in-Container.ps1" |
+          & docker run --name sql-server --rm --memory 4g --cpus 3 "--isolation=$ENV:ISOLATION" --mount "$mnt" --mount type=bind,source=C:\SQL,target=C:\SQL -e SQL="$sql" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" `
+            --workdir=C:\App --entrypoint powershell "$($env:THEIMAGE):$($env:TAG)" -Command "Wait-Event"
+
+          & docker exec sql-server powershell -Command "cd C:\App; . .\Setup-SQL-Server-in-Container.ps1;" |
             tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/OUTPUT $sql.txt"
+
+          echo "Remobing the sql-server container"
+          & docker rm -f sql-server
           Write-Host " "
-          Write-Host "---------------------------------"
+          Write-Host "---------------------------------------------- $ENV:SQL Finished -----------------------------------------"
           Write-Host " "
         }
 
