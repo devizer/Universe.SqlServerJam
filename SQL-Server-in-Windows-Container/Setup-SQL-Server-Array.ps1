@@ -39,13 +39,6 @@
            '2014-x86 Advanced',
            '2014-x86 Core',
 #>
-           '2012-x64 Developer',
-           '2012-x64 Advanced',
-           '2012-x64 Core',
-           '2012-x86 Developer',
-           '2012-x86 Advanced',
-           '2012-x86 Core',
-           '2012-x64 LocalDB',
            
            '2008R2-x64 Developer',
            '2008R2-x64 Advanced Update',
@@ -72,8 +65,15 @@
 
            '2005-x86 Advanced Update',
            '2005-x86 Advanced',
-           '2005-x86 Core'
+           '2005-x86 Core',
 
+           '2012-x64 Developer',
+           '2012-x64 Advanced',
+           '2012-x64 Core',
+           '2012-x86 Developer',
+           '2012-x86 Advanced',
+           '2012-x86 Core',
+           '2012-x64 LocalDB'
         );
         
         [array]::Reverse($SqlServers)
