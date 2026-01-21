@@ -44,11 +44,11 @@ Say "Starting vcredist2008_x86.exe ..."
 & .\vcredist2008_x86.exe /qn /norestart
 
 
-# If ("$ENV:SQL" -match 2005) { Setup-SqlServers "$ENV:SQL" }
-# ElseIf ("$ENV:SQL" -match 2008 -or "$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" /SkipRules=PerfMonCounterNotCorruptedCheck } 
-# Else { Setup-SqlServers "$ENV:SQL" /SkipRules=PerfMonCounterCheck }
+If ("$ENV:SQL" -match 2005) { Setup-SqlServers "$ENV:SQL" }
+ElseIf ("$ENV:SQL" -match 2008 -or "$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" /SkipRules=PerfMonCounterNotCorruptedCheck } 
+Else { Setup-SqlServers "$ENV:SQL" /SkipRules=PerfMonCounterCheck }
 
-Setup-SqlServers "$ENV:SQL"
+# Setup-SqlServers "$ENV:SQL"
 
 Publish-SQLServer-SetupLogs "C:\App\Setup Logs of $ENV:SQL"
 
