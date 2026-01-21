@@ -1,6 +1,6 @@
 cd C:\App
 pushd .
-. .\Install-SqlServer-Version-Management.ps1
+# . .\Install-SqlServer-Version-Management.ps1
 popd
 $ENV:TF_BUILD='True'
 
