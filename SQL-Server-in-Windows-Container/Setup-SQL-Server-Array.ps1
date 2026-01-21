@@ -1,4 +1,5 @@
         $SqlServers = @(
+<#
            '2025 Developer',
            '2025 Core',
            '2025 LocalDB',
@@ -44,6 +45,7 @@
            '2012-x86 Advanced',
            '2012-x86 Core',
            '2012-x64 LocalDB',
+#>
            
            '2008R2-x64 Developer',
            '2008R2-x64 Advanced Update',
