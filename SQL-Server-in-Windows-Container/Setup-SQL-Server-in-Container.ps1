@@ -6,6 +6,7 @@ $ENV:TF_BUILD='True'
 
 function DO_NOT_SKIP() {
 
+pushd .
 Write-Host Installing $ENV:SQL
 Write-Host fix 64
 cd $env:systemroot\system32
@@ -15,6 +16,7 @@ Write-Host Fix 32
 cd $env:systemroot\syswow64
 & lodctr /R
 Write-Host ' '
+popd
 
 }
 
