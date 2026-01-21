@@ -94,10 +94,10 @@
           Remove-Item -Path "C:\SQL\*" -Recurse -Force
           $mnt="type=bind,source=$(Get-Location),target=C:\App"
           echo "--mount parameter is: [$mnt]"
-          & docker run -d --name sql-server --rm --memory 4g --cpus 3 "--isolation=$ENV:ISOLATION" --mount "$mnt" --mount type=bind,source=C:\SQL,target=C:\SQL -e SQL="$sql" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" `
+          & docker run -d --name sql-server --memory 4g --cpus 3 "--isolation=$ENV:ISOLATION" --mount "$mnt" --mount type=bind,source=C:\SQL,target=C:\SQL -e SQL="$sql" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" `
             --workdir=C:\App --entrypoint powershell "$($env:THEIMAGE):$($env:TAG)" -Command "Sleep 3600000;"
 
-          & docker exec sql-server powershell -Command "Write-Host STRTING ...; cd C:\App; . .\Setup-SQL-Server-in-Container.ps1;" |
+          & docker exec sql-server powershell -Command "Write-Host STRTING ... ; cd C:\App; Write-Host STRTING at (Get-Location) ...; ls | ft; . .\Setup-SQL-Server-in-Container.ps1;" |
             tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/OUTPUT $sql.txt"
 
           echo "Removing the sql-server container"
