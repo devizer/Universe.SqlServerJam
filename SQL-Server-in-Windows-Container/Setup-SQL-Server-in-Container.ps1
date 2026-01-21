@@ -1,17 +1,12 @@
 cd C:\App
 pushd .
-# . .\Install-SqlServer-Version-Management.ps1
+. .\Install-SqlServer-Version-Management.ps1
 popd
 $ENV:TF_BUILD='True'
 
 function DO_NOT_SKIP() {
 
 Write-Host Installing $ENV:SQL
-& .\vcredist2005_x64.exe /q
-& .\vcredist2008_x64.exe /qn /norestart
-& .\vcredist2005_x86.exe /q
-& .\vcredist2008_x86.exe /qn /norestart
-
 Write-Host fix 64
 cd $env:systemroot\system32
 & lodctr /R
@@ -31,6 +26,20 @@ start-service winmgmt
 
 Say Start RPC
 Start-Service -Name "RpcSs"
+
+Measure-Action "VC Redist 2005 x64" { & .\vcredist2005_x64.exe /q }
+Measure-Action "VC Redist 2008 x64" { & .\vcredist2008_x64.exe /qn /norestart }
+Measure-Action "VC Redist 2005 x86" { & .\vcredist2005_x86.exe /q }
+Measure-Action "VC Redist 2008 x86" { & .\vcredist2008_x86.exe /qn /norestart }
+
+Say "Starting vcredist2005_x64.exe ..."
+& .\vcredist2005_x64.exe /q
+Say "Starting vcredist2008_x64.exe ..."
+& .\vcredist2008_x64.exe /qn /norestart
+Say "Starting vcredist2005_x86.exe ..."
+& .\vcredist2005_x86.exe /q
+Say "Starting vcredist2008_x86.exe ..."
+& .\vcredist2008_x86.exe /qn /norestart
 
 
 # If ("$ENV:SQL" -match 2005) { Setup-SqlServers "$ENV:SQL" }
