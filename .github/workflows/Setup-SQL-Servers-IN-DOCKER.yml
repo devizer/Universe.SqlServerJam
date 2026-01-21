@@ -80,7 +80,11 @@ jobs:
          echo SECOND; jobs
          # find "/c/Program Files" -name chrome.exe
 
-    
+    - name: Accelerate Docker
+      shell: bash
+      run: |
+         Run-Remote-Script https://raw.githubusercontent.com/devizer/glist/master/Move-Docker-to-SSD-for-Windows-On-Microsoft-Hosted-Build-Agent.ps1
+
     - name: Checkout
       uses: actions/checkout@v4
       with:
