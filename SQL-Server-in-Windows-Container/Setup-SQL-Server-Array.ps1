@@ -103,7 +103,7 @@
           echo "Removing the sql-server container"
           & docker rm -f sql-server
           Write-Host " "
-          Write-Host "---------------------------------------------- $ENV:SQL Finished -----------------------------------------"
+          Write-Host "---------------------------------------------- [$SQL] Finished -----------------------------------------"
           Write-Host " "
         }
 
