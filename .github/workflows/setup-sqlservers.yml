@@ -297,10 +297,10 @@ jobs:
         $mnt="type=bind,source=$(Get-Location),target=C:\App"
         echo "--mount parameter is: [$mnt]"
         & docker run -d --name sql-server --memory 4g --cpus 4 "--isolation=hyperv" --mount "$mnt" --mount type=bind,source=C:\SQL,target=C:\SQL --mount type=bind,source=C:\Temp,target=C:\Temp -e SQL="$sql" `
-          -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\SQL-Setup" -e INSTANCE=MSSQLSERVER `
+          -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\SQL-Setup" `
           -p 1433:1433 --workdir=C:\App --entrypoint powershell devizervlad/iis-net4x-net35:ltsc2022 -Command "Sleep 2147482; Wait-Event;"
         & docker exec sql-server powershell -Command "cd C:\App; . .\Setup-SQL-Server-in-Container.ps1;" |
-          tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/OUTPUT $sql.txt"
+          tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/OUTPUT ${{ matrix.SqlServers }}.txt"
         [System.IO.File]::AppendAllText($env:GITHUB_ENV, "SQLSERVER_WELLKNOWN_In_Docker=Server=127.0.0.1,1433;User ID=sa; Password=Meaga`$tr0ng;Encrypt=False`r`n")
 
        
