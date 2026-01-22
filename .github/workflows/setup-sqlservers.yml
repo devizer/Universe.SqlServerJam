@@ -274,7 +274,7 @@ jobs:
 
 
     - name: 'TLS 1.1 Force'
-      if: ${{ false }}
+      if: ${{ always() }}
       run: |
           New-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client" -Force
           New-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server" -Force

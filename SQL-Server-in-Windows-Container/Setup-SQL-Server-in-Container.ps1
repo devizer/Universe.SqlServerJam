@@ -55,7 +55,9 @@ Else { Setup-SqlServers "$ENV:SQL" /SkipRules=PerfMonCounterCheck }
 
 # Setup-SqlServers "$ENV:SQL"
 
-Publish-SQLServer-SetupLogs "C:\App\SQL Setup Logs\Setup of $ENV:SQL"
+$serverVersion = "$ENV:SQL".Split(":")[0]
+
+Publish-SQLServer-SetupLogs "C:\App\SQL Setup Logs\Setup of $serverVersion"
 
 Say "List SQL Server Instances"
 Find-Local-SqlServers | 
