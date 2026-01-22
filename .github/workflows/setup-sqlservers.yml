@@ -121,32 +121,32 @@ jobs:
            '2012-x64 LocalDB',
 #          '2012-x86 LocalDB',
            
-#           '2008R2-x64 Developer',
-#           '2008R2-x64 Advanced Update',
-#           '2008R2-x64 Advanced',
-#           '2008R2-x64 Core Update',
-#           '2008R2-x64 Core',
-#           '2008R2-x86 Developer',
-#           '2008R2-x86 Advanced Update',
-#           '2008R2-x86 Advanced',
-#           '2008R2-x86 Core Update',
-#           '2008R2-x86 Core',
-#           '2008-x64 Developer Update',
-#           '2008-x64 Developer',
-#           '2008-x64 Advanced Update',
-#           '2008-x64 Advanced',
-#           '2008-x64 Core Update',
-#           '2008-x64 Core',
-#           '2008-x86 Developer Update',
-#           '2008-x86 Developer',
-#           '2008-x86 Advanced Update',
-#           '2008-x86 Advanced',
-#           '2008-x86 Core Update',
-#           '2008-x86 Core',
-#
-#           '2005-x86 Advanced Update',
-#           '2005-x86 Advanced',
-#           '2005-x86 Core'
+           '2008R2-x64 Developer',
+           '2008R2-x64 Advanced Update',
+           '2008R2-x64 Advanced',
+           '2008R2-x64 Core Update',
+           '2008R2-x64 Core',
+           '2008R2-x86 Developer',
+           '2008R2-x86 Advanced Update',
+           '2008R2-x86 Advanced',
+           '2008R2-x86 Core Update',
+           '2008R2-x86 Core',
+           '2008-x64 Developer Update',
+           '2008-x64 Developer',
+           '2008-x64 Advanced Update',
+           '2008-x64 Advanced',
+           '2008-x64 Core Update',
+           '2008-x64 Core',
+           '2008-x86 Developer Update',
+           '2008-x86 Developer',
+           '2008-x86 Advanced Update',
+           '2008-x86 Advanced',
+           '2008-x86 Core Update',
+           '2008-x86 Core',
+
+           '2005-x86 Advanced Update',
+           '2005-x86 Advanced',
+           '2005-x86 Core'
 
         ]
 
@@ -285,10 +285,29 @@ jobs:
           New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server" -Name "DisabledByDefault" -Value 0 -PropertyType "DWord" -Force
 
      
-    - name: SETUP Sql Server
+    - name: SQL In Container
+      if: startsWith(matrix.SqlServers, '2005') || startsWith(matrix.SqlServers, '2008')
+      run: |
+        $sql="${{ matrix.SqlServers }}"
+        echo "SQL: '$sql'"
+        New-item C:\SQL -ItemType Directory -Force -EA SilentlyContinue | Out-Null
+        New-item C:\Temp -ItemType Directory -Force -EA SilentlyContinue | Out-Null
+        $mnt="type=bind,source=$(Get-Location),target=C:\App"
+        echo "--mount parameter is: [$mnt]"
+        cd SQL-Server-in-Windows-Container
+        & docker run -d --name sql-server --memory 4g --cpus 4 "--isolation=hyperv" --mount "$mnt" --mount type=bind,source=C:\SQL,target=C:\SQL --mount type=bind,source=C:\Temp,target=C:\Temp -e SQL="$sql" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\SQL-Setup" `
+          -p 1433:1433 --workdir=C:\App --entrypoint powershell "$($env:THEIMAGE):$($env:TAG)" -Command "Sleep 2147482; Wait-Event;"
+        & docker exec sql-server powershell -Command "cd C:\App; . .\Setup-SQL-Server-in-Container.ps1;" |
+          tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/OUTPUT $sql.txt"
+        [System.IO.File]::AppendAllLines($env:GITHUB_ENV, "SQLSERVER_WELLKNOWN_In_Docker=Server=127.0.0.1,1433;User ID=sa; Password=Meaga`$tr0ng;Encrypt=False")
+
+       
+
+    - name: SETUP Sql Server (Host)
       env:
         SQL_SERVERS: ${{ matrix.SqlServers }}
       uses: nick-fields/retry@v3
+      if: (!startsWith(matrix.SqlServers, '2005')) && (!startsWith(matrix.SqlServers, '2008'))
       with:
         timeout_minutes: 25
         max_attempts: 3
