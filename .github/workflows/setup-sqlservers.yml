@@ -284,6 +284,18 @@ jobs:
 
           New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server" -Name "Enabled" -Value 1 -PropertyType "DWord" -Force
           New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Server" -Name "DisabledByDefault" -Value 0 -PropertyType "DWord" -Force
+          # TLS 1.0 Client
+          $path = "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client"
+          if (-not (Test-Path $path)) { New-Item -Path $path -Force }
+          New-ItemProperty -Path $path -Name "Enabled" -Value 1 -PropertyType DWord -Force
+          New-ItemProperty -Path $path -Name "DisabledByDefault" -Value 0 -PropertyType DWord -Force
+
+          # TLS 1.0 Server
+          $path = "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server"
+          if (-not (Test-Path $path)) { New-Item -Path $path -Force }
+          New-ItemProperty -Path $path -Name "Enabled" -Value 1 -PropertyType DWord -Force
+          New-ItemProperty -Path $path -Name "DisabledByDefault" -Value 0 -PropertyType DWord -Force
+
 
      
     - name: SQL In Container
@@ -301,7 +313,7 @@ jobs:
           -p 1433:1433 -p 1434:1434 --workdir=C:\App --entrypoint powershell devizervlad/iis-net4x-net35:ltsc2022 -Command "Sleep 2147482; Wait-Event;"
         & docker exec sql-server powershell -Command "cd C:\App; . .\Setup-SQL-Server-in-Container.ps1;" |
           tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/OUTPUT ${{ matrix.SqlServers }}.txt"
-        [System.IO.File]::AppendAllText($env:GITHUB_ENV, "SQLSERVER_WELLKNOWN_In_Docker=Server=localhost,1433;User ID=sa; Password=Meaga`$tr0ng;Encrypt=False`r`n")
+        [System.IO.File]::AppendAllText($env:GITHUB_ENV, "SQLSERVER_WELLKNOWN_In_Docker=Server=localhost,1433;User ID=sa; Password=Meaga`$tr0ng;Encrypt=False; TrustServerCertificate=True; `r`n")
 
        
 
