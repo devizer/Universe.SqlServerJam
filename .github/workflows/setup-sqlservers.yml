@@ -67,6 +67,12 @@ jobs:
       matrix:
         SqlServers: [
            # '2022 Developer, 2008 Core, 2005 Core',
+           '2008R2-x64 Core',
+           '2008-x64 Core',
+           '2005-x86 Core',
+           '2008R2-x64 Developer',
+           '2008-x64 Developer',
+
            # '2022 Developer, 2019 Developer, 2017 Developer, 2016 Developer',
            # '2022 Developer Update, 2019 Developer Update, 2017 Developer Update, 2016 Developer Update',
            '2025 Developer Update, 2022 Developer Update, 2019 Developer Update, 2017 Developer Update, 2016 Developer Update, 2014 Developer Update, 2012 Developer Update',
@@ -121,22 +127,18 @@ jobs:
            '2012-x64 LocalDB',
 #          '2012-x86 LocalDB',
            
-           '2008R2-x64 Developer',
            '2008R2-x64 Advanced Update',
            '2008R2-x64 Advanced',
            '2008R2-x64 Core Update',
-           '2008R2-x64 Core',
            '2008R2-x86 Developer',
            '2008R2-x86 Advanced Update',
            '2008R2-x86 Advanced',
            '2008R2-x86 Core Update',
            '2008R2-x86 Core',
            '2008-x64 Developer Update',
-           '2008-x64 Developer',
            '2008-x64 Advanced Update',
            '2008-x64 Advanced',
            '2008-x64 Core Update',
-           '2008-x64 Core',
            '2008-x86 Developer Update',
            '2008-x86 Developer',
            '2008-x86 Advanced Update',
@@ -145,8 +147,7 @@ jobs:
            '2008-x86 Core',
 
            '2005-x86 Advanced Update',
-           '2005-x86 Advanced',
-           '2005-x86 Core'
+           '2005-x86 Advanced'
 
         ]
 
