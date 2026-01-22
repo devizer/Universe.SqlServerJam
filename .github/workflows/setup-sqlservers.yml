@@ -289,7 +289,7 @@ jobs:
     - name: SQL In Container
       if: startsWith(matrix.SqlServers, '2005') || startsWith(matrix.SqlServers, '2008')
       run: |
-        $sql="${{ matrix.SqlServers }}"
+        $sql="${{ matrix.SqlServers }}: MSSQLSERVER"
         echo "SQL: '$sql'"
         New-item C:\SQL -ItemType Directory -Force -EA SilentlyContinue | Out-Null
         New-item C:\Temp -ItemType Directory -Force -EA SilentlyContinue | Out-Null
