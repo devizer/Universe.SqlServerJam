@@ -191,7 +191,7 @@ jobs:
             ls
 
     - name: Measure Install-Module
-      if: ${{ true }}
+      if: ${{ false }}
       run: |
         Import-DevOps
         Measure-Action "Install SqlServer-Version-Management Module" { Install-Module SqlServer-Version-Management -Force }
