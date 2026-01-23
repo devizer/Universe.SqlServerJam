@@ -70,8 +70,8 @@ if [[ "$(uname -s)" == Linux ]]; then
    # fio
    if [[ "$(uname -s)" == Linux ]] && [[ -z "$(cpmmand -v fio)" ]]; then
      Say "Installing missing fio on Linux"
-     sudo apt-get update -qq;
-     sudo apt-get install fio -y -qq | { grep Setting || true; }
+     try-and-retry sudo apt-get update -qq >/dev/null 2>&1;
+     try-and-retry sudo apt-get install fio -y -qq 2>&1 | { grep Setting || true; }
    fi
 elif [[ "$(uname -s)" == Darwin ]]; then
    Say "MacOS Volumes"
