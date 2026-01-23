@@ -166,12 +166,12 @@ jobs:
     - name: Probe Core Module
       shell: pwsh
       if: always()
-      run: 'Import-DevOps; Write-Line -TextYellow "[$($PSVersionTable.PSEdition)] $((Get-Memory-Info).Description)"; Get-ChildItem Env: | Sort-Object Name | ForEach-Object { "$($_.Name)=$($_.Value)" }; Write-Line -TextYellow PSModulePath; $env:PSModulePath -split [IO.Path]::PathSeparator | Sort-Object'
+      run: 'Import-DevOps; Write-Line -TextYellow "[$($PSVersionTable.PSEdition)] $((Get-Memory-Info).Description)"; Write-Line -TextYellow PSModulePath; $env:PSModulePath -split [IO.Path]::PathSeparator | Sort-Object | % { "   $_" }; Write-Line -TextYellow ENVIRONMENT; Get-ChildItem Env: | Sort-Object Name | ForEach-Object { "$($_.Name)=$($_.Value)" };'
 
     - name: Probe Desktop Module
       shell: powershell
       if: always()
-      run: 'Import-DevOps; Write-Line -TextYellow "[$($PSVersionTable.PSEdition)] $((Get-Memory-Info).Description)"; Get-ChildItem Env: | Sort-Object Name | ForEach-Object { "$($_.Name)=$($_.Value)" }; Write-Line -TextYellow PSModulePath; $env:PSModulePath -split [IO.Path]::PathSeparator | Sort-Object'
+      run: 'Import-DevOps; Write-Line -TextYellow "[$($PSVersionTable.PSEdition)] $((Get-Memory-Info).Description)"; Write-Line -TextYellow PSModulePath; $env:PSModulePath -split [IO.Path]::PathSeparator | Sort-Object | % { "   $_" }; Write-Line -TextYellow ENVIRONMENT; Get-ChildItem Env: | Sort-Object Name | ForEach-Object { "$($_.Name)=$($_.Value)" };'
 
     - name: List Available Modules
       if: always()
