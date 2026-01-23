@@ -33,7 +33,28 @@ The guide: https://devizer.github.io/SqlServer-Version-Management
    $errors = Setup-SqlServers -SqlServers "2016 Core: SQLEXPRESS"
 #>
 
-# Include Directive: [ src\Import-DevOps.ps1 ]
+# Include Directive: [ src\Includes\Import-DevOps.ps1 ]
+# Include File: [\SqlSetup.PS1Project\src\Includes\Import-DevOps.ps1]
+# This implicit call resolves conflict with bash shell scripts names
+function Import-DevOps() {
+   $ModuleName = "SqlServer-Version-Management"
+   $exception=$null;
+   $wp=$WarningPreference;
+   $WarningPreference="SilentlyContinue"
+   # Actual Powershell Version
+   try { Import-Module "$ModuleName" 3>$null; $okActual = $true; } catch { $exception = $_.Exception; }
+   if (-not $okActual) {
+     # Legacy Powershell Version
+     try { Import-Module "$ModuleName" ; $okLegacy = $true; } catch { $exception = $_.Exception; Write-Host "Warning! Import-Module $ModuleName failed$([Environment]::NewLine)$($_.Exception)" -ForegroundColor DarkRed }
+   }
+   if ($okActual -or $okLegacy) {
+     # Write-Host "Module '$ModuleTitle' Successfully imported" -ForeGroundColor Green
+   }
+   $WarningPreference=$wp;
+
+}
+# Import-DevOps; Try-And-Retry "curl should fail" { & "curl.exe" -I https://google.com2 }
+
 # Include Directive: [ ..\Includes\*.ps1 ]
 # Include File: [\Includes\$Full7zLinksMetadata.ps1]
 $Full7zLinksMetadata_onWindows = @(
