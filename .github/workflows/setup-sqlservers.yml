@@ -163,6 +163,9 @@ jobs:
     - name: Bootstrap
       uses: devizer/devops-library@main
 
+    - name: List Available Modules
+      run: 'Get-Module -ListAvailable | ft -autosize | out-string -width 1234'
+
     - name: Checkout
       uses: actions/checkout@v4
       with:
