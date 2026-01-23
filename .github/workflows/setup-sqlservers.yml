@@ -160,27 +160,9 @@ jobs:
       DEBUG_LOG_FOLDER: 'C:\Artifacts'
 
     steps:
-    - name: Total Modules
-      if: ${{ false }}
-      run: 'Write-Host "Total Modules: $((get-module -ListAvailable).Count)"'
-
     - name: Bootstrap
-      shell: bash
-      run: |
-         set -eu;
-         nohup powershell -c "\$PSVersionTable" &
-         wait
-         # time powershell -c "Install-Module -Name SqlServer-Version-Management -Force"
-         nohup powershell -c "Install-Module -Name SqlServer-Version-Management -Force" &
-         # nohup cmd.exe /c "start https://devizer.github.io" &
-         ls -la "/c/Program Files/Google/Chrome/Application/chrome.exe"
-         nohup "/c/Program Files/Google/Chrome/Application/chrome.exe" --headless --disable-gpu https://devizer.github.io &
-         echo FIRST; jobs
-         sleep 3
-         echo SECOND; jobs
-         # find "/c/Program Files" -name chrome.exe
+      uses: devizer/devops-library@main
 
-    
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -301,8 +283,12 @@ jobs:
     - name: SQL In Container
       if: startsWith(matrix.SqlServers, '2005') || startsWith(matrix.SqlServers, '2008')
       run: |
+        Import-DevOps
         $sql="${{ matrix.SqlServers }}: MSSQLSERVER"
         echo "SQL: '$sql'"
+        Say "Pull devizervlad/iis-net4x-net35:ltsc2022"
+        Try-And-Retry "Pull devizervlad/iis-net4x-net35:ltsc2022" { & docker pull devizervlad/iis-net4x-net35:ltsc2022 }
+
         New-item C:\SQL -ItemType Directory -Force -EA SilentlyContinue | Out-Null
         New-item C:\Temp -ItemType Directory -Force -EA SilentlyContinue | Out-Null
         cd SQL-Server-in-Windows-Container
