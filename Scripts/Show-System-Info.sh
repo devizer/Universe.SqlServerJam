@@ -28,6 +28,7 @@ else # GitHub Actions
   echo "THEARTIFACTS=$THEARTIFACTS" >> "$GITHUB_ENV"
   echo "THEARTIFACTS_NATIVE=$THEARTIFACTS_NATIVE" >> "$GITHUB_ENV"
 fi
+
 mkdir -p "$THEARTIFACTS"
 
 echo '
@@ -66,6 +67,11 @@ bash -c "7z b -mmt=1 -md=22" | tee -a "$ReportName"
 if [[ "$(uname -s)" == Linux ]]; then
    Say "Linux Volumes"
    sudo df -h -T | tee ~/volumes-info.txt
+   # fio
+   if [[ "$(uname -s)" == Linux ]] && [[ -z "$(cpmmand -v fio)" ]]; then
+     sudo apt-get update -qq;
+     sudo apt-get install fio -y -qq | { grep Setting || true; }
+   fi
 elif [[ "$(uname -s)" == Darwin ]]; then
    Say "MacOS Volumes"
    sudo df -h | tee ~/volumes-info.txt
