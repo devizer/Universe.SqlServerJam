@@ -190,7 +190,11 @@ jobs:
     - name: Measure Install-Module
       if: ${{ true }}
       run: |
-        Measure-Action "Install Platform-Info Module" { Install-Module Platform-Info -Force }
+        Import-DevOps
+        Measure-Action "Install SqlServer-Version-Management Module" { Install-Module SqlServer-Version-Management -Force }
+        Say "List Available Modules"
+        Get-Module -ListAvailable | ft -autosize | out-string -width 1234
+
 
     - name: ANSI Colors {{  }}
       run: |
