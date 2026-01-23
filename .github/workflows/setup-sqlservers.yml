@@ -199,7 +199,7 @@ jobs:
     - name: .NET 6
       shell: bash
       run: |
-           cmd //c taskkill /T /F /IM dotnet.exe
+           taskkill //T //F //IM dotnet.exe
            Run-Remote-Script https://dot.net/v1/dotnet-install.ps1 -Channel "6.0" -Runtime aspnetcore -InstallDir "C:\Program Files\dotnet"
 
     - name: Show Env
