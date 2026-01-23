@@ -69,6 +69,7 @@ if [[ "$(uname -s)" == Linux ]]; then
    sudo df -h -T | tee ~/volumes-info.txt
    # fio
    if [[ "$(uname -s)" == Linux ]] && [[ -z "$(cpmmand -v fio)" ]]; then
+     Say "Installing missing fio on Linux"
      sudo apt-get update -qq;
      sudo apt-get install fio -y -qq | { grep Setting || true; }
    fi
