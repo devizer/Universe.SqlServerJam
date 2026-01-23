@@ -163,7 +163,18 @@ jobs:
     - name: Bootstrap
       uses: devizer/devops-library@main
 
+    - name: Probe Core Module
+      shell: pwsh
+      if: always()
+      run: 'Import-DevOps; Write-Line -TextYellow "[$($PSVersionTable.PSEdition)] $((Get-Memory-Info).Description)"'
+
+    - name: Probe Desktop Module
+      shell: powershell
+      if: always()
+      run: 'Import-DevOps; Write-Line -TextYellow "[$($PSVersionTable.PSEdition)] $((Get-Memory-Info).Description)"'
+
     - name: List Available Modules
+      if: always()
       run: 'Get-Module -ListAvailable | ft -autosize | out-string -width 1234'
 
     - name: Checkout
@@ -386,11 +397,13 @@ jobs:
 
     - name: Pack SQL Server Setup Logs
       if: always()
+      shell: powershell
       run: |
        Import-DevOps
        Publish-SQLServer-SetupLogs "C:\Temp\SQL Server Setup Logs"
 
     - name: Show SQL Servers
+      shell: pwsh
       if: always()
       run: |
         Import-DevOps
