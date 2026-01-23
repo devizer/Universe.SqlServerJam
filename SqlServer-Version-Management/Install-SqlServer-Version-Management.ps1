@@ -4,7 +4,7 @@ Param(
 )
 
 $ModuleName = 'SqlServer-Version-Management';
-$ModuleVersion = '2.1.171';
+$ModuleVersion = '2.1.172';
 $ModuleFiles = @(
 	@{
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psd1';
@@ -15,7 +15,7 @@ $ModuleFiles = @(
 			"  ModuleToProcess = @('SqlServer-Version-Management.psm1')",
 			"",
 			"  # Version below is automatically incremented on build",
-			"  ModuleVersion = `"2.1.171`"",
+			"  ModuleVersion = `"2.1.172`"",
 			"",
 			"  GUID = 'dd03b53d-575a-4056-ae08-e6dfea3384ea'",
 			"",
@@ -100,14 +100,14 @@ $ModuleFiles = @(
 			"",
 			"        ",
 			"        Tags = @(",
-			"          `"SQL`", `"Server`", `"SqlServer`", `"CI`", `"Unattended`", `"Setup`", `"Install`", `"RTM`", `"ServicePack`", `"CU`", `"ComulativeUpdate`", `"2022`", `"2019`", `"2017`", `"2016`", `"2014`", `"2012`", `"2008R2`", `"2008`", `"2005`", `"Windows`"",
+			"          `"SQL`", `"Server`", `"SqlServer`", `"CI`", `"Unattended`", `"Setup`", `"Install`", `"RTM`", `"ServicePack`", `"CU`", `"ComulativeUpdate`", `"2022`", `"2019`", `"2017`", `"2016`", `"2014`", `"2012`", `"2008R2`", `"2008`", `"2005`", `"Windows`", `"Try-And-Retry`"",
 			"        )",
 			"",
 			"        LicenseUri = 'https://opensource.org/license/mit/'",
 			"",
 			"",
 			"        # Does not tested on powershell below 5.1",
-			"        ProjectUri = 'https://github.com/devizer/Universe.SqlServerJam/tree/master/SqlServer-Version-Management'",
+			"        ProjectUri = 'https://github.com/devizer/SqlServer-Version-Management'",
 			"",
 			"        # IconUri = ''",
 			"",
@@ -132,6 +132,7 @@ $ModuleFiles = @(
 		FileName = 'SqlServer-Version-Management\SqlServer-Version-Management.psm1';
 		Content = @(
 			"# Include Directive: [ src\Synopsis.ps1 ]",
+			"# Include Directive: [ src\Import-DevOps.ps1 ]",
 			"# Include Directive: [ ..\Includes\*.ps1 ]",
 			"# Include File: [\Includes\`$Full7zLinksMetadata.ps1]",
 			"`$Full7zLinksMetadata_onWindows = @(",
@@ -641,6 +642,7 @@ $ModuleFiles = @(
 			"  `$linkXp=`"https://github.com/q3aql/aria2-static-builds/releases/download/v1.19.2/aria2-1.19.2-win-xp-build1.7z`"",
 			"  `$linkX86=`"https://github.com/aria2/aria2/releases/download/release-1.36.0/aria2-1.36.0-win-32bit-build1.zip`"",
 			"  `$linkX64=`"https://github.com/aria2/aria2/releases/download/release-1.36.0/aria2-1.36.0-win-64bit-build1.zip`"",
+			"  `$linkArm64=`"https://github.com/minnyres/aria2-windows-arm64/releases/download/v1.37.0/aria2_1.37.0_arm64.zip`" # Not Tested",
 			"",
 			"  if (-not `$arch) { ",
 			"    `$currentArch = Get-CPU-Architecture-Suffix-for-Windows;",
@@ -1401,14 +1403,18 @@ $ModuleFiles = @(
 			"  `$ErrorActionPreference = `"SilentlyContinue`"",
 			"  if (-not `$err) {",
 			"    Write-Host `"Success. `" -ForeGroundColor Green -NoNewLine;",
-			"    Write-Host `"'`$title' took `$(`$msec.ToString(`"n0`")) ms`"",
+			"    Write-Host `"'`$title'`"  -ForeGroundColor Cyan -NoNewLine;",
+			"    Write-Host `" took `$(`$msec.ToString(`"n0`")) ms`"",
 			"  } else {",
 			"    # Write-Host `$err.GetType()",
-			"    Write-Host `"Fail. `$(`$err.Message)`" -ForeGroundColor Red -NoNewLine;",
-			"    Write-Host `" '`$title' took `$(`$msec.ToString(`"n0`")) ms`"",
+			"    Write-Host `"Fail. `$(`$err.Message) `" -ForeGroundColor Red -NoNewLine;",
+			"    Write-Host `"'`$title'`"  -ForeGroundColor Magenta -NoNewLine;",
+			"    Write-Host `" took `$(`$msec.ToString(`"n0`")) ms`"",
 			"  }",
 			"  `$ErrorActionPreference=`$ea",
 			"}",
+			"",
+			"# Measure-Action `"Test OK`" { }; Measure-Action `"Test Error`" { `$x = 5 / 0 }",
 			"",
 			"# Include File: [\Includes\Out-String-And-TrimEnd.ps1]",
 			"Function Out-String-And-TrimEnd",
@@ -4057,6 +4063,7 @@ $ModuleFiles = @(
 			"",
 			"",
 			"",
+			"Export-ModuleMember -Function Import-DevOps",
 			"Export-ModuleMember -Function Parse-SqlServers-Input",
 			"Export-ModuleMember -Function Setup-SqlServers",
 			"Export-ModuleMember -Function Query-SqlServer-Version",
