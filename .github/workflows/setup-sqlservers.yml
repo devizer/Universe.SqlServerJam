@@ -261,8 +261,9 @@ jobs:
         $sql="${{ matrix.SqlServers }}: MSSQLSERVER"
         echo "SQL: '$sql'"
         Say "Pull devizervlad/iis-net4x-net35:ltsc2022"
-        Try-And-Retry "Pull devizervlad/iis-net4x-net35:ltsc2022" { & docker pull devizervlad/iis-net4x-net35:ltsc2022 }
+        Try-And-Retry "Pull devizervlad/iis-net4x-net35:ltsc2022" { & docker pull devizervlad/iis-net4x-net35:ltsc2022 | out-host }
 
+        Say "Starting container sql-server"
         New-item C:\SQL -ItemType Directory -Force -EA SilentlyContinue | Out-Null
         New-item C:\Temp -ItemType Directory -Force -EA SilentlyContinue | Out-Null
         cd SQL-Server-in-Windows-Container
@@ -271,6 +272,7 @@ jobs:
         & docker run -d --name sql-server --memory 4g --cpus 4 "--isolation=hyperv" --mount "$mnt" --mount type=bind,source=C:\SQL,target=C:\SQL --mount type=bind,source=C:\Temp,target=C:\Temp -e SQL="$sql" `
           -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\SQL-Setup" `
           -p 1433:1433 -p 1434:1434 --workdir=C:\App --entrypoint powershell devizervlad/iis-net4x-net35:ltsc2022 -Command "Sleep 2147482; Wait-Event;"
+        Say "Starting Setup in Container"
         & docker exec sql-server powershell -Command "cd C:\App; . .\Setup-SQL-Server-in-Container.ps1;" |
           tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/OUTPUT ${{ matrix.SqlServers }}.txt"
         [System.IO.File]::AppendAllText($env:GITHUB_ENV, "SQLSERVER_WELLKNOWN_In_Docker=Server=localhost,1433;User ID=sa; Password=Meaga`$tr0ng;Encrypt=False; TrustServerCertificate=True; `r`n")
