@@ -181,39 +181,15 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     - name: Uninstall LocalDB
-      uses: nick-fields/retry@v3
-      with:
-        timeout_minutes: 3
-        max_attempts: 5
-        shell: powershell
-        retry_wait_seconds: 10
-        command: |
-            # & powershell -f Scripts\Uninstall-LocalDB.ps1
-            iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/SqlServer-Version-Management.ps1'))
+      shell: powershell
+      run: |
             Uninstall-LocalDB-List "*"
             cd C:\Pre-Build
             ls
 
-
-    - name: Install-SqlServer-Version-Management
-      env:
-        SQL_SERVERS: ${{ matrix.SqlServers }}
-      uses: nick-fields/retry@v3
-      with:
-        timeout_minutes: 1
-        max_attempts: 5
-        shell: powershell
-        retry_wait_seconds: 10
-        command: |
-           iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/Install-SqlServer-Version-Management.ps1'))
-
-        # $moduleName = "SqlServer-Version-Management"; Write-Host "Existing `"$moduleName`" module version is $(get-Module -ListAvailable | ? { $_.Name -eq "SqlServer-Version-Management" } | % { "$($_.Version)" })"
-
-
     - name: Measure Install-Module
-      if: ${{ false }}
+      if: ${{ true }}
       run: |
-        iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/SqlServer-Version-Management/SqlServer-Version-Management.ps1'))
         Measure-Action "Install Platform-Info Module" { Install-Module Platform-Info -Force }
 
     - name: ANSI Colors {{  }}
@@ -221,17 +197,15 @@ jobs:
         powershell -f "Scripts\[Test] Ansi Colors.ps1" 
 
     - name: .NET 6
+      shell: bash
       run: |
-           & taskkill /T /F /IM dotnet.exe
-           # $ErrorActionPreference="Stop"
-           cd "$($Env:UserProfile)"
-           Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1';
-           ./dotnet-install.ps1 -InstallDir "C:\Program Files\dotnet" -Channel "6.0" -Runtime aspnetcore
-           exit 0
+           cmd //c taskkill /T /F /IM dotnet.exe
+           Run-Remote-Script https://dot.net/v1/dotnet-install.ps1 -Channel "6.0" -Runtime aspnetcore -InstallDir "C:\Program Files\dotnet"
 
     - name: Show Env
       run: |
-        Write-Host "CPU: $(Get-CPU-Name), $([System.Environment]::ProcessorCount) Cores"
+        Import-DevOps
+        Say "CPU: $(Get-CPU-Name -IncludeCoreCount)"
         Write-Host "OS: $((Select-WMI-Objects Win32_OperatingSystem | select -Property Caption | Select -First 1).Caption)"
         function Header() { $esc=[char]27; Write-Host "$esc[45;1m $($args) $esc[m" }
         
