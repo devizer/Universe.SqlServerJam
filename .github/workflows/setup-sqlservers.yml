@@ -387,15 +387,17 @@ jobs:
     - name: Pack SQL Server Setup Logs
       if: always()
       run: |
+       Import-DevOps
        Publish-SQLServer-SetupLogs "C:\Temp\SQL Server Setup Logs"
 
     - name: Show SQL Servers
       if: always()
       run: |
-       Say "Installed Versions"
-       @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | ft -AutoSize | Out-String -Width 1234 | Out-Host
-       Say "Query Versions"
-       @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | Populate-Local-SqlServer-Version | Select -Property Instance, Version | ft -AutoSize | Out-String -Width 1234 | Out-Host
+        Import-DevOps
+        Say "Installed Versions"
+        @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | ft -AutoSize | Out-String -Width 1234 | Out-Host
+        Say "Query Versions"
+        @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | Populate-Local-SqlServer-Version | Select -Property Instance, Version | ft -AutoSize | Out-String -Width 1234 | Out-Host
 
 
     - name: Upload SQL Server Setup Logs artifacts
