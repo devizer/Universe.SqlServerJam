@@ -5,7 +5,7 @@ $archiveFull="$workFolder\LocalSqlDiscovery-net4.5.7z"
 $okDownload = Download-File-FailFree $archiveFull @($url)
 cd "$workFolder"
 # ls | out-host
-& 7z.exe x -bso1 -bsp1 -y LocalSqlDiscovery-net4.5.7z
+& 7z.exe x -bso0 -bsp0 -y LocalSqlDiscovery-net4.5.7z
 cd LocalSqlDiscovery-net4.5
 $outputFile = "SHOW-SQL-Servers.log"
 & .\SHOW-SQL-Servers.cmd *| tee "$outputFile"
