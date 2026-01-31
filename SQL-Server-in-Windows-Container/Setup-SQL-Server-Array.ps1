@@ -97,17 +97,17 @@
         $blockSetup = { 
           $sql = $_; 
           $index++
-          echo "$index/$count SQL: '$sql'"
+          Write-Host "$index/$count SQL: '$sql'"
           Remove-Item -Path "C:\SQL\*" -Recurse -Force
           # --mount type=bind,source=C:\SQL,target=C:\SQL
-          & docker run -d --name sql-server --hostname sql-server --memory 4g --cpus 3 "--isolation=$ENV:ISOLATION" --mount "$mnt" --mount type=bind,source=C:\SQL,target=C:\SQL -e SQL="$sql" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" `
-            --workdir=C:\App --entrypoint powershell "$($env:THEIMAGE):$($env:TAG)" -Command "Sleep 2147482; Wait-Event;"
+          & { & docker run -d --name sql-server --hostname sql-server --memory 4g --cpus 3 "--isolation=$ENV:ISOLATION" --mount "$mnt" --mount type=bind,source=C:\SQL,target=C:\SQL -e SQL="$sql" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" `
+            --workdir=C:\App --entrypoint powershell "$($env:THEIMAGE):$($env:TAG)" -Command "Sleep 2147482; Wait-Event;" } 2>&1 | out-host
 
-          & docker exec sql-server powershell -Command "cd C:\App; . .\Install-SqlServer-Version-Management.ps1; . .\Setup-SQL-Server-in-Container.ps1;" |
-            tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/OUTPUT $sql.txt"
+          & { & docker exec sql-server powershell -Command "cd C:\App; . .\Install-SqlServer-Version-Management.ps1; . .\Setup-SQL-Server-in-Container.ps1;" |
+            tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/OUTPUT $sql.txt" } 2>&1 | out-host
 
-          echo "Removing the sql-server container"
-          & docker rm -f sql-server
+          Write-Host "Removing the sql-server container"
+          & { & docker rm -f sql-server } 2>&1 | out-host
           Write-Host " "
           Write-Host "---------------------------------------------- $index/$count [$SQL] Finished -----------------------------------------"
           Write-Host " "
