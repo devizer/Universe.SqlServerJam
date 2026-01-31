@@ -9,9 +9,10 @@ ls | out-host
 cd LocalSqlDiscovery-net4.5
 $outputFile = "SHOW-SQL-Servers.log"
 & .\SHOW-SQL-Servers.cmd *| tee "$outputFile"
-$mediumVersion = Get-Content "$outputFile" | ? {$_ -match "Medium Version"} | % {$_.Split(":") | Select -Last 1}
+$mediumVersion = Get-Content "$outputFile" | ? {$_ -match "Medium Version"} | % {$_.Split(":") | Select -Last 1 | % { "$_".Trim() }}
 $mediumVersion = @($mediumVersion | Sort-Object -Property @{ Expression = { To-Sortable-Version-String $_ }; Descending = $false })
-Write-Line -TextGreen "Medium Version(s)"
+$mediumVersion = @($mediumVersion | % { "   * $_" })
+Write-Line -TextGreen "Medium Version(s)" -Reset
 Write-Host ($mediumVersion -join ([Environment]::NewLine))
 
 
