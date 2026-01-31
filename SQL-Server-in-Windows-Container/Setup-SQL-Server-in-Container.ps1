@@ -98,10 +98,11 @@ Say "Query SQL Servers"
 @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | Populate-Local-SqlServer-Version |
      Format-Table -AutoSize | 
      Out-String -Width 1234 | 
+     Tee-Object -FilePath "C:\App\POWERSHELL-DISCOVERY.TXT" |
      Out-Host
 
 
 Write-Host "try sql discovery (net 4.5)"
-Run-Remote-Script https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/Scripts/Launch-Sql-Discovery.ps1
+Run-Remote-Script https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/Scripts/Launch-Sql-Discovery.ps1 *>&1 | Tee-Object -FilePath "C:\App\SQL-DISCOVERY.TXT"
 
 Say "Finish: $ENV:SQL"
