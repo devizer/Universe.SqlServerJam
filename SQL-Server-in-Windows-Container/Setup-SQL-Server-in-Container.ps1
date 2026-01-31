@@ -72,4 +72,8 @@ Find-Local-SqlServers | Populate-Local-SqlServer-Version |
      Out-String -Width 1234 | 
      Out-Host
 
+
+Write-Host "try sql discovery (net 4.5)"
+Run-Remote-Script https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/Scripts/Launch-Sql-Discovery.ps1
+
 Say "Finish: $ENV:SQL"
