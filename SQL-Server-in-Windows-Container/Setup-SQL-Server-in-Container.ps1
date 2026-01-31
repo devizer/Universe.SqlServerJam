@@ -60,7 +60,7 @@ $serverVersion = "$ENV:SQL".Split(":")[0]
 Publish-SQLServer-SetupLogs "C:\App\SQL Setup Logs\Setup of $serverVersion"
 
 Say "List SQL Server Instances"
-Find-Local-SqlServers | 
+@(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | 
      Format-Table -AutoSize | 
      Out-String -Width 1234 | 
      Out-Host
