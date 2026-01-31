@@ -94,7 +94,8 @@
         $mnt="type=bind,source=$(Get-Location),target=C:\App"
         echo "--mount parameter is: [$mnt]"
         $index=0; $count=$SqlServers.Length
-        $blockSetup = { $sql = $_; 
+        $blockSetup = { 
+          $sql = $_; 
           $index++
           echo "$index/$count SQL: '$sql'"
           Remove-Item -Path "C:\SQL\*" -Recurse -Force

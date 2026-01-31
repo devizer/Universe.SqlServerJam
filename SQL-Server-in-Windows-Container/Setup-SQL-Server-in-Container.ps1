@@ -32,7 +32,7 @@ Start-Service msiserver
 
 if ("$ENV:SQL" -match 2012) {
   Say "Clean transaction folder 'C:\Windows\System32\config\txr' (2012 only)"
-  rmdir /s /q C:\Windows\System32\config\txr 2>$null
+  Remove-Item -Path "C:\Windows\System32\config\txr" -Recurse -Force -ErrorAction SilentlyContinue
 }
 
 # Say Starting AppIDSvc
