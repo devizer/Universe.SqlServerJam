@@ -113,6 +113,6 @@
           Write-Host " "
         }
 
-        $errors = @($SqlServers | Try-Action-ForEach "SETUP SQL SERVER IN CONTAINER" $blockSetup { "$_" })
+        $errors = @($SqlServers | Try-Action-ForEach -ActionTitle "SETUP SQL SERVER IN CONTAINER" -Action $blockSetup -ItemTitle { "$_" })
         Write-Host "SETUP ERRORS COUNT = $($errors.Count)"
         Write-Host $errors
