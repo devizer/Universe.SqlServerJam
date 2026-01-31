@@ -27,9 +27,17 @@ start-service winmgmt
 Say Starting RpcSs
 Start-Service -Name "RpcSs"
 
-Say Starting AppIDSvc
-Set-Service AppIDSvc -StartupType Automatic
-Start-Service AppIDSvc
+Say Starting msiserver
+Start-Service msiserver
+
+if ("$ENV:SQL" -match 2012) {
+  Say "Clean transaction folder 'C:\Windows\System32\config\txr' (2012 only)"
+  rmdir /s /q C:\Windows\System32\config\txr 2>$null
+}
+
+# Say Starting AppIDSvc
+# Set-Service AppIDSvc -StartupType Automatic
+# Start-Service AppIDSvc
 
 Say Grant Full Access to Crypto Keys
 $path = "$env:ProgramData\Microsoft\Crypto\RSA\MachineKeys"
@@ -64,8 +72,10 @@ If ("$ENV:SQL" -match 2005) { Setup-SqlServers "$ENV:SQL" }
 ElseIf ("$ENV:SQL" -match 2008) { Setup-SqlServers "$ENV:SQL" /SkipRules=PerfMonCounterNotCorruptedCheck } 
 # ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=PerfMonCounterNotCorruptedCheck FacetPowerShellCheck RebootRequiredCheck" } 
 # ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=AllRules" } 
-ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=RebootRequiredCheck PerfMonCounterNotCorruptedCheck FacetPowerShellCheck AclPermissionsFacet Cluster_VerifyForErrors Cluster_IsOnlineIfServerIsClustered BlockMixedArchitectureInstall VSSShellInstalledFacet X86SupportedOn64BitCheck Wow64PlatformCheck" } 
+# !!!!!!!!!!!!!!!!!!!!!!! /BROWSERSVCSTARTUPTYPE=Disabled
+ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/BROWSERSVCSTARTUPTYPE=Disabled" "/SkipRules=RebootRequiredCheck PerfMonCounterNotCorruptedCheck FacetPowerShellCheck AclPermissionsFacet Cluster_VerifyForErrors Cluster_IsOnlineIfServerIsClustered BlockMixedArchitectureInstall VSSShellInstalledFacet X86SupportedOn64BitCheck Wow64PlatformCheck NoGuidAllAppsCheck" } 
 Else { Setup-SqlServers "$ENV:SQL" /SkipRules=PerfMonCounterCheck }
+
 
 # SkipRules="RebootRequiredCheck PerfMonCounterNotCorruptedCheck FacetPowerShellCheck AclPermissionsFacet Cluster_VerifyForErrors Cluster_IsOnlineIfServerIsClustered BlockMixedArchitectureInstall"
 
