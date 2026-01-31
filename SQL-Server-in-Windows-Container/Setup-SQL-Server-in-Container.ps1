@@ -49,8 +49,11 @@ Say "Starting vcredist2008_x86.exe ..."
 If ("$ENV:SQL" -match 2005) { Setup-SqlServers "$ENV:SQL" }
 ElseIf ("$ENV:SQL" -match 2008) { Setup-SqlServers "$ENV:SQL" /SkipRules=PerfMonCounterNotCorruptedCheck } 
 # ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=PerfMonCounterNotCorruptedCheck FacetPowerShellCheck RebootRequiredCheck" } 
-ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=AllRules" } 
+# ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=AllRules" } 
+ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=RebootRequiredCheck PerfMonCounterNotCorruptedCheck FacetPowerShellCheck AclPermissionsFacet Cluster_VerifyForErrors Cluster_IsOnlineIfServerIsClustered BlockMixedArchitectureInstall" } 
 Else { Setup-SqlServers "$ENV:SQL" /SkipRules=PerfMonCounterCheck }
+
+# SkipRules="RebootRequiredCheck PerfMonCounterNotCorruptedCheck FacetPowerShellCheck AclPermissionsFacet Cluster_VerifyForErrors Cluster_IsOnlineIfServerIsClustered BlockMixedArchitectureInstall"
 
 # 2012: /SkipRules="PerfMonCounterNotCorruptedCheck FacetPowerShellCheck RebootRequiredCheck ServerCoreBlockUnsupportedSxSCheck"
 

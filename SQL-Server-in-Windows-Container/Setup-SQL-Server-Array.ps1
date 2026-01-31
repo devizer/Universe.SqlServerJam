@@ -96,7 +96,7 @@
         foreach($sql in $SqlServers) {
           echo "SQL: '$sql'"
           Remove-Item -Path "C:\SQL\*" -Recurse -Force
-          & docker run -d --name sql-server --memory 4g --cpus 3 "--isolation=$ENV:ISOLATION" --mount "$mnt" --mount type=bind,source=C:\SQL,target=C:\SQL -e SQL="$sql" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" `
+          & docker run -d --name sql-server --hostname sql-server --memory 4g --cpus 3 "--isolation=$ENV:ISOLATION" --mount "$mnt" --mount type=bind,source=C:\SQL,target=C:\SQL -e SQL="$sql" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" `
             --workdir=C:\App --entrypoint powershell "$($env:THEIMAGE):$($env:TAG)" -Command "Sleep 2147482; Wait-Event;"
 
           & docker exec sql-server powershell -Command "cd C:\App; . .\Install-SqlServer-Version-Management.ps1; . .\Setup-SQL-Server-in-Container.ps1;" |
