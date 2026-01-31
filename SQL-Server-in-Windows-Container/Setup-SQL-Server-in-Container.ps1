@@ -67,7 +67,7 @@ Find-Local-SqlServers |
 
 
 Say "Query SQL Servers"
-Find-Local-SqlServers | Populate-Local-SqlServer-Version |
+@(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | Populate-Local-SqlServer-Version |
      Format-Table -AutoSize | 
      Out-String -Width 1234 | 
      Out-Host

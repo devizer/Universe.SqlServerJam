@@ -4,8 +4,8 @@ $workFolder="$($ENV:SystemDrive)\Temp\Sql-Discovery"
 $archiveFull="$workFolder\LocalSqlDiscovery-net4.5.7z"
 $okDownload = Download-File-FailFree $archiveFull @($url)
 cd "$workFolder"
-ls | out-host
-& 7z.exe x -y LocalSqlDiscovery-net4.5.7z
+# ls | out-host
+& 7z.exe x -bso1 -bsp1 -y LocalSqlDiscovery-net4.5.7z
 cd LocalSqlDiscovery-net4.5
 $outputFile = "SHOW-SQL-Servers.log"
 & .\SHOW-SQL-Servers.cmd *| tee "$outputFile"
@@ -14,5 +14,3 @@ $mediumVersion = @($mediumVersion | Sort-Object -Property @{ Expression = { To-S
 $mediumVersion = @($mediumVersion | % { "   * $_" })
 Write-Line -TextGreen "Medium Version(s)" -Reset
 Write-Host ($mediumVersion -join ([Environment]::NewLine))
-
-
