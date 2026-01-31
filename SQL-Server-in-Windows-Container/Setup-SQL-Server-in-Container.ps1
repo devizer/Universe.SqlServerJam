@@ -1,4 +1,8 @@
 cd C:\App
+
+Import-Module CimCmdlets -ErrorAction SilentlyContinue
+Import-Module Microsoft.PowerShell.Management -ErrorAction SilentlyContinue
+
 pushd .
 . .\Install-SqlServer-Version-Management.ps1
 popd
