@@ -46,9 +46,12 @@ Say "Starting vcredist2008_x86.exe ..."
 #>
 
 
+./setup.exe /ACTION=install /Q /IACCEPTSQLSERVERLICENSETERMS /SkipRules=PerfMonCounterNotCorruptedCheck FacetPowerShellCheck ...
+
 If ("$ENV:SQL" -match 2005) { Setup-SqlServers "$ENV:SQL" }
 ElseIf ("$ENV:SQL" -match 2008) { Setup-SqlServers "$ENV:SQL" /SkipRules=PerfMonCounterNotCorruptedCheck } 
-ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=PerfMonCounterNotCorruptedCheck FacetPowerShellCheck RebootRequiredCheck" } 
+# ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=PerfMonCounterNotCorruptedCheck FacetPowerShellCheck RebootRequiredCheck" } 
+ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=AllRules" } 
 Else { Setup-SqlServers "$ENV:SQL" /SkipRules=PerfMonCounterCheck }
 
 # 2012: /SkipRules="PerfMonCounterNotCorruptedCheck FacetPowerShellCheck RebootRequiredCheck ServerCoreBlockUnsupportedSxSCheck"
