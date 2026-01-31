@@ -24,8 +24,22 @@ DO_NOT_SKIP
 Say Starting winmgmt
 start-service winmgmt
 
-Say Starting RPC
+Say Starting RpcSs
 Start-Service -Name "RpcSs"
+
+Say Starting AppIDSvc
+Set-Service AppIDSvc -StartupType Automatic
+Start-Service AppIDSvc
+
+Say Grant Full Access to Crypto Keys
+$path = "$env:ProgramData\Microsoft\Crypto\RSA\MachineKeys"
+$acl = Get-Acl $path
+$rule = New-Object System.Security.AccessControl.FileSystemAccessRule("Everyone", "FullControl", "ContainerInherit, ObjectInherit", "None", "Allow")
+$acl.AddAccessRule($rule)
+Set-Acl $path $acl
+
+Say Add Builtin SYSTEM to Administrators
+& net localgroup Administrators "NT AUTHORITY\SYSTEM" /add
 
 <#
 
