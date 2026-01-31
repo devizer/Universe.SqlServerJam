@@ -93,8 +93,10 @@
         New-item C:\SQL -ItemType Directory -Force -EA SilentlyContinue | Out-Null
         $mnt="type=bind,source=$(Get-Location),target=C:\App"
         echo "--mount parameter is: [$mnt]"
+        $index=0; $count=$SqlServers.Length
         foreach($sql in $SqlServers) {
-          echo "SQL: '$sql'"
+          $index++
+          echo "$index/$count SQL: '$sql'"
           Remove-Item -Path "C:\SQL\*" -Recurse -Force
           # --mount type=bind,source=C:\SQL,target=C:\SQL
           & docker run -d --name sql-server --hostname sql-server --memory 4g --cpus 3 "--isolation=$ENV:ISOLATION" --mount "$mnt" -e SQL="$sql" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" `
@@ -106,7 +108,7 @@
           echo "Removing the sql-server container"
           & docker rm -f sql-server
           Write-Host " "
-          Write-Host "---------------------------------------------- [$SQL] Finished -----------------------------------------"
+          Write-Host "---------------------------------------------- $index/$count [$SQL] Finished -----------------------------------------"
           Write-Host " "
         }
 
