@@ -94,12 +94,11 @@
         $mnt="type=bind,source=$(Get-Location),target=C:\App"
         echo "--mount parameter is: [$mnt]"
         $index=0; $count=$SqlServers.Length
-        $blockSetup=[scriptblock]{ 
-          $sql = $_; 
+        $blockSetup = { $sql = $_;
           $index++
           Write-Host "$index/$count SQL: '$sql'"
           Remove-Item -Path "C:\SQL\*" -Recurse -Force
-          # --mount type=bind,source=C:\SQL,target=C:\SQL
+
           & { & docker run -d --name sql-server --hostname sql-server --memory 4g --cpus 3 "--isolation=$ENV:ISOLATION" `
             --mount "$mnt" --mount type=bind,source=C:\SQL,target=C:\SQL `
             -e SQL="$sql" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" `
