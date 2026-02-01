@@ -1,4 +1,4 @@
-        $SqlServers = @(
+﻿        $SqlServers = @(
 <#
            '2025 Developer',
            '2025 Core',
