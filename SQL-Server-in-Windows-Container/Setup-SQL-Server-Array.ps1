@@ -94,7 +94,7 @@
         $mnt="type=bind,source=$(Get-Location),target=C:\App"
         echo "--mount parameter is: [$mnt]"
         $index=0; $count=$SqlServers.Length
-        $blockSetup = { 
+        $blockSetup=[scriptblock]{ 
           $sql = $_; 
           $index++
           Write-Host "$index/$count SQL: '$sql'"
