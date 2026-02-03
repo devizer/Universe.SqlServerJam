@@ -94,12 +94,12 @@
         $mnt="type=bind,source=$(Get-Location),target=C:\App"
         echo "--mount parameter is: [$mnt]"
         $index=0; $count=$SqlServers.Length
-        [scriptblock] $blockSetup = { $sql = $_;
+        [scriptblock] $blockSetup = { 
+          $sql = $_;
           $index++
           Write-Host "$index/$count SQL: '$sql'"
           Remove-Item -Path "C:\SQL\*" -Recurse -Force
 
-          <# 
           & { & docker run -d --name sql-server --hostname sql-server --memory 4g --cpus 3 "--isolation=$ENV:ISOLATION" `
             --mount "$mnt" --mount type=bind,source=C:\SQL,target=C:\SQL `
             -e SQL="$sql" -e PS1_TROUBLE_SHOOT="On" -e SQLSERVERS_SETUP_FOLDER="C:\Temp\SQL-Setup" `
@@ -107,7 +107,6 @@
 
           & { & docker exec sql-server powershell -Command "cd C:\App; . .\Install-SqlServer-Version-Management.ps1; . .\Setup-SQL-Server-in-Container.ps1;" } 2>&1 |
             tee-object "$ENV:SYSTEM_ARTIFACTSDIRECTORY/OUTPUT $sql.txt" } 2>&1 | out-host
-          #>
 
           Write-Host "Removing the sql-server container"
           & { & docker rm -f sql-server } 2>&1 | out-host
