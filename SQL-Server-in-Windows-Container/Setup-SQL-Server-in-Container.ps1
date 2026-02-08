@@ -4,7 +4,9 @@ Import-Module CimCmdlets -ErrorAction SilentlyContinue
 Import-Module Microsoft.PowerShell.Management -ErrorAction SilentlyContinue
 
 pushd .
+if (Test-Path ".\Install-SqlServer-Version-Management.ps1") {
 . .\Install-SqlServer-Version-Management.ps1
+}
 popd
 $ENV:TF_BUILD='True'
 
