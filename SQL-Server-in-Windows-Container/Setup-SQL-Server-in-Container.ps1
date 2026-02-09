@@ -93,7 +93,9 @@ Else { Setup-SqlServers "$ENV:SQL" "Collation=$collation" /SkipRules=PerfMonCoun
 
 $serverVersion = "$ENV:SQL".Split(":")[0]
 
-Publish-SQLServer-SetupLogs "C:\App\SQL Setup Logs\Setup of $serverVersion"
+$artfifacts_folder="$ENV:SYSTEM_ARTIFACTSDIRECTORY"
+if ("$artfifacts_folder" -eq "") { $artfifacts_folder="C:\Artifacts" }
+Publish-SQLServer-SetupLogs "$artfifacts_folder\SQL Setup Logs\Setup of $serverVersion"
 
 Say "List SQL Server Instances"
 @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | 
