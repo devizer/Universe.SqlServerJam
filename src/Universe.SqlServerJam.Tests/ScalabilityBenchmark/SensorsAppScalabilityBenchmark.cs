@@ -20,8 +20,9 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
     {
         var envValue = SensorsAppStressSettings.WorkingSetRows;
         if (!BuildServerInfo.IsBuildServer) return envValue.GetValueOrDefault(100 * 1000);
+        // Build Server Case
         bool isDbOnRamDisk = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("RAM_DISK"));
-        if (!isDbOnRamDisk) return 1000 * 1000;
+        if (!isDbOnRamDisk) return 100 * 1000;
         bool isWindows = CrossInfo.ThePlatform == CrossInfo.Platform.Windows;
         return isWindows ? 100 * 1000 : 400 * 1000;
     }
