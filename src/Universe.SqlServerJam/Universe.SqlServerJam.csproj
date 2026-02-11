@@ -5,6 +5,7 @@
       <!-- net451 for dapper 1.60.6 -->
 	  <TargetFrameworks>netstandard2.0;netstandard1.4; net35;net40;net45;net451; net461;net6.0;net8.0;</TargetFrameworks>
 	  <LangVersion>latest</LangVersion>
+      <NoWarn>$(NoWarn);CA1416;NETSDK1215</NoWarn>
   </PropertyGroup>
 
     <PropertyGroup>
@@ -67,15 +68,7 @@
         <Reference Include="System.ServiceProcess" />
     </ItemGroup>
 
-    <ItemGroup Condition=" 
-			   '$(TargetFramework)' == 'netstandard2.0' 
-			   Or '$(TargetFramework)' == 'net451' 
-			   Or '$(TargetFramework)' == 'net6.0' 
-			   Or '$(TargetFramework)' == 'net8.0' 
-			   Or '$(TargetFramework)' == 'netstandard1.4' 
-			   Or '$(TargetFramework)' == 'netcoreapp1.0'
-			   Or '$(TargetFramework)' == 'netcoreapp1.1' 
-			   Or '$(TargetFramework)' == 'net461' ">
+    <ItemGroup Condition=" &#xD;&#xA;			   '$(TargetFramework)' == 'netstandard2.0' &#xD;&#xA;			   Or '$(TargetFramework)' == 'net451' &#xD;&#xA;			   Or '$(TargetFramework)' == 'net6.0' &#xD;&#xA;			   Or '$(TargetFramework)' == 'net8.0' &#xD;&#xA;			   Or '$(TargetFramework)' == 'netstandard1.4' &#xD;&#xA;			   Or '$(TargetFramework)' == 'netcoreapp1.0'&#xD;&#xA;			   Or '$(TargetFramework)' == 'netcoreapp1.1' &#xD;&#xA;			   Or '$(TargetFramework)' == 'net461' ">
 		<!-- net451+ -->
 		<PackageReference Include="Dapper" Version="1.60.6" />
     </ItemGroup>

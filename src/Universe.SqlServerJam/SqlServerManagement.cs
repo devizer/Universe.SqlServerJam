@@ -36,7 +36,7 @@ namespace Universe.SqlServerJam
         public string ClientDataSource => _ClientDataSource.Value;
         private readonly Lazy<string> _ClientDataSource;
 
-        private string GetClientDataSource() => SqlServerJamConfigurationExtensions.GetClientSizeDataSource(SqlConnection.ConnectionString);
+        private string GetClientDataSource() => SqlServerJamConfigurationExtensions.GetClientSideDataSource(SqlConnection.ConnectionString);
         public SqlCpuUsage? CpuUsage => GetCpuUsage();
 
 

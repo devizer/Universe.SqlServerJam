@@ -1,0 +1,65 @@
+<Project>
+
+    <PropertyGroup>
+        <!-- Disable auto AssemblyInfo generation -->
+        <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+
+        <!-- Directory of VERSION.SOURCE.TXT -->
+        <VersionSourceDir>$([System.IO.Path]::GetDirectoryName('$(MSBuildThisFileFullPath)'))</VersionSourceDir>
+        <VersionSourceFile>$(VersionSourceDir)\VERSION.SOURCE.TXT</VersionSourceFile>
+
+        <!-- Read BASE_VERSION from file -->
+        <BASE_VERSION>$([System.IO.File]::ReadAllText('$(VersionSourceFile)').Trim())</BASE_VERSION>
+
+        <!-- Directory of VERSION.SOURCE.TXT -->
+        <VersionSourceDir>$([System.IO.Path]::GetDirectoryName('$(MSBuildThisFileFullPath)'))</VersionSourceDir>
+        <VersionSourceFile>$(VersionSourceDir)\VERSION.SOURCE.TXT</VersionSourceFile>
+    </PropertyGroup>
+
+    <!-- Fail if VERSION.SOURCE.TXT is missing -->
+    <Target Name="CheckVersionSourceFile" BeforeTargets="BeforeBuild;GenerateNuspec"
+            Condition="!Exists('$(VersionSourceFile)')">
+        <Error Text="MISSING VERSION.SOURCE.TXT in the '$(VersionSourceDir)'." />
+    </Target>
+
+    <!-- Compute Git commit count and set versions -->
+    <Target Name="ComputeVersionByGitHistory" BeforeTargets="BeforeBuild;GenerateNuspec"
+            DependsOnTargets="CheckVersionSourceFile"
+            Condition="'$(VersionResolved)' != 'true'">
+
+        <!--
+          <Message Text="CURRENT FOLDER: [$(MSBuildStartupDirectory)]" Importance="high"/>
+          <Message Text="PROJECT FOLDER: [$(MSBuildProjectDirectory)]" Importance="high"/>
+        -->
+
+        <!-- Run git command -->
+        <Exec Command="git rev-list --count HEAD"
+              ConsoleToMSBuild="true"
+              IgnoreExitCode="true"
+              StandardOutputImportance="Low"
+              WorkingDirectory="$(MSBuildProjectDirectory)"
+    >
+            <Output TaskParameter="ConsoleOutput" PropertyName="GIT_COMMIT_COUNT"/>
+        </Exec>
+
+        <!-- Trim output and fallback -->
+        <PropertyGroup>
+            <GIT_COMMIT_COUNT>$([System.Text.RegularExpressions.Regex]::Replace('$(GIT_COMMIT_COUNT)', '\s+', ''))</GIT_COMMIT_COUNT>
+            <GIT_COMMIT_COUNT Condition="'$(GIT_COMMIT_COUNT)' == ''">0</GIT_COMMIT_COUNT>
+            <GIT_COMMIT_COUNT Condition="!$([System.Int32]::TryParse('$(GIT_COMMIT_COUNT)', out _))">0</GIT_COMMIT_COUNT>
+
+            <!-- Compose version -->
+            <Version>$(BASE_VERSION).$(GIT_COMMIT_COUNT).0</Version>
+            <FileVersion>$(BASE_VERSION).$(GIT_COMMIT_COUNT).0</FileVersion>
+            <AssemblyVersion>$(BASE_VERSION).$(GIT_COMMIT_COUNT).0</AssemblyVersion>
+            <PackageVersion>$(BASE_VERSION).$(GIT_COMMIT_COUNT).0</PackageVersion>
+
+            <!-- Mark as resolved to run once -->
+            <VersionResolved>true</VersionResolved>
+        </PropertyGroup>
+
+        <!-- Output message -->
+        <Message Text="Resolved Version By Git History '$(Version)'" Importance="high"/>
+    </Target>
+
+</Project>

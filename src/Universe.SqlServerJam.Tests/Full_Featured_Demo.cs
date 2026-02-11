@@ -325,7 +325,7 @@ namespace Universe.SqlServerJam.Tests
                     try
                     {
                         SqlSpeedMeasurement test = new SqlSpeedMeasurement(supportedProtocol.ConnectionString);
-                        decimal msec = test.GetPing(limitCount: 100000, milliSecondsLimit: TestEnvironment.SqlPingDuration);
+                        double msec = test.GetPing(limitCount: 100000, milliSecondsLimit: TestEnvironment.SqlPingDuration);
                         var transport = GetTransportInfo(supportedProtocol.ConnectionString);
                         Console.WriteLine($"{(msec.ToString("f2")).PadLeft(9)} : {sqlRef.DataSource} ({transport})");
                     }
@@ -370,7 +370,7 @@ namespace Universe.SqlServerJam.Tests
                         builder["Pooling"] = true;
                         var connectionString = builder.ConnectionString;
                         SqlSpeedMeasurement test = new SqlSpeedMeasurement(connectionString);
-                        decimal kbPerSec = test.GetUploadSpeed(limitIterations: 100000, blockSizeInKb: blockSize, limitMilliSeconds: TestEnvironment.SqlUploadDuration);
+                        double kbPerSec = test.GetUploadSpeed(limitIterations: 100000, blockSizeInKb: blockSize, limitMilliSeconds: TestEnvironment.SqlUploadDuration);
                         var transport = GetTransportInfo(supportedProtocol.ConnectionString);
                         Console.WriteLine($"{(kbPerSec.ToString("f1")).PadLeft(9)} : {sqlRef.DataSource} ({transport})");
                     }
@@ -413,7 +413,7 @@ namespace Universe.SqlServerJam.Tests
                         builder["Pooling"] = true;
                         var connectionString = builder.ConnectionString;
                         SqlSpeedMeasurement test = new SqlSpeedMeasurement(connectionString);
-                        decimal kbPerSec = test.GetDownloadSpeed(limitIterations: 100000, blockSizeInKb: blockSize, limitMilliSeconds: TestEnvironment.SqlDownloadDuration);
+                        double kbPerSec = test.GetDownloadSpeed(limitIterations: 100000, blockSizeInKb: blockSize, limitMilliSeconds: TestEnvironment.SqlDownloadDuration);
                         var transport = GetTransportInfo(supportedProtocol.ConnectionString);
                         Console.WriteLine($"{(kbPerSec.ToString("f1")).PadLeft(9)} : {sqlRef.DataSource} ({transport})");
                     }

@@ -70,7 +70,7 @@ public class SensorsAppScalabilityBenchmark : NUnitTestsBase
         Stopwatch startSeedAt = Stopwatch.StartNew();
         var categoriesCount = GetStressCategoriesCount();
         seeder.Seed(categoriesCount);
-        Console.WriteLine($"Stress DB [{newDbName}] is ready{Environment.NewLine}Seed took {startSeedAt.Elapsed.TotalSeconds:n2} seconds");
+        Console.WriteLine($"Stress DB [{newDbName}] is ready{Environment.NewLine}Seed of {categoriesCount:n0} took {startSeedAt.Elapsed.TotalSeconds:n2} seconds");
         Stopwatch getCategoriesStartAt = Stopwatch.StartNew();
         StressState.Categories = dataAccess.GetAllCategories().ToArray();
         getCategoriesStartAt.Stop();

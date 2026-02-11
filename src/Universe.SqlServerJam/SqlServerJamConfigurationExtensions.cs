@@ -5,6 +5,16 @@ namespace Universe.SqlServerJam
 {
     public static class SqlServerJamConfigurationExtensions
     {
+        /*
+        public static DbConnection CreateConnection(this DbProviderFactory dbProviderFactory, string connectionString)
+        {
+            if (dbProviderFactory == null) throw new ArgumentNullException(nameof(dbProviderFactory));
+            var ret = dbProviderFactory.CreateConnection();
+            ret.ConnectionString = connectionString;
+            return ret;
+        }
+        */
+
         public static DbConnection CreateConnection(this DbProviderFactory factory, string connectionString)
         {
             if (factory == null) throw new ArgumentNullException(nameof(factory));
@@ -16,14 +26,19 @@ namespace Universe.SqlServerJam
             return ret;
         }
 
+        public static DbCommand CreateDbCommand(this DbProviderFactory factory, string sqlCommandText, DbConnection con)
+        {
+            if (factory == null) throw new ArgumentNullException(nameof(factory));
+            var ret = factory.CreateCommand();
+            ret.CommandText = sqlCommandText;
+            ret.Connection = con;
+            return ret;
+        }
+
+
         public static DbConnection CreateConnection(string connectionString)
         {
-            if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));
-            if (string.IsNullOrEmpty(connectionString)) throw new ArgumentException("connectionString argument is empty", nameof(connectionString));
-
-            var ret = SqlServerJamConfiguration.SqlProviderFactory.CreateConnection();
-            ret.ConnectionString = connectionString;
-            return ret;
+            return SqlServerJamConfiguration.SqlProviderFactory.CreateConnection(connectionString);
         }
 
 
@@ -49,10 +64,18 @@ namespace Universe.SqlServerJam
             return b.ConnectionString;
         }
 
-        public static string GetClientSizeDataSource(string connectionString)
+        public static string GetClientSideDataSource(string connectionString)
         {
             if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));
             var b = SqlServerJamConfiguration.SqlProviderFactory.CreateConnectionStringBuilder();
+            b.ConnectionString = connectionString;
+            return b["Data Source"]?.ToString();
+        }
+        public static string GetClientSideDataSource(this DbProviderFactory factory, string connectionString)
+        {
+            if (factory == null) throw new ArgumentNullException(nameof(factory));
+            if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));
+            var b = factory.CreateConnectionStringBuilder();
             b.ConnectionString = connectionString;
             return b["Data Source"]?.ToString();
         }
@@ -91,9 +114,6 @@ namespace Universe.SqlServerJam
             ret.CommandText = sqlCommandText;
             ret.Connection = con;
             return ret;
-
-
-
         }
     }
 }
