@@ -42,6 +42,7 @@ jobs:
         Say "CPU: $(Get-Cpu-Name -IncludeCoreCount)"
 
     - name: Total Modules
+      shell: pwsh
       if: ${{ true }}
       run: 'Write-Host "Total Modules: $((get-module -ListAvailable).Count)"'
 
