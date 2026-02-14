@@ -76,13 +76,17 @@ Say "Starting vcredist2008_x86.exe ..."
 $collation = If ("$ENV:SQL" -match "2019" -or "$ENV:SQL" -match "2022" -or "$ENV:SQL" -match "2025") { "Latin1_General_100_CI_AS_SC_UTF8" } Else { "SQL_Latin1_General_CP1_CI_AS" };
 Say "SQL Setup COLLATION = '$collation'"
 
-If ("$ENV:SQL" -match 2005) { Setup-SqlServers "$ENV:SQL" }
-ElseIf ("$ENV:SQL" -match 2008) { Setup-SqlServers "$ENV:SQL" "Collation=$collation" /SkipRules=PerfMonCounterNotCorruptedCheck } 
+$installTo = "$($ENV:SQLSERVERS_INSTALL_TO)"
+if (-not $installTo) { $installTo = "C:\SQL" }
+Write-Host "Target SQL Server Install Folder: [$installTo]"
+
+If ("$ENV:SQL" -match 2005) { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" }
+ElseIf ("$ENV:SQL" -match 2008) { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" "Collation=$collation" /SkipRules=PerfMonCounterNotCorruptedCheck } 
 # ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=PerfMonCounterNotCorruptedCheck FacetPowerShellCheck RebootRequiredCheck" } 
 # ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=AllRules" } 
 # !!!!!!!!!!!!!!!!!!!!!!! /BROWSERSVCSTARTUPTYPE=Disabled
-ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "Collation=$collation" "/BROWSERSVCSTARTUPTYPE=Disabled" "/SkipRules=RebootRequiredCheck PerfMonCounterNotCorruptedCheck FacetPowerShellCheck AclPermissionsFacet Cluster_VerifyForErrors Cluster_IsOnlineIfServerIsClustered BlockMixedArchitectureInstall VSSShellInstalledFacet X86SupportedOn64BitCheck Wow64PlatformCheck NoGuidAllAppsCheck" } 
-Else { Setup-SqlServers "$ENV:SQL" "Collation=$collation" /SkipRules=PerfMonCounterCheck }
+ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" "Collation=$collation" "/BROWSERSVCSTARTUPTYPE=Disabled" "/SkipRules=RebootRequiredCheck PerfMonCounterNotCorruptedCheck FacetPowerShellCheck AclPermissionsFacet Cluster_VerifyForErrors Cluster_IsOnlineIfServerIsClustered BlockMixedArchitectureInstall VSSShellInstalledFacet X86SupportedOn64BitCheck Wow64PlatformCheck NoGuidAllAppsCheck" } 
+Else { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" "Collation=$collation" /SkipRules=PerfMonCounterCheck }
 
 
 # SkipRules="RebootRequiredCheck PerfMonCounterNotCorruptedCheck FacetPowerShellCheck AclPermissionsFacet Cluster_VerifyForErrors Cluster_IsOnlineIfServerIsClustered BlockMixedArchitectureInstall"
