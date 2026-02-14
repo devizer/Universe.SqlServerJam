@@ -2207,7 +2207,7 @@ Function Write-Line([string[]] $directArgs = @()) {
           $ansiValue = $ansiColors[$key];
           $ansi += $ansiValue;
           $isReset = ($key -eq "Reset");
-          if ($isReset) { $text="Gray"; $back="Black"; }
+          if ($isReset) { $text="Gray"; $back="Black"; <# $ansi += $ansiColors["Reset"] #> }
           if ($key -like "Text*") { $text = $key.SubString(4) }
           if ($key -like "Back*") { $back = $key.SubString(4) }
           $isControl = $true;
@@ -2237,6 +2237,8 @@ function Show-Text-Matrix() {
     Write-Line -DirectArgs $line
   }
 }
+
+Write-Line "Env Variable " -TextMagenta "'The_Variable'" -Reset " set to " -TextGreen "'The_Value'"
 
 Write-Line -TextMagenta -Underline -Bold "ANSI" -Reset " (bold underline magenta)"
 Show-Text-Matrix
