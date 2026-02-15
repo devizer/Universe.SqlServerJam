@@ -84,6 +84,8 @@ $installTo = "$($ENV:SQLSERVERS_INSTALL_TO)"
 if (-not $installTo) { $installTo = "C:\SQL" }
 Write-Host "Target SQL Server Install Folder: [$installTo]"
 
+$PSNativeCommandArgumentPassing = "Legacy"
+
 try 
 { 
     # RunRuleResults_RunFeatureSpecificRules.xml: rules list
