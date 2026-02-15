@@ -1597,7 +1597,9 @@ function Run-Remote-Script() {
   if ($okDownload) {
       $a=@($runnerParameter, $fileFullName) + @($passthrowArgs)
       $a=@($a | ? { "$_" })
+      $prevPass = $PSNativeCommandArgumentPassing; $PSNativeCommandArgumentPassing = "Legacy"
       & "$runner" @($a)
+      $PSNativeCommandArgumentPassing = $prevPass
       # Incorrect version if $runner contains space
       # $allWorld = $runner.Split(" ") + @($runnerParameter) + @($fileFullName) + $passthrowArgs;
       # $allWorld = @($allWorld | ? { "$_" })
