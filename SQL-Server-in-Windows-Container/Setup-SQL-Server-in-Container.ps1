@@ -1,5 +1,9 @@
 cd C:\App
 
+$dump_folder="C:\App"
+if ($ENV:SYSTEM_ARTIFACTSDIRECTORY) { $dump_folder=$ENV:SYSTEM_ARTIFACTSDIRECTORY }
+New-Item $dump_folder -Type Directory -Force -EA SilentlyContinue | out-null
+
 Import-Module CimCmdlets -ErrorAction SilentlyContinue
 Import-Module Microsoft.PowerShell.Management -ErrorAction SilentlyContinue
 
@@ -80,26 +84,25 @@ $installTo = "$($ENV:SQLSERVERS_INSTALL_TO)"
 if (-not $installTo) { $installTo = "C:\SQL" }
 Write-Host "Target SQL Server Install Folder: [$installTo]"
 
-If ("$ENV:SQL" -match 2005) { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" }
-ElseIf ("$ENV:SQL" -match 2008) { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" "Collation=$collation" /SkipRules=PerfMonCounterNotCorruptedCheck } 
-# ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=PerfMonCounterNotCorruptedCheck FacetPowerShellCheck RebootRequiredCheck" } 
-# ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=AllRules" } 
-# !!!!!!!!!!!!!!!!!!!!!!! /BROWSERSVCSTARTUPTYPE=Disabled
-ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" "Collation=$collation" "/BROWSERSVCSTARTUPTYPE=Disabled" "/SkipRules=RebootRequiredCheck PerfMonCounterNotCorruptedCheck FacetPowerShellCheck AclPermissionsFacet Cluster_VerifyForErrors Cluster_IsOnlineIfServerIsClustered BlockMixedArchitectureInstall VSSShellInstalledFacet X86SupportedOn64BitCheck Wow64PlatformCheck NoGuidAllAppsCheck" } 
-Else { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" "Collation=$collation" /SkipRules=PerfMonCounterCheck }
+try 
+{ 
+    If ("$ENV:SQL" -match 2005) { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" }
+    ElseIf ("$ENV:SQL" -match 2008) { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" "Collation=$collation" /SkipRules=PerfMonCounterNotCorruptedCheck } 
+    # ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=PerfMonCounterNotCorruptedCheck FacetPowerShellCheck RebootRequiredCheck" } 
+    # ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=AllRules" } 
+    # !!!!!!!!!!!!!!!!!!!!!!! /BROWSERSVCSTARTUPTYPE=Disabled
+    ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" "Collation=$collation" "/BROWSERSVCSTARTUPTYPE=Disabled" "/SkipRules=RebootRequiredCheck PerfMonCounterNotCorruptedCheck FacetPowerShellCheck AclPermissionsFacet Cluster_VerifyForErrors Cluster_IsOnlineIfServerIsClustered BlockMixedArchitectureInstall VSSShellInstalledFacet X86SupportedOn64BitCheck Wow64PlatformCheck NoGuidAllAppsCheck" } 
+    Else { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" "Collation=$collation" /SkipRules=PerfMonCounterCheck }
 
-
-# SkipRules="RebootRequiredCheck PerfMonCounterNotCorruptedCheck FacetPowerShellCheck AclPermissionsFacet Cluster_VerifyForErrors Cluster_IsOnlineIfServerIsClustered BlockMixedArchitectureInstall"
-
-# 2012: /SkipRules="PerfMonCounterNotCorruptedCheck FacetPowerShellCheck RebootRequiredCheck ServerCoreBlockUnsupportedSxSCheck"
-
-# Setup-SqlServers "$ENV:SQL"
-
-$serverVersion = "$ENV:SQL".Split(":")[0]
-
-$artfifacts_folder="$ENV:SYSTEM_ARTIFACTSDIRECTORY"
-if ("$artfifacts_folder" -eq "") { $artfifacts_folder="C:\Artifacts" }
-Publish-SQLServer-SetupLogs "$artfifacts_folder\SQL Setup Logs\Setup of $serverVersion"
+    # SkipRules="RebootRequiredCheck PerfMonCounterNotCorruptedCheck FacetPowerShellCheck AclPermissionsFacet Cluster_VerifyForErrors Cluster_IsOnlineIfServerIsClustered BlockMixedArchitectureInstall"
+    # 2012: /SkipRules="PerfMonCounterNotCorruptedCheck FacetPowerShellCheck RebootRequiredCheck ServerCoreBlockUnsupportedSxSCheck"
+} 
+finally {
+    $serverVersion = "$ENV:SQL".Split(":")[0]
+    $artfifacts_folder="$ENV:SYSTEM_ARTIFACTSDIRECTORY"
+    if ("$artfifacts_folder" -eq "") { $artfifacts_folder="C:\Artifacts" }
+    Publish-SQLServer-SetupLogs "$artfifacts_folder\SQL Setup Logs\Setup of $serverVersion"
+}
 
 Say "List SQL Server Instances"
 @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | 
