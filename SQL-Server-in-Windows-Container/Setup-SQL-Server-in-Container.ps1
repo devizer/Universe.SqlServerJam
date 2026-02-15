@@ -86,12 +86,16 @@ Write-Host "Target SQL Server Install Folder: [$installTo]"
 
 try 
 { 
+    # RunRuleResults_RunFeatureSpecificRules.xml: rules list
+    $v2014_rules = "PerfMonCounterCheck AclPermissionsFacet ASSPIInstanceNameNotInUseCheck Bids2008InstalledCheck DEV10RTMDetected FacetDomainControllerCheck FacetWOW64PlatformCheck FusionRebootCheck HasSecurityBackupAndDebugPrivilegesCheck IsFirewallEnabled MediaPathLength NoRebootPackage NoRebootPackageDownLevel RebootRequiredCheck SQL14CTP1SideBySideInstallCheck SSMS_IsInternetConnected ServerCore64BitCheck ServerCoreBlockUnsupportedSxSCheck ServerCorePlatformCheck SetupCompatibilityCheck ThreadHasAdminPrivilegeCheck WmiServiceStateCheck"
+    $v2012_rules= "RebootRequiredCheck PerfMonCounterNotCorruptedCheck FacetPowerShellCheck AclPermissionsFacet Cluster_VerifyForErrors Cluster_IsOnlineIfServerIsClustered BlockMixedArchitectureInstall VSSShellInstalledFacet X86SupportedOn64BitCheck Wow64PlatformCheck NoGuidAllAppsCheck"
     If ("$ENV:SQL" -match 2005) { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" }
     ElseIf ("$ENV:SQL" -match 2008) { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" "Collation=$collation" /SkipRules=PerfMonCounterNotCorruptedCheck } 
     # ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=PerfMonCounterNotCorruptedCheck FacetPowerShellCheck RebootRequiredCheck" } 
     # ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "/SkipRules=AllRules" } 
     # !!!!!!!!!!!!!!!!!!!!!!! /BROWSERSVCSTARTUPTYPE=Disabled
-    ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" "Collation=$collation" "/BROWSERSVCSTARTUPTYPE=Disabled" "/SkipRules=RebootRequiredCheck PerfMonCounterNotCorruptedCheck FacetPowerShellCheck AclPermissionsFacet Cluster_VerifyForErrors Cluster_IsOnlineIfServerIsClustered BlockMixedArchitectureInstall VSSShellInstalledFacet X86SupportedOn64BitCheck Wow64PlatformCheck NoGuidAllAppsCheck" } 
+    ElseIf ("$ENV:SQL" -match 2012) { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" "Collation=$collation" "/BROWSERSVCSTARTUPTYPE=Disabled" "/SkipRules=$v2012_rules" } 
+    ElseIf ("$ENV:SQL" -match 2014) { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" "Collation=$collation" "/BROWSERSVCSTARTUPTYPE=Disabled" "/SkipRules=$v2014_rules" } 
     Else { Setup-SqlServers "$ENV:SQL" "InstallTo=$installTo" "Collation=$collation" /SkipRules=PerfMonCounterCheck }
 
     # SkipRules="RebootRequiredCheck PerfMonCounterNotCorruptedCheck FacetPowerShellCheck AclPermissionsFacet Cluster_VerifyForErrors Cluster_IsOnlineIfServerIsClustered BlockMixedArchitectureInstall"
