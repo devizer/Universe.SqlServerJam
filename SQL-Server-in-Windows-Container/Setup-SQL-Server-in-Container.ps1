@@ -110,10 +110,16 @@ finally {
     Publish-SQLServer-SetupLogs "$artfifacts_folder\SQL Setup Logs\Setup of $serverVersion"
 }
 
+$discovery_log_folder="C:\App"
+if ($ENV:SYSTEM_ARTIFACTSDIRECTORY) { $discovery_log_folder="$ENV:SYSTEM_ARTIFACTSDIRECTORY" }
+
+Write-Host "DICOVERY LOG FOLDER: [$discovery_log_folder]"
+
 Say "List SQL Server Instances"
 @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | 
      Format-Table -AutoSize | 
      Out-String -Width 1234 | 
+     Tee-Object -FilePath "$discovery_log_folder\discovery-short-by-powershell.txt" |
      Out-Host
 
 
@@ -121,11 +127,11 @@ Say "Query SQL Servers"
 @(Find-Local-SqlServers) + @(Find-LocalDb-SqlServers) | Populate-Local-SqlServer-Version |
      Format-Table -AutoSize | 
      Out-String -Width 1234 | 
-     Tee-Object -FilePath "C:\App\POWERSHELL-DISCOVERY.TXT" |
+     Tee-Object -FilePath "$discovery_log_folder\discovery-full-by-powershell.txt" |
      Out-Host
 
 
 Write-Host "try sql discovery (net 4.5)"
-Run-Remote-Script https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/Scripts/Launch-Sql-Discovery.ps1 *>&1 | Tee-Object -FilePath "C:\App\SQL-DISCOVERY.TXT"
+Run-Remote-Script https://raw.githubusercontent.com/devizer/Universe.SqlServerJam/master/Scripts/Launch-Sql-Discovery.ps1 *>&1 | Tee-Object -FilePath "$discovery_log_folder\discovery-full-by-jam.txt"
 
 Say "Finish: $ENV:SQL"
