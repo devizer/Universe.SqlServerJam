@@ -66,7 +66,7 @@ jobs:
 
     - name: System Info
       if: ${{ !cancelled() }}
-      run: 'export ReportFileName="$SYSTEM_ARTIFACTSDIRECTORY/GH Actions Sys Info ${{ matrix.os }}.txt"; bash -e Scripts/Show-System-Info.sh'
+      run: 'export ReportFileName="GH Actions Sys Info ${{ matrix.os }}.txt"; bash -e Scripts/Show-System-Info.sh'
 
     - name: Try PostgreSQL on MAC
       if: "${{ runner.os == 'macOS' && !cancelled() }}"
