@@ -33,7 +33,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Environment
-      run: 'printenv | sort'
+      run: 'printenv | sort | tee $SYSTEM_ARTIFACTSDIRECTORY/BASH-ENV.txt; echo $PATH | awk -F':' '{ for(i=1; i<=NF; i++) { print $i }}' | tee $SYSTEM_ARTIFACTSDIRECTORY/BASH-PATH.txt'
 
     - name: PS1 Module
       shell: pwsh
@@ -52,7 +52,7 @@ jobs:
     - name: Install Node v16.20.2
       run: Run-Remote-Script https://devizer.github.io/devops-library/install-nodejs.sh v16.20.2; Say "BYE"; node --version
     - name: Show Node v16.20.2
-      run: node --version; Say 'whereis node'; whereis node || true; Say PATH; echo $PATH | awk -F':' '{ for(i=1; i<=NF; i++) { print $i }}'
+      run: node --version; Say 'whereis node'; whereis node || true; Say PATH; echo $PATH | awk -F':' '{ for(i=1; i<=NF; i++) { print $i }}' | tee $SYSTEM_ARTIFACTSDIRECTORY/BASH-PATH.txt
 
     - name: Install Node v24.13.1
       if: ${{ !cancelled() }}
@@ -63,7 +63,7 @@ jobs:
 
     - name: System Info
       if: ${{ !cancelled() }}
-      run: 'export ReportFileName="GH Actions Sys Info ${{ matrix.os }}.txt"; bash -e Scripts/Show-System-Info.sh'
+      run: 'export ReportFileName="$SYSTEM_ARTIFACTSDIRECTORY/GH Actions Sys Info ${{ matrix.os }}.txt"; bash -e Scripts/Show-System-Info.sh'
 
     - name: Try PostgreSQL on MAC
       if: "${{ runner.os == 'macOS' && !cancelled() }}"

@@ -2,13 +2,9 @@ set -eu; set -o pipefail
 script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-build-tools-bundle.sh; (wget -q -nv --no-check-certificate -O - $script 2>/dev/null || curl -ksSL $script) | bash > /dev/null
 
 FIO_DURATION=22 # Seconds
-if [[ -n "${SYSTEM_ARTIFACTSDIRECTORY:-}" ]]; then # Azure Dev-Ops
-  export GITHUB_ENV=/dev/null
-  THEARTIFACTS="${SYSTEM_ARTIFACTSDIRECTORY:-}"
-  # THEARTIFACTS="/d/a/1/a"
-  ReportName="$THEARTIFACTS/Azure ${AGENT_JOBNAME:-}.txt"
+if [[ -n "${AGENT_JOBNAME:-}" ]]; then # Azure Dev-Ops
+  ReportName="${SYSTEM_ARTIFACTSDIRECTORY:-}/Azure ${AGENT_JOBNAME:-}.txt"
   echo "ReportName          = [$ReportName]"
-  echo "THEARTIFACTS        = [$THEARTIFACTS]"
 else # GitHub Actions
   if [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
     echo "Windows 'SystemDrive' var = [${SYSSTEMDRIVE:-}]"
