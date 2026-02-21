@@ -72,7 +72,7 @@ jobs:
       if: "${{ runner.os == 'macOS' && !cancelled() }}"
       run: |
         set -eu;
-        export ReportFileName="$SYSTEM_ARTIFACTSDIRECTORY/GH Actions Postgres Log ${{ matrix.os }}.txt";
+        export ReportFileName="GH Actions Postgres Log ${{ matrix.os }}.txt";
         brew install postgresql
         brew services start postgresql
         sleep 9
