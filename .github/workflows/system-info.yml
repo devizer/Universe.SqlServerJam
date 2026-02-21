@@ -52,14 +52,14 @@ jobs:
     - name: Install Node v16.20.2
       run: Run-Remote-Script https://devizer.github.io/devops-library/install-nodejs.sh v16.20.2; Say "BYE"; node --version
     - name: Show Node v16.20.2
-      run: node --version; Say 'which node'; which node; Say PATH; echo $PATH | awk -F':' '{ for(i=1; i<=NF; i++) { print $i }}'
+      run: node --version; Say 'whereis node'; whereis node || true; Say PATH; echo $PATH | awk -F':' '{ for(i=1; i<=NF; i++) { print $i }}'
 
     - name: Install Node v24.13.1
       if: ${{ !cancelled() }}
       run: Run-Remote-Script https://devizer.github.io/devops-library/install-nodejs.sh v24.13.1; Say "BYE"; node --version
     - name: Show Node v24.13.1
       if: ${{ !cancelled() }}
-      run: node --version; Say 'which node'; which node; Say PATH; echo $PATH | awk -F':' '{ for(i=1; i<=NF; i++) { print $i }}'
+      run: node --version; Say 'whereis node'; whereis node || true; Say PATH; echo $PATH | awk -F':' '{ for(i=1; i<=NF; i++) { print $i }}'
 
     - name: System Info
       if: ${{ !cancelled() }}
