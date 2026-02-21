@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2025, windows-2022, ubuntu-22.04, ubuntu-24.04, macos-14, macos-15]
+        os: [windows-2025, windows-2022, ubuntu-22.04, ubuntu-24.04, macos-14, macos-15, macos-15-intel]
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -45,6 +45,12 @@ jobs:
       shell: pwsh
       if: ${{ true }}
       run: 'Write-Host "Total Modules: $((get-module -ListAvailable).Count)"'
+
+    - name: Bootstrap
+      uses: devizer/devops-library@main
+
+    - name: Install Node 16.20.2
+      run: Run-Remote-Script https://devizer.github.io/devops-library/install-nodejs.sh --version v16.20.2 --skip-npm-upgrade
 
     - name: System Info
       run: 'export ReportFileName="GH Actions Sys Info ${{ matrix.os }}.txt"; bash -e Scripts/Show-System-Info.sh'
