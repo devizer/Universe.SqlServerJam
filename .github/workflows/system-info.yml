@@ -49,13 +49,13 @@ jobs:
 
     - name: Environment
       run: |
-        printenv | sort | tee $SYSTEM_ARTIFACTSDIRECTORY/BASH-ENV.txt; 
-        echo $PATH | awk -F':' '{ for(i=1; i<=NF; i++) { print $i }}' | tee $SYSTEM_ARTIFACTSDIRECTORY/BASH-PATH.txt
+        printenv | sort | tee "$SYSTEM_ARTIFACTSDIRECTORY/BASH ENVIRONMENT ${{ matrix.os }}.txt"
+        echo $PATH | awk -F':' '{ for(i=1; i<=NF; i++) { print $i }}' | tee "$SYSTEM_ARTIFACTSDIRECTORY/BASH PATH ${{ matrix.os }}.txt"
 
     - name: Install Node v16.20.2
       run: Run-Remote-Script https://devizer.github.io/devops-library/install-nodejs.sh v16.20.2; Say "BYE"; node --version
     - name: Show Node v16.20.2
-      run: node --version; Say 'whereis node'; whereis node || true; Say PATH; echo $PATH | awk -F':' '{ for(i=1; i<=NF; i++) { print $i }}' | tee $SYSTEM_ARTIFACTSDIRECTORY/BASH-PATH.txt
+      run: node --version; Say 'whereis node'; whereis node || true; Say PATH; echo $PATH | awk -F':' '{ for(i=1; i<=NF; i++) { print $i }}' | tee "$SYSTEM_ARTIFACTSDIRECTORY/BASH PATH plus Node ${{ matrix.os }}.txt"
 
     - name: Install Node v24.13.1
       if: ${{ !cancelled() }}
