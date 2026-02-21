@@ -32,10 +32,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Environment
-      run: |
-        printenv | sort | tee $SYSTEM_ARTIFACTSDIRECTORY/BASH-ENV.txt; 
-        echo $PATH | awk -F':' '{ for(i=1; i<=NF; i++) { print $i }}' | tee $SYSTEM_ARTIFACTSDIRECTORY/BASH-PATH.txt
 
     - name: PS1 Module
       shell: pwsh
@@ -50,6 +46,11 @@ jobs:
 
     - name: Bootstrap
       uses: devizer/devops-library@main
+
+    - name: Environment
+      run: |
+        printenv | sort | tee $SYSTEM_ARTIFACTSDIRECTORY/BASH-ENV.txt; 
+        echo $PATH | awk -F':' '{ for(i=1; i<=NF; i++) { print $i }}' | tee $SYSTEM_ARTIFACTSDIRECTORY/BASH-PATH.txt
 
     - name: Install Node v16.20.2
       run: Run-Remote-Script https://devizer.github.io/devops-library/install-nodejs.sh v16.20.2; Say "BYE"; node --version
