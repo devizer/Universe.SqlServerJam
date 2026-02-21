@@ -6,26 +6,14 @@ if [[ -n "${AGENT_JOBNAME:-}" ]]; then # Azure Dev-Ops
   ReportName="${SYSTEM_ARTIFACTSDIRECTORY:-}/Azure ${AGENT_JOBNAME:-}.txt"
   echo "ReportName          = [$ReportName]"
 else # GitHub Actions
-  if [[ "$(uname -s)" == *"MINGW"* ]] || [[ "$(uname -s)" == *"MSYS"* ]]; then
-    echo "Windows 'SystemDrive' var = [${SYSSTEMDRIVE:-}]"
-    sysDrive="${SYSSTEMDRIVE:-}"
-    sysDrive="${sysDrive:0:1}"
-    sysDrive="${sysDrive:-c}"
-    THEARTIFACTS="/$sysDrive/Artifacts"
-    THEARTIFACTS_NATIVE="$sysDrive:\\Artifacts"
-  else
-    THEARTIFACTS="$HOME/Artifacts"
-    THEARTIFACTS_NATIVE="$THEARTIFACTS"
-  fi
-  ReportName="$THEARTIFACTS/$ReportFileName"
-  echo "ReportName          = [$ReportName]"
-  echo "THEARTIFACTS        = [$THEARTIFACTS]"
-  echo "THEARTIFACTS_NATIVE = [$THEARTIFACTS_NATIVE]"
-  echo "THEARTIFACTS=$THEARTIFACTS" >> "$GITHUB_ENV"
-  echo "THEARTIFACTS_NATIVE=$THEARTIFACTS_NATIVE" >> "$GITHUB_ENV"
+  ReportName="${SYSTEM_ARTIFACTSDIRECTORY:-}/$ReportFileName"
 fi
 
 THEARTIFACTS="${SYSTEM_ARTIFACTSDIRECTORY}"
+ReportName="$THEARTIFACTS/$ReportFileName"
+echo "ReportName          = [$ReportName]"
+echo "THEARTIFACTS        = [$THEARTIFACTS]"
+
 mkdir -p "$THEARTIFACTS"
 
 echo '
