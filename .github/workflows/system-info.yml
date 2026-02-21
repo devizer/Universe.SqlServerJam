@@ -49,12 +49,17 @@ jobs:
     - name: Bootstrap
       uses: devizer/devops-library@main
 
-    - name: Install Node 16.20.2
+    - name: Install Node v16.20.2
       run: Run-Remote-Script https://devizer.github.io/devops-library/install-nodejs.sh v16.20.2; Say "BYE"; node --version
+    - name: Show Node v16.20.2
+      run: node --version
 
     - name: Install Node v24.13.1
       if: ${{ !cancelled() }}
       run: Run-Remote-Script https://devizer.github.io/devops-library/install-nodejs.sh v24.13.1; Say "BYE"; node --version
+    - name: Show Node v24.13.1
+      if: ${{ !cancelled() }}
+      run: node --version
 
     - name: System Info
       if: ${{ !cancelled() }}
