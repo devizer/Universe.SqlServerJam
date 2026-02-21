@@ -4,17 +4,12 @@ script=https://raw.githubusercontent.com/devizer/test-and-build/master/install-b
 FIO_DURATION=22 # Seconds
 if [[ -n "${AGENT_JOBNAME:-}" ]]; then # Azure Dev-Ops
   ReportName="${SYSTEM_ARTIFACTSDIRECTORY:-}/Azure ${AGENT_JOBNAME:-}.txt"
-  echo "ReportName          = [$ReportName]"
 else # GitHub Actions
   ReportName="${SYSTEM_ARTIFACTSDIRECTORY:-}/$ReportFileName"
 fi
 
-THEARTIFACTS="${SYSTEM_ARTIFACTSDIRECTORY}"
-ReportName="$THEARTIFACTS/$ReportFileName"
 echo "ReportName          = [$ReportName]"
-echo "THEARTIFACTS        = [$THEARTIFACTS]"
 
-mkdir -p "$THEARTIFACTS"
 
 echo '
 ls -la /D || true
