@@ -50,7 +50,10 @@ jobs:
       uses: devizer/devops-library@main
 
     - name: Install Node 16.20.2
-      run: Run-Remote-Script https://devizer.github.io/devops-library/install-nodejs.sh --version v16.20.2 --skip-npm-upgrade
+      run: Run-Remote-Script https://devizer.github.io/devops-library/install-nodejs.sh v16.20.2; Say "BYE"; node --version
+
+    - name: Install Node v24.13.1
+      run: Run-Remote-Script https://devizer.github.io/devops-library/install-nodejs.sh v24.13.1; Say "BYE"; node --version
 
     - name: System Info
       run: 'export ReportFileName="GH Actions Sys Info ${{ matrix.os }}.txt"; bash -e Scripts/Show-System-Info.sh'
