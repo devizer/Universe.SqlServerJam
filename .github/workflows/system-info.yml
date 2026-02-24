@@ -52,6 +52,9 @@ jobs:
         printenv | sort | tee "$SYSTEM_ARTIFACTSDIRECTORY/BASH ENVIRONMENT ${{ matrix.os }}.txt"
         echo $PATH | awk -F':' '{ for(i=1; i<=NF; i++) { print $i }}' | tee "$SYSTEM_ARTIFACTSDIRECTORY/BASH PATH ${{ matrix.os }}.txt"
 
+    - name: Test-JQ
+      run: Run-Remote-Script https://devizer.github.io/devops-library/install-jq.sh --target-folder /usr/local/bin --version 1.8.1; echo '{"hello":42}' | jq -r .hello || true
+
     - name: Install Node v16.20.2
       run: Run-Remote-Script https://devizer.github.io/devops-library/install-nodejs.sh v16.20.2; Say "BYE"; node --version
     - name: Show Node v16.20.2
