@@ -40,7 +40,6 @@ namespace Universe.SqlServerJam
         public SqlCpuUsage? CpuUsage => GetCpuUsage();
 
 
-
         // Actually it is need for WarmUp extension
         public int CommandTimeout { get; private set; } = 30;
 

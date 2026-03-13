@@ -171,6 +171,10 @@ namespace Universe.SqlServerJam.Tests
                         report.AppendLine("Default Log ..............: " + paths.DefaultLog);
                         report.AppendLine("Default Backup ...........: " + paths.DefaultBackup);
 
+                        var modelDatabase = man.Databases["model"];
+                        var modelFiles = modelDatabase.Exists ? modelDatabase.Files : null;
+                        report.AppendLine("Model Files ..............: " + (modelFiles == null ? "not exists" : modelFiles.ToFilesString()));
+
 
                         // DB Options demo
                         var currentDatabase = man.CurrentDatabaseName;

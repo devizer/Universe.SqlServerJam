@@ -254,9 +254,27 @@ WHERE d.name = @name
             get
             {
                 // size is 32-bit int in pages
-                string sql = $"Select type_desc TypeName, state_desc StateName, name Name, size Size, physical_name PhysicalName, Cast((Case When (is_read_only = 1 or is_media_read_only = 1) Then 1 Else 0 End) as bit) IsReadOnly From [{this.DatabaseName}].sys.database_files";
+                string sql = $@"Select
+  type_desc TypeName,
+  state_desc StateName,
+  name Name,
+  size Size,
+  physical_name PhysicalName,
+  Cast((Case When (is_read_only = 1 or is_media_read_only = 1) Then 1 Else 0 End) as bit) IsReadOnly,
+  max_size MaxSize,
+  is_percent_growth IsPercentGrowth,
+  growth Growth
+From
+  [{this.DatabaseName}].sys.database_files";
+
                 var files = _ServerManagement.SqlConnection.Query<SqlDatabaseFile>(sql).ToList();
-                foreach (var file in files) file.Size *= 8 * 1024;
+                foreach (var file in files)
+                {
+                    // pages to bytes
+                    file.Size *= 8 * 1024;
+                    file.MaxSize *= 8 * 1024;
+                    if (!file.IsPercentGrowth) file.Growth *= 8 * 1024; 
+                }
                 return new SqlDatabaseFiles() { Files = files };
             }
         }
@@ -265,6 +283,35 @@ WHERE d.name = @name
         {
             public long Size => Files.Count == 0 ? 0 : Files.Sum(x => x.Size);
             public List<SqlDatabaseFile> Files { get; internal set; } = new List<SqlDatabaseFile>();
+
+            public string ToFilesString()
+            {
+                StringBuilder ret = new StringBuilder();
+                foreach (var file in Files)
+                {
+                    // ret.AppendLine($" - {file.Name} ({file.Type}): {file.Size / 1024:n0} KB, Physical Name: {file.PhysicalName}, Growth: {(file.IsPercentGrowth ? file.Growth + "%" : $"{file.Growth / 1024:n0} KB")}, State: {file.StateName}, {(file.IsReadOnly ? "ReadOnly" : "ReadWrite")}");
+                    StringBuilder fileInfo = new StringBuilder($"{file.Type} '{file.Name}'");
+                    if (file.IsReadOnly) fileInfo.Append(" R/O");
+                    fileInfo.Append($" {file.Size / 1024:n0}KB");
+                    if (file.MaxSize != 0) fileInfo.Append($" growth {file.GrowthAsString}");
+                    if (file.MaxSize < 0)
+                    {
+                        // unlimited
+                    }
+                    else if (file.MaxSize == 0)
+                    {
+                        fileInfo.Append(" no growth");
+                    }
+                    else
+                    {
+                        fileInfo.Append($" max size {file.MaxSize / 1024 / 1024:n0}MB");
+                    }
+
+                    if (ret.Length > 0) ret.Append("; ");
+                    ret.Append(fileInfo);
+                }
+                return ret.ToString();
+            }
 
             public string ToSizeString()
             {
@@ -297,8 +344,24 @@ WHERE d.name = @name
             public string StateName { get; internal set; }
             public string Name { get; internal set; }
             public long Size { get; internal set; }
+            public long MaxSize { get; internal set; }
             public string PhysicalName { get; internal set; }
             public bool IsReadOnly { get; internal set; }
+            public bool IsPercentGrowth { get; internal set; }
+            // Either Pages or Percent, depending on IsPercentGrowth
+            public long Growth { get; internal set; }
+
+            public string GrowthAsString
+            {
+                get
+                {
+                    if (IsPercentGrowth) return $"{Growth}%";
+                    // Growth is a multiple of 8*1024
+                    var kb = Growth / 1024;
+                    if (kb < 1024) return $"{kb:0}KB";
+                    else return $"{kb / 1024:0}MB";
+                }
+            }
 
             public SqlDatabaseFileType Type =>
                 "ROWS".Equals(TypeName, StringComparisonExtensions.IgnoreCase) ? SqlDatabaseFileType.Data
@@ -468,7 +531,9 @@ WHERE d.name = @name
             ret.AppendLine($"{pre} - Default Collation ... : {DefaultCollationName} [{comparisionStyle}]");
             ret.AppendLine($"{pre} - Fulltext Search ..... : {(IsFullTextEnabled ? "Enabled" : "Not Enabled")}");
             ret.AppendLine($"{pre} - Size (KB) ........... : {Size}");
-            ret.AppendLine($"{pre} - Size Detailed ....... : {this.Files.ToSizeString()}");
+            var sqlDatabaseFiles = this.Files;
+            ret.AppendLine($"{pre} - Size Detailed ....... : {sqlDatabaseFiles.ToSizeString()}");
+            ret.AppendLine($"{pre} - Files ............... : {sqlDatabaseFiles.ToFilesString()}");
             ret.AppendLine($"{pre} - Recovery Mode ....... : {RecoveryMode}");
             ret.AppendLine($"{pre} - Owner ............... : {OwnerName}");
             ret.AppendLine($"{pre} - AZ Edition .......... : {AzureEdition}");
