@@ -127,6 +127,7 @@ namespace Universe.SqlServerJam.Tests
                     report.AppendLine("Update Level .............: " + man.ProductUpdateLevel);
                     report.AppendLine("Edition Name .............: " + man.EngineEditionName);
                     report.AppendLine("Engine Edition ...........: " + man.EngineEdition);
+                    report.AppendLine("Server Title .............: " + man.ServerTitle);
                     report.AppendLine("Medium Version ...........: " + man.MediumServerVersion);
                     report.AppendLine("Long Version .............: " + man.LongServerVersion);
 

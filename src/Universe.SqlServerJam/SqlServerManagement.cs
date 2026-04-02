@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace Universe.SqlServerJam
 
         readonly Lazy<Version> _ShortServerVersion;
         private Lazy<string> _MediumServerVersion;
+        private Lazy<string> _ServerTitle;
         private Lazy<string> _LongServerVersion;
         private Lazy<string> _HostPlatform;
         private Lazy<SqlServerSysInfo> _SqlServerSysInfo;
@@ -51,6 +53,7 @@ namespace Universe.SqlServerJam
 
             _ShortServerVersion = new Lazy<Version>(() => GetShortServerVersion(null));
             _MediumServerVersion = new Lazy<string>(GetMediumServerVersion);
+            _ServerTitle = new Lazy<string>(GetSqlServerTitle);
             _LongServerVersion = new Lazy<string>(GetLongServerVersion);
             _HostPlatform = new Lazy<string>(GetHostPlatform);
             _ProductVersion = new Lazy<Version>(() => ResilientVersionParser.Parse(this.ProductVersionRaw));
@@ -93,6 +96,7 @@ namespace Universe.SqlServerJam
         public bool IsLinux => "Linux".Equals(HostPlatform, StringComparison.OrdinalIgnoreCase);
         public Version ShortServerVersion => _ShortServerVersion.Value;
         public string MediumServerVersion => _MediumServerVersion.Value;
+        public string ServerTitle => _ServerTitle.Value;
         public string LongServerVersion => _LongServerVersion.Value;
 
         public bool IsLocalDB => ShortServerVersion.Major >= 11 && GetServerProperty<int>("IsLocalDB") == 1;
@@ -330,6 +334,61 @@ namespace Universe.SqlServerJam
             var mediumVersion = string.Join(" ", parts.ToArray());
             return mediumVersion;
         }
+
+/*
+SQL Server 2025 (RTM-CU2) (KB5075211) - 17.0.4015.4 (X64) Enterprise Developer Edition (64-bit) RTM CU2
+SQL Server 2025 (RTM-CU2) (KB5075211) - 17.0.4015.4 (X64) Express Edition (64-bit) RTM CU2
+SQL Server 2025 (RTM-CU2) (KB5075211) - 17.0.4015.4 (X64) LocalDB Express Edition (64-bit) RTM CU2
+SQL Server 2022 (RTM-CU17) (KB5048038) - 16.0.4175.1 (X64) Express Edition (64-bit) RTM CU17
+SQL Server 2022 (RTM-CU17) (KB5048038) - 16.0.4175.1 (X64) Developer Edition (64-bit) RTM CU17
+SQL Server 2022 (RTM) - 16.0.1000.6 (X64) LocalDB Express Edition (64-bit) RTM 
+SQL Server 2019 (RTM-CU31) (KB5049296) - 15.0.4420.2 (X64) Express Edition (64-bit) RTM CU31
+SQL Server 2019 (RTM-CU31) (KB5049296) - 15.0.4420.2 (X64) Developer Edition (64-bit) RTM CU31
+SQL Server 2019 (RTM-CU27-GDR) (KB5040948) - 15.0.4382.1 (X64) LocalDB Express Edition (64-bit) RTM CU27
+SQL Server 2017 (RTM-CU31) (KB5016884) - 14.0.3456.2 (X64) Express Edition (64-bit) RTM CU31
+SQL Server 2017 (RTM-CU31) (KB5016884) - 14.0.3456.2 (X64) Developer Edition (64-bit) RTM CU31
+SQL Server 2017 (RTM) - 14.0.1000.169 (X64) LocalDB Express Edition (64-bit) RTM 
+SQL Server 2016 (SP3-GDR) (KB5040946) - 13.0.6441.1 (X64) Express Edition (64-bit) SP3 
+SQL Server 2016 (SP3-GDR) (KB5040946) - 13.0.6441.1 (X64) Developer Edition (64-bit) SP3 
+SQL Server 2016 (SP3) (KB5003279) - 13.0.6300.2 (X64) LocalDB Express Edition (64-bit) SP3 
+SQL Server 2014 (SP3) (KB4022619) - 12.0.6024.0 (X64) LocalDB Express Edition (64-bit) SP3 
+SQL Server 2014 (SP3) (KB4022619) - 12.0.6024.0 (X64) Express Edition (64-bit) SP3 
+SQL Server 2014 (SP3) (KB4022619) - 12.0.6024.0 (X64) Developer Edition (64-bit) SP3 
+SQL Server 2014 (SP3) (KB4022619) - 12.0.6024.0 (Intel X86) Express Edition SP3 
+SQL Server 2014 (SP3) (KB4022619) - 12.0.6024.0 (Intel X86) Developer Edition SP3 
+SQL Server 2012 (SP4) (KB4018073) - 11.0.7001.0 (X64) LocalDB Express Edition (64-bit) SP4 
+SQL Server 2012 (SP4) (KB4018073) - 11.0.7001.0 (X64) Express Edition (64-bit) SP4 
+SQL Server 2012 (SP4) (KB4018073) - 11.0.7001.0 (X64) Developer Edition (64-bit) SP4 
+SQL Server 2012 (SP4) (KB4018073) - 11.0.7001.0 (Intel X86) Express Edition SP4 
+SQL Server 2012 (SP4) (KB4018073) - 11.0.7001.0 (Intel X86) Developer Edition SP4 
+SQL Server 2008 R2 (SP3) - 10.50.6000.34 (X64) Express Edition (64-bit) SP3 
+SQL Server 2008 R2 (SP3) - 10.50.6000.34 (X64) Developer Edition (64-bit) SP3 
+SQL Server 2008 R2 (SP3) - 10.50.6000.34 (Intel X86) Express Edition SP3 
+SQL Server 2008 R2 (SP3) - 10.50.6000.34 (Intel X86) Developer Edition SP3 
+SQL Server 2008 (SP3) - 10.0.5500.0 (X64) Express Edition (64-bit) SP3 
+SQL Server 2008 (RTM) - 10.0.1600.22 (X64) Developer Edition (64-bit) RTM 
+SQL Server 2008 (RTM) - 10.0.1600.22 (Intel X86) Developer Edition RTM 
+SQL Server 2005 - 9.00.5000.00 (Intel X86) Express Edition with Advanced Services SP4 
+SQL Server 2005 - 9.00.5000.00 (Intel X86) Express Edition SP4 
+*/
+        private string GetSqlServerTitle()
+        {
+            const string sql =
+                "SET NOCOUNT ON; Declare @ret nvarchar(1000); SELECT @ret = CAST(LEFT(@@VERSION, CHARINDEX(CHAR(10), @@VERSION) - 1) AS NVARCHAR(MAX)) + (Case ServerProperty('IsLocalDB') When 1 Then 'LocalDB' Else '' End) + ' ' + Cast(ISNULL(ServerProperty('Edition'), '') as nvarchar(222)) + ' ' + Cast(ISNULL(ServerProperty('ProductLevel'), '') as nvarchar(222)) + ' ' + Cast(ISNULL(ServerProperty('ProductUpdateLevel'), '') as nvarchar(222)); Set @ret = Replace(@ret, '  ', ' '); Set @ret = Replace(@ret, '  ', ' '); Select @ret;";
+
+            var ret = this.SqlConnection.Query<string>(sql).FirstOrDefault();
+            while(ret != null && ret.IndexOf("  ", StringComparisonExtensions.IgnoreCase) >= 0)
+                ret = ret.Replace("  ", " ");
+
+            const string microsoftPrefix = "Microsoft ";
+            if (ret?.StartsWith(microsoftPrefix, StringComparison.OrdinalIgnoreCase) == true && ret?.Length > microsoftPrefix.Length)
+            {
+                ret = ret.Substring(microsoftPrefix.Length);
+            }
+
+            return ret;
+        }
+
 
         string GetLongServerVersion()
         {
