@@ -18,7 +18,7 @@ Write-Host "Version: $ver" -ForegroundColor Yellow
 
 $curdir=$(pwd)
 pushd ..\Universe.SqlServerJam.Tests
-Measure-Action "PACK Universe.SqlServerJam" { & dotnet test -f net8.0 --filter "Name ~ Full_Featured_Demo" }
+Measure-Action "TEST Universe.SqlServerJam" { & dotnet test -f net8.0 --filter "Name ~ Full_Featured_Demo" }
 # dotnet test --filter "Name ~ Full_Featured_Demo & Name !~ Meashure_Upload_Speed & Name !~ Meashure_Download_Speed" -f net8.0
 # dotnet test --filter "Name ~ Full_Featured_Demo" -f net8.0
 if (-not $?) { throw 'Test Failed. Pack aborted'; exit 7 }

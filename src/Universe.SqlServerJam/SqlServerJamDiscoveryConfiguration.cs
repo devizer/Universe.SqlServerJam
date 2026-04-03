@@ -6,8 +6,8 @@ namespace Universe.SqlServerJam
     {
         const string FormatLocalServerName = "LOCAL_SQLSERVER_DISCOVERY_CONNECTION_STRING_FORMAT";
         const string FormatLocalDbName =     "LOCALDB_DISCOVERY_CONNECTION_STRING_FORMAT";
-        private const string DefaultLocalDbConnectionStringFormat = "Data Source={0};Integrated Security=SSPI;Encrypt=False";
-        private const string DefaultLocalServerConnectionStringFormat = "Data Source={0};Integrated Security=SSPI;Encrypt=False";
+        private const string DefaultLocalDbConnectionStringFormat = "Data Source={0};Integrated Security=SSPI;Encrypt=False;TrustServerCertificate=True";
+        private const string DefaultLocalServerConnectionStringFormat = "Data Source={0};Integrated Security=SSPI;Encrypt=False;TrustServerCertificate=True";
         private static string _LocalServerConnectionStringFormat;
         private static string _LocalDbConnectionStringFormat;
 
