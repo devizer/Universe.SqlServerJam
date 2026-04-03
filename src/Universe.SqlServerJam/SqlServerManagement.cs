@@ -377,6 +377,7 @@ SQL Server 2005 - 9.00.5000.00 (Intel X86) Express Edition SP4
                 "SET NOCOUNT ON; Declare @ret nvarchar(1000); SELECT @ret = CAST(LEFT(@@VERSION, CHARINDEX(CHAR(10), @@VERSION) - 1) AS NVARCHAR(MAX)) + (Case ServerProperty('IsLocalDB') When 1 Then 'LocalDB' Else '' End) + ' ' + Cast(ISNULL(ServerProperty('Edition'), '') as nvarchar(222)) + ' ' + Cast(ISNULL(ServerProperty('ProductLevel'), '') as nvarchar(222)) + ' ' + Cast(ISNULL(ServerProperty('ProductUpdateLevel'), '') as nvarchar(222)); Set @ret = Replace(@ret, '  ', ' '); Set @ret = Replace(@ret, '  ', ' '); Select @ret;";
 
             var ret = this.SqlConnection.Query<string>(sql).FirstOrDefault();
+            ret = ret?.Trim();
             while(ret != null && ret.IndexOf("  ", StringComparisonExtensions.IgnoreCase) >= 0)
                 ret = ret.Replace("  ", " ");
 
@@ -386,6 +387,7 @@ SQL Server 2005 - 9.00.5000.00 (Intel X86) Express Edition SP4
                 ret = ret.Substring(microsoftPrefix.Length);
             }
 
+            ret = ret?.Replace("LocalDB Express Edition", "LocalDB");
             return ret;
         }
 
