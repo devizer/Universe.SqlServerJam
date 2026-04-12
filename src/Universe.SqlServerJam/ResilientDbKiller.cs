@@ -42,13 +42,13 @@ namespace Universe.SqlServerJam
                             // EF Behavior
                             string sql =
                                 $"IF SERVERPROPERTY('EngineEdition') <> 5" +
-                                $"   EXEC(N'ALTER DATABASE [{dbName}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;')";
+                                $"   EXEC(N'ALTER DATABASE [{SqlJamExtensions.Escape(dbName)}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;')";
 
                             // Single User Mode is needless
                             // con.Execute(sql);
 
                             using var actionLog = SqlJamLog.LogAction($"ResilientDbKiller({dbName}): Execute 'Drop Database', Counter={retryCount - counter}");
-                            con.Execute($"Drop Database [{dbName}]", commandTimeout: 90);
+                            con.Execute($"Drop Database [{SqlJamExtensions.Escape(dbName)}]", commandTimeout: 90);
                             return;
                         }
                         catch

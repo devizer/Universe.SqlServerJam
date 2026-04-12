@@ -30,4 +30,5 @@ namespace Universe.SqlServerJam.Tests
             return true;
         }
     }
+
 }

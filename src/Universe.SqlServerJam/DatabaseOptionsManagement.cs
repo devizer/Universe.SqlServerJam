@@ -46,7 +46,7 @@ namespace Universe.SqlServerJam
             set
             {
                 string sql = string.Format("Alter Database [{0}] Set {1}_BROKER",
-                    DatabaseName,
+                    SqlJamExtensions.Escape(DatabaseName),
                     value ? "ENABLE" : "DISABLE");
 
                 _Connection.Execute(sql);
@@ -61,7 +61,7 @@ namespace Universe.SqlServerJam
             set
             {
                 string sql = string.Format("Alter Database [{0}] Set {1}",
-                    DatabaseName,
+                    SqlJamExtensions.Escape(DatabaseName),
                     value ? "READ_ONLY" : "READ_WRITE");
 
                 _Connection.Execute(sql);
@@ -74,7 +74,7 @@ namespace Universe.SqlServerJam
             set
             {
                 string sql = string.Format("Alter Database [{0}] Set AUTO_SHRINK {1}",
-                    DatabaseName,
+                    SqlJamExtensions.Escape(DatabaseName),
                     value ? "ON" : "OFF");
 
                 _Connection.Execute(sql);
@@ -84,7 +84,7 @@ namespace Universe.SqlServerJam
         public void SetState(TargetDatabaseState newState)
         {
             string sql = string.Format("Alter Database [{0}] Set {1}",
-                DatabaseName,
+                SqlJamExtensions.Escape(DatabaseName),
                 newState);
 
             _Connection.Execute(sql);
@@ -128,7 +128,7 @@ namespace Universe.SqlServerJam
                         : string.Empty);
 
                 string sql = string.Format("Alter Database [{0}] Set AUTO_CREATE_STATISTICS {1}",
-                    DatabaseName,
+                    SqlJamExtensions.Escape(DatabaseName),
                     option);
 
                 // Console.WriteLine($"[DEBUG] AutoCreateStatistic={value}{Environment.NewLine}{sql}{Environment.NewLine}");
@@ -155,7 +155,7 @@ namespace Universe.SqlServerJam
                     option = "AUTO_UPDATE_STATISTICS ON, AUTO_UPDATE_STATISTICS_ASYNC ON";
 
                 string sql = string.Format("Alter Database [{0}] Set {1}",
-                    DatabaseName,
+                    SqlJamExtensions.Escape(DatabaseName),
                     option);
 
                 // Console.WriteLine($"[DEBUG] AutoUpdateStatistic={value}{Environment.NewLine}{sql}{Environment.NewLine}");
@@ -176,7 +176,7 @@ namespace Universe.SqlServerJam
                     throw new ArgumentException();
 
                 string sql = string.Format("Alter Database [{0}] COLLATE {1}",
-                    DatabaseName,
+                    SqlJamExtensions.Escape(DatabaseName),
                     value);
 
                 _Connection.Execute(sql);
@@ -397,7 +397,7 @@ From
 
                 var verifyName = value == DatabasePageVerify.None ? "NONE" : value == DatabasePageVerify.Checksum ? "CHECKSUM" : value == DatabasePageVerify.TornPageDetection ? "TORN_PAGE_DETECTION" : null;
                 if (verifyName == null) throw new ArgumentException($"Unknown DB Page Verify argument '{value}'");
-                var sqlVerify = $"Alter Database [{this.DatabaseName}] Set PAGE_VERIFY {verifyName}";
+                var sqlVerify = $"Alter Database [{SqlJamExtensions.Escape(this.DatabaseName)}] Set PAGE_VERIFY {verifyName}";
                 _ServerManagement.SqlConnection.Execute(sqlVerify);
 
                 /*
@@ -439,7 +439,7 @@ From
             {
                 if (value == DatabaseRecoveryMode.Unknown) throw new ArgumentOutOfRangeException();
                 var mode = value == DatabaseRecoveryMode.BulkLogged ? "Bulk_Logged" : value.ToString();
-                var sql = $"Alter Database [{DatabaseName}] Set Recovery {mode}";
+                var sql = $"Alter Database [{SqlJamExtensions.Escape(DatabaseName)}] Set Recovery {mode}";
                 _Connection.Execute(sql);
             }
 
@@ -453,7 +453,7 @@ From
             }
             set
             {
-                var sql = $"Alter Database [{DatabaseName}] Set RECURSIVE_TRIGGERS {(value ? "ON" : "OFF")}";
+                var sql = $"Alter Database [{SqlJamExtensions.Escape(DatabaseName)}] Set RECURSIVE_TRIGGERS {(value ? "ON" : "OFF")}";
                 _Connection.Execute(sql);
             }
         }
